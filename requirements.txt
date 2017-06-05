@@ -1,0 +1,7 @@
+Django==1.9.13
+Pillow==4.1.1
+django-crequest==2016.3.16
+ipython==2.0.0
+ipdb==0.10.3
+# uWSGI
+# psycopg2

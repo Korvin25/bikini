@@ -1,0 +1,28 @@
+# Django/Python #
+.Python
+*.py[cod]
+**/*.py[cod]
+temp/
+temp/**/*.*
+upload/
+.temp
+/static/*
+/media/*
+/main/settings/local.py
+*.sqlite3
+/env/*
+/main/touchme
+
+# OS or Editor folders, extensions #
+.idea
+.cache
+.DS_Store
+.project
+.settings
+.log
+*.log
+*.log.*
+*.exe
+*zip
+Thumbs.db
+*tmp*
