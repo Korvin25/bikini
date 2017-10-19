@@ -1,7 +1,63 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Главная страница{% endblock %}
+{% block meta_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
+{% block meta_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
+{% block meta_keyw %}{{ seo_settings.global.get_meta_keyw }}{% endblock %}
+
+{% block og_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
+{% block og_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
+
+{% block twitter_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
+{% block twitter_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
+
+{% block base_class %}shell_wrapp{% endblock %}
+
+{% block header %}
+  {% include 'blocks/header_home.html' %}
+{% endblock %}
 
 {% block content %}
-    <h1>Главная страница</h1>
+  <main>
+    <div class="main_content">
+      <h2 class="title_block">Популярные товары</h2>
+      {% include 'blocks/list_products.html' %}
+    </div>
+    
+    <div class="text_preview_wrapp">
+      <div class="text_preview_inner">
+        <div class="text_preview_left">
+          <h2 class="title_block">Наши преимущества</h2>
+          <p><strong>Наш интернет магазин предлагает вам большой ассортимент купальников</strong>, а также мини и микро одежды. Благодаря этому каждая девушка сможет подобрать для себя идеальную пляжную одежду, выгодно подчеркивающую все прелести фигуры. К тому же, на Bikinimini представлено экстремальное бикини разных размеров, стилей и цветов.</p>
+          <p><strong>На нашем сайте вы найдете более сотни моделей купальников</strong>, нижнего белья и верхней мини и микро одежды. Не разочарует также выбор цветов и материалов. Среди многочисленных шортиков, трусиков, топов и боди вы сможете найти действительно идеальную для себя модель. Экстрим бикини купить на сайте Bikinimini не составит никакого труда, поскольку у нас найдётся достаточное многообразие одежды такого фасона. Благодаря нашим купальникам вы сможете создать уникальный пляжный образ на всех курортах. К тому же можно не бояться, что вы неожиданного встретите купальник-двойник.</p>
+          <p><strong>При желании вы можете выбрать полноценный купальник</strong>, а также сочетать его с топом, шортами и юбкой на свое усмотрение. Экстрим бикини магазин представляет только высшего качества, поэтому в нашей микро одежде вы можете отправиться не только на купание, но и престижную пляжную вечеринку. К тому же нашу верхнюю одежду вы можете использовать и для гоу-гоу. Стоит отметить, что столь качественные экстрим бикини интернет магазин предлагает по доступным ценам.</p>
+          <p><strong>Мы предлагаем своим клиентам обслуживание на должном уровне</strong> и обращаем внимание на обсуждения наших моделей. При желании наши клиенты могут принять участие в многочисленных конкурсах, которые мы регулярно проводим на нашем сайте.</p>
+        </div>
+        
+        <div class="soc_block_text">
+          <div>
+            <!--VK-->
+            <script type="text/javascript" src="//vk.com/js/api/openapi.js?116"></script>
+            <!-- VK Widget -->
+            <div id="vk_groups" style="height:auto !important"></div>
+            <script type="text/javascript">
+            VK.Widgets.Group("vk_groups", {mode: 0, width: "235", height: "365", color1: 'FFFFFF', color2: '2B587A', color3: '5B7FA6'}, 68369405);
+            </script>
+            <!--/VK-->
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="with_banner">
+      <div class="with_banner_wrapp" style="background-image:url(/static/images/akciya_bg.jpg);">
+        <div class="with_banner_padd">
+          <div class="with_mini_text">Конкурс на</div>
+          <div class="with_big_text">лучшее фото</div>
+          <div class="with_mini_text">в бикини</div>
+          <a href="" class="butt_with">Принять участие</a>
+        </div>
+      </div>
+    </div>
+  </main>
 {% endblock %}

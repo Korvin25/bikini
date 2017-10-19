@@ -1,12 +1,93 @@
+{% load i18n core_tags staticfiles %}
+{% get_current_language as CURRENT_LANGUAGE %}
+
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>{% block title %}Bikinimini.ru{% endblock %}</title>
-</head>
-<body>
-  <div class="content">
-    {% block content %}{% endblock %}
-  </div>
-</body>
+<html lang="{{ CURRENT_LANGUAGE }}">
+  <head>
+    <title>{% block meta_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}</title>
+    <meta content="charset=utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="keywords"  content="{% block meta_keyw %}{{ seo_settings.global.meta_keyw }}{% endblock %}" />
+    <meta name="description" content="{% block meta_desc %}{{ seo_settings.global.meta_desc }}{% endblock %}" />
+
+    <!-- Картинка для вконтакта-->
+    <link rel="image_src" href="">
+    <!-- Для Facebook-->
+    <meta property="og:title"    content="" />
+    <meta property="og:type"     content="website" />
+    {# <meta property="og:url"      content="{{ request.path|make_absolute }}" /> #}
+    <meta property="og:url"      content="{{ request.path }}" />
+    <meta property="og:description"  content="{% block og_desc %}{{ seo_settings.global.meta_desc }}{% endblock %}">
+    {# <meta property="og:image"    content="{% block og_image %}{{ favicon_196|make_absolute }}{% endblock %}"> #}
+    <!-- Для Twitter-->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{% block twitter_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_desc %}{{ seo_settings.global.meta_desc }}{% endblock %}">
+    {# <meta name="twitter:image" content="{% block twitter_image %}{{ favicon_196|make_absolute }}{% endblock %}"> #}
+
+    <link rel="icon" type="image/png"  href="/static/i/logo_ico.png" />
+    <meta http-equiv="X-UA-Compatible"   content="IE=edge" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+
+    <link href="/static/font.css"  type="text/css"  rel="stylesheet" />
+    <link href="/static/style.css" type="text/css"  rel="stylesheet" />
+    {% block extra_css %}{% endblock %}
+
+    <script src="/static/js/jquery-1.9.0.min.js"></script>
+    {% block head_js %}{% endblock %}
+
+    <!--[if IE]><script src="/static/js/html5shiv.js"></script><![endif]-->
+  </head>
+  <body>
+    <div class="{% block base_class %}shell_wrapp inner_page_wrapp{% endblock %}">
+      {% block header %}
+        {% include 'blocks/header.html' %}
+      {% endblock %}
+
+      {% block content %}{% endblock %}
+
+      {% block popups %}{% endblock %}
+
+      {% block footer %}
+        {% include 'blocks/footer.html' %}
+      {% endblock %}
+    </div>        
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        var touch_top = $('#touch-menu-top');
+        var menu_top  = $('.menu_top_line_wrapp');
+        
+        var touch_foot = $('#touch-menu-foot');
+        var menu_foot  = $('#foot_menu ul');
+        
+        $(touch_top).on('click', function(e) {
+          e.preventDefault();
+          menu_top.slideToggle();
+        });
+        
+        $(touch_foot).on('click', function(e) {
+          e.preventDefault();
+          menu_foot.slideToggle();
+        });
+        
+        
+        $(window).resize(function(){
+          var wid = $(window).width();
+          if(wid > 760 && menu_top.is(':hidden')) {
+            menu_top.removeAttr('style');
+          }
+        });
+        
+        $(window).resize(function(){
+          var wid = $(window).width();
+          if(wid > 760 && menu_foot.is(':hidden')) {
+            menu_foot.removeAttr('style');
+          }
+        });
+      });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+  </body>
 </html>

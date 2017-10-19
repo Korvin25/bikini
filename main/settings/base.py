@@ -36,6 +36,8 @@ SITE_ID = 1
 # Application definition
 
 INSTALLED_APPS = (
+    'jet',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,18 +46,37 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
+    'ckeditor',
     'crequest',
+    'django_cleanup',
+    'easy_thumbnails',
+    'modeltranslation',
+    'request',
+    'rosetta',
 
+    'apps.core',
+    'apps.geo',
     'apps.lk',
+    'apps.settings',
+    'apps.catalog',
+    'apps.content',
+    # 'apps.contests',
+    # 'apps.blog',
+    # 'apps.banners',
+    # 'apps.payments',
+    # 'apps.mailings',
+    # 'apps.feedback',
 )
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
+    # 'django.middleware.locale.LocaleMiddleware',
+    'solid_i18n.middleware.SolidLocaleMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'request.middleware.RequestMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -80,9 +101,8 @@ TEMPLATES = [
                 'django.core.context_processors.request',
 
                 # custom:
-                # 'main.context_processors.content',
                 # 'apps.content.context_processors.content',
-                # 'apps.settings.context_processors.settings',
+                'apps.settings.context_processors.settings',
             ],
             # 'loaders': [
             #     'django.template.loaders.filesystem.Loader',
@@ -107,12 +127,34 @@ DATABASES = {
 }
 
 LANGUAGE_CODE = 'ru'
+LANGUAGES = (
+    ('ru', 'Russian'),
+    ('en', 'English'),
+)
 
 TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'apps/lang/locale'),
+)
+
+MODELTRANSLATION_CUSTOM_FIELDS = ('RichTextField', 'RichTextUploadingField',)
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'ru'
+MODELTRANSLATION_TRANSLATION_FILES = (
+    'apps.geo.translation',
+    'apps.settings.translation',
+    'apps.catalog.translation',
+    'apps.content.translation',
+    # 'apps.contests.translation',
+    # 'apps.blog.translation',
+    # 'apps.banners.translation',
+)
+
+SOLID_I18N_DEFAULT_PREFIX_REDIRECT = False
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -125,6 +167,52 @@ EMAIL_HOST_USER = 'qqq'
 EMAIL_HOST_PASSWORD = 'qqq'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'qqq <qqq@qqq.com>'
+
+
+CKEDITOR_ALLOW_NONIMAGE_FILES = False
+CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_CONFIGS = {
+    'default': {
+        'forcePasteAsPlainText': True,
+        'language': 'ru',
+        'width': '100%',
+        'toolbar': [
+            {'name': 'document', 'items': ['Source']},
+            {'name': 'clipboard', 'items': ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']},
+            {'name': 'editing', 'items': ['Find', 'Replace', '-', 'SelectAll', '-', 'Scayt']},
+            '/',
+            {'name': 'basicstyles', 'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
+            {'name': 'paragraph', 'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language']},
+            {'name': 'links', 'items': ['Link', 'Unlink', 'Anchor']},
+            {'name': 'insert', 'items': ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe']},
+            '/',
+            {'name': 'styles', 'items': ['Format', 'FontSize']},
+            {'name': 'colors', 'items': ['TextColor', 'BGColor']},
+            {'name': 'tools', 'items': ['Maximize', 'ShowBlocks']},
+            {'name': 'others', 'items': ['-']},
+            {'name': 'about', 'items': ['About']},
+       ],
+        'format_tags': 'p;h2;h3',
+        'removeDialogTabs': 'image:advanced;link:advanced',
+        'image_previewText': '&nbsp',
+   },
+    'simple': {
+        'forcePasteAsPlainText': True,
+        'language': 'ru',
+        'width': '70%',
+        'height': '80%',
+        'toolbar': [
+            {'name': 'document', 'items': ['Source']},
+            {'name': 'paragraph', 'groups': ['list', 'blocks'],
+             'items': ['NumberedList', 'BulletedList', '-', 'Blockquote']},
+            {'name': 'basicstyles', 'items': ['Bold', 'Italic']},
+            {'name': 'links', 'items': ['Link']},
+       ],
+        'removeDialogTabs': 'image:advanced;link:advanced',
+        'image_previewText': '&nbsp',
+   },
+}
 
 
 LOGGING = {
@@ -182,15 +270,63 @@ LOGGING = {
             'handlers': ['email_log_file'],
             'level': 'INFO',
         },
-        'django.request': {
-            'handlers': ['requests_file', 'mail_admins'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
         # 'django.request': {
-        #     'handlers': ['mail_admins'],
-        #     'level': 'ERROR',
+        #     'handlers': ['requests_file', 'mail_admins'],
+        #     'level': 'DEBUG',
         #     'propagate': True,
         # },
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
     }
 }
+
+
+ROSETTA_MESSAGES_PER_PAGE = 50
+ROSETTA_SHOW_AT_ADMIN_PANEL = False
+
+
+THUMBNAIL_ALIASES = {
+    '': {
+        # 'project': {'size': (472, 420), 'crop': False, 'quality': 100},
+    },
+}
+
+
+ADMIN_SITE_HEADER = 'Bikinimini'
+
+JET_DEFAULT_THEME = 'light-gray'
+JET_THEMES = [
+    {
+        'theme': 'default', # theme folder name
+        'color': '#47bac1', # color of the theme's button in user menu
+        'title': 'Default' # theme title
+    },
+    {
+        'theme': 'green',
+        'color': '#44b78b',
+        'title': 'Green'
+    },
+    {
+        'theme': 'light-green',
+        'color': '#2faa60',
+        'title': 'Light Green'
+    },
+    {
+        'theme': 'light-violet',
+        'color': '#a464c4',
+        'title': 'Light Violet'
+    },
+    {
+        'theme': 'light-blue',
+        'color': '#5EADDE',
+        'title': 'Light Blue'
+    },
+    {
+        'theme': 'light-gray',
+        'color': '#222',
+        'title': 'Light Gray'
+    }
+]

@@ -6,6 +6,8 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, Permis
 from django.db import models
 from django.utils import timezone
 
+from ..geo.models import Country, City
+
 
 class UserManager(BaseUserManager):
 
@@ -50,9 +52,24 @@ class UserManager(BaseUserManager):
 
 class Profile(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField('Email', unique=True)
+    name = models.CharField('ФИО', max_length=511, blank=True)
+    date_joined = models.DateTimeField('Дата и время регистрации', auto_now_add=True)
+    subscription = models.BooleanField('Подписан на рассылку', default=True)
+
     is_active = models.BooleanField('Активен?', default=True)
     is_staff = models.BooleanField('Имеет доступ к админ-панели', default=False)
-    date_joined = models.DateTimeField('Дата и время регистрации', auto_now_add=True)
+
+    country = models.ForeignKey(Country, verbose_name='Страна', null=True, blank=True)
+    city = models.ForeignKey(City, verbose_name='Город', null=True, blank=True)
+    index = models.CharField('Индекс', max_length=15, null=True, blank=True)
+    street = models.CharField('Улица', max_length=63, null=True, blank=True)
+    house = models.CharField('Дом', max_length=7, null=True, blank=True)
+    building = models.CharField('Строение', max_length=7, null=True, blank=True)
+    housing = models.CharField('Корпус', max_length=7, null=True, blank=True)
+    flat = models.CharField('Квартира', max_length=7, null=True, blank=True)
+    phone = models.CharField('Контактный телефон', max_length=31, null=True, blank=True)
+
+    desired_products = models.ManyToManyField('catalog.Product', verbose_name='Желаемые товары', blank=True)
 
     objects = UserManager()
 
@@ -64,4 +81,8 @@ class Profile(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = 'профили'
 
     def get_short_name(self):
+        return self.email
+
+    @property
+    def username(self):
         return self.email

@@ -1,0 +1,279 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block meta_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
+{% block meta_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
+{% block meta_keyw %}{{ seo_settings.global.get_meta_keyw }}{% endblock %}
+
+{% block og_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
+{% block og_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
+
+{% block twitter_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
+{% block twitter_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
+
+{% block content %}
+  <main>
+    <div class="main_content">
+      
+      <ul id="touch_breadcrumb" class="breadcrumb">
+        <li><a href="#">Главная</a></li>
+        <li><a href="#">Женщинам</a></li>
+      </ul>
+      
+      <div class="sec_block">
+        
+        <div class="sec_menu">
+          <ul>
+            <li class="title_sec_block">Категории</li>
+            <li><a href="#"><strong>VIP</strong></a></li>
+            <li><a href="#"><strong>Микро бикини</strong></a></li>
+            <li><a href="#"><strong>Мини бикини</strong></a></li>
+            <li><a href="#"><strong>Женское бельё</strong></a></li>
+            <li><a href="#"><strong>Стринги</strong></a></li>
+            <li><a href="#"><strong>Пляжная одежда</strong></a></li>
+            <li><a href="#"><strong>Аксессуары</strong></a></li>
+            <li class="title_sec_block"><a href="#">Смотреть все</a></li>
+          </ul>
+        </div>
+        
+        <div class="sec_filtr">
+          <form method="get" action="" class="sec_filtr_wrapp">
+            <div class="title_sec_block">Фильтр</div>
+            <div class="filtr_title">Цвет:</div>
+            <div class="check_box check_mini">
+              <label for="white">
+                <input type="checkbox" name="color" id="white" value="white" />
+                <span style="background-color:white;" title="Белый">Белый</span>
+              </label>
+              <label for="palegreen">
+                <input type="checkbox" name="color"  id="palegreen" value="palegreen" />
+                <span style="background-color:palegreen;" title="Бледно-зеленый">Бледно-зеленый</span>
+              </label>
+              <label for="fuchsia">
+                <input type="checkbox" name="color"  id="fuchsia" value="fuchsia" />
+                <span style="background-color:fuchsia;" title="Фуксия">Фуксия</span>
+              </label>
+              <label for="red">
+                <input type="checkbox" name="color"  id="red" value="red" />
+                <span style="background-color:red;" title="Красный">Красный</span>
+              </label>
+              <label for="yellow">
+                <input type="checkbox" name="color" id="yellow" value="yellow" />
+                <span style="background-color:yellow;" title="Желтый">Желтый</span>
+              </label>
+              <label for="darkslateblue">
+                <input type="checkbox" name="color" id="darkslateblue" value="darkslateblue" />
+                <span style="background-color:darkslateblue;" title="Темный аспидно-синий">Темный аспидно-синий</span>
+              </label>
+            </div>
+            
+            <div class="filtr_title">Размер вверх:</div>
+            <div class="check_box check_size">
+              <label for="XS">
+                <input type="checkbox" name="size" id="XS" value="XS" />
+                <span title="XS">XS</span>
+              </label>
+              <label for="S">
+                <input type="checkbox" name="size"  id="S" value="S" />
+                <span title="S">S</span>
+              </label>
+              <label for="M">
+                <input type="checkbox" name="size"  id="M" value="M" />
+                <span title="M">M</span>
+              </label>
+              <label for="L">
+                <input type="checkbox" name="size"  id="L" value="L" />
+                <span title="L">L</span>
+              </label>
+              <label for="XL">
+                <input type="checkbox" name="size" id="XL" value="XL" />
+                <span title="XL">XL</span>
+              </label>
+            </div>
+            
+            <div class="filtr_title">Размер низ:</div>
+            <div class="check_box check_size">
+              <label for="XS2">
+                <input type="checkbox" name="size" id="XS2" value="XS" />
+                <span title="XS">XS</span>
+              </label>
+              <label for="S2">
+                <input type="checkbox" name="size"  id="S2" value="S" />
+                <span title="S">S</span>
+              </label>
+              <label for="M2">
+                <input type="checkbox" name="size"  id="M2" value="M" />
+                <span title="M">M</span>
+              </label>
+              <label for="L2">
+                <input type="checkbox" name="size"  id="L2" value="L" />
+                <span title="L">L</span>
+              </label>
+              <label for="XL2">
+                <input type="checkbox" name="size" id="XL2" value="XL" />
+                <span title="XL">XL</span>
+              </label>
+            </div>
+            <div class="filtr_title">Цена:</div>
+            <div class="check_box check_input">
+              <input type="text" name="min_price" value="" placeholder="0 p." />
+              <span>&mdash;</span>
+              <input type="text" name="max_price" value="" placeholder="10 000 p." />
+            </div>
+            
+            
+            <div class="filtr_title">Вверх:</div>
+              <div class="check_box check_mini check_photo check_photo_plus">
+                <label for="top-1">
+                  <input type="checkbox" name="top" id="top-1" value="1" />
+                  <span>
+                    <img src="/static/images/clotnes_acs/top-1.jpg" />
+                  </span>
+                </label>
+                <label for="top-2">
+                  <input type="checkbox" name="top"  id="top-2" value="2" />
+                  <span>
+                    <img src="/static/images/clotnes_acs/top-2.jpg" />
+                  </span>
+                </label>
+                <label for="top-3">
+                  <input type="checkbox" name="top"  id="top-3" value="3" />
+                  <span>
+                    <img src="/static/images/clotnes_acs/top-3.jpg" />
+                  </span>
+                </label>
+                
+              </div>
+              
+            <div class="filtr_title">Низ:</div>
+              <div class="check_box check_mini check_photo check_photo_plus">
+                <label for="bott-1">
+                  <input type="checkbox" name="bott" id="bott-1" value="1" />
+                  <span>
+                    <img src="/static/images/clotnes_acs/bott-1.jpg" />
+                  </span>
+                </label>
+                <label for="bott-2">
+                  <input type="checkbox" name="bott"  id="bott-2" value="2" />
+                  <span>
+                    <img src="/static/images/clotnes_acs/bott-2.jpg" />
+                  </span>
+                </label>
+                <label for="bott-3">
+                  <input type="checkbox" name="bott"  id="bott-3" value="3" />
+                  <span>
+                    <img src="/static/images/clotnes_acs/bott-3.jpg" />
+                  </span>
+                </label>
+              </div>
+            
+            <button class="bt_red">Показать</button>
+            <button class="reset_frm" type="reset">Сбросить</button>
+          </form>
+        </div>
+        
+        <div class="sec_banner_block">
+          <div class="with_banner_page" style="background-image:url(/static/images/akciya_bg.jpg);">
+            <div class="with_banner_padd_page">
+               <div class="with_mini_text">Конкурс на</div>
+                <div class="with_big_text">лучшее фото</div>
+               <div class="with_mini_text">в бикини</div>
+              <a href="" class="butt_with">Принять участие</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="main_content">
+        <ul class="breadcrumb">
+          <li><a href="#">Главная</a></li>
+          <li><a href="#">Женщинам</a></li>
+        </ul>
+        
+        {% include 'blocks/list_products.html' %}
+        
+        <div class="with_banner_page" style="background-image:url(/static/images/akciya_bg.jpg);">
+          <div class="with_banner_padd_page">
+             <div class="with_mini_text">Конкурс на</div>
+              <div class="with_big_text">лучшее фото</div>
+             <div class="with_mini_text">в бикини</div>
+            <a href="" class="butt_with">Принять участие</a>
+          </div>
+        </div>
+        
+        <div class="item_list_wrapp" itemscope="" itemtype="http://schema.org/ItemList">
+          <div class="product_list">
+            <div class="photo_list"><a href=""><img src="/static/images/catalog/pic6.jpg" alt=""></a></div>
+            <h3><a href="">Стринги DRIVE LUX RED</a></h3>
+            <h4>Яркие микро стринги</h4>
+            <div class="product_price">4300<abbr title="руб">р.</abbr></div>
+            <a href="#" class="to_cart_list">В корзину</a>
+          </div>
+          <div class="product_list">
+            <div class="photo_list"><a href=""><img src="/static/images/catalog/pic7.jpg" alt=""></a></div>
+            <h3><a href="">Стринги DRIVE LUX RED</a></h3>
+            <h4>Яркие микро стринги</h4>
+            <div class="product_price">4300<abbr title="руб">р.</abbr></div>
+            <a href="#" class="to_cart_list">В корзину</a>
+          </div>
+          <div class="product_list">
+            <div class="photo_list"><a href=""><img src="/static/images/catalog/pic8.jpg" alt=""></a></div>
+            <h3><a href="">Стринги DRIVE LUX RED</a></h3>
+            <h4>Яркие микро стринги</h4>
+            <div class="product_price">4300<abbr title="руб">р.</abbr></div>
+            <a href="#" class="to_cart_list">В корзину</a>
+          </div>
+        </div>
+        <div class="pagination_block">
+          <div class="wrapp_pagination">
+            <a href="#" class="yet_items"><span>Показать ещё 10</span></a>
+            
+            <div class="pagination">
+              <ul class="pagination_list" id="paginationUL">
+                <li class="pagi_bts pagi_back">
+                  <a href="#">Назад</a>
+                </li>
+                <li><a href="#">1</a></li>
+                <li><a href="#">&hellip;</a></li>
+                <li><a href="#">7</a></li>
+                <li><a href="#">8</a></li>
+                <li><a href="#">9</a></li>
+                <li><a href="#">10</a></li>
+                <li class="active_pagi"><a href="#">11</a></li>
+                <li><a href="#">12</a></li>
+                <li><a href="#">13</a></li>
+                <li><a href="#">14</a></li>
+                <li><a href="#">15</a></li>
+                <li><a href="#">16</a></li>
+                <li><a href="#">17</a></li>
+                <li><a href="#">18</a></li>
+                <li><a href="#">19</a></li>
+                <li><a href="#">20</a></li>
+                <li><a href="#">21</a></li>
+                <li><a href="#">22</a></li>
+                <li><a href="#">23</a></li>
+                <li><a href="#">24</a></li>
+                <li><a href="#">&hellip;</a></li>
+                <li><a href="#">38</a></li>
+                <li class="pagi_bts pagi_next">
+                  <a href="#">Далее</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class="text_preview_page">
+          <div class="text_preview_inner">
+            <h2 class="title_block">Наши приемущества</h2>
+            <p><strong>Наш интернет магазин предлагает вам большой ассортимент купальников</strong>, а также мини и микро одежды. Благодаря этому каждая девушка сможет подобрать для себя идеальную пляжную одежду, выгодно подчеркивающую все прелести фигуры. К тому же, на Bikinimini представлено экстремальное бикини разных размеров, стилей и цветов.</p>
+            <p><strong>На нашем сайте вы найдете более сотни моделей купальников</strong>, нижнего белья и верхней мини и микро одежды. Не разочарует также выбор цветов и материалов. Среди многочисленных шортиков, трусиков, топов и боди вы сможете найти действительно идеальную для себя модель. Экстрим бикини купить на сайте Bikinimini не составит никакого труда, поскольку у нас найдётся достаточное многообразие одежды такого фасона. Благодаря нашим купальникам вы сможете создать уникальный пляжный образ на всех курортах. К тому же можно не бояться, что вы неожиданного встретите купальник-двойник.</p>
+            <p><strong>При желании вы можете выбрать полноценный купальник</strong>, а также сочетать его с топом, шортами и юбкой на свое усмотрение. Экстрим бикини магазин представляет только высшего качества, поэтому в нашей микро одежде вы можете отправиться не только на купание, но и престижную пляжную вечеринку. К тому же нашу верхнюю одежду вы можете использовать и для гоу-гоу. Стоит отметить, что столь качественные экстрим бикини интернет магазин предлагает по доступным ценам.</p>
+            <p><strong>Мы предлагаем своим клиентам обслуживание на должном уровне</strong> и обращаем внимание на обсуждения наших моделей. При желании наши клиенты могут принять участие в многочисленных конкурсах, которые мы регулярно проводим на нашем сайте.</p>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </main>
+{% endblock %}

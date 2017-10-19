@@ -1,0 +1,133 @@
+/*
+	...src: local('☺'),... - IE;
+*/
+
+@font-face { /* font-family: 'Museo100';       */
+	font-family: 'Museo100';
+	src: url('fonts/Museo100/Museo100.eot');
+	src: local('☺'), 
+	url('fonts/Museo100/Museo100.woff') format('woff'), 
+	url('fonts/Museo100/Museo100.ttf') format('truetype'), 
+	url('fonts/Museo100/Museo100.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face { /* font-family: 'Museo300';       */
+	font-family: 'Museo300';
+	src: url('fonts/Museo300/Museo300.eot');
+	src: local('☺'), 
+	url('fonts/Museo300/Museo300.woff') format('woff'), 
+	url('fonts/Museo300/Museo300.ttf') format('truetype'), 
+	url('fonts/Museo300/Museo300.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face { /* font-family: 'Museo500';       */
+	font-family: 'Museo500';
+	src: url('fonts/Museo500/Museo500.eot');
+	src: local('☺'), 
+	url('fonts/Museo500/Museo500.woff') format('woff'), 
+	url('fonts/Museo500/Museo500.ttf') format('truetype'), 
+	url('fonts/Museo500/Museo500.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face { /* font-family: 'Museo700';       */
+	font-family: 'Museo700';
+	src: url('fonts/Museo700/Museo700.eot');
+	src: local('☺'), 
+	url('fonts/Museo700/Museo700.woff') format('woff'), 
+	url('fonts/Museo700/Museo700.ttf') format('truetype'), 
+	url('fonts/Museo700/Museo700.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face { /* font-family: 'Museo900';       */
+	font-family: 'Museo900';
+	src: url('fonts/Museo900/Museo900.eot');
+	src: local('☺'), 
+	url('fonts/Museo900/Museo900.woff') format('woff'), 
+	url('fonts/Museo900/Museo900.ttf') format('truetype'), 
+	url('fonts/Museo900/Museo900.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face { /* font-family: 'NeoBold';        */
+	font-family: 'NeoBold';
+	src: url('fonts/NeoBold/NeoBold.eot');
+	src: local('☺'), 
+	url('fonts/NeoBold/NeoBold.woff') format('woff'), 
+	url('fonts/NeoBold/NeoBold.ttf') format('truetype'), 
+	url('fonts/NeoBold/NeoBold.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face { /* font-family: 'NeoBoldItalic';  */
+	font-family: 'NeoBoldItalic';
+	src: url('fonts/NeoBoldItalic/NeoBoldItalic.eot');
+	src: local('☺'), url('fonts/NeoBoldItalic/NeoBoldItalic.woff') format('woff'), url('fonts/NeoBoldItalic/NeoBoldItalic.ttf') format('truetype'), url('fonts/NeoBoldItalic/NeoBoldItalic.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face { /* font-family: 'NeoItalic';      */
+	font-family: 'NeoItalic';
+	src: url('fonts/NeoItalic/NeoItalic.eot');
+	src: local('☺'), 
+	url('fonts/NeoItalic/NeoItalic.woff') format('woff'), 
+	url('fonts/NeoItalic/NeoItalic.ttf') format('truetype'), 
+	url('fonts/NeoItalic/NeoItalic.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face { /* font-family: 'NeoLight';       */
+	font-family: 'NeoLight';
+	src: url('fonts/NeoLight/NeoLight.eot');
+	src: local('☺'), 
+	url('fonts/NeoLight/NeoLight.woff') format('woff'), 
+	url('fonts/NeoLight/NeoLight.ttf') format('truetype'), 
+	url('fonts/NeoLight/NeoLight.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face { /* font-family: 'NeoLightItalic'; */
+	font-family: 'NeoLightItalic';
+	src: url('fonts/NeoLightItalic/NeoLightItalic.eot');
+	src: local('☺'), 
+	url('fonts/NeoLightItalic/NeoLightItalic.woff') format('woff'), 
+	url('fonts/NeoLightItalic/NeoLightItalic.ttf') format('truetype'), 
+	url('fonts/NeoLightItalic/NeoLightItalic.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face { /* font-family: 'NeoMedium';      */
+	font-family: 'NeoMedium';
+	src: url('fonts/NeoMedium/NeoMedium.eot');
+	src: local('☺'), 
+	url('fonts/NeoMedium/NeoMedium.woff') format('woff'), 
+	url('fonts/NeoMedium/NeoMedium.ttf') format('truetype'), 
+	url('fonts/NeoMedium/NeoMedium.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face { /* font-family: 'NeoRegular';     */
+	font-family: 'NeoRegular';
+	src: url('fonts/NeoRegular/NeoRegular.eot');
+	src: local('☺'), 
+	url('fonts/NeoRegular/NeoRegular.woff') format('woff'), 
+	url('fonts/NeoRegular/NeoRegular.ttf') format('truetype'), 
+	url('fonts/NeoRegular/NeoRegular.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face { /* font-family: 'NeoUltra';       */
+	font-family: 'NeoUltra';
+	src: url('fonts/NeoUltra/NeoUltra.eot');
+	src: local('☺'), 
+	url('fonts/NeoUltra/NeoUltra.woff') format('woff'), 
+	url('fonts/NeoUltra/NeoUltra.ttf') format('truetype'), 
+	url('fonts/NeoUltra/NeoUltra.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+

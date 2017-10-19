@@ -1,0 +1,390 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block meta_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
+{% block meta_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
+{% block meta_keyw %}{{ seo_settings.global.get_meta_keyw }}{% endblock %}
+
+{% block og_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
+{% block og_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
+
+{% block twitter_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
+{% block twitter_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
+
+{% block content %}
+  <main>
+    <div class="main_content main_cut">
+      
+      <ul id="touch_breadcrumb" class="breadcrumb">
+        <li><a href="#">Главная</a></li>
+        <li><a href="#">Личный кабинет</a></li>
+      </ul>
+    
+      <div id="main_content" class="wrapp_content">
+        <ul class="breadcrumb">
+          <li><a href="#">Главная</a></li>
+          <li><a href="#">Личный кабинет</a></li>
+        </ul>
+        <h1 class="title_block">Личный кабинет</h1>
+
+        <div class="wns_tubs">
+          <div class="wns_buttons">
+            <div class="lnk_bt_wns">
+              <img src="/static/i/icon_user.png" alt="Мои данные" />
+              <abbr>Мои данные</abbr>
+            </div>
+            <div class="lnk_bt_wns">
+              <img src="/static/i/icon_myorders.png" alt="Мои заказы" />
+              <abbr>Мои заказы</abbr>
+            </div>
+          </div>
+          
+          <div class="wns_content">
+            <div class="wns_row_content">
+              <div class="wns_form_block">
+                <form action="">
+                
+                  <div class="wns_row_input">
+                    <label class="wns_lbl">
+                      <p class="wns_title_row_frm">Как к вам обращаться:</p>
+                      <div class="input_shell">
+                        <input type="text" value="" name="fio" class="input_text errr" placeholder="Фамилия, Имя, Отчество *" />
+                        <span class="err_r">Заполните поле</span>
+                      </div>
+                    </label>
+                  </div>
+                  <hr class="hr_" />
+                  
+                  <div class="wns_row_input wns_row_input1900">
+                      <div class="wns_lbl">
+                        <p class="wns_title_row_frm">Данные для доставки:</p>
+                        <script>
+                          (function( $ ) {
+                            $.fn.selectbox2 = function() {
+                            var selectDefaultHeight = 40;
+                              $('#selectboxss2 .selectboxssvalue').click(function() {
+                                var currentHeight = $(this).closest("#selectboxss2").height();
+                                if (currentHeight < 100 || currentHeight == selectDefaultHeight) {
+                                  $(this).closest("#selectboxss2").height("auto");
+                                  $(this).find('#arrowselect2').attr("style", "border-radius: 1000px;transition: 0.2s;transform: rotate(180deg);");
+                                }
+                                if (currentHeight >= 101) {
+                                  $(this).closest("#selectboxss2").height(selectDefaultHeight);
+                                  $(this).find('#arrowselect2').attr("style", "rotate(0deg);");
+                                }
+                              });
+                              $('li.selectoption').click(function() {
+                                $(this).closest("#selectboxss2").height(selectDefaultHeight);
+                                $(this).closest("#selectboxss2").find('#arrowselect2').attr("style", "rotate(0deg);");
+                                
+                                var t = $(this).closest("li.selectoption").text();
+                                $(this).closest("#selectboxss2").find('.selectboxssvalue span.input_text_view').text(t);
+                              });
+                            };
+                          })( jQuery );
+                        </script>
+                        <script> $(document).ready(function(){ $('#selectboxss2').selectbox2(); }); </script>
+                        <div class="input_shell select_shel">
+                          <div class="select_img">
+                            <div class="selectboxss drop_list_text" id="selectboxss2">
+                              <div class="selectboxssvalue">
+                                <span class="input_text_view">Страна <span class="orange_text">*</span></span>
+                                <img src="/static/i/arrow_down_list.png" class="arrowselect" id="arrowselect2" />
+                              </div>
+                              <ul class="selectboxssmenu">
+                                <li class="selectoption">Россия</li>
+                                <li class="selectoption">Украина</li>
+                              </ul>
+                            </div>
+                          </div>
+                          
+                          <span class="err_r">Заполните поле</span>
+                        </div>
+                        <script>
+                          (function( $ ) {
+                            $.fn.selectbox3 = function() {
+                            var selectDefaultHeight = 40;
+                              $('#selectboxss3 .selectboxssvalue').click(function() {
+                                var currentHeight = $(this).closest("#selectboxss3").height();
+                                if (currentHeight < 100 || currentHeight == selectDefaultHeight) {
+                                  $(this).closest("#selectboxss3").height("auto");
+                                  $(this).find('#arrowselect3').attr("style", "border-radius: 1000px;transition: 0.2s;transform: rotate(180deg);");
+                                }
+                                if (currentHeight >= 101) {
+                                  $(this).closest("#selectboxss3").height(selectDefaultHeight);
+                                  $(this).find('#arrowselect3').attr("style", "rotate(0deg);");
+                                }
+                              });
+                              $('li.selectoption').click(function() {
+                                $(this).closest("#selectboxss3").height(selectDefaultHeight);
+                                $(this).closest("#selectboxss3").find('#arrowselect3').attr("style", "rotate(0deg);");
+                                
+                                var t = $(this).closest("li.selectoption").text();
+                                $(this).closest("#selectboxss3").find('.selectboxssvalue span.input_text_view').text(t);
+                              });
+                            };
+                          })( jQuery );
+                        </script>
+                        <script> $(document).ready(function(){ $('#selectboxss3').selectbox3(); }); </script>
+                        <div class="input_shell select_shel">
+                          <div class="select_img errr">
+                            <div class="selectboxss drop_list_text" id="selectboxss3">
+                              <div class="selectboxssvalue">
+                                <span class="input_text_view">Город <span class="orange_text">*</span></span>
+                                <img src="/static/i/arrow_down_list.png" class="arrowselect" id="arrowselect3" />
+                              </div>
+                              <ul class="selectboxssmenu">
+                                <li class="selectoption">Москва</li>
+                                <li class="selectoption">Санкт-Петербург</li>
+                                <li class="selectoption">Екатеринбург</li>
+                                <li class="selectoption">Севастополь</li>
+                                <li class="selectoption">Воронеж</li>
+                                <li class="selectoption">Ростов</li>
+                                <li class="selectoption">Пекин</li>
+                                <li class="selectoption">Киев</li>
+                              </ul>
+                            </div>
+                          </div>
+                          <span class="err_r">Заполните поле</span>
+                        </div>
+                        
+                        <div class="input_shell">
+                          <input type="text" value="" name="index" class="input_text" placeholder="Индекс *" />
+                          <span class="err_r">Заполните поле</span>
+                        </div>
+                        
+                        <div class="input_shell">
+                          <input type="text" value="" name="street" class="input_text" placeholder="Улица *" />
+                          <span class="err_r">Заполните поле</span>
+                        </div>
+                        
+                        <div class="rows_popup_input rows_wns_input">
+                          <div class="row_form_popup two_rows">
+                            <label class="input_shell">
+                              <input type="text" value="" name="street" class="input_text" placeholder="Дом *" />
+                              <span class="err_r">Заполните поле</span>
+                            </label>
+                            
+                            <label class="input_shell">
+                              <input type="text" value="" name="street" class="input_text" placeholder="Строение" />
+                              <span class="err_r">Заполните поле</span>
+                            </label>
+                          </div>
+                          
+                          <div class="row_form_popup two_rows">
+                            <label class="input_shell">
+                              <input type="text" value="" name="street" class="input_text" placeholder="Корпус" />
+                              <span class="err_r">Заполните поле</span>
+                            </label>
+                            
+                            <label class="input_shell">
+                              <input type="text" value="" name="street" class="input_text errr" placeholder="Квартира *" />
+                              <span class="err_r">Заполните поле</span>
+                            </label>
+                          </div>
+                        </div>
+                        
+                        <div class="input_shell">
+                          <input type="text" value="" name="phone" class="input_text" placeholder="Контактный телефон *" />
+                          <span class="err_r">Заполните поле</span>
+                        </div>
+                        
+                      </div>
+                    </div>
+                  
+                  <hr class="hr_" />
+                  
+                  <div class="wns_row_input">
+                    <label class="wns_lbl">
+                      <p class="wns_title_row_frm">Ваш e-mail:</p>
+                      <div class="input_shell">
+                        <input type="text" value="" name="mail" class="input_text" placeholder="E-mail *" />
+                        <span class="err_r">Заполните поле</span>
+                      </div>
+                    </label>
+                  </div>
+                  <hr class="hr_" />
+                  
+                  <div class="wns_row_input wns_row_w100">
+                    <div class="wns_lbl wns_lblW">
+                      <div class="pass_wns_box">
+                        <abbr>Пароль:</abbr>
+                        <div class="edit_pass_wns">
+                          <div class="edit_text_wns">Изменить</div>
+                        </div>
+                      </div>
+                      
+                      <div class="row_form_popup">
+                        <label class="lbl_box check_popap_row">
+                          <input class="check_form" type="checkbox" value="" name="save_vhod">
+                          <p>Я хочу получать информацию о скидках и новинках <a href="#">Изменить</a></p>
+                        </label>
+                      </div>
+                      
+                    </div>
+                  </div>
+                  
+                  
+                  
+                  
+                  <div class="row_form_popup row_pop_butt">
+                    <button class="bt_red">Сохранить</button>
+                  </div>
+                  
+                </form>
+              </div>
+            </div>
+            
+            <div class="wns_row_content">
+              <div class="wns_orders_tbl">
+                
+                <div class="table_shell tb_shell">
+                  <div class="table_head tb_head">
+                    <div class="table_cell"><div class="tb_title">Дата заказа</div></div>
+                    <div class="table_cell"><div class="tb_title">Номер заказа</div></div>
+                    <div class="table_cell"><div class="tb_title">Способ доставки</div></div>
+                    <div class="table_cell"><div class="tb_title">Способ оплаты</div></div>
+                    <div class="table_cell"><div class="tb_title">Статус</div></div>
+                    <div class="table_cell"><div class="tb_title">Итого к оплате</div></div>
+                    
+                  </div>
+                  
+                  <div class="table_row  tb_row">
+                    <div class="table_cell">
+                      <div class="tb_title">Дата заказа</div>
+                      <div class="txt_cell_td">12 августа</div>
+                    </div>
+                    
+                    <div class="table_cell">
+                      <div class="tb_title">Номер заказа</div>
+                      <div class="txt_cell_td">201612356890</div>
+                    </div>
+                    
+                    <div class="table_cell">
+                      <div class="tb_title">Способ доставки</div>
+                      <div class="txt_cell_td">самовывоз</div>
+                    </div>
+                    
+                    <div class="table_cell">
+                      <div class="tb_title">Способ оплаты</div>
+                      <div class="txt_cell_td">paypal</div>
+                    </div>
+                    
+                    <div class="table_cell">
+                      <div class="tb_title">Статус</div>
+                      <div class="txt_cell_td">исполнен</div>
+                    </div>
+                    
+                    <div class="table_cell">
+                      <div class="tb_title">Итого к оплате</div>
+                      <div class="txt_cell_td"><div class="product_price">3 250<abbr title="руб">р</abbr></div></div>
+                    </div>
+                    
+                  </div>
+                  
+                  <div class="table_row  tb_row">
+                    <div class="table_cell">
+                      <div class="tb_title">Дата заказа</div>
+                      <div class="txt_cell_td">12 августа</div>
+                    </div>
+                    
+                    <div class="table_cell">
+                      <div class="tb_title">Номер заказа</div>
+                      <div class="txt_cell_td">201612356890</div>
+                    </div>
+                    
+                    <div class="table_cell">
+                      <div class="tb_title">Способ доставки</div>
+                      <div class="txt_cell_td">самовывоз</div>
+                    </div>
+                    
+                    <div class="table_cell">
+                      <div class="tb_title">Способ оплаты</div>
+                      <div class="txt_cell_td">paypal</div>
+                    </div>
+                    
+                    <div class="table_cell">
+                      <div class="tb_title">Статус</div>
+                      <div class="txt_cell_td">исполнен</div>
+                    </div>
+                    
+                    <div class="table_cell">
+                      <div class="tb_title">Итого к оплате</div>
+                      <div class="txt_cell_td"><div class="product_price">3 250<abbr title="руб">р</abbr></div></div>
+                    </div>
+                    
+                  </div>
+                  
+                  <div class="table_row  tb_row">
+                    <div class="table_cell">
+                      <div class="tb_title">Дата заказа</div>
+                      <div class="txt_cell_td">12 августа</div>
+                    </div>
+                    
+                    <div class="table_cell">
+                      <div class="tb_title">Номер заказа</div>
+                      <div class="txt_cell_td">201612356890</div>
+                    </div>
+                    
+                    <div class="table_cell">
+                      <div class="tb_title">Способ доставки</div>
+                      <div class="txt_cell_td">самовывоз</div>
+                    </div>
+                    
+                    <div class="table_cell">
+                      <div class="tb_title">Способ оплаты</div>
+                      <div class="txt_cell_td">paypal</div>
+                    </div>
+                    
+                    <div class="table_cell">
+                      <div class="tb_title">Статус</div>
+                      <div class="txt_cell_td">исполнен</div>
+                    </div>
+                    
+                    <div class="table_cell">
+                      <div class="tb_title">Итого к оплате</div>
+                      <div class="txt_cell_td"><div class="product_price">3 250<abbr title="руб">р</abbr></div></div>
+                    </div>
+                    
+                  </div>
+                  
+                </div>
+                
+                
+              </div>
+            </div>
+          </div>
+          <script>
+            (function($){        
+              $.fn.lightTabs = function(options){
+                var createTabs = function(){
+                  tabs = this;
+                  i = 0;
+                  showPage = function(i){
+                    $(tabs).children(".wns_content").children(".wns_row_content").hide();
+                    $(tabs).children(".wns_content").children(".wns_row_content").eq(i).show();
+                    $(tabs).children(".wns_buttons").children(".lnk_bt_wns").removeClass("wns_active");
+                    $(tabs).children(".wns_buttons").children(".lnk_bt_wns").eq(i).addClass("wns_active");
+                  }
+                  showPage(0);
+                  $(tabs).children(".wns_buttons").children(".lnk_bt_wns").each(function(index, element){
+                    $(element).attr("data-page", i);
+                    i++;            
+                  });
+                  $(tabs).children(".wns_buttons").children(".lnk_bt_wns").click(function(){
+                    showPage(parseInt($(this).attr("data-page")));
+                  });        
+                };    
+                return this.each(createTabs);
+              };  
+            })(jQuery);
+            $(document).ready(function(){
+              $(".wns_tubs").lightTabs();
+            });
+          </script>
+        </div>
+
+      </div>
+    </div>
+  </main>
+{% endblock %}

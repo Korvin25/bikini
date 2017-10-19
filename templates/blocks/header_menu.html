@@ -1,0 +1,92 @@
+{% load i18n core_tags %}
+{% get_current_language as CURRENT_LANGUAGE %}
+
+<div id="touch_menu">
+  <div class="lang_head lng_header">
+    <a href="#" onclick="return false;" class="lang_head_tit">{% trans 'Язык' %}: {% trans 'Язык' %}: {% if CURRENT_LANGUAGE == 'ru' %}РУС{% else %}ENG{% endif %}<img src="/static/i/blank.gif" onclick="nodeExpand(19860001,0)" id="img_19860001"></a>
+    <ul id="tb_19860001" style="display: none;">
+      <form action="{% url 'set_language' %}" method="post" id="i18n_ru1">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{% get_current_path %}" />
+        <input name="language" type="hidden" value="ru" />
+      </form>
+      <form action="{% url 'set_language' %}" method="post" id="i18n_en1">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{% get_current_path %}" />
+        <input name="language" type="hidden" value="en" />
+      </form>
+      <li>{% if CURRENT_LANGUAGE == 'ru' %}<img src="/static/i/arrow_list.png">Русский{% else %}<a href="#" onClick="document.getElementById('i18n_ru1').submit()">Русский</a>{% endif %}</li>
+      <li>{% if CURRENT_LANGUAGE == 'en' %}<img src="/static/i/arrow_list.png">English{% else %}<a href="#" onClick="document.getElementById('i18n_en1').submit()">English</a>{% endif %}</li>
+    </ul>
+  </div>
+  
+  <div id="logo_mini"><a href="/" title="МиниБикини"><img src="/static/i/logo.png" alt="МиниБикини" /></a></div>
+  <a href="#" id="touch-menu-top">Меню</a>
+</div>
+
+<div class="menu_top_line_wrapp">
+  <div class="logo"><a href="/" title="МиниБикини"><img src="/static/i/logo.png" alt="МиниБикини" /></a></div>
+  
+  <ul class="cat_row_top">
+    <li><a href="#" title="">Мужчинам</a></li>
+    <li><a href="#" title="">Женщинам</a></li>
+  </ul>
+  
+  <ul class="cat_row_top cat_row_top2">
+    <li><a href="#" title="">Оплата и доставка</a></li>
+    <li><a href="#" title="">Сотрудничество</a></li>
+    <li><a href="#" title="">Контакты</a></li>
+  </ul>
+  <div class="clr clr_mrgn"></div>
+  <div class="list_top_menu_wrapp">
+    <ul class="list_menu_lev1">
+      <li><a href="#">Подарочный сертификат</a></li>
+      <li><a href="#"><img src="/static/i/logo_mini.png" alt="desinger" />desinger</a></li>
+      <li><a href="#">Видео</a></li>
+      <li><a href="#" >Список желаемых покупок&nbsp;&nbsp;<img src="/static/i/desir.png" alt="" />&nbsp;&nbsp;<span class="disc_number">3</span></a></li>
+    </ul>
+    <ul class="list_menu_lev1 list_menu_lev2">
+      <li class="lang_head">
+        <a href="#" onclick="return false;" class="lang_head_tit">{% trans 'Язык' %}: {% if CURRENT_LANGUAGE == 'ru' %}РУС{% else %}ENG{% endif %}<img src="/static/i/blank.gif" onClick="nodeExpand(198600,0)"  id="img_198600"></a>
+        
+        <ul id="tb_198600" style="display:none">
+          <form action="{% url 'set_language' %}" method="post" id="i18n_ru">
+            {% csrf_token %}
+            <input name="next" type="hidden" value="{% get_current_path %}" />
+            <input name="language" type="hidden" value="ru" />
+          </form>
+          <form action="{% url 'set_language' %}" method="post" id="i18n_en">
+            {% csrf_token %}
+            <input name="next" type="hidden" value="{% get_current_path %}" />
+            <input name="language" type="hidden" value="en" />
+          </form>
+          <li>{% if CURRENT_LANGUAGE == 'ru' %}<img src="/static/i/arrow_list.png">Русский{% else %}<a href="#" onClick="document.getElementById('i18n_ru').submit()">Русский</a>{% endif %}</li>
+          <li>{% if CURRENT_LANGUAGE == 'en' %}<img src="/static/i/arrow_list.png">English{% else %}<a href="#" onClick="document.getElementById('i18n_en').submit()">English</a>{% endif %}</li>
+        </ul>
+      </li>
+      
+      <script type="text/javascript">
+        function nodeExpand(nodeId, level) {
+          var d = document;
+          var img = 'img_' + nodeId;
+          var tb = 'tb_' + nodeId;
+          if(d.getElementById(tb).style.display == 'none') {
+            if(level == 0) {d.getElementById(img).src = '/static/i/blank.gif';}
+            if(level == 1) {d.getElementById(img).src = '/static/i/blank.gif';}
+            d.getElementById(tb).style.display = '';
+          }
+          else {
+            if(level == 0) {d.getElementById(img).src = '/static/i/blank.gif';}
+            if(level == 1) {d.getElementById(img).src = '/static/i/blank.gif';}
+            d.getElementById(tb).style.display = 'none';
+          }
+        }
+      </script>
+      
+      <li><a href="#">Мой профиль</a></li>
+      <li><a href="#">Моё избранное</a></li>
+      <li><a href="#">История покупок</a></li>
+      <li><a href="#">Выход</a></li>
+    </ul>
+  </div>
+</div>

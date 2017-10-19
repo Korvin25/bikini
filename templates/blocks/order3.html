@@ -1,0 +1,172 @@
+<div class="window_popap no_float">
+  <div class="close_popap"><img src="/static/i/close_icon.png" alt="Закрыть" /></div>
+  <div class="wrap_window_popap bg_wrapp_window">
+    <div class="popap_row">
+      <div class="popap_row_wrapp">
+        <h2 class="title_popap">Данные для доставки</h2>
+        <form action="">
+          
+          <div class="rows_popup_input">
+            <div class="row_form_popup">
+              <label class="lbl_box">
+                <p>Страна:<span class="orange_text">*</span></p>
+                <script>
+                  (function( $ ) {
+                    $.fn.selectbox2 = function() {
+                    var selectDefaultHeight = 40;
+                      $('#selectboxss2 .selectboxssvalue').click(function() {
+                        var currentHeight = $(this).closest("#selectboxss2").height();
+                        if (currentHeight < 100 || currentHeight == selectDefaultHeight) {
+                          $(this).closest("#selectboxss2").height("auto");
+                          $(this).find('#arrowselect2').attr("style", "border-radius: 1000px;transition: 0.2s;transform: rotate(180deg);");
+                        }
+                        if (currentHeight >= 101) {
+                          $(this).closest("#selectboxss2").height(selectDefaultHeight);
+                          $(this).find('#arrowselect2').attr("style", "rotate(0deg);");
+                        }
+                      });
+                      $('li.selectoption').click(function() {
+                        $(this).closest("#selectboxss2").height(selectDefaultHeight);
+                        $(this).closest("#selectboxss2").find('#arrowselect2').attr("style", "rotate(0deg);");
+                        
+                        var t = $(this).closest("li.selectoption").text();
+                        $(this).closest("#selectboxss2").find('.selectboxssvalue span.input_text_view').text(t);
+                      });
+                    };
+                  })( jQuery );
+                </script>
+                <script> $(document).ready(function(){ $('#selectboxss2').selectbox2(); }); </script>
+                <div class="select_img">
+                  <div class="selectboxss drop_list_text" id="selectboxss2">
+                    <div class="selectboxssvalue">
+                      <span class="input_text_view"></span>
+                      <img src="/static/i/arrow_down_list.png" class="arrowselect" id="arrowselect2" />
+                    </div>
+                    <ul class="selectboxssmenu">
+                      <li class="selectoption">Россия</li>
+                      <li class="selectoption">Украина</li>
+                    </ul>
+                  </div>
+                </div>
+              </label>
+            </div>
+            
+            <div class="row_form_popup">
+              <label class="lbl_box">
+                <p>Город:<span class="orange_text">*</span></p>
+                <script>
+                  (function( $ ) {
+                    $.fn.selectbox3 = function() {
+                    var selectDefaultHeight = 40;
+                      $('#selectboxss3 .selectboxssvalue').click(function() {
+                        var currentHeight = $(this).closest("#selectboxss3").height();
+                        if (currentHeight < 100 || currentHeight == selectDefaultHeight) {
+                          $(this).closest("#selectboxss3").height("auto");
+                          $(this).find('#arrowselect3').attr("style", "border-radius: 1000px;transition: 0.2s;transform: rotate(180deg);");
+                        }
+                        if (currentHeight >= 101) {
+                          $(this).closest("#selectboxss3").height(selectDefaultHeight);
+                          $(this).find('#arrowselect3').attr("style", "rotate(0deg);");
+                        }
+                      });
+                      $('li.selectoption').click(function() {
+                        $(this).closest("#selectboxss3").height(selectDefaultHeight);
+                        $(this).closest("#selectboxss3").find('#arrowselect3').attr("style", "rotate(0deg);");
+                        
+                        var t = $(this).closest("li.selectoption").text();
+                        $(this).closest("#selectboxss3").find('.selectboxssvalue span.input_text_view').text(t);
+                      });
+                    };
+                  })( jQuery );
+                </script>
+                <script> $(document).ready(function(){ $('#selectboxss3').selectbox3(); }); </script>
+                <div class="select_img">
+                  <div class="selectboxss drop_list_text" id="selectboxss3">
+                    <div class="selectboxssvalue">
+                      <span class="input_text_view"></span>
+                      <img src="/static/i/arrow_down_list.png" class="arrowselect" id="arrowselect3" />
+                    </div>
+                    <ul class="selectboxssmenu">
+                      <li class="selectoption">Москва</li>
+                      <li class="selectoption">Санкт-Петербург</li>
+                      <li class="selectoption">Екатеринбург</li>
+                      <li class="selectoption">Севастополь</li>
+                      <li class="selectoption">Воронеж</li>
+                      <li class="selectoption">Ростов</li>
+                      <li class="selectoption">Пекин</li>
+                      <li class="selectoption">Киев</li>
+                    </ul>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+          
+          <div class="rows_popup_input">
+            <div class="row_form_popup">
+              <label class="lbl_box">
+                <p>Индекс:<span class="orange_text">*</span></p>
+                <input type="text" value="" name="index" class="input_text" />
+              </label>
+            </div>
+            
+            <div class="row_form_popup">
+              <label class="lbl_box">
+                <p>Улица:<span class="orange_text">*</span></p>
+                <input type="text" value="" name="street" class="input_text" />
+              </label>
+            </div>
+          </div>
+          
+          <div class="rows_popup_input">
+            <div class="row_form_popup two_rows">
+              <label class="lbl_box">
+                <p>Дом:<span class="orange_text">*</span></p>
+                <input type="text" value="" name="home" class="input_text" />
+              </label>
+              
+              <label class="lbl_box">
+                <p>Строение:<span class="orange_text">*</span></p>
+                <input type="text" value="" name="str" class="input_text" />
+              </label>
+            </div>
+            
+            <div class="row_form_popup two_rows">
+              <label class="lbl_box">
+                <p>Корпус:<span class="orange_text">*</span></p>
+                <input type="text" value="" name="street" class="input_text" />
+              </label>
+              <label class="lbl_box">
+                <p>Квартира:<span class="orange_text">*</span></p>
+                <input type="text" value="" name="street" class="input_text" />
+              </label>
+            </div>
+          </div>
+          
+          <div class="rows_popup_input">
+            <div class="row_form_popup">
+              <label class="lbl_box">
+                <p>Контактный телефон:<span class="orange_text">*</span></p>
+                <input type="text" value="" name="phone" class="input_text" />
+              </label>
+            </div>
+            
+            <div class="row_form_popup">
+              <label class="lbl_box">
+                <p>Имя, Фамилия, Отчество:<span class="orange_text">*</span></p>
+                <input type="text" value="" name="fio" class="input_text" />
+              </label>
+            </div>
+          </div>
+          
+          <div class="row_form_popup row_pop_butt">
+            <button class="bt_red">Оформить заказ</button>
+          </div>
+          
+        </form>
+      </div>
+    </div>
+    
+    
+  </div>
+</div>

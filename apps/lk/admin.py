@@ -16,7 +16,7 @@ admin.site.unregister(Group)
 class ProfileAdmin(UserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
-    list_display = ('id', 'email', 'is_active', 'is_staff', 'is_superuser',)
+    list_display = ('id', 'email', 'name', 'country', 'city', 'is_active', 'is_staff', 'is_superuser',)
     list_display_links = ('email',)
     list_filter = ('is_active', 'is_staff', 'is_superuser',)
     list_per_page = 200
@@ -25,11 +25,16 @@ class ProfileAdmin(UserAdmin):
         # Настройки юзера
         ('Данные', {
             'classes': ('suit-tab', 'suit-tab-default',),
-            'fields': ('email', 'date_joined',)
+            'fields': ('email', 'name', 'date_joined', 'subscription',)
+        }),
+        ('Данные для доставки', {
+            'classes': ('suit-tab', 'suit-tab-default',),
+            'fields': ('country', 'city', 'index', 'street', 'house',
+                       'building', 'housing', 'flat', 'phone',)
         }),
         ('Управление доступами', {
             'classes': ('suit-tab', 'suit-tab-default',),
-            'fields': ('is_superuser', 'is_staff', 'is_active',),
+            'fields': ('is_superuser', 'is_staff', 'is_active', 'groups',),
         }),
         ('Пароль', {
             'classes': ('wide', 'suit-tab', 'suit-tab-default',),

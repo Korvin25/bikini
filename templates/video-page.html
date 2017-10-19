@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block meta_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
+{% block meta_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
+{% block meta_keyw %}{{ seo_settings.global.get_meta_keyw }}{% endblock %}
+
+{% block og_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
+{% block og_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
+
+{% block twitter_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
+{% block twitter_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
+
+{% block content %}
+  <main>
+    <div class="main_content main_content_video">
+      
+      <div class="blog_title">
+        <ul class="breadcrumb">
+          <li><a href="#">Главная</a></li>
+          <li><a href="#">Видео</a></li>
+          <li><a href="#">Заголовок видео</a></li>
+        </ul>
+        <!--h1 class="title_block">Видео</h1-->
+      </div>
+      
+      
+    
+      <div id="main_content" class="content_video">
+        
+        <div class="video_wrapp_page">
+          
+          <div class="movie_row">
+            <div class="movie">
+              <div class="wrapp_movie">
+                <img src="/static/images/video/movie1.jpg" />
+                <a href="#" class="play movie_play">Play</a>
+              </div>
+            </div>
+            <h2 class="title_block">Заголовок видео</h2>
+            <div class="text_blog">
+              <p>
+                Мини бикини от Анастасии Ивановской – это брендовые миниатюрные купальники ручной работы, которые выбирают смелые и уверенные в себе представительницы прекрасного пола. Мини бикини интернет магазин представляет в ассортименте, витрины порадуют девушек уникальными раздельными купальниками, купальниками из сетки, купальниками с мини-шортиками, купальниками с рюшами, купальниками с трусиками на завязках.
+              </p>
+            </div>
+            <a href="#" class="red_button">Купить товар из этого видео</a>
+          </div>
+          
+          <div class="movie_row">
+            <div class="movie">
+              <div class="wrapp_movie">
+                <img src="/static/images/video/movie2.jpg" />
+                <a href="#" class="play movie_play">Play</a>
+              </div>
+            </div>
+            <h2 class="title_block">Заголовок видео 2</h2>
+            <div class="text_blog">
+              <p>
+                Мини бикини от Анастасии Ивановской – это брендовые миниатюрные купальники ручной работы, которые выбирают смелые и уверенные в себе представительницы прекрасного пола. Мини бикини интернет магазин представляет в ассортименте, витрины порадуют девушек уникальными раздельными купальниками, купальниками из сетки, купальниками с мини-шортиками, купальниками с рюшами, купальниками с трусиками на завязках.
+              </p>
+            </div>
+            <a href="#" class="red_button">Купить товар из этого видео</a>
+          </div>
+          
+        </div>
+        
+        <div class="bt_req_call red_bor_butt">
+          <a href="#" onclick="return false">Показать ещё</a>
+        </div>
+        
+        
+      </div>
+      
+    </div>
+  </main>
+{% endblock %}

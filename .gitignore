@@ -4,6 +4,7 @@
 **/*.py[cod]
 temp/
 temp/**/*.*
+tmp/*
 upload/
 .temp
 /static/*

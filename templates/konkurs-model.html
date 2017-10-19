@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block meta_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
+{% block meta_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
+{% block meta_keyw %}{{ seo_settings.global.get_meta_keyw }}{% endblock %}
+
+{% block og_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
+{% block og_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
+
+{% block twitter_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
+{% block twitter_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
+
+{% block content %}
+  <main>
+    <div class="main_content">
+    
+      <div id="main_content" class="wrapp_content content_konkurs">
+        
+        
+        <div class="item_content_block">
+        <div class="text_preview_page text_item">
+          <ul class="breadcrumb">
+            <li><a href="#">Главная</a></li>
+            <li><a href="#">Конкурс</a></li>
+            <li><a href="#">Милана Миланова</a></li>
+          </ul>
+          <h1 class="title_block">Милана Миланова</h1>
+          <div class="text_preview_inner">
+            <p>Многоуважаемые фотографы и заказчики,когда пишете мне в лс-огромная просьба излагать сразу всю суть.Город,жанр,место съёмки. Уважайте моё и своё время пожалуйста.Я не могу каждому задавать по 10 вопросов,что и как.</p>
+          </div>
+          <div class="count_block">
+            <a href="#" class="butt_put">
+              <label for="put_2" class="td_label_check_win">
+                <input type="checkbox" name="put[]" id="put_2" value="1">
+                <img src="/static/i/heart_icon.png" alt="В Избранное">
+              </label>
+            </a>
+            <span class="disc_number">3</span>
+          </div>
+          <div class="bt_req_call red_bor_butt">
+            <a href="#" onclick="return false">Оценить участницу</a>
+          </div>
+        </div>
+        <!-- SLIDER ITEM >>> -->
+          <div class="nom_img">
+            <script language="javascript" src="/static/js/highslide/jquery.jcarousel.min.js"></script>
+            <script type="text/javascript">
+            var connector = function(itemNavigation, carouselStage) {
+              return carouselStage.jcarousel('items').eq(itemNavigation.index()); 
+            }; 
+            $(function() {
+              var carouselStage    = $('.nom_img_med_wrap').jcarousel({wrap: 'circular'}); 
+              var carouselNavigation = $('.carousel-navigation').jcarousel();
+              carouselNavigation.jcarousel('items').each(function() { 
+                var item = $(this); 
+                var target = connector(item, carouselStage); 
+                item .on(
+                  'jcarouselcontrol:active', function() {
+                    carouselNavigation.jcarousel('scrollIntoView', this); 
+                    item.addClass('active'); 
+                  }).on('jcarouselcontrol:inactive', function() { 
+                    item.removeClass('active'); 
+                  }).jcarouselControl({ target: target, carousel: carouselStage }); 
+              });
+              
+              $('#l_arr_nom_img').on('jcarouselcontrol:inactive', function() {
+                  $(this).addClass('inactive'); 
+                }
+              ).on('jcarouselcontrol:active', function() {
+                  $(this).removeClass('inactive'); 
+                }
+              ).jcarouselControl({ target: '-=1' }); 
+              
+              $('#r_arr_nom_img').on('jcarouselcontrol:inactive', function() {
+                  $(this).addClass('inactive');
+                }
+              ).on('jcarouselcontrol:active', function() {
+                  $(this).removeClass('inactive');
+                }
+              ).jcarouselControl({ target: '+=1' }); 
+            });
+          </script>
+            <!-- УВЕЛИЧЕНИЕ КАРТИНКИ -->
+            <script type="text/javascript" src="/static/js/highslide/highslide-with-gallery.js"></script>
+            <link rel="stylesheet" type="text/css" href="/static/js/highslide/highslide.css" />
+            <script type="text/javascript">
+            hs.graphicsDir = '/static/js/highslide/graphics/'; 
+            hs.align = 'center';
+            hs.transitions = ['expand', 'crossfade']; 
+            hs.outlineType = 'rounded-white';
+            hs.fadeInOut = true; 
+            hs.dimmingOpacity = 0.5; 
+            hs.addSlideshow({
+              interval: 5000, 
+              repeat: false, 
+              useControls: true, 
+              fixedControls: 'fit', 
+              overlayOptions: { 
+                opacity: 0.75, 
+                position: 'bottom center', 
+                hideOnMouseOut: true
+              }
+
+            });
+          </script>
+            <!-- УВЕЛИЧЕНИЕ КАРТИНКИ <<< -->
+          
+            
+            <div class="nom_img_med_wrap highslide-gallery">
+              <ul class="nom_img_list">
+                <li>
+                  <a href="/static/images/konkurs/photo_slide_big.jpg" target="_blank" class="highslide" onclick="return hs.expand(this)" title="">
+                  <img src="/static/images/konkurs/photo_slide_big.jpg" /></a>
+                </li>
+                <li>
+                  <a href="/static/images/konkurs/photo_slide_big2.jpg" target="_blank" class="highslide" onclick="return hs.expand(this)" title="">
+                  <img src="/static/images/konkurs/photo_slide_big2.jpg" /></a>
+                </li>
+                <li>
+                  <a href="/static/images/konkurs/photo_slide_big3.jpg" target="_blank" class="highslide" onclick="return hs.expand(this)" title="">
+                  <img src="/static/images/konkurs/photo_slide_big3.jpg" /></a>
+                </li>
+                <li>
+                  <a href="/static/images/konkurs/photo_slide_big4.jpg" target="_blank" class="highslide" onclick="return hs.expand(this)" title="">
+                  <img src="/static/images/konkurs/photo_slide_big4.jpg" /></a>
+                </li>
+                <li>
+                  <a href="/static/images/konkurs/photo_slide_big.jpg" target="_blank" class="highslide" onclick="return hs.expand(this)" title="">
+                  <img src="/static/images/konkurs/photo_slide_big.jpg" /></a>
+                </li>
+                
+              </ul>
+            </div>
+            <div class="C_navigation">
+              <div class="l_arr" id="l_arr_nom_img"><img src="/static/i/arrow_slide.png" /></div>
+              <div class="r_arr" id="r_arr_nom_img"><img src="/static/i/arrow_slide.png" /></div>
+              <div class="carousel-navigation">
+                <ul class="jcarousel">
+                  <li class=""><img src="/static/images/konkurs/photo_slide_min.jpg" /></li>
+                  <li class=""><img src="/static/images/konkurs/photo_slide_min2.jpg" /></li>
+                  <li class=""><img src="/static/images/konkurs/photo_slide_min3.jpg" /></li>
+                  <li class=""><img src="/static/images/konkurs/photo_slide_min4.jpg" /></li>
+                  <li class=""><img src="/static/images/konkurs/photo_slide_min.jpg" /></li>
+                  <!--li class=""><img src="/static/images/item1/1.jpg" /></li-->
+                </ul>
+              </div>
+            </div>
+            
+          </div>
+          <div class="highslide-dimming"></div>
+        <!-- SLIDER ITEM <<< -->
+        </div>
+        
+        <h2 class="title_block">Участница демонстрирует:</h2>
+        <div class="item_list_wrapp" itemscope="" itemtype="http://schema.org/ItemList">
+          <div class="product_list">
+            <div class="photo_list"><a href=""><img src="/static/images/catalog/pic6.jpg" alt=""></a></div>
+            <h3><a href="">Стринги DRIVE LUX RED</a></h3>
+            <h4>Яркие микро стринги</h4>
+            <div class="product_price">4300<abbr title="руб">р.</abbr></div>
+            <a href="#" class="to_cart_list">В корзину</a>
+          </div>
+          <div class="product_list">
+            <div class="photo_list"><a href=""><img src="/static/images/catalog/pic6.jpg" alt=""></a></div>
+            <h3><a href="">Стринги DRIVE LUX RED</a></h3>
+            <h4>Яркие микро стринги</h4>
+            <div class="product_price">4300<abbr title="руб">р.</abbr></div>
+            <a href="#" class="to_cart_list">В корзину</a>
+          </div>
+          <div class="product_list">
+            <div class="photo_list"><a href=""><img src="/static/images/catalog/pic7.jpg" alt=""></a></div>
+            <h3><a href="">Стринги DRIVE LUX RED</a></h3>
+            <h4>Яркие микро стринги</h4>
+            <div class="product_price">4300<abbr title="руб">р.</abbr></div>
+            <a href="#" class="to_cart_list">В корзину</a>
+          </div>
+          <div class="product_list">
+            <div class="photo_list"><a href=""><img src="/static/images/catalog/pic8.jpg" alt=""></a></div>
+            <h3><a href="">Стринги DRIVE LUX RED</a></h3>
+            <h4>Яркие микро стринги</h4>
+            <div class="product_price">4300<abbr title="руб">р.</abbr></div>
+            <a href="#" class="to_cart_list">В корзину</a>
+          </div>
+        </div>
+        
+      </div>
+      
+    </div>
+  </main>
+{% endblock %}

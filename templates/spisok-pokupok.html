@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block meta_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
+{% block meta_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
+{% block meta_keyw %}{{ seo_settings.global.get_meta_keyw }}{% endblock %}
+
+{% block og_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
+{% block og_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
+
+{% block twitter_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
+{% block twitter_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
+
+{% block content %}
+  <main>
+    <div class="main_content main_content_video">
+      
+      <div class="blog_title">
+        <ul class="breadcrumb">
+          <li><a href="#">Главная</a></li>
+          <li><a href="#">Список желаемых покупок</a></li>
+        </ul>
+        <h1 class="title_block">Список желаемых покупок</h1>
+      </div>
+      
+      
+    
+      <div id="main_content" class="content_video list_push">
+        <div class="item_list_wrapp item_list_wrapp_all" itemscope="" itemtype="http://schema.org/ItemList">
+          <div class="product_list product_list_all">
+            <div class="photo_list"><a href=""><img src="/static/images/catalog/pic1.jpg" alt=""></a></div>
+            <h3>
+              <a href="">Стринги DRIVE</a>
+              <div class="sec_block_item">
+                <a href="#" class="butt_put">
+                  <label for="put_item" class="td_label_check_win">
+                    <input type="checkbox" name="put_item[]" id="put_item" value="1" checked>
+                    <img src="/static/i/heart_icon.png" alt="Отложить">
+                  </label>
+                </a>
+                
+                <a href="#" class="sett_butt">
+                  <img src="/static/i/sett_icon.png" alt="Изменить комплектацию">
+                </a>
+              </div>                  
+            </h3>
+            <h4>Яркие микро стринги</h4>
+            
+            <ul class="settings_item">
+              <li><span>Размер верх:</span><strong>L</strong></li>
+              <li><span>Размер низ:</span><strong>m</strong></li>
+              <li class="last_color"><span>Цвет:</span><div class="td_color_box" style="background-color:palegreen;" title="Бледно-зеленый">Бледно-зеленый</div></li>
+            </ul>
+            
+            <div class="product_price">4300<abbr title="руб">р.</abbr></div>
+            <a href="#" class="to_cart_list">В корзину</a>
+          </div>
+          
+          <div class="product_list product_list_all">
+            <div class="photo_list"><a href=""><img src="/static/images/catalog/pic2.jpg" alt=""></a></div>
+            <h3>
+              <a href="">Стринги DRIVE</a>
+              <div class="sec_block_item">
+                <a href="#" class="butt_put">
+                  <label for="put_item2" class="td_label_check_win">
+                    <input type="checkbox" name="put_item2[]" id="put_item2" value="1" checked>
+                    <img src="/static/i/heart_icon.png" alt="Отложить">
+                  </label>
+                </a>
+                
+                <a href="#" class="sett_butt">
+                  <img src="/static/i/sett_icon.png" alt="Изменить комплектацию">
+                </a>
+              </div>
+            </h3>
+            <h4>Яркие микро стринги</h4>
+            <ul class="settings_item">
+              <li><span>Размер верх:</span><strong>L</strong></li>
+              <li><span>Размер низ:</span><strong>m</strong></li>
+              <li class="last_color"><span>Цвет:</span><div class="td_color_box" style="background-color:palegreen;" title="Бледно-зеленый">Бледно-зеленый</div></li>
+            </ul>
+            <div class="product_price">4300<abbr title="руб">р.</abbr></div>
+            <a href="#" class="to_cart_list">В корзину</a>
+          </div>
+          
+          <div class="product_list product_list_all">
+            <div class="photo_list"><a href=""><img src="/static/images/catalog/pic3.jpg" alt=""></a></div>
+            <h3>
+              <a href="">Стринги DRIVE 1</a>
+              <div class="sec_block_item">
+                <a href="#" class="butt_put">
+                  <label for="put_item3" class="td_label_check_win">
+                    <input type="checkbox" name="put_item3[]" id="put_item3" value="1" checked>
+                    <img src="/static/i/heart_icon.png" alt="Отложить">
+                  </label>
+                </a>
+                
+                <a href="#" class="sett_butt">
+                  <img src="/static/i/sett_icon.png" alt="Изменить комплектацию">
+                </a>
+              </div>
+            </h3>
+            <h4>Яркие микро стринги</h4>
+            <ul class="settings_item">
+              <li><span>Размер верх:</span><strong>L</strong></li>
+              <li><span>Размер низ:</span><strong>m</strong></li>
+              <li class="last_color"><span>Цвет:</span><div class="td_color_box" style="background-color:red;" title="Красный">Красный</div></li>
+            </ul>
+            <div class="product_price">4300<abbr title="руб">р.</abbr></div>
+            <a href="#" class="to_cart_list">В корзину</a>
+          </div>
+          <div class="product_list product_list_all">
+            <div class="photo_list"><a href=""><img src="/static/images/catalog/pic3.jpg" alt=""></a></div>
+            <h3>
+              <a href="">Стринги DRIVE</a>
+              <div class="sec_block_item">
+                <a href="#" class="butt_put">
+                  <label for="put_item3" class="td_label_check_win">
+                    <input type="checkbox" name="put_item3[]" id="put_item3" value="1" checked>
+                    <img src="/static/i/heart_icon.png" alt="Отложить">
+                  </label>
+                </a>
+                
+                <a href="#" class="sett_butt">
+                  <img src="/static/i/sett_icon.png" alt="Изменить комплектацию">
+                </a>
+              </div>
+            </h3>
+            <h4>Яркие микро стринги</h4>
+            <ul class="settings_item">
+              <li><span>Размер верх:</span><strong>L</strong></li>
+              <li><span>Размер низ:</span><strong>m</strong></li>
+              <li class="last_color"><span>Цвет:</span><div class="td_color_box" style="background-color:red;" title="Красный">Красный</div></li>
+            </ul>
+            <div class="product_price">4300<abbr title="руб">р.</abbr></div>
+            <a href="#" class="to_cart_list">В корзину</a>
+          </div>
+          <div class="product_list product_list_all">
+            <div class="photo_list"><a href=""><img src="/static/images/catalog/pic3.jpg" alt=""></a></div>
+            <h3>
+              <a href="">Стринги DRIVE</a>
+              <div class="sec_block_item">
+                <a href="#" class="butt_put">
+                  <label for="put_item3" class="td_label_check_win">
+                    <input type="checkbox" name="put_item3[]" id="put_item3" value="1" checked>
+                    <img src="/static/i/heart_icon.png" alt="Отложить">
+                  </label>
+                </a>
+                
+                <a href="#" class="sett_butt">
+                  <img src="/static/i/sett_icon.png" alt="Изменить комплектацию">
+                </a>
+              </div>
+            </h3>
+            <h4>Яркие микро стринги</h4>
+            <ul class="settings_item">
+              <li><span>Размер верх:</span><strong>L</strong></li>
+              <li><span>Размер низ:</span><strong>m</strong></li>
+              <li class="last_color"><span>Цвет:</span><div class="td_color_box" style="background-color:red;" title="Красный">Красный</div></li>
+            </ul>
+            <div class="product_price">4300<abbr title="руб">р.</abbr></div>
+            <a href="#" class="to_cart_list">В корзину</a>
+          </div>
+          
+          <div class="product_list product_list_all">
+            <div class="photo_list"><a href=""><img src="/static/images/catalog/pic8.jpg" alt=""></a></div>
+            <h3>
+              <a href="">Стринги DRIVE</a>
+              <div class="sec_block_item">
+                <a href="#" class="butt_put">
+                  <label for="put_item4" class="td_label_check_win">
+                    <input type="checkbox" name="put_item4[]" id="put_item4" value="1" checked>
+                    <img src="/static/i/heart_icon.png" alt="Отложить">
+                  </label>
+                </a>
+                
+                <a href="#" class="sett_butt">
+                  <img src="/static/i/sett_icon.png" alt="Изменить комплектацию">
+                </a>
+              </div>
+            </h3>
+            <h4>Яркие микро стринги</h4>
+            <ul class="settings_item">
+              <li><span>Размер верх:</span><strong>L</strong></li>
+              <li><span>Размер низ:</span><strong>m</strong></li>
+              <li class="last_color"><span>Цвет:</span><div class="td_color_box" style="background-color:palegreen;" title="Бледно-зеленый">Бледно-зеленый</div></li>
+            </ul>
+            <div class="product_price">4300<abbr title="руб">р.</abbr></div>
+            <a href="#" class="to_cart_list">В корзину</a>
+          </div>
+          
+        </div>
+        
+        
+      </div>
+      
+    </div>
+  </main>
+{% endblock %}
