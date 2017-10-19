@@ -1,11 +1,12 @@
-<header style="background-image: url(/static/images/bg_header.jpg);">
+{% load core_tags %}
+<header style="background-image: url({{ slide.get_cover_url }});">
   <div class="menu_top_line">
     {% include 'blocks/header_menu.html' %}
     
     <div class="clr touch_clr"></div>
     
     <ul class="bt_contacts">
-      <li class="bt_phone"><a href="tel:+79164456555">+7 (916) <strong>445-65-55</strong></a></li>
+      <li class="bt_phone"><a href="tel:{{ settings.phone|to_phone }}">{{ settings.phone|safe }}</a></li>
       <li class="bt_soc"><a href="#"><img src="/static/i/soc_viber.png" alt="Viber" />Viber</a></li>
       <li class="bt_soc"><a href="#"><img src="/static/i/soc_whatsapp.png" alt="Whatsapp" />Whatsapp</a></li>
       <li class="clr_butt_head clr_butt_head0"></li>
@@ -19,19 +20,11 @@
     
     <!--\\\-->
       <div class="text_head_block">
-        <h1><em>Мини Бикини от</em></h1>
-        <img src="/static/images/ai.png" alt="Анастасия Ивановская" />
-        <p>
-          <em>
-            Брендовые миниатюрные купальники  ручной работы,
-            которые выбирают смелые  и уверенные в себе 
-            представительницы прекрасного пола.
-          </em>
-        </p>
-        <a href="#" title="Перейти в каталог" class="text_link_cat">Перейти в каталог</a>
+        {{ slide.description|safe }}
+        <a href="{{ slide.link }}" title="{{ slide.link_text }}" target="_blank" class="text_link_cat">{{ slide.link_text }}</a>
       </div>
       <div class="arrow_text_head">
-        <a href="" title="Перейти в каталог" class="link_arrow_text">Перейти в каталог</a>
+        <a href="{{ slide.link }}" title="{{ slide.link_text }}" target="_blank" class="link_arrow_text">{{ slide.link_text }}</a>
       </div>
     <!--///-->
 

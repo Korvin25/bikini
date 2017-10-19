@@ -34,7 +34,7 @@ class HomepageSliderAdmin(TabbedTranslationAdmin):
     list_filter = ('slider_type',)
     fieldsets = (
         (None, {
-            'fields': ('title', 'slider_type', 'description', 'link', 'link_text',
+            'fields': ('slider_type', 'title', 'description', 'link', 'link_text',
                        'cover', 'video', 'video_id', 'order', 'add_dt',),
         }),
     )

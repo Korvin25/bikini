@@ -72,3 +72,9 @@ def to_str(something):
     (используется для Decimal, которые должны быть представлены в виде "123.00", а не "123,00")
     """
     return str(something)
+
+
+@register.filter
+def to_phone(phone_number):
+    phone = ''.join([s for s in phone_number if s in '+1234567890'])
+    return phone

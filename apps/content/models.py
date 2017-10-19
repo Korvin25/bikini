@@ -63,7 +63,7 @@ class HomepageSlider(models.Model):
         return self.title
 
     def get_cover_url(self):
-        return (self.cover.url if self.cover
+        return (self.cover['homepage_cover'].url if self.cover
                 else 'http://img.youtube.com/vi/{}/mqdefault.jpg'.format(self.video_id))
 
     def get_iframe_video_link(self):

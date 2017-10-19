@@ -1,3 +1,4 @@
+{% load core_tags %}
 <footer>
   <div class="footer_wrapp">
     <ul class="menu_foot">
@@ -16,7 +17,7 @@
     </div>
     
     <ul class="menu_foot contacts_foot">
-      <li class="bt_phone"><a href="tel:+79164456555">+7 (916) <strong>445-65-55</strong></a></li>
+      <li class="bt_phone"><a href="tel:{{ settings.phone|to_phone }}">{{ settings.phone|safe }}</strong></a></li>
       <li class="bt_req_call"><a href="#"><strong>Обратный звонок</strong></a></li>
     </ul>
   </div>

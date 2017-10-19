@@ -17,11 +17,11 @@ class Category(MetatagModel):
     )
     title = models.CharField('Название', max_length=255)
     # sex = MultiSelectField('Пол', max_length=15, choices=SEX_CHOICES)
-    sex = models.CharField('Пол', max_length=7, choices=SEX_CHOICES)
+    sex = models.CharField('Пол', max_length=7, choices=SEX_CHOICES, default='female')
     order = models.IntegerField('Порядок', default=10)
 
     class Meta:
-        ordering = ['-sex', 'order', 'title', ]
+        ordering = ['sex', 'order', 'id', ]
         verbose_name = 'категория'
         verbose_name_plural = 'категории'
 
@@ -52,13 +52,13 @@ class Product(MetatagModel):
     order_at_homepage = models.IntegerField('Порядок на главной', default=10)
     add_dt = models.DateTimeField('Дата добавления', auto_now_add=True)
 
-    additional_products = models.ManyToManyField('self', symmetrical=False,
+    additional_products = models.ManyToManyField('self', symmetrical=False, blank=True,
                                                  verbose_name='Дополнительные товары', related_name='from_additional',
                                                  limit_choices_to={'product_type': 'additional'})
-    associated_products = models.ManyToManyField('self', symmetrical=False,
+    associated_products = models.ManyToManyField('self', symmetrical=False, blank=True,
                                                  verbose_name='Сопутствующие товары', related_name='from_associated',
                                                  limit_choices_to={'product_type': 'default'})
-    also_products = models.ManyToManyField('self', symmetrical=False,
+    also_products = models.ManyToManyField('self', symmetrical=False, blank=True,
                                            verbose_name='С этим товаром также покупают', related_name='from_also',
                                            limit_choices_to={'product_type': 'default'})
 
@@ -79,3 +79,11 @@ class Product(MetatagModel):
         return ', '.join(self.categories.all().values_list('title', flat=True)) or '-'
     show_categories.allow_tags = True
     show_categories.short_description = 'Категории'
+
+    @property
+    def cover_thumb(self):
+        return self.photo['product_cover'].url if self.photo else ''
+
+    def get_price_rub(self):
+        price = self.price_rub
+        return int(price) if int(price) == price else price

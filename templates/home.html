@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block meta_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
-{% block meta_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
-{% block meta_keyw %}{{ seo_settings.global.get_meta_keyw }}{% endblock %}
+{% block meta_title %}{{ seo_settings.home.get_meta_title }}{% endblock %}
+{% block meta_desc %}{{ seo_settings.home.get_meta_desc }}{% endblock %}
+{% block meta_keyw %}{{ seo_settings.home.get_meta_keyw }}{% endblock %}
 
-{% block og_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
-{% block og_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
+{% block og_title %}{{ seo_settings.home.get_meta_title }}{% endblock %}
+{% block og_desc %}{{ seo_settings.home.get_meta_desc }}{% endblock %}
 
-{% block twitter_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
-{% block twitter_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
+{% block twitter_title %}{{ seo_settings.home.get_meta_title }}{% endblock %}
+{% block twitter_desc %}{{ seo_settings.home.get_meta_desc }}{% endblock %}
 
 {% block base_class %}shell_wrapp{% endblock %}
 
@@ -21,18 +21,16 @@
   <main>
     <div class="main_content">
       <h2 class="title_block">Популярные товары</h2>
-      {% include 'blocks/list_products.html' %}
+      {% include 'blocks/homepage_products.html' %}
     </div>
     
     <div class="text_preview_wrapp">
       <div class="text_preview_inner">
-        <div class="text_preview_left">
-          <h2 class="title_block">Наши преимущества</h2>
-          <p><strong>Наш интернет магазин предлагает вам большой ассортимент купальников</strong>, а также мини и микро одежды. Благодаря этому каждая девушка сможет подобрать для себя идеальную пляжную одежду, выгодно подчеркивающую все прелести фигуры. К тому же, на Bikinimini представлено экстремальное бикини разных размеров, стилей и цветов.</p>
-          <p><strong>На нашем сайте вы найдете более сотни моделей купальников</strong>, нижнего белья и верхней мини и микро одежды. Не разочарует также выбор цветов и материалов. Среди многочисленных шортиков, трусиков, топов и боди вы сможете найти действительно идеальную для себя модель. Экстрим бикини купить на сайте Bikinimini не составит никакого труда, поскольку у нас найдётся достаточное многообразие одежды такого фасона. Благодаря нашим купальникам вы сможете создать уникальный пляжный образ на всех курортах. К тому же можно не бояться, что вы неожиданного встретите купальник-двойник.</p>
-          <p><strong>При желании вы можете выбрать полноценный купальник</strong>, а также сочетать его с топом, шортами и юбкой на свое усмотрение. Экстрим бикини магазин представляет только высшего качества, поэтому в нашей микро одежде вы можете отправиться не только на купание, но и престижную пляжную вечеринку. К тому же нашу верхнюю одежду вы можете использовать и для гоу-гоу. Стоит отметить, что столь качественные экстрим бикини интернет магазин предлагает по доступным ценам.</p>
-          <p><strong>Мы предлагаем своим клиентам обслуживание на должном уровне</strong> и обращаем внимание на обсуждения наших моделей. При желании наши клиенты могут принять участие в многочисленных конкурсах, которые мы регулярно проводим на нашем сайте.</p>
-        </div>
+        {% if seo_settings.home.seo_text %}
+          <div class="text_preview_left">
+            {{ seo_settings.home.seo_text|safe }}
+          </div>
+        {% endif %}
         
         <div class="soc_block_text">
           <div>

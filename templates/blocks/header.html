@@ -1,3 +1,4 @@
+{% load core_tags %}
 <header style="background-image: url(/static/images/bg_header.jpg);">
   <div class="menu_top_line">
     {% include 'blocks/header_menu.html' %}
@@ -5,7 +6,7 @@
     <div class="clr touch_clr"></div>
     
     <ul class="bt_contacts">
-      <li class="bt_phone"><a href="tel:+79164456555">+7 (916) <strong>445-65-55</strong></a></li>
+      <li class="bt_phone"><a href="tel:{{ settings.phone|to_phone }}">{{ settings.phone|safe }}</strong></a></li>
       <li class="bt_soc"><a href="#"><img src="/static/i/soc_viber.png" alt="Viber" />Viber</a></li>
       <li class="bt_soc"><a href="#"><img src="/static/i/soc_whatsapp.png" alt="Whatsapp" />Whatsapp</a></li>
       <li class="clr_butt_head clr_butt_head0"></li>

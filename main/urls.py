@@ -9,10 +9,12 @@ from django.views.generic import TemplateView
 
 from solid_i18n.urls import solid_i18n_patterns
 
+from apps.content.views import HomepageView
+
 
 urlpatterns = solid_i18n_patterns(
     # pages
-    url(r'^$', TemplateView.as_view(template_name='home.html'), name='home'),
+    url(r'^$', HomepageView.as_view(), name='home'),
     url(r'^pages/$', TemplateView.as_view(template_name='pages.html'), name='pages'),
 
     url(r'^blog-page/$', TemplateView.as_view(template_name='blog-page.html'), name='blog-page'),
@@ -20,8 +22,8 @@ urlpatterns = solid_i18n_patterns(
     url(r'^konkurs-itog/$', TemplateView.as_view(template_name='konkurs-itog.html'), name='konkurs-itog'),
     url(r'^konkurs-model/$', TemplateView.as_view(template_name='konkurs-model.html'), name='konkurs-model'),
     url(r'^konkurs1/$', TemplateView.as_view(template_name='konkurs1.html'), name='konkurs1'),
-    url(r'^man-detail/$', TemplateView.as_view(template_name='man-detail.html'), name='man-detail'),
-    url(r'^man/$', TemplateView.as_view(template_name='man.html'), name='man'),
+    url(r'^men-detail/$', TemplateView.as_view(template_name='men-detail.html'), name='men-detail'),
+    url(r'^men/$', TemplateView.as_view(template_name='men.html'), name='men'),
     url(r'^my-cut-1/$', TemplateView.as_view(template_name='my-cut-1.html'), name='my-cut-1'),
     url(r'^my-cut-2/$', TemplateView.as_view(template_name='my-cut-2.html'), name='my-cut-2'),
     url(r'^my-cut-3/$', TemplateView.as_view(template_name='my-cut-3.html'), name='my-cut-3'),
