@@ -20,7 +20,19 @@
     
     <!--\\\-->
       <div class="text_head_block">
-        {{ slide.description|safe }}
+        {% if slide.description_h1 %}
+          <h1><em>{{ slide.description_h1 }}</em></h1>
+        {% endif %}
+        {% if slide.description_picture %}
+          <img src="{{ slide.description_picture.url }}"{% if slide.description_picture_alt %} alt="{{ slide.description_picture_alt }}"{% endif %}/>
+        {% endif %}
+        {% if slide.description_p %}
+          <p>
+            <em>
+              {{ slide.description_p|linebreaksbr }}
+            </em>
+          </p>
+        {% endif %}        
         <a href="{{ slide.link }}" title="{{ slide.link_text }}" target="_blank" class="text_link_cat">{{ slide.link_text }}</a>
       </div>
       <div class="arrow_text_head">

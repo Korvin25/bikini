@@ -3,7 +3,8 @@ from __future__ import unicode_literals
 
 from modeltranslation.translator import translator, TranslationOptions
 
-from .models import Video, HomepageSlider, Page
+from ..core.translation import TitleTranslationOptions
+from .models import Video, HomepageSlider, Page, Menu, MenuItem
 
 
 class VideoTranslationOptions(TranslationOptions):
@@ -11,7 +12,9 @@ class VideoTranslationOptions(TranslationOptions):
 
 
 class HomepageSliderTranslationOptions(TranslationOptions):
-    fields = ('title', 'description', 'link', 'link_text',)
+    # fields = ('title', 'description', 'link', 'link_text',)
+    fields = ('title', 'description_h1', 'description_picture', 'description_picture_alt',
+              'description_p', 'link', 'link_text',)
 
 
 class PageTranslationOptions(TranslationOptions):
@@ -19,6 +22,12 @@ class PageTranslationOptions(TranslationOptions):
               'meta_title', 'meta_desc', 'meta_keyw', 'seo_text',)
 
 
+class MenuItemTranslationOptions(TranslationOptions):
+    fields = ('label', 'link',)
+
+
 translator.register(Video, VideoTranslationOptions)
 translator.register(HomepageSlider, HomepageSliderTranslationOptions)
 translator.register(Page, PageTranslationOptions)
+# translator.register(Menu, TitleTranslationOptions)
+translator.register(MenuItem, MenuItemTranslationOptions)

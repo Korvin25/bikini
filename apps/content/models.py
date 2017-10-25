@@ -45,7 +45,12 @@ class HomepageSlider(models.Model):
     )
     title = models.CharField('Заголовок слайда', max_length=255)
     slider_type = models.CharField('Тип слайда', max_length=15, choices=SLIDER_TYPES, default='unit')
-    description = RichTextUploadingField('Описание')
+    description = RichTextUploadingField('Описание', blank=True)
+    description_h1 = models.CharField('Описание (h1)', max_length=255, blank=True)
+    description_picture = ThumbnailerImageField('Описание (картинка)', upload_to='homepage_slider/pictures/',
+                                                null=True, blank=True)
+    description_picture_alt = models.CharField('Описание (alt у картинки)', max_length=127, blank=True)
+    description_p = models.TextField('Описание (текст)', blank=True)
     link = models.URLField('Ссылка')
     link_text = models.CharField('Текст на ссылке', max_length=127, help_text='например, "Перейти в каталог"')
     cover = ThumbnailerImageField('Обложка', upload_to='homepage_slider/covers/', null=True, blank=True)
@@ -94,3 +99,33 @@ class Page(MetatagModel):
     @property
     def image_alt(self):
         return self.image_attributes or self.title
+
+
+class Menu(models.Model):
+    title = models.CharField('Название', max_length=255)
+    slug = models.SlugField('Уникальный идентификатор', unique=True)
+    order = models.IntegerField('Порядок', default=10)
+
+    class Meta:
+        ordering = ['order', 'id', ]
+        verbose_name = 'меню'
+        verbose_name_plural = 'меню'
+
+    def __unicode__(self):
+        return self.title
+
+
+class MenuItem(models.Model):
+    menu = models.ForeignKey(Menu, verbose_name='Меню', related_name='items')
+    label = models.CharField('Название', max_length=255)
+    link = models.CharField('Ссылка', max_length=255)
+    target_blank = models.BooleanField('Открывать в новой вкладке', default=False)
+    order = models.IntegerField('Порядок', default=10)
+
+    class Meta:
+        ordering = ['order', 'id', ]
+        verbose_name = 'пункт меню'
+        verbose_name_plural = 'пункты меню'
+
+    def __unicode__(self):
+        return self.label

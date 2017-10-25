@@ -62,7 +62,7 @@ INSTALLED_APPS = (
     'apps.content',
     # 'apps.contests',
     # 'apps.blog',
-    # 'apps.banners',
+    'apps.banners',
     # 'apps.payments',
     # 'apps.mailings',
     # 'apps.feedback',
@@ -101,7 +101,7 @@ TEMPLATES = [
                 'django.core.context_processors.request',
 
                 # custom:
-                # 'apps.content.context_processors.content',
+                'apps.content.context_processors.content',
                 'apps.settings.context_processors.settings',
             ],
             # 'loaders': [
@@ -151,7 +151,7 @@ MODELTRANSLATION_TRANSLATION_FILES = (
     'apps.content.translation',
     # 'apps.contests.translation',
     # 'apps.blog.translation',
-    # 'apps.banners.translation',
+    'apps.banners.translation',
 )
 
 SOLID_I18N_DEFAULT_PREFIX_REDIRECT = False

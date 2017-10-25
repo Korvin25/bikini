@@ -33,9 +33,9 @@
   </ul>
   
   <ul class="cat_row_top cat_row_top2">
-    <li><a href="#" title="">Оплата и доставка</a></li>
-    <li><a href="#" title="">Сотрудничество</a></li>
-    <li><a href="#" title="">Контакты</a></li>
+    {% for item in menu.header %}
+      <li><a href="{{ item.link }}" title="{{ item.label }}">{{ item.label }}</a></li>
+    {% endfor %}
   </ul>
   <div class="clr clr_mrgn"></div>
   <div class="list_top_menu_wrapp">

@@ -35,10 +35,12 @@ class SettingAdmin(TabbedTranslationAdmin):
             'fields': ('key', 'value', 'description',)
         }),
     )
-    # readonly_fields = ('key',)
 
-    # def has_add_permission(self, request):
-    #     return None
+    def get_readonly_fields(self, request, obj=None):
+        fields = list(super(SettingAdmin, self).get_readonly_fields(request, obj))
+        if obj:
+            fields.append('key')
+        return fields
 
     def has_delete_permission(self, request, obj=None):
         return None
@@ -47,19 +49,20 @@ class SettingAdmin(TabbedTranslationAdmin):
 @admin.register(VisualSetting)
 class VisualSettingAdmin(TabbedTranslationAdmin):
     list_display = ('key', 'description',)
-    # readonly_fields = ('key',)
-
     fieldsets = (
         (None, {
             'fields': ('key', 'value', 'description',)
         }),
     )
 
-    # def has_add_permission(self, request):
-    #     return None
+    def get_readonly_fields(self, request, obj=None):
+        fields = list(super(VisualSettingAdmin, self).get_readonly_fields(request, obj))
+        if obj:
+            fields.append('key')
+        return fields
 
-    # def has_delete_permission(self, request, obj=None):
-    #     return None
+    def has_delete_permission(self, request, obj=None):
+        return None
 
 
 @admin.register(SEOSetting)
@@ -72,10 +75,12 @@ class SEOSettingAdmin(TabbedTranslationAdmin):
             'fields': ('key', 'description', 'title', 'meta_desc', 'meta_keyw', 'seo_text',)
         }),
     )
-    # readonly_fields = ('key',)
 
-    # def has_add_permission(self, request):
-    #     return None
+    def get_readonly_fields(self, request, obj=None):
+        fields = list(super(SEOSettingAdmin, self).get_readonly_fields(request, obj))
+        if obj:
+            fields.append('key')
+        return fields
 
-    # def has_delete_permission(self, request, obj=None):
-    #     return None
+    def has_delete_permission(self, request, obj=None):
+        return None

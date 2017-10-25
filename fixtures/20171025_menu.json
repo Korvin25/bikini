@@ -1,0 +1,140 @@
+[
+{
+    "model": "content.menu",
+    "pk": 1,
+    "fields": {
+        "title": "\u041c\u0435\u043d\u044e \u0432 \u0448\u0430\u043f\u043a\u0435",
+        "slug": "header",
+        "order": 10
+    }
+},
+{
+    "model": "content.menu",
+    "pk": 2,
+    "fields": {
+        "title": "\u041c\u0435\u043d\u044e \u0432 \u043f\u043e\u0434\u0432\u0430\u043b\u0435",
+        "slug": "footer",
+        "order": 10
+    }
+},
+{
+    "model": "content.menuitem",
+    "pk": 1,
+    "fields": {
+        "menu": 1,
+        "label": "\u041e\u043f\u043b\u0430\u0442\u0430 \u0438 \u0434\u043e\u0441\u0442\u0430\u0432\u043a\u0430",
+        "label_ru": "\u041e\u043f\u043b\u0430\u0442\u0430 \u0438 \u0434\u043e\u0441\u0442\u0430\u0432\u043a\u0430",
+        "label_en": "Payment and delivery",
+        "link": "/oplata/",
+        "link_ru": "/oplata/",
+        "link_en": "/en/payment/",
+        "target_blank": false,
+        "order": 10
+    }
+},
+{
+    "model": "content.menuitem",
+    "pk": 2,
+    "fields": {
+        "menu": 1,
+        "label": "\u0421\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u0447\u0435\u0441\u0442\u0432\u043e",
+        "label_ru": "\u0421\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u0447\u0435\u0441\u0442\u0432\u043e",
+        "label_en": "Cooperation",
+        "link": "/sotrudnichestvo/",
+        "link_ru": "/sotrudnichestvo/",
+        "link_en": "/en/cooperation/",
+        "target_blank": false,
+        "order": 10
+    }
+},
+{
+    "model": "content.menuitem",
+    "pk": 3,
+    "fields": {
+        "menu": 1,
+        "label": "\u041a\u043e\u043d\u0442\u0430\u043a\u0442\u044b",
+        "label_ru": "\u041a\u043e\u043d\u0442\u0430\u043a\u0442\u044b",
+        "label_en": "Contacts",
+        "link": "/kontakty/",
+        "link_ru": "/kontakty/",
+        "link_en": "/en/contacts/",
+        "target_blank": false,
+        "order": 10
+    }
+},
+{
+    "model": "content.menuitem",
+    "pk": 4,
+    "fields": {
+        "menu": 2,
+        "label": "\u0420\u0430\u0437\u043c\u0435\u0440\u044b",
+        "label_ru": "\u0420\u0430\u0437\u043c\u0435\u0440\u044b",
+        "label_en": "Dimensions",
+        "link": "/razmery/",
+        "link_ru": "/razmery/",
+        "link_en": "/en/dimensions/",
+        "target_blank": false,
+        "order": 10
+    }
+},
+{
+    "model": "content.menuitem",
+    "pk": 5,
+    "fields": {
+        "menu": 2,
+        "label": "\u041e \u043d\u0430\u0441",
+        "label_ru": "\u041e \u043d\u0430\u0441",
+        "label_en": "About us",
+        "link": "/o-nas/",
+        "link_ru": "/o-nas/",
+        "link_en": "/en/about-us/",
+        "target_blank": false,
+        "order": 10
+    }
+},
+{
+    "model": "content.menuitem",
+    "pk": 6,
+    "fields": {
+        "menu": 2,
+        "label": "\u0424\u0430\u0441\u043e\u043d\u044b",
+        "label_ru": "\u0424\u0430\u0441\u043e\u043d\u044b",
+        "label_en": "Shapes",
+        "link": "/fasony/",
+        "link_ru": "/fasony/",
+        "link_en": "/en/shapes/",
+        "target_blank": false,
+        "order": 10
+    }
+},
+{
+    "model": "content.menuitem",
+    "pk": 7,
+    "fields": {
+        "menu": 2,
+        "label": "\u0412\u043e\u043f\u0440\u043e\u0441-\u043e\u0442\u0432\u0435\u0442",
+        "label_ru": "\u0412\u043e\u043f\u0440\u043e\u0441-\u043e\u0442\u0432\u0435\u0442",
+        "label_en": "Q&A",
+        "link": "/faq/",
+        "link_ru": "/faq/",
+        "link_en": "/en/faq/",
+        "target_blank": false,
+        "order": 10
+    }
+},
+{
+    "model": "content.menuitem",
+    "pk": 8,
+    "fields": {
+        "menu": 2,
+        "label": "\u041e\u043f\u043b\u0430\u0442\u0430 \u0438 \u0434\u043e\u0441\u0442\u0430\u0432\u043a\u0430",
+        "label_ru": "\u041e\u043f\u043b\u0430\u0442\u0430 \u0438 \u0434\u043e\u0441\u0442\u0430\u0432\u043a\u0430",
+        "label_en": "Payment and delivery",
+        "link": "/oplata/",
+        "link_ru": "/oplata/",
+        "link_en": "/en/payment/",
+        "target_blank": false,
+        "order": 10
+    }
+}
+]

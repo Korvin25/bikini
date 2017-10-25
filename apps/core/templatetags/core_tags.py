@@ -54,7 +54,7 @@ def get_full_url(context, url, request=None):
     if request is None:
         request = context['request']
     current_site = get_current_site(request)
-    return 'http://{0}{1}'.format(current_site.domain, url)
+    return 'http://{}{}'.format(current_site.domain, url)
 
 
 @register.assignment_tag()

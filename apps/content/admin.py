@@ -3,9 +3,10 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 
+from jet.admin import CompactInline
 from modeltranslation.admin import TabbedTranslationAdmin
 
-from .models import Video, HomepageSlider, Page
+from .models import Video, HomepageSlider, Page, Menu, MenuItem
 from .translation import *
 
 
@@ -34,12 +35,16 @@ class HomepageSliderAdmin(TabbedTranslationAdmin):
     list_filter = ('slider_type',)
     fieldsets = (
         (None, {
-            'fields': ('slider_type', 'title', 'description', 'link', 'link_text',
+            'fields': ('slider_type', 'title',
+                       # 'description',
+                       'description_h1', 'description_picture', 'description_picture_alt', 'description_p',
+                       'link', 'link_text',
                        'cover', 'video', 'video_id', 'order', 'add_dt',),
         }),
     )
     readonly_fields = ('video_id', 'add_dt',)
-    search_fields = ['title', 'description', 'link_text', ]
+    # search_fields = ['title', 'description', 'link_text', ]
+    search_fields = ['title', 'description_h1', 'description_p', 'link_text', ]
 
     def has_delete_permission(self, request, obj=None):
         if HomepageSlider.objects.count() < 2:
@@ -60,3 +65,30 @@ class PageAdmin(TabbedTranslationAdmin):
         }),
     )
     search_fields = ['title', 'slug', 'text', ]
+
+
+class MenuItemInline(CompactInline):
+    model = MenuItem
+    fields = ('label_ru', 'label_en', 'link_ru', 'link_en', 'target_blank', 'order',)
+    extra = 0
+
+
+@admin.register(Menu)
+class MenuAdmin(admin.ModelAdmin):
+    list_display = ('title',)
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'slug',),
+        }),
+    )
+    inlines = [MenuItemInline, ]
+
+    def get_readonly_fields(self, request, obj=None):
+        fields = list(super(MenuAdmin, self).get_readonly_fields(request, obj))
+        if obj:
+            fields.append('title')
+            fields.append('slug')
+        return fields
+
+    def has_delete_permission(self, request, obj=None):
+        return None
