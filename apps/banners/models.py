@@ -16,13 +16,13 @@ class ActiveBannerManager(models.Manager):
 
 
 def get_upload_to(self, filename):
-    upload_to = 'banners/{}/{}'.format(self.location, filename)
+    upload_to = 'b/{}/{}'.format(self.location, filename)
     return upload_to
 
 
 class Banner(models.Model):
     LOCATION_CHOICES = (
-        ('right', 'Справа (вертикальный)'),
+        ('left', 'Слева (вертикальный)'),
         ('bottom', 'Снизу (горизонтальный)'),
     )
     title = models.CharField('Заголовок', max_length=255,
@@ -53,17 +53,31 @@ class Banner(models.Model):
         location = 'справа' if self.location == 'right' else 'снизу'
         return '{} ({})'.format(self.title, location)
 
-    def has_text(self):
-        return ('<img src="/static/admin/img/icon-yes.svg" alt="True">' if self.lines.count()
-                else '<img src="/static/admin/img/icon-no.svg" alt="False">')
-    has_text.allow_tags = True
-    has_text.short_description = 'Есть текст?'
+    @property
+    def image_url(self):
+        return (self.image['footer_banner'].url if self.location == 'bottom'
+                else self.image['left_banner'].url if self.location == 'left'
+                else self.image.url)
 
-    def has_button(self):
-        return ('<img src="/static/admin/img/icon-yes.svg" alt="True">' if self.button_text
+    @property
+    def has_text(self):
+        return self.lines.count()
+
+    def show_has_text(self):
+        return ('<img src="/static/admin/img/icon-yes.svg" alt="True">' if self.has_text
                 else '<img src="/static/admin/img/icon-no.svg" alt="False">')
-    has_button.allow_tags = True
-    has_button.short_description = 'Есть кнопка?'
+    show_has_text.allow_tags = True
+    show_has_text.short_description = 'Есть текст?'
+
+    @property
+    def has_button(self):
+        return self.button_text
+
+    def show_has_button(self):
+        return ('<img src="/static/admin/img/icon-yes.svg" alt="True">' if self.has_button
+                else '<img src="/static/admin/img/icon-no.svg" alt="False">')
+    show_has_button.allow_tags = True
+    show_has_button.short_description = 'Есть кнопка?'
 
 
 class BannerTextLine(models.Model):

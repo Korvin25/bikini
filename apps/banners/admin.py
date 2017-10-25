@@ -49,7 +49,7 @@ class BannerTextLineInline(CompactInline):
 @admin.register(Banner)
 class BannerAdmin(TabbedTranslationAdmin):
     list_display = ('id', 'title_ru', 'image', 'url', 'location', 'show', 'target_blank',
-                    'has_text', 'has_button',
+                    'show_has_text', 'show_has_button',
                     'start_datetime', 'end_datetime',)
                     # 'shows', 'clicks',)
     list_display_links = ('id', 'title_ru',)
