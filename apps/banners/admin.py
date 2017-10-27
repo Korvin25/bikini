@@ -8,7 +8,7 @@ from django.utils import timezone
 from jet.admin import CompactInline
 from modeltranslation.admin import TabbedTranslationAdmin
 
-from .models import Banner, BannerTextLine
+from .models import Banner, BannerTextLine, PromoBanner, PromoBannerGirl
 from .translation import *
 
 
@@ -62,3 +62,37 @@ class BannerAdmin(TabbedTranslationAdmin):
         }),
     )
     inlines = [BannerTextLineInline, ]
+
+
+class PromoBannerGirlInline(admin.TabularInline):
+    model = PromoBannerGirl
+    exclude = ('name',)
+    extra = 0
+    min_length = 1
+
+
+@admin.register(PromoBanner)
+class PromoBannerAdmin(TabbedTranslationAdmin):
+    list_display = ('id', 'title', 'is_enabled', 'link', 'link_text', 'cover', 'add_dt',)
+    list_display_links = ('title',)
+    list_filter = ('is_enabled',)
+    fieldsets = (
+        (None, {
+            'fields': (# 'banner_type', 
+                       'title',
+                       'description_h1', 'description_picture', 'description_picture_alt', 'description_p',
+                       'link', 'link_text', 'is_enabled', 'add_dt',),
+        }),
+        ('Обложка', {
+            'fields': ('cover',),
+        }),
+    )
+    readonly_fields = ('video_id', 'add_dt',)
+    inlines = [PromoBannerGirlInline, ]
+    # search_fields = ['title', 'description', 'link_text', ]
+    search_fields = ['title', 'description_h1', 'description_p', 'link_text', ]
+
+    def has_delete_permission(self, request, obj=None):
+        if PromoBanner.objects.count() < 2:
+            return None
+        return super(PromoBannerAdmin, self).has_delete_permission(request, obj)

@@ -6,7 +6,8 @@ from django.contrib import admin
 from jet.admin import CompactInline
 from modeltranslation.admin import TabbedTranslationAdmin
 
-from .models import Video, HomepageSlider, Page, Menu, MenuItem
+from .admin_forms import VideoAdminForm
+from .models import Video, Page, Menu, MenuItem
 from .translation import *
 
 
@@ -14,6 +15,7 @@ from .translation import *
 class VideoAdmin(TabbedTranslationAdmin):
     list_display = ('title_ru', 'title_en', 'video', 'video_id', 'order', 'cover', 'product', 'add_dt',)
     list_editable = ('title_en', 'order',)
+    form = VideoAdminForm
     fieldsets = (
         (None, {
             'fields': ('title', 'video', 'video_id', 'cover', 'text', 'product', 'order', 'add_dt',),
@@ -25,31 +27,6 @@ class VideoAdmin(TabbedTranslationAdmin):
     readonly_fields = ('video_id', 'add_dt',)
     raw_id_fields = ('product',)
     search_fields = ['title', 'text', 'video', ]
-
-
-@admin.register(HomepageSlider)
-class HomepageSliderAdmin(TabbedTranslationAdmin):
-    list_display = ('title_ru', 'title_en', 'slider_type', 'order',
-                    'link', 'link_text', 'cover', 'video', 'video_id', 'add_dt',)
-    list_editable = ('title_en', 'order',)
-    list_filter = ('slider_type',)
-    fieldsets = (
-        (None, {
-            'fields': ('slider_type', 'title',
-                       # 'description',
-                       'description_h1', 'description_picture', 'description_picture_alt', 'description_p',
-                       'link', 'link_text',
-                       'cover', 'video', 'video_id', 'order', 'add_dt',),
-        }),
-    )
-    readonly_fields = ('video_id', 'add_dt',)
-    # search_fields = ['title', 'description', 'link_text', ]
-    search_fields = ['title', 'description_h1', 'description_p', 'link_text', ]
-
-    def has_delete_permission(self, request, obj=None):
-        if HomepageSlider.objects.count() < 2:
-            return None
-        return super(HomepageSliderAdmin, self).has_delete_permission(request, obj)
 
 
 @admin.register(Page)

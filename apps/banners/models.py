@@ -93,3 +93,67 @@ class BannerTextLine(models.Model):
 
     def __unicode__(self):
         return self.line
+
+
+class PromoBanner(models.Model):
+    SLIDER_TYPES = (
+        ('unit', 'единичный'),
+        ('composite', 'составной (поля добавятся позже)'),
+    )
+    title = models.CharField('Заголовок баннера', max_length=255, help_text='для показа в админке')
+    banner_type = models.CharField('Тип баннера', max_length=15, choices=SLIDER_TYPES, default='unit')
+
+    description_h1 = models.CharField('Описание (h1)', max_length=255, blank=True)
+    description_picture = ThumbnailerImageField('Описание (картинка)', upload_to='promo_banner/pictures/',
+                                                null=True, blank=True)
+    description_picture_alt = models.CharField('Описание (alt у картинки)', max_length=127, blank=True)
+    description_p = models.TextField('Описание (текст)', blank=True)
+    link = models.URLField('Ссылка')
+    link_text = models.CharField('Текст на ссылке', max_length=127, help_text='например, "Перейти в каталог"')
+
+    cover = ThumbnailerImageField('Обложка', upload_to='promo_banner/covers/')
+    video = models.URLField('Видео', help_text='Ссылка на youtube.com', null=True, blank=True)
+    video_id = models.CharField(null=True, blank=True, max_length=31, editable=False)
+
+    is_enabled = models.BooleanField('Включен?', default=True)
+    add_dt = models.DateTimeField('Дата добавления', auto_now_add=True)
+
+    class Meta:
+        ordering = ['-id', ]
+        verbose_name = 'промо-баннер'
+        verbose_name_plural = 'промо-баннер на главной'
+
+    def __unicode__(self):
+        return self.title
+
+    def get_cover_url(self):
+        return (self.cover['homepage_cover'].url if self.cover
+                else '/static/images/bg_header.jpg')
+                # else 'http://img.youtube.com/vi/{}/mqdefault.jpg'.format(self.video_id))
+
+    def get_iframe_video_link(self):
+        return get_youtube_embed_video(video_id=self.video_id)
+
+    def get_girl_photo(self):
+        girl = self.girls.filter(is_enabled=True).order_by('?').first()
+        return (girl.get_photo_url() if girl
+                else '/static/images/grl_head.png')
+
+
+class PromoBannerGirl(models.Model):
+    banner = models.ForeignKey(PromoBanner, verbose_name='Баннер', related_name='girls')
+    name = models.CharField('Имя', max_length=255, blank=True, help_text='необязательное поле; для показа в админке')
+    photo = ThumbnailerImageField('Фото', upload_to='promo_banner/girls/', help_text='файл .png')
+    is_enabled = models.BooleanField('Включено?', default=True)
+
+    class Meta:
+        ordering = ['id', ]
+        verbose_name = 'фото модели'
+        verbose_name_plural = 'фото моделей'
+
+    def __unicode__(self):
+        return self.name or self.photo.name
+
+    def get_photo_url(self):
+        return (self.photo['homepage_girl'].url if self.photo
+                else '/static/images/grl_head.png')

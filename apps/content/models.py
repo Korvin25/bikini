@@ -38,43 +38,6 @@ class Video(models.Model):
         return get_youtube_embed_video(video_id=self.video_id)
 
 
-class HomepageSlider(models.Model):
-    SLIDER_TYPES = (
-        ('unit', 'единичный'),
-        ('composite', 'составной (поля добавятся позже)'),
-    )
-    title = models.CharField('Заголовок слайда', max_length=255)
-    slider_type = models.CharField('Тип слайда', max_length=15, choices=SLIDER_TYPES, default='unit')
-    description = RichTextUploadingField('Описание', blank=True)
-    description_h1 = models.CharField('Описание (h1)', max_length=255, blank=True)
-    description_picture = ThumbnailerImageField('Описание (картинка)', upload_to='homepage_slider/pictures/',
-                                                null=True, blank=True)
-    description_picture_alt = models.CharField('Описание (alt у картинки)', max_length=127, blank=True)
-    description_p = models.TextField('Описание (текст)', blank=True)
-    link = models.URLField('Ссылка')
-    link_text = models.CharField('Текст на ссылке', max_length=127, help_text='например, "Перейти в каталог"')
-    cover = ThumbnailerImageField('Обложка', upload_to='homepage_slider/covers/', null=True, blank=True)
-    video = models.URLField('Видео', help_text='Ссылка на youtube.com', null=True, blank=True)
-    video_id = models.CharField(null=True, blank=True, max_length=31, editable=False)
-    add_dt = models.DateTimeField('Дата добавления', auto_now_add=True)
-    order = models.IntegerField('Порядок', default=10)
-
-    class Meta:
-        ordering = ['order', '-add_dt', ]
-        verbose_name = 'слайд'
-        verbose_name_plural = 'промо-слайдер на главной'
-
-    def __unicode__(self):
-        return self.title
-
-    def get_cover_url(self):
-        return (self.cover['homepage_cover'].url if self.cover
-                else 'http://img.youtube.com/vi/{}/mqdefault.jpg'.format(self.video_id))
-
-    def get_iframe_video_link(self):
-        return get_youtube_embed_video(video_id=self.video_id)
-
-
 class Page(MetatagModel):
     title = models.CharField('Заголовок', max_length=255)
     slug = models.SlugField('Адрес в url', max_length=255, unique=True)

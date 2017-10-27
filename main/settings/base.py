@@ -292,6 +292,7 @@ THUMBNAIL_ALIASES = {
     '': {
         'product_cover': {'size': (220, 220), 'crop': True, 'quality': 100},
         'homepage_cover': {'size': (1939, 937), 'crop': True, 'quality': 100},
+        'homepage_girl': {'size': (500, 737), 'crop': True, 'quality': 100},
         'footer_banner': {'size': (1407, 408), 'crop': True, 'upscale': True, 'quality': 100},
     },
 }
