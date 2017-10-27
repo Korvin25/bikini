@@ -43,5 +43,11 @@
   </div>
   
   <h3 class="sl_text" style="background-image: url(/static/images/sl_text.png);">Дерзко Стильно Провокационно</h3>
-  <span class="grl_head" style="background-image: url({{ promo_banner.get_girl_photo }});"></span>
+  {% with promo_banner.girl as girl %}
+    {% if girl %}
+      <span class="grl_head" style="background-image: url({{ girl.get_photo.url }}); height: {{ girl.get_photo.height }}px; width: {{ girl.get_photo.width }}px; margin-left: {{ girl.margin_left }}px;"></span>
+    {% else %}
+      <span class="grl_head" style="background-image: url(/static/images/grl_head.png)"></span>
+    {% endif %}
+  {% endwith %}
 </header>

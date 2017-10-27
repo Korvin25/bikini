@@ -134,10 +134,10 @@ class PromoBanner(models.Model):
     def get_iframe_video_link(self):
         return get_youtube_embed_video(video_id=self.video_id)
 
-    def get_girl_photo(self):
+    @property
+    def girl(self):
         girl = self.girls.filter(is_enabled=True).order_by('?').first()
-        return (girl.get_photo_url() if girl
-                else '/static/images/grl_head.png')
+        return girl
 
 
 class PromoBannerGirl(models.Model):
@@ -154,6 +154,9 @@ class PromoBannerGirl(models.Model):
     def __unicode__(self):
         return self.name or self.photo.name
 
-    def get_photo_url(self):
-        return (self.photo['homepage_girl'].url if self.photo
-                else '/static/images/grl_head.png')
+    def get_photo(self):
+        return self.photo['homepage_girl']
+
+    @property
+    def margin_left(self):
+        return (-118 - ((self.get_photo().width-314) / 2))
