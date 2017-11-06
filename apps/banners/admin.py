@@ -42,7 +42,7 @@ class IsPublishedNow(SimpleListFilter):
 
 class BannerTextLineInline(CompactInline):
     model = BannerTextLine
-    fields = ('line_ru', 'line_en', 'big', 'order',)
+    fields = ('line_ru', 'line_en', 'line_de', 'line_fr', 'line_it', 'line_es', 'big', 'order',)
     extra = 1
 
 

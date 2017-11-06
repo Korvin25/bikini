@@ -14,21 +14,21 @@ from .translation import *
 # class CityInline(admin.TabularInline):
 class CityInline(CompactInline):
     model = City
-    fields = ('title_ru', 'title_en', 'order',)
+    fields = ('title_ru', 'title_en', 'title_de', 'title_fr', 'title_it', 'title_es', 'order',)
     extra = 0
     show_change_link = True
 
 
 @admin.register(Country)
 class CountryAdmin(TabbedTranslationAdmin):
-    list_display = ('title_ru', 'title_en', 'order',)
-    list_editable = ('title_en', 'order',)
+    list_display = ('title_ru', 'order',)
+    list_editable = ('order',)
     inlines = [CityInline, ]
 
 
 @admin.register(City)
 class CityAdmin(TabbedTranslationAdmin):
-    list_display = ('title_ru', 'title_en', 'country', 'order',)
+    list_display = ('title_ru', 'country', 'order',)
     list_filter = ('country',)
-    list_editable = ('title_en', 'order',)
+    list_editable = ('order',)
     list_per_page = 200

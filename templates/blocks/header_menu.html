@@ -1,22 +1,19 @@
 {% load i18n core_tags %}
 {% get_current_language as CURRENT_LANGUAGE %}
+{% get_current_path as CURRENT_PATH %}
 
 <div id="touch_menu">
   <div class="lang_head lng_header">
-    <a href="#" onclick="return false;" class="lang_head_tit">{% trans 'Язык' %}: {% trans 'Язык' %}: {% if CURRENT_LANGUAGE == 'ru' %}РУС{% else %}ENG{% endif %}<img src="/static/i/blank.gif" onclick="nodeExpand(19860001,0)" id="img_19860001"></a>
+    <a href="#" onclick="return false;" class="lang_head_tit">{% trans 'Язык' %}: {{ LANGUAGES_DICT|get_value:CURRENT_LANGUAGE|slice:':3'|upper }}<img src="/static/i/blank.gif" onclick="nodeExpand(19860001,0)" id="img_19860001"></a>
     <ul id="tb_19860001" style="display: none;">
-      <form action="{% url 'set_language' %}" method="post" id="i18n_ru1">
-        {% csrf_token %}
-        <input name="next" type="hidden" value="{% get_current_path %}" />
-        <input name="language" type="hidden" value="ru" />
-      </form>
-      <form action="{% url 'set_language' %}" method="post" id="i18n_en1">
-        {% csrf_token %}
-        <input name="next" type="hidden" value="{% get_current_path %}" />
-        <input name="language" type="hidden" value="en" />
-      </form>
-      <li>{% if CURRENT_LANGUAGE == 'ru' %}<img src="/static/i/arrow_list.png">Русский{% else %}<a href="#" onClick="document.getElementById('i18n_ru1').submit()">Русский</a>{% endif %}</li>
-      <li>{% if CURRENT_LANGUAGE == 'en' %}<img src="/static/i/arrow_list.png">English{% else %}<a href="#" onClick="document.getElementById('i18n_en1').submit()">English</a>{% endif %}</li>
+      {% for lang_code, lang_name in LANGUAGES %}
+        <form action="{% url 'set_language' %}" method="post" id="i18n_{{ lang_code }}1">
+          {% csrf_token %}
+          <input name="next" type="hidden" value="{{ CURRENT_PATH }}" />
+          <input name="language" type="hidden" value="{{ lang_code }}" />
+        </form>
+        <li>{% if CURRENT_LANGUAGE == lang_code %}<img src="/static/i/arrow_list.png">{{ lang_name }}{% else %}<a href="#" onClick="document.getElementById('i18n_{{ lang_code }}1').submit()">{{ lang_name }}</a>{% endif %}</li>
+      {% endfor %}
     </ul>
   </div>
   
@@ -47,21 +44,17 @@
     </ul>
     <ul class="list_menu_lev1 list_menu_lev2">
       <li class="lang_head">
-        <a href="#" onclick="return false;" class="lang_head_tit">{% trans 'Язык' %}: {% if CURRENT_LANGUAGE == 'ru' %}РУС{% else %}ENG{% endif %}<img src="/static/i/blank.gif" onClick="nodeExpand(198600,0)"  id="img_198600"></a>
+        <a href="#" onclick="return false;" class="lang_head_tit">{% trans 'Язык' %}: {{ LANGUAGES_DICT|get_value:CURRENT_LANGUAGE|slice:':3'|upper }}<img src="/static/i/blank.gif" onClick="nodeExpand(198600,0)"  id="img_198600"></a>
         
         <ul id="tb_198600" style="display:none">
-          <form action="{% url 'set_language' %}" method="post" id="i18n_ru">
-            {% csrf_token %}
-            <input name="next" type="hidden" value="{% get_current_path %}" />
-            <input name="language" type="hidden" value="ru" />
-          </form>
-          <form action="{% url 'set_language' %}" method="post" id="i18n_en">
-            {% csrf_token %}
-            <input name="next" type="hidden" value="{% get_current_path %}" />
-            <input name="language" type="hidden" value="en" />
-          </form>
-          <li>{% if CURRENT_LANGUAGE == 'ru' %}<img src="/static/i/arrow_list.png">Русский{% else %}<a href="#" onClick="document.getElementById('i18n_ru').submit()">Русский</a>{% endif %}</li>
-          <li>{% if CURRENT_LANGUAGE == 'en' %}<img src="/static/i/arrow_list.png">English{% else %}<a href="#" onClick="document.getElementById('i18n_en').submit()">English</a>{% endif %}</li>
+          {% for lang_code, lang_name in LANGUAGES %}
+            <form action="{% url 'set_language' %}" method="post" id="i18n_{{ lang_code }}">
+              {% csrf_token %}
+              <input name="next" type="hidden" value="{{ CURRENT_PATH }}" />
+              <input name="language" type="hidden" value="{{ lang_code }}" />
+            </form>
+            <li>{% if CURRENT_LANGUAGE == lang_code %}<img src="/static/i/arrow_list.png">{{ lang_name }}{% else %}<a href="#" onClick="document.getElementById('i18n_{{ lang_code }}').submit()">{{ lang_name }}</a>{% endif %}</li>
+          {% endfor %}
         </ul>
       </li>
       

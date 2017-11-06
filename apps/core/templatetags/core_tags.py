@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from itertools import chain
 
 from django import template
+from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 
 
@@ -17,9 +18,12 @@ def get_current_path(context):
     (используется для переключения языков в шапке)
     """
     path = context['request'].path
-    path = (path.replace('/ru/', '/', 1) if path.startswith('/ru/')
-            else path.replace('/en/', '/', 1) if path.startswith('/en/')
-            else path)
+    languages = settings.LANGUAGES_DICT.keys()
+    for lang in languages:
+        _lang = '/{}/'.format(lang)
+        if path.startswith(_lang):
+            path = path.replace(_lang, '/', 1)
+            break
     return path
 
 
@@ -78,3 +82,8 @@ def to_str(something):
 def to_phone(phone_number):
     phone = ''.join([s for s in phone_number if s in '+1234567890'])
     return phone
+
+
+@register.filter
+def get_value(dict_value, key):
+    return dict_value.get(key)

@@ -3,16 +3,17 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 from django.conf.urls import include, url
+from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
 
-from solid_i18n.urls import solid_i18n_patterns
+# from solid_i18n.urls import solid_i18n_patterns
 
 from apps.content.views import HomepageView
 
 
-urlpatterns = solid_i18n_patterns(
+urlpatterns = i18n_patterns(
     # pages
     url(r'^$', HomepageView.as_view(), name='home'),
     url(r'^pages/$', TemplateView.as_view(template_name='pages.html'), name='pages'),
@@ -38,6 +39,8 @@ urlpatterns = solid_i18n_patterns(
     url(r'^video/$', TemplateView.as_view(template_name='video.html'), name='video'),
     url(r'^women-detail/$', TemplateView.as_view(template_name='women-detail.html'), name='women-detail'),
     url(r'^women/$', TemplateView.as_view(template_name='women.html'), name='women'),
+
+    prefix_default_language=False,
 )
 
 urlpatterns += [

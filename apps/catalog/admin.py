@@ -11,9 +11,9 @@ from .translation import *
 
 @admin.register(Category)
 class CategoryAdmin(TabbedTranslationAdmin):
-    list_display = ('sex', 'title_ru', 'title_en', 'order',)
+    list_display = ('sex', 'title_ru', 'order',)
     list_display_links = ('title_ru',)
-    list_editable = ('title_en', 'order',)
+    list_editable = ('order',)
     list_filter = ('sex',)
     list_per_page = 200
     fieldsets = (

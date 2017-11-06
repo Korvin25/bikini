@@ -13,8 +13,8 @@ from .translation import *
 
 @admin.register(Video)
 class VideoAdmin(TabbedTranslationAdmin):
-    list_display = ('title_ru', 'title_en', 'video', 'video_id', 'order', 'cover', 'product', 'add_dt',)
-    list_editable = ('title_en', 'order',)
+    list_display = ('title_ru', 'video', 'video_id', 'order', 'cover', 'product', 'add_dt',)
+    list_editable = ('order',)
     form = VideoAdminForm
     fieldsets = (
         (None, {
@@ -31,8 +31,8 @@ class VideoAdmin(TabbedTranslationAdmin):
 
 @admin.register(Page)
 class PageAdmin(TabbedTranslationAdmin):
-    list_display = ('title_ru', 'title_en', 'slug', 'image', 'order',)
-    list_editable = ('title_en', 'order',)
+    list_display = ('title_ru', 'slug', 'image', 'order',)
+    list_editable = ('order',)
     fieldsets = (
         (None, {
             'fields': ('title', 'slug', 'image', 'image_attributes', 'text', 'order',),
@@ -46,7 +46,8 @@ class PageAdmin(TabbedTranslationAdmin):
 
 class MenuItemInline(CompactInline):
     model = MenuItem
-    fields = ('label_ru', 'label_en', 'link_ru', 'link_en', 'target_blank', 'order',)
+    fields = ('label_ru', 'label_en', 'label_de', 'label_fr', 'label_it', 'label_es',
+              'link_ru', 'link_en', 'link_de', 'link_fr', 'link_it', 'link_es', 'target_blank', 'order',)
     extra = 0
 
 

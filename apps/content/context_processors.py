@@ -11,10 +11,14 @@ def content(request):
     menu = {m.slug: m.items.all() for m in Menu.objects.prefetch_related('items').all()}
     left_banners = Banner.active_objects.filter(location='left').order_by('?')[:3]
     footer_banner = Banner.active_objects.filter(location='bottom').order_by('?').first()
+    LANGUAGES = settings.LANGUAGES
+    LANGUAGES_DICT = settings.LANGUAGES_DICT
 
     content = {
         'menu': menu,
         'left_banners': left_banners,
         'footer_banner': footer_banner,
+        'LANGUAGES': LANGUAGES,
+        'LANGUAGES_DICT': LANGUAGES_DICT,
     }
     return content

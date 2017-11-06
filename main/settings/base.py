@@ -68,21 +68,39 @@ INSTALLED_APPS = (
     # 'apps.feedback',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # 'django.middleware.locale.LocaleMiddleware',
-    'solid_i18n.middleware.SolidLocaleMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+
     'request.middleware.RequestMiddleware',
+
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'crequest.middleware.CrequestMiddleware',
-)
+]
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
 
 TEMPLATES = [
     {
@@ -98,7 +116,7 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
-                'django.core.context_processors.request',
+                'django.template.context_processors.request',
 
                 # custom:
                 'apps.content.context_processors.content',
@@ -128,9 +146,14 @@ DATABASES = {
 
 LANGUAGE_CODE = 'ru'
 LANGUAGES = (
-    ('ru', 'Russian'),
+    ('ru', 'Русский'),
     ('en', 'English'),
+    ('de', 'Deutsch'),
+    ('fr', 'Français'),
+    ('it', 'Italiano'),
+    ('es', 'Español'),
 )
+LANGUAGES_DICT = dict(LANGUAGES)
 
 TIME_ZONE = 'Europe/Moscow'
 
@@ -154,7 +177,7 @@ MODELTRANSLATION_TRANSLATION_FILES = (
     'apps.banners.translation',
 )
 
-SOLID_I18N_DEFAULT_PREFIX_REDIRECT = False
+# SOLID_I18N_DEFAULT_PREFIX_REDIRECT = False
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -333,3 +356,9 @@ JET_THEMES = [
         'title': 'Light Gray'
     }
 ]
+
+# https://django-request.readthedocs.io/en/latest/settings.html
+REQUEST_IGNORE_AJAX = True
+REQUEST_IGNORE_PATHS = (
+    r'^admin/',
+)
