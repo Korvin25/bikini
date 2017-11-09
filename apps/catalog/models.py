@@ -125,7 +125,7 @@ class Category(MetatagModel):
         verbose_name_plural = 'категории'
 
     def __unicode__(self):
-        return self.title
+        return '({}) {}'.format(self.show_sex(), self.title)
 
     def show_sex(self):
         return {

@@ -90,14 +90,12 @@ class AttributeAdmin(TabbedTranslationAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         """
-        Если объект уже создан:
-        - и добавлены варианты - не даем менять категорию (чтобы не поломались формы в инлайнах)
-        - и добавлены товары - не даем менять slug (чтобы не поломалось поле attrs)
+        Если объект уже создан и добавлены товары - не даем менять slug (чтобы не поломалось поле attrs)
+        (+ не даем метять тип атрибута, чтобы не поломались инлайны у вариантов)
         """
         readonly_fields = list(super(AttributeAdmin, self).get_readonly_fields(request, obj))
         if obj:
-            if obj.options.count():
-                readonly_fields.append('attr_type')
+            readonly_fields.append('attr_type')
             q = {'attrs__{}__gt'.format(obj.slug): []}
             if Product.objects.filter(**q).count():
                 readonly_fields.append('slug')
