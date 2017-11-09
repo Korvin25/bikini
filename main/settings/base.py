@@ -45,14 +45,19 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django.contrib.postgres',
 
     'ckeditor',
+    'colorfield',
     'crequest',
     'django_cleanup',
+    'django_object_actions',
     'easy_thumbnails',
     'modeltranslation',
     'request',
     'rosetta',
+    'salmonella',
+    'sortedm2m',
 
     'apps.core',
     'apps.geo',
@@ -85,22 +90,6 @@ MIDDLEWARE = [
     'crequest.middleware.CrequestMiddleware',
 ]
 
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
-
 
 TEMPLATES = [
     {
@@ -122,10 +111,6 @@ TEMPLATES = [
                 'apps.content.context_processors.content',
                 'apps.settings.context_processors.settings',
             ],
-            # 'loaders': [
-            #     'django.template.loaders.filesystem.Loader',
-            #     'django.template.loaders.app_directories.Loader',
-            # ],
             'debug': DEBUG,
        },
    },
@@ -139,9 +124,13 @@ WSGI_APPLICATION = 'main.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-   }
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': '...',
+        'USER': '...',
+        'PASSWORD': '...',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
 }
 
 LANGUAGE_CODE = 'ru'
@@ -313,10 +302,7 @@ ROSETTA_SHOW_AT_ADMIN_PANEL = False
 
 THUMBNAIL_ALIASES = {
     '': {
-        'product_cover': {'size': (220, 220), 'crop': True, 'quality': 100},
-        'homepage_cover': {'size': (1939, 937), 'crop': True, 'quality': 100},
-        'homepage_girl': {'size': (737, 737), 'crop': False, 'upscale': True, 'quality': 100},
-        'footer_banner': {'size': (1407, 408), 'crop': True, 'upscale': True, 'quality': 100},
+        'attribute_option': {'size': (37, 37), 'crop': True, 'quality': 100},
     },
 }
 

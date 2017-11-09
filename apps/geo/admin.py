@@ -4,17 +4,15 @@ from __future__ import unicode_literals
 from django.contrib import admin
 
 from jet.admin import CompactInline
-from modeltranslation.admin import TranslationTabularInline, TabbedTranslationAdmin
+from modeltranslation.admin import TranslationInlineModelAdmin, TabbedTranslationAdmin
 
 from .models import Country, City
 from .translation import *
 
 
-# class CityInline(TranslationTabularInline):
-# class CityInline(admin.TabularInline):
-class CityInline(CompactInline):
+class CityInline(TranslationInlineModelAdmin, CompactInline):
     model = City
-    fields = ('title_ru', 'title_en', 'title_de', 'title_fr', 'title_it', 'title_es', 'order',)
+    fields = ('title', 'order',)
     extra = 0
     show_change_link = True
 

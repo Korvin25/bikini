@@ -1,24 +1,104 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.contrib import admin
+from functools import update_wrapper
 
-from modeltranslation.admin import TabbedTranslationAdmin
+from django.contrib import admin, messages
+from django.contrib.admin.templatetags.admin_urls import add_preserved_filters
+from django.contrib.admin.filters import SimpleListFilter
+from django.http import HttpResponseRedirect, Http404
+from django.shortcuts import render
+from django.utils.safestring import mark_safe
 
-from .models import Category, Product
+from jet.admin import CompactInline
+from modeltranslation.admin import TabbedTranslationAdmin, TranslationInlineModelAdmin
+from salmonella.admin import SalmonellaMixin
+
+from .admin_dynamic import AttrsInlineFormset, ProductOptionInlineForm, ProductPhotoInlineForm, AttrsAdminMixin
+from .admin_forms import AttributeOptionAdminForm, ChangeCategoryForm
+from .models import (Attribute, AttributeOption, Category, AdditionalProduct, Certificate,
+                     Product, ProductOption, ProductPhoto,)
 from .translation import *
 
 
+def _pop(_list, name):
+    if name in _list:
+        _list.pop(_list.index(name))
+    return _list
+
+
+# === Атрибуты (справочники) ===
+
+class AttributeOptionInline(TranslationInlineModelAdmin, CompactInline):
+    model = AttributeOption
+    form = AttributeOptionAdminForm
+    fields = ('title', 'picture', 'color', 'order',)
+    min_num = 1
+    extra = 0
+
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = list(super(AttributeOptionInline, self).get_fieldsets(request, obj))
+        fields = fieldsets[0][1]['fields']
+        if obj.attr_type == 'color':
+            _pop(fields, 'picture')
+        elif obj.attr_type == 'size':
+            _pop(fields, 'picture')
+            _pop(fields, 'color')
+        elif obj.attr_type == 'style':
+            _pop(fields, 'color')
+        return fieldsets
+
+
+@admin.register(Attribute)
+class AttributeAdmin(TabbedTranslationAdmin):
+    list_display = ('title_ru', 'attr_type', 'slug', 'display_type', 'order',)
+    list_editable = ('order',)
+    ordering = ['attr_type', 'order', 'id', ]
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'slug', 'attr_type', 'order', 'display_type',),
+        }),
+        ('Варианты', {
+            'fields': ('options_instruction',),
+        }),
+    )
+    readonly_fields = ('options_instruction',)
+    inlines = [AttributeOptionInline, ]
+
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = list(super(AttributeAdmin, self).get_fieldsets(request, obj))
+        if obj:
+            del fieldsets[1]
+        return fieldsets
+
+    def get_inline_instances(self, request, obj=None):
+        if not obj:
+            return []
+        return super(AttributeAdmin, self).get_inline_instances(request, obj)
+
+    def get_readonly_fields(self, request, obj=None):
+        readonly_fields = list(super(AttributeAdmin, self).get_readonly_fields(request, obj))
+        if obj:
+            if obj.options.count():
+                readonly_fields.append('attr_type')
+            q = {'attrs__{}__gt'.format(obj.slug): []}
+            if Product.objects.filter(**q).count():
+                readonly_fields.append('slug')
+        return readonly_fields
+
+
+# === Категории ===
+
 @admin.register(Category)
 class CategoryAdmin(TabbedTranslationAdmin):
-    list_display = ('sex', 'title_ru', 'order',)
+    list_display = ('show_sex', 'title_ru', 'order', 'show_attributes',)
     list_display_links = ('title_ru',)
     list_editable = ('order',)
     list_filter = ('sex',)
     list_per_page = 200
     fieldsets = (
         (None, {
-            'fields': ('sex', 'title', 'order',),
+            'fields': ('sex', 'title', 'order', 'attributes',),
         }),
         ('SEO', {
             'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'seo_text',),
@@ -27,17 +107,145 @@ class CategoryAdmin(TabbedTranslationAdmin):
     search_fields = ['title', ]
 
 
-@admin.register(Product)
-class ProductAdmin(TabbedTranslationAdmin):
-    list_display = ('id', 'title', 'product_type', 'show_categories', 'show', 'show_at_homepage',
-                    'order_at_homepage', 'add_dt', 'in_stock',)
+# === Дополнительные товары + сертификаты ===
+
+@admin.register(AdditionalProduct)
+class AdditionalProductAdmin(TabbedTranslationAdmin):
+    list_display = ('id', 'title', 'show', 'price_rub', 'price_eur', 'price_usd',)
     list_display_links = ('id', 'title',)
-    list_editable = ('order_at_homepage', 'in_stock',)
-    list_filter = ('product_type', 'show', 'show_at_homepage', 'add_dt', 'categories',)
+    list_filter = ('show',)
     list_per_page = 200
     fieldsets = (
         (None, {
-            'fields': ('product_type', 'title', 'subtitle', 'categories', 'vendor_code', 'photo',
+            'fields': ('title', 'vendor_code', 'photo',
+                       ('price_rub', 'price_eur', 'price_usd',), 'show',),
+        }),
+    )
+    search_fields = ['title', 'vendor_code', ]
+
+
+@admin.register(Certificate)
+class CertificateProductAdmin(TabbedTranslationAdmin):
+    list_display = ('id', 'title', 'show', 'price_rub', 'price_eur', 'price_usd',)
+    list_display_links = ('id', 'title',)
+    list_filter = ('show',)
+    list_per_page = 200
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'vendor_code',
+                       ('price_rub', 'price_eur', 'price_usd',), 'show',),
+        }),
+    )
+    search_fields = ['title', 'vendor_code', ]
+
+
+# === Товары ===
+
+class HasAttrsFilter(SimpleListFilter):
+    title = 'Есть атрибуты?'
+    parameter_name = 'has_attrs'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('yes', 'Да'),
+            ('no', 'Нет'),
+        )
+
+    def queryset(self, request, queryset):
+        return (queryset.filter(attrs={}) if self.value() == 'no'
+                else queryset.exclude(attrs={}) if self.value() == 'yes'
+                else queryset)
+
+
+class ProductOptionInline(AttrsAdminMixin, CompactInline):
+    model = ProductOption
+    formset = AttrsInlineFormset
+    form = ProductOptionInlineForm
+    fields = ('title', 'vendor_code', 'price_rub', 'price_eur', 'price_usd', 'in_stock')
+    min_num = 1
+    extra = 0
+
+
+class ProductPhotoInline(AttrsAdminMixin, CompactInline):
+    model = ProductPhoto
+    formset = AttrsInlineFormset
+    form = ProductPhotoInlineForm
+    fields = ('photo',)
+
+    def get_extra(self, request, obj=None):
+        extra = (0 if obj and obj.photos.count()
+                 else 1)
+        return extra
+
+
+@admin.register(Product)
+class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
+    change_category_template = 'admin/catalog/product/change_category.html'
+
+    def change_category_view(self, request, id, form_url='', extra_context=None):
+        opts = Product._meta
+        try:
+            obj = Product.objects.get(pk=id)
+        except (Product.DoesNotExist, ValueError) as e:
+            raise Http404
+        form = ChangeCategoryForm(request.POST, instance=obj) if request.POST else ChangeCategoryForm(instance=obj)
+
+        if not self.has_change_permission(request, obj):
+            raise PermissionDenied
+
+        if form.is_valid():
+            form.save()
+            category = obj.category
+            self.message_user(request,
+                              mark_safe('''Категория у товара "<a href="/admin/catalog/product/{}/change/">{}</a>"
+                                 изменена на "<a href="/admin/catalog/category/{}/change/">{}</a>".'''.format(
+                                    id, obj.__unicode__(), category.id, category.__unicode__(),
+                                )),
+                              messages.SUCCESS)
+            return HttpResponseRedirect('/admin/catalog/product/{}/change/'.format(id))
+
+        preserved_filters = self.get_preserved_filters(request)
+        form_url = add_preserved_filters({'preserved_filters': preserved_filters, 'opts': opts}, form_url)
+
+        context = {
+            'title': 'Изменить категорию у товара %s' % obj,
+            'has_change_permission': self.has_change_permission(request, obj),
+            'form_url': form_url,
+            'form': form,
+            'opts': opts,
+            'errors': form.errors,
+            'app_label': opts.app_label,
+            'original': obj,
+        }
+        context.update(extra_context or {})
+        return render(request, self.change_category_template, context)
+
+    def get_urls(self):
+        from django.conf.urls import url
+
+        def wrap(view):
+            def wrapper(*args, **kwargs):
+                return self.admin_site.admin_view(view)(*args, **kwargs)
+            return update_wrapper(wrapper, view)
+
+        info = self.model._meta.app_label, self.model._meta.model_name
+        urls = [
+            url(r'^(.+)/change_category/$',
+                wrap(self.change_category_view),
+                name='%s_%s_change_category' % info),
+        ]
+        super_urls = super(ProductAdmin, self).get_urls()
+        return urls + super_urls
+
+    list_display = ('id', 'title', 'category', 'show', 'has_attrs', 'show_at_homepage',
+                    'order_at_homepage', 'add_dt', 'in_stock', 'vendor_code')
+    list_display_links = ('id', 'title',)
+    list_editable = ('order_at_homepage', 'in_stock', 'vendor_code')
+    list_filter = ('show', HasAttrsFilter, 'show_at_homepage', 'add_dt', 'category',)
+    list_per_page = 200
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'subtitle', 'category', 'vendor_code', 'photo',
                        ('price_rub', 'price_eur', 'price_usd',), 'text', 'in_stock',),
         }),
         ('Настройки показа на сайте', {
@@ -49,8 +257,41 @@ class ProductAdmin(TabbedTranslationAdmin):
         ('SEO', {
             'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'seo_text',),
         }),
+        ('Варианты товара', {
+            'fields': ('options_instruction',),
+        }),
+        ('Фото', {
+            'fields': ('photos_instruction',),
+        }),
     )
-    readonly_fields = ('id', 'add_dt',)
-    raw_id_fields = ('additional_products', 'associated_products', 'also_products',)
-    search_fields = ['title', 'subtitle', 'text', ]
-    ordering = ('-product_type', '-id',)
+    readonly_fields = ('id', 'add_dt', 'options_instruction', 'photos_instruction', 'show_category',)
+    inlines = [ProductOptionInline, ProductPhotoInline, ]
+    # raw_id_fields = ('additional_products', 'associated_products', 'also_products',)
+    salmonella_fields = ('additional_products', 'associated_products', 'also_products',)
+    search_fields = ['title', 'vendor_code', 'subtitle', 'text', ]
+
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = list(super(ProductAdmin, self).get_fieldsets(request, obj))
+        if obj:
+            # fieldsets[0][1]['fields'][2] = 'show_category'
+            fieldsets[0][1]['fields'][12] = 'show_category'
+            del fieldsets[4]
+            del fieldsets[4]
+        return fieldsets
+
+    def get_inline_instances(self, request, obj=None):
+        if not obj:
+            return []
+        return super(ProductAdmin, self).get_inline_instances(request, obj)
+
+    def get_readonly_fields(self, request, obj=None):
+        readonly_fields = list(super(ProductAdmin, self).get_readonly_fields(request, obj))
+        if obj:
+            readonly_fields.append('category')
+        return readonly_fields
+
+    def save_formset(self, request, form, formset, change):
+        s = super(ProductAdmin, self).save_formset(request, form, formset, change)
+        if formset.model == ProductOption:
+            formset.instance.set_attrs()
+        return s

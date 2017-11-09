@@ -53,7 +53,8 @@ urlpatterns += [
     url(r'^jet/', include('jet.urls', 'jet')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
-    url(r'^rosetta/', include('rosetta.urls')),
+    url(r'^admin/rosetta/', include('rosetta.urls')),
+    url(r'^admin/salmonella/', include('salmonella.urls')),
 ]
 
 if settings.DEBUG:
