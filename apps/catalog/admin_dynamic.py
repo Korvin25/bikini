@@ -9,6 +9,9 @@ from .models import ProductOption, ProductPhoto, Category
 
 
 class AttrsInlineFormset(forms.BaseInlineFormSet):
+    """
+    Переопределяем формсет, чтобы передать значения в формы
+    """
 
     def get_form_kwargs(self, index):
         kwargs = super(AttrsInlineFormset, self).get_form_kwargs(index)
@@ -20,6 +23,9 @@ class AttrsInlineFormMixin(object):
     attrs_min_choices = 1
 
     def __init__(self, attrs_list, *args, **kwargs):
+        """
+        Создаем динамические поля на основе product.category.attrs
+        """
         super(AttrsInlineFormMixin, self).__init__(*args, **kwargs)
 
         self.attrs_list = attrs_list
@@ -31,6 +37,9 @@ class AttrsInlineFormMixin(object):
                 self.fields[attr['slug']].initial = self.instance.attrs.get(attr['slug'])
 
     def save(self, commit=True):
+        """
+        Сохраняем данные с динамических полей в поле attrs у объекта
+        """
         obj = super(AttrsInlineFormMixin, self).save(commit=False)
         obj.attrs = {}
         for attr in self.attrs_list:
@@ -60,6 +69,9 @@ class AttrsAdminMixin(object):
     attrs_min_choices = 1
 
     def get_fields(self, request, obj=None):
+        """
+        from stackoverflow
+        """
         fields = list(super(AttrsAdminMixin, self).get_fields(request, obj))
         new_fields = []
 
@@ -75,6 +87,9 @@ class AttrsAdminMixin(object):
             return fields
 
     def get_fieldsets(self, request, obj=None):
+        """
+        from stackoverflow
+        """
         fieldsets = super(AttrsAdminMixin, self).get_fieldsets(request, obj)
         if obj and obj.category_id:
             fields = list(fieldsets[0][1]['fields'])

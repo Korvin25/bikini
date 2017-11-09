@@ -37,6 +37,9 @@ class AttributeOptionInline(TranslationInlineModelAdmin, CompactInline):
     extra = 0
 
     def get_fieldsets(self, request, obj=None):
+        """
+        Выводим необязательные поля (picture и color) в зависимости от типа атрибута
+        """
         fieldsets = list(super(AttributeOptionInline, self).get_fieldsets(request, obj))
         fields = fieldsets[0][1]['fields']
         if obj.attr_type == 'color':
@@ -66,17 +69,28 @@ class AttributeAdmin(TabbedTranslationAdmin):
     inlines = [AttributeOptionInline, ]
 
     def get_fieldsets(self, request, obj=None):
+        """
+        Если объект уже создан, вместо таба с инструкцией по вариантам будет таб с инлайнами
+        """
         fieldsets = list(super(AttributeAdmin, self).get_fieldsets(request, obj))
         if obj:
             del fieldsets[1]
         return fieldsets
 
     def get_inline_instances(self, request, obj=None):
+        """
+        Если объект уже создан (а главное, выбран тип атрибута), показываем инлайны
+        """
         if not obj:
             return []
         return super(AttributeAdmin, self).get_inline_instances(request, obj)
 
     def get_readonly_fields(self, request, obj=None):
+        """
+        Если объект уже создан:
+        - и добавлены варианты - не даем менять категорию (чтобы не поломались формы в инлайнах)
+        - и добавлены товары - не даем менять slug (чтобы не поломалось поле attrs)
+        """
         readonly_fields = list(super(AttributeAdmin, self).get_readonly_fields(request, obj))
         if obj:
             if obj.options.count():
@@ -271,6 +285,10 @@ class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
     search_fields = ['title', 'vendor_code', 'subtitle', 'text', ]
 
     def get_fieldsets(self, request, obj=None):
+        """
+        Если объект уже создан, вместо таба с инструкциями будут табы с инлайнами.
+        Также вместо поля выбора категории показываем ридонли-поле с ссылкой на страниу выбора
+        """
         fieldsets = list(super(ProductAdmin, self).get_fieldsets(request, obj))
         if obj:
             # fieldsets[0][1]['fields'][2] = 'show_category'
@@ -280,17 +298,26 @@ class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
         return fieldsets
 
     def get_inline_instances(self, request, obj=None):
+        """
+        Если объект уже создан (а главное, выбрана категория), показываем инлайны
+        """
         if not obj:
             return []
         return super(ProductAdmin, self).get_inline_instances(request, obj)
 
     def get_readonly_fields(self, request, obj=None):
+        """
+        Если объект уже создан, не даем менять категорию (только на отдельной странице)
+        """
         readonly_fields = list(super(ProductAdmin, self).get_readonly_fields(request, obj))
         if obj:
             readonly_fields.append('category')
         return readonly_fields
 
     def save_formset(self, request, form, formset, change):
+        """
+        Обновляем поле attrs у товара после сохранения всех его вариантов
+        """
         s = super(ProductAdmin, self).save_formset(request, form, formset, change)
         if formset.model == ProductOption:
             formset.instance.set_attrs()
