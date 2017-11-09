@@ -49,6 +49,9 @@ class AttributeOptionInline(TranslationInlineModelAdmin, CompactInline):
             _pop(fields, 'color')
         elif obj.attr_type == 'style':
             _pop(fields, 'color')
+        elif obj.attr_type == 'text':
+            _pop(fields, 'picture')
+            _pop(fields, 'color')
         return fieldsets
 
 

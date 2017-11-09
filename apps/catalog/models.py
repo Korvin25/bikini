@@ -20,6 +20,7 @@ class Attribute(models.Model):
         ('color', 'цвет'),
         ('size', 'размер'),
         ('style', 'фасон'),
+        ('text', 'текст'),
     )
     POSITION_CHOICES = (
         ('all', 'все'),
