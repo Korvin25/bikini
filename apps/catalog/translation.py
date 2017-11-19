@@ -5,7 +5,8 @@ from modeltranslation.decorators import register
 from modeltranslation.translator import translator, TranslationOptions
 
 from ..core.translation import TitleTranslationOptions, MetatagTitleTranslationOptions
-from .models import Attribute, AttributeOption, Category, AdditionalProduct, Certificate, Product, ProductOption
+from .models import (Attribute, AttributeOption, ExtraProduct, Category,
+                     AdditionalProduct, Certificate, Product, ProductOption,)
 
 
 @register(Product)
@@ -16,6 +17,7 @@ class ProductTranslationOptions(TranslationOptions):
 
 translator.register(Attribute, TitleTranslationOptions)
 translator.register(AttributeOption, TitleTranslationOptions)
+translator.register(ExtraProduct, TitleTranslationOptions)
 translator.register(Category, MetatagTitleTranslationOptions)
 translator.register(AdditionalProduct, TitleTranslationOptions)
 translator.register(Certificate, TitleTranslationOptions)

@@ -1,0 +1,73 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls admin_static admin_modify %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+        &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ app_label|capfirst|escape }}</a>
+        &rsaquo; {% if has_change_permission %}<a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>{% else %}{{ opts.verbose_name_plural|capfirst }}{% endif %}
+        &rsaquo; Изменить атрибуты у товара {{ original }}
+    </div>
+{% endblock %}
+
+{% block content %}
+    <script type="text/javascript" src="/admin/jsi18n/"></script>
+    <link href="/static/modeltranslation/css/tabbed_translation_fields.css" type="text/css" media="all" rel="stylesheet" />
+    <script type="text/javascript" src="/static/admin/js/core.js"></script>
+    <script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
+    <script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
+    <script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+    <script type="text/javascript" src="/static/admin/js/actions.js"></script>
+    <script type="text/javascript" src="/static/admin/js/urlify.js"></script>
+    <script type="text/javascript" src="/static/admin/js/prepopulate.js"></script>
+    <script type="text/javascript" src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
+    <script type="text/javascript" src="/static/modeltranslation/js/force_jquery.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.mb.browser/0.1/jquery.mb.browser.min.js"></script>
+    <script type="text/javascript" src="/static/modeltranslation/js/tabbed_translation_fields.js"></script>
+    <script type="text/javascript" src="/static/ckeditor/ckeditor-init.js" data-ckeditor-basepath="/static/ckeditor/ckeditor/" id="ckeditor-init-script"></script>
+    <script type="text/javascript" src="/static/ckeditor/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="/static/salmonella/js/salmonella.js"></script>
+    <script type="text/javascript" src="/static/admin/js/inlines.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/forms.css" />
+    <style>
+        ._input { float: left; margin-right: 3px; }
+        ._label { width: auto; }
+        ._label:after { height: auto !important; content: none; }
+        .form-row input[type=checkbox] { display: inline !important; }
+        .form-row li { margin-bottom: 5px; }
+    </style>
+
+    <div>
+        <form action="{{ form_url }}" method="post">
+            {% if form.errors %}
+                <p class="errornote">Пожалуйста, исправьте ошибки ниже.</p>
+            {% endif %}
+
+            {% csrf_token %}
+
+            <fieldset class="module aligned">
+                <div class="form-row field-attributes">
+                    <div class="field-box field-attributes">
+                        {% if form.attributes.errors %}<ul class="errorlist">{{ form.attributes.errors|unordered_list }}</ul>{% endif %}
+                        <label for="id_attributes">Атрибуты:</label>
+                        {{ form.attributes }}
+                    </div>
+                </div>
+                <div class="form-row field-extra-products">
+                    <div class="field-box field-extra-products">
+                        {% if form.extra_products.errors %}<ul class="errorlist">{{ form.extra_products.errors|unordered_list }}</ul>{% endif %}
+                        <label for="id_extra_products">Дополнительные товары:</label>
+                        {{ form.extra_products }}
+                    </div>
+                </div>
+            </fieldset>
+
+            <div class="submit-row">
+                <input type="submit" value="Сохранить" class="default">
+            </div>
+
+        </form>
+    </div>
+{% endblock %}

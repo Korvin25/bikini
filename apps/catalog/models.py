@@ -33,31 +33,61 @@ class Attribute(models.Model):
         (1, 'на странице товара'),
         (0, 'откл.'),
     )
-    title = models.CharField('Название', max_length=255)
+    CATEGORY_CHOICES = (
+        ('primary', 'основные'),
+        ('extra', 'дополнительные'),
+    )
+    admin_title = models.CharField('Название (в админке)', max_length=255)
+    title = models.CharField('Название (на сайте)', max_length=255)
     slug = models.SlugField('В URL', help_text='''уникальное поле; принимаются английские буквы, цифры и символ "_"
                                                   <br><br>примеры:<br>- color<br>- top_w<br>- bottom_size''', unique=True)
     attr_type = models.CharField('Тип', max_length=7, choices=ATTRIBUTE_TYPES)
-    position = models.CharField('Расположение', max_length=7, choices=POSITION_CHOICES, default='all')
-    order = models.IntegerField('Порядок', default=10)
+    neighbor = models.OneToOneField('self', verbose_name='Соседний атрибут', null=True, blank=True,
+                                    help_text='выводится рядом на странице товара', related_name='from_neighbor')
+    category = models.CharField('Категория', max_length=7, choices=CATEGORY_CHOICES)
     display_type = models.SmallIntegerField('Тип показа', choices=DISPLAY_TYPES, default=3)
+    order = models.IntegerField('Порядок', default=10)
+
+    # old and unused:
+    position = models.CharField('Расположение', max_length=7, choices=POSITION_CHOICES, default='all')
+    add_to_price = models.BooleanField('Прибавлять к цене', default=False, help_text='для дополнительных атрибутов')
 
     class Meta:
-        ordering = ['order', 'id', ]
+        ordering = ['-category', 'order', 'id', ]
         verbose_name = 'атрибут'
         verbose_name_plural = 'атрибуты'
 
     def __unicode__(self):
-        return self.title
+        return self.admin_title
 
     def save(self, *args, **kwargs):
         self.slug = (self.slug or '').replace('-', '_')
+        if self.category == 'extra' and self.display_type > 1:
+            self.display_type = 1
         return super(Attribute, self).save(*args, **kwargs)
+
+    def set_neighbor(self, obj):
+        """
+        Реализуем аналог symmetrical=True у OneToOneField
+        """
+        self.neighbor = obj
+        self.save()
 
     @mark_safe
     def options_instruction(self):
         return 'для заполнения вариантов сначала сохраните объект'
     options_instruction.allow_tags = True
     options_instruction.short_description = 'Варианты'
+
+    @classmethod
+    def get_attrs_list(cls, qs):
+        attrs = qs.prefetch_related('options').all()
+        attrs = [{
+            'title': attr.admin_title,
+            'slug': attr.slug,
+            'choices': [(option.id, option.get_label(attr_type=attr.attr_type)) for option in attr.options.all()],
+        } for attr in attrs]
+        return attrs
 
 
 class AttributeOption(models.Model):
@@ -80,16 +110,23 @@ class AttributeOption(models.Model):
             attr_type = self.attribute.attr_type
             if not attr_type == 'color':
                 self.color = ''
-            if not attr_type == 'style':
+            if not attr_type in ['style', 'color']:
                 self.picture = ''
         return super(AttributeOption, self).save(*args, **kwargs)
 
-    def get_placeholder_image(self, image_attrs='', dimension=25, image_src=''):
+    def get_placeholder_image(self, image_attrs='', dimension=35, image_src='', border=True):
         if not image_src:
             image_src = 'http://via.placeholder.com/{}/{}'.format(dimension, image_attrs)
-        return '''<img src="{}"
-                       style="border-radius: {}px; border: 1px solid black"
-                       title="{}">'''.format(image_src, dimension, self.title)
+        style = 'border-radius: {}px'.format(dimension)
+        if border:
+            style = '{}; border: 1px solid black'.format(style)
+        return '''<img src="{0}"
+                       style="height: {1}px; width: {1}px; {2}"
+                       title="{3}">'''.format(image_src, dimension, style, self.title)
+
+    @property
+    def admin_picture_url(self):
+        return self.picture['admin_attribute_option'].url if self.picture else ''
 
     @property
     def picture_url(self):
@@ -97,14 +134,73 @@ class AttributeOption(models.Model):
 
     def get_label(self, attr_type=None):
         attr_type = attr_type or self.attribute.attr_type
-        label = (self.get_placeholder_image('{0}/{0}'.format(self.color[1:]))
+        label = (self.get_placeholder_image(image_src=self.admin_picture_url, dimension=35)
+                     if (attr_type == 'color' and self.picture)
+                 else self.get_placeholder_image('{0}/{0}'.format(self.color[1:]))
                      if (attr_type == 'color' and self.color)
                  else self.get_placeholder_image('ffffff/000000/?text={}'.format(self.title), 45)
                      if attr_type == 'size'
-                 else self.get_placeholder_image(image_src=self.picture_url, dimension=37)
+                 else self.get_placeholder_image(image_src=self.admin_picture_url, dimension=45, border=False)
                      if (attr_type == 'style' and self.picture)
                  else self.title)
+        if self.color or self.picture:
+            label = '{}&nbsp;&nbsp;{}'.format(label, self.title)
         return mark_safe(label)
+
+
+class ExtraProduct(models.Model):
+    admin_title = models.CharField('Название (в админке)', max_length=255)
+    title = models.CharField('Название (на сайте)', max_length=255)
+    slug = models.SlugField('В URL', help_text='''уникальное поле; принимаются английские буквы, цифры и символ "_"
+                                                  <br><br>примеры:<br>- color<br>- top_w<br>- bottom_size''', unique=True)
+    order = models.IntegerField('Порядок', default=10)
+    attributes = SortedManyToManyField(Attribute, verbose_name='Атрибуты', related_name='extra_products',
+                                       limit_choices_to={'category': 'extra'})
+
+    class Meta:
+        ordering = ['order', 'id', ]
+        verbose_name = 'дополнительный товар'
+        verbose_name_plural = 'атрибуты: дополнительные товары'
+
+    def __unicode__(self):
+        return self.admin_title
+
+    def save(self, *args, **kwargs):
+        self.slug = (self.slug or '').replace('-', '_')
+        return super(ExtraProduct, self).save(*args, **kwargs)
+
+    def show_attributes(self):
+        return list(self.attributes.values_list('admin_title', flat=True))
+    show_attributes.allow_tags = True
+    show_attributes.short_description = 'Атрибуты'
+
+    def get_attributes_qs(self):
+        return self.attributes.filter(category='extra')
+
+    def get_attrs_list(self):
+        qs = self.get_attributes_qs()
+        attrs = Attribute.get_attrs_list(qs)
+        return attrs
+
+    def get_attrs_slugs(self):
+        qs = self.get_attributes_qs()
+        return list(qs.values_list('slug', flat=True))
+
+    @classmethod
+    def get_all_attributes_qs(cls, qs=None):
+        qs = qs or ExtraProduct.objects.all()
+        return Attribute.objects.filter(extra_products__in=qs)
+
+    @classmethod
+    def get_all_attrs_list(cls, qs=None):
+        qs = cls.get_all_attributes_qs(qs)
+        attrs = Attribute.get_attrs_list(qs)
+        return attrs
+
+    @classmethod
+    def get_all_attrs_slugs(cls, qs=None):
+        qs = cls.get_all_attributes_qs(qs)
+        return list(qs.values_list('slug', flat=True))
 
 
 # === Категории ===
@@ -117,7 +213,8 @@ class Category(MetatagModel):
     title = models.CharField('Название', max_length=255)
     sex = models.CharField('Пол', max_length=7, choices=SEX_CHOICES, default='female')
     order = models.IntegerField('Порядок', default=10)
-    attributes = SortedManyToManyField(Attribute, verbose_name='Атрибуты', related_name='categories', blank=True)
+    attributes = SortedManyToManyField(Attribute, verbose_name='Атрибуты', related_name='categories', blank=True,
+                                       limit_choices_to={'category': 'primary'})
 
     class Meta:
         ordering = ['sex', 'order', 'id', ]
@@ -136,28 +233,35 @@ class Category(MetatagModel):
     show_sex.short_description = 'Пол'
 
     def show_attributes(self):
-        return list(self.attributes.values_list('title', flat=True))
+        return list(self.attributes.values_list('admin_title', flat=True))
     show_attributes.allow_tags = True
     show_attributes.short_description = 'Атрибуты'
 
-    @property
-    def attrs_list(self):
-        attrs = self.attributes.prefetch_related('options').all()
-        attrs = [{
-            'title': attr.title,
-            'slug': attr.slug,
-            'choices': [(option.id, option.get_label(attr_type=attr.attr_type)) for option in attr.options.all()],
-        } for attr in attrs]
+    def get_attributes_qs(self, filter='primary'):
+        # filter in ['primary', 'photos',]
+        qs = self.attributes
+        qs = (qs.filter(category='primary') if filter == 'primary'
+              # else qs.filter(category='extra') if filter == 'extra'
+              else qs.filter(attr_type__in=['color', 'style']) if filter == 'photos'
+              else qs)
+        return qs
+
+    def get_attrs_list(self, filter='primary'):
+        qs = self.get_attributes_qs(filter=filter)
+        attrs = Attribute.get_attrs_list(qs)
         return attrs
 
-    @property
-    def attrs_slugs(self):
-        return list(self.attributes.values_list('slug', flat=True))
+    def get_attrs_slugs(self, filter='primary'):
+        qs = self.get_attributes_qs(filter=filter)
+        return list(qs.values_list('slug', flat=True))
 
 
 # === Дополнительные товары + сертификаты ===
 
 class AdditionalProduct(models.Model):
+    """
+    switched off
+    """
     title = models.CharField('Название', max_length=255)
     vendor_code = models.CharField('Артикул', max_length=255, blank=True)
     photo = ThumbnailerImageField('Фото', upload_to='catalog/products/', blank=True)
@@ -230,6 +334,9 @@ class Product(MetatagModel):
     also_products = models.ManyToManyField('self', symmetrical=False, blank=True,
                                            verbose_name='С этим товаром также покупают', related_name='from_also')
 
+    attributes = SortedManyToManyField(Attribute, verbose_name='Атрибуты', related_name='products', blank=True,
+                                       limit_choices_to={'category': 'primary'})
+
     class Meta:
         ordering = ['-id', ]
         verbose_name = 'товар'
@@ -237,6 +344,27 @@ class Product(MetatagModel):
 
     def __unicode__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        init_attributes = (True if (not self.id and self.category)
+                          else False)
+        s = super(Product, self).save(*args, **kwargs)
+        if init_attributes:
+            self.set_attributes_from_category(self.category)
+        return s
+
+    def set_attributes_from_category(self, category):
+        self.attributes = category.attributes.all()
+        self.set_attrs()
+
+    def create_extra_products(self, extra_products_ids):
+        extra_options_ids = []
+        extra_products = ExtraProduct.objects.filter(id__in=extra_products_ids)
+        for ep in extra_products:
+            eo, _created = ProductExtraOption.objects.get_or_create(product_id=self.id, extra_product_id=ep.id,
+                                                                    defaults={'title': ep.admin_title})
+            extra_options_ids.append(eo.id)
+        self.extra_options.exclude(id__in=extra_options_ids).delete()
 
     def has_attrs(self):
         return ('<img src="/static/admin/img/icon-yes.svg" alt="True">' if self.attrs
@@ -264,6 +392,20 @@ class Product(MetatagModel):
     options_instruction.short_description = 'Варианты товара'
 
     @mark_safe
+    def extra_options_instruction(self):
+        return '''для заполнения дополнительных товаров сначала выберите их на
+                  <a href="/admin/catalog/product/{}/change_attributes/">странице изменения атрибутов</a>'''.format(self.id)
+    extra_options_instruction.allow_tags = True
+    extra_options_instruction.short_description = 'Дополнительные товары'
+
+    @mark_safe
+    def show_attributes(self):
+        attrs_str = list(self.attributes.values_list('admin_title', flat=True))
+        return '{} (<a href="/admin/catalog/product/{}/change_attributes/">изменить</a>)'.format(attrs_str, self.id)
+    show_attributes.allow_tags = True
+    show_attributes.short_description = 'Атрибуты'
+
+    @mark_safe
     def photos_instruction(self):
         return 'для добавления фото сначала сохраните объект'
     photos_instruction.allow_tags = True
@@ -277,12 +419,38 @@ class Product(MetatagModel):
     show_category.allow_tags = True
     show_category.short_description = 'Категория'
 
+    @mark_safe
+    def show_attributes(self):
+        attrs_str = list(self.attributes.values_list('admin_title', flat=True))
+        return '{} (<a href="/admin/catalog/product/{}/change_attributes/">изменить</a>)'.format(attrs_str, self.id)
+    show_attributes.allow_tags = True
+    show_attributes.short_description = 'Атрибуты'
+
+    def get_attributes_qs(self, filter='primary'):
+        # filter in ['primary', 'photos',]
+        qs = self.attributes
+        qs = (qs.filter(category='primary') if filter == 'primary'
+              # else qs.filter(category='extra') if filter == 'extra'
+              else qs.filter(attr_type__in=['color', 'style']) if filter == 'photos'
+              else qs)
+        return qs
+
+    def get_attrs_list(self, filter='primary'):
+        qs = self.get_attributes_qs(filter=filter)
+        attrs = Attribute.get_attrs_list(qs)
+        return attrs
+
+    def get_attrs_slugs(self, filter='primary'):
+        qs = self.get_attributes_qs(filter=filter)
+        return list(qs.values_list('slug', flat=True))
+
     def set_attrs(self):
-        attrs = {slug: [] for slug in self.category.attrs_slugs}
+        attrs = {slug: [] for slug in self.get_attrs_slugs()}
         for _attrs in self.options.values_list('attrs', flat=True):
             for k, v in _attrs.iteritems():
                 if isinstance(v, list):
-                    attrs[k].extend(v)
+                    if attrs.get(k):
+                        attrs[k].extend(v)
         attrs = {k: list(set(v)) for k, v in attrs.iteritems()}
         self.attrs = attrs
         self.save()
@@ -308,6 +476,35 @@ class ProductOption(models.Model):
 
     def __unicode__(self):
         return self.title
+
+
+class ProductExtraOption(models.Model):
+    product = models.ForeignKey(Product, verbose_name='Товар', related_name='extra_options')
+    extra_product = models.ForeignKey(ExtraProduct, verbose_name='Дополнительный товар', related_name='extra_options')
+    title = models.CharField('Название', max_length=255)
+
+    vendor_code = models.CharField('Артикул', max_length=255, blank=True)
+    price_rub = models.DecimalField('Цена, руб.', max_digits=9, decimal_places=2, default=0)
+    price_eur = models.DecimalField('Цена, eur.', max_digits=9, decimal_places=2, default=0)
+    price_usd = models.DecimalField('Цена, usd.', max_digits=9, decimal_places=2, default=0)
+    in_stock = models.SmallIntegerField('Количество на складе', default=5)
+
+    attrs = JSONField(default=dict)
+
+    class Meta:
+        unique_together = [('product', 'extra_product')]
+        ordering = ['id', ]
+        verbose_name = 'дополнительный товар'
+        verbose_name_plural = 'дополнительные товары'
+
+    def __unicode__(self):
+        return self.title
+
+    @mark_safe
+    def attrs_instruction(self):
+        return 'для заполнения атрибутов сначала выберите тип дополнительного товара и сохраните объект'
+    attrs_instruction.allow_tags = True
+    attrs_instruction.short_description = 'Атрибуты'
 
 
 class ProductPhoto(models.Model):
