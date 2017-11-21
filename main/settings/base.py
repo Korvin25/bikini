@@ -307,8 +307,7 @@ THUMBNAIL_ALIASES = {
         'homepage_girl': {'size': (737, 737), 'crop': False, 'upscale': True, 'quality': 100},
         'footer_banner': {'size': (1407, 408), 'crop': True, 'upscale': True, 'quality': 100},
         'attribute_option': {'size': (37, 37), 'crop': True, 'quality': 100, 'upscale': True},
-        'admin_attribute_option': {'size': (45, 45), 'crop': True, 'quality': 100, 'upscale': True},
-        # 'admin_attribute_option': {'size': (60, 60), 'crop': True, 'quality': 100, 'upscale': True},
+        'admin_attribute_option': {'size': (200, 200), 'crop': True, 'quality': 100, 'upscale': True},
     },
 }
 

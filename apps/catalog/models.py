@@ -140,7 +140,7 @@ class AttributeOption(models.Model):
                      if (attr_type == 'color' and self.color)
                  else self.get_placeholder_image('ffffff/000000/?text={}'.format(self.title), 45)
                      if attr_type == 'size'
-                 else self.get_placeholder_image(image_src=self.admin_picture_url, dimension=45, border=False)
+                 else self.get_placeholder_image(image_src=self.admin_picture_url, dimension=200, border=False)
                      if (attr_type == 'style' and self.picture)
                  else self.title)
         if self.color or self.picture:
@@ -346,7 +346,7 @@ class Product(MetatagModel):
         return self.title
 
     def save(self, *args, **kwargs):
-        init_attributes = (True if (not self.id and self.category)
+        init_attributes = (True if (not self.id and getattr(self, 'category', None))
                           else False)
         s = super(Product, self).save(*args, **kwargs)
         if init_attributes:
