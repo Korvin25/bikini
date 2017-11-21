@@ -128,6 +128,13 @@ class AttributeOption(models.Model):
     def admin_picture_url(self):
         return self.picture['admin_attribute_option'].url if self.picture else ''
 
+    @mark_safe
+    def admin_show_picture(self):
+        return (self.get_placeholder_image(image_src=self.admin_picture_url, dimension=200, border=False)
+                if self.picture else '-')
+    admin_show_picture.allow_tags = True
+    admin_show_picture.short_description = ' '
+
     @property
     def picture_url(self):
         return self.picture['attribute_option'].url if self.picture else ''

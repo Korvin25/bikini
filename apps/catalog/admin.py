@@ -36,7 +36,8 @@ class AttributeOptionInline(TranslationInlineModelAdmin, CompactInline):
     model = AttributeOption
     form = AttributeOptionAdminForm
     formset = AttributeOptionInlineFormset
-    fields = ('title', 'color', 'picture', 'order',)
+    fields = ('title', 'color', 'picture', 'admin_show_picture', 'order',)
+    readonly_fields = ('admin_show_picture',)
     min_num = 1
     extra = 0
 
@@ -51,11 +52,13 @@ class AttributeOptionInline(TranslationInlineModelAdmin, CompactInline):
             pass
         elif obj.attr_type == 'size':
             _pop(fields, 'picture')
+            _pop(fields, 'admin_show_picture')
             _pop(fields, 'color')
         elif obj.attr_type == 'style':
             _pop(fields, 'color')
         elif obj.attr_type == 'text':
             _pop(fields, 'picture')
+            _pop(fields, 'admin_show_picture')
             _pop(fields, 'color')
         return fieldsets
 
