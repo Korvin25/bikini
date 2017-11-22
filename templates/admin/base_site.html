@@ -6,3 +6,8 @@
         <span class="icon-jet"></span> Bikinimini
     </h1>
 {% endblock %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/css/custom.css' %}">
+{% endblock %}
