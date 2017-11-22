@@ -154,19 +154,20 @@ class ExtraProductAdmin(TabbedTranslationAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(TabbedTranslationAdmin):
-    list_display = ('show_sex', 'title_ru', 'order', 'show_attributes',)
-    list_display_links = ('title_ru',)
+    list_display = ('show_sex', 'title', 'slug', 'order', 'show_attributes',)
+    list_display_links = ('title',)
     list_editable = ('order',)
     list_filter = ('sex',)
     list_per_page = 200
     fieldsets = (
         (None, {
-            'fields': ('sex', 'title', 'order', 'attributes',),
+            'fields': ('sex', 'title', 'slug', 'order', 'attributes',),
         }),
         ('SEO', {
             'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'seo_text',),
         }),
     )
+    prepopulated_fields = {'slug': ('title',)}
     search_fields = ['title', ]
 
 
@@ -360,7 +361,7 @@ class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
         super_urls = super(ProductAdmin, self).get_urls()
         return urls + super_urls
 
-    list_display = ('id', 'title', 'category', 'show', 'has_attrs', 'show_at_homepage',
+    list_display = ('id', 'title', 'slug', 'category', 'show', 'has_attrs', 'show_at_homepage',
                     'order_at_homepage', 'add_dt', 'in_stock', 'vendor_code')
     list_display_links = ('id', 'title',)
     list_editable = ('order_at_homepage', 'in_stock', 'vendor_code')
@@ -368,7 +369,7 @@ class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
     list_per_page = 200
     fieldsets = (
         (None, {
-            'fields': ('title', 'subtitle', 'category', 'vendor_code', 'photo',
+            'fields': ('title', 'subtitle', 'slug', 'category', 'vendor_code', 'photo', 'admin_show_photo',
                        ('price_rub', 'price_eur', 'price_usd',), 'text', 'in_stock',),
         }),
         ('Настройки показа на сайте', {
@@ -391,8 +392,9 @@ class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
             'fields': ('extra_options_instruction',),
         }),
     )
+    prepopulated_fields = {'slug': ('title',)}
     readonly_fields = ('id', 'add_dt', 'options_instruction', 'extra_options_instruction', 'photos_instruction',
-                       'show_category', 'show_attributes',)
+                       'show_category', 'show_attributes', 'admin_show_photo',)
     inlines = [ProductOptionInline, ProductPhotoInline, ProductExtraOptionInline, ]
     # # raw_id_fields = ('additional_products', 'associated_products', 'also_products',)
     # salmonella_fields = ('additional_products', 'associated_products', 'also_products',)
@@ -406,8 +408,8 @@ class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
         """
         fieldsets = list(super(ProductAdmin, self).get_fieldsets(request, obj))
         if obj:
-            # fieldsets[0][1]['fields'][2] = 'show_category'
-            fieldsets[0][1]['fields'][12] = 'show_category'
+            # fieldsets[0][1]['fields'][3] = 'show_category'  # меняем 'category' на 'show_category'
+            fieldsets[0][1]['fields'][18] = 'show_category'  # увеличиваем index из-за modeltranslation
             del fieldsets[4]
             del fieldsets[4]
             if obj.extra_options.count():

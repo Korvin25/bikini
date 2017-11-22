@@ -156,17 +156,11 @@ LOCALE_PATHS = (
 
 MODELTRANSLATION_CUSTOM_FIELDS = ('RichTextField', 'RichTextUploadingField',)
 MODELTRANSLATION_DEFAULT_LANGUAGE = 'ru'
-MODELTRANSLATION_TRANSLATION_FILES = (
-    'apps.geo.translation',
-    'apps.settings.translation',
-    'apps.catalog.translation',
-    'apps.content.translation',
-    # 'apps.contests.translation',
-    # 'apps.blog.translation',
-    'apps.banners.translation',
-)
-
-# SOLID_I18N_DEFAULT_PREFIX_REDIRECT = False
+MODELTRANSLATION_FALLBACK_LANGUAGES = {'default': ('ru',), 'de': ('en', 'ru',), 'fr': ('en', 'ru',),
+                                                           'it': ('en', 'ru',), 'es': ('en', 'ru',),}
+# MODELTRANSLATION_PREPOPULATE_LANGUAGE = 'en'
+MODELTRANSLATION_AUTO_POPULATE = True
+# MODELTRANSLATION_AUTO_POPULATE = 'required'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

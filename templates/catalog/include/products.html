@@ -1,0 +1,108 @@
+{% if products.count %}
+
+  <div class="item_list_wrapp" itemscope="" itemtype="http://schema.org/ItemList">
+    {% for product in products %}
+      <div class="product_list">
+        <div class="photo_list"><a href="{{ product.get_absolute_url }}"><img src="{{ product.cover_thumb }}" alt="{{ product.title }}" /></a></div>
+        <h3><a href="{{ product.get_absolute_url }}">{{ product.title }}</a></h3>
+        <h4>{{ product.subtitle }}</h4>
+        <div class="product_price">{{ product.get_price_rub }}<abbr title="руб">р.</abbr></div>
+        <a href="#" class="to_cart_list">В корзину</a>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if footer_banner %}
+    {% with footer_banner as banner %}
+      {% if not banner.has_button %}
+        <a href="{{ banner.url }}"{% if banner.target_blank %} target="_blank"{% endif %}>
+      {% endif %}
+        <div class="with_banner_page" style="background-image:url({{ banner.image_url }});">
+          {% if banner.has_text or banner.has_button %}
+            <div class="with_banner_padd_page">
+              {% for line in banner.lines.all %}
+                <div class="{% if line.big %}with_big_text{% else %}with_mini_text{% endif %}">{{ line.line }}</div>
+              {% endfor %}
+              {% if banner.has_button %}<a href="{{ banner.url }}"{% if banner.target_blank %} target="_blank"{% endif %} class="butt_with">{{ banner.button_text }}</a>{% endif %}
+            </div>
+          {% endif %}
+        </div>
+      {% if not banner.has_button %}
+        </a>
+      {% endif %}
+    {% endwith %}
+  {% endif %}
+
+  <div class="item_list_wrapp" itemscope="" itemtype="http://schema.org/ItemList"></div>
+
+  {% comment %}
+    <div class="item_list_wrapp" itemscope="" itemtype="http://schema.org/ItemList">
+      <div class="product_list">
+        <div class="photo_list"><a href=""><img src="/static/images/catalog/pic6.jpg" alt=""></a></div>
+        <h3><a href="">Стринги DRIVE LUX RED</a></h3>
+        <h4>Яркие микро стринги</h4>
+        <div class="product_price">4300<abbr title="руб">р.</abbr></div>
+        <a href="#" class="to_cart_list">В корзину</a>
+      </div>
+      <div class="product_list">
+        <div class="photo_list"><a href=""><img src="/static/images/catalog/pic7.jpg" alt=""></a></div>
+        <h3><a href="">Стринги DRIVE LUX RED</a></h3>
+        <h4>Яркие микро стринги</h4>
+        <div class="product_price">4300<abbr title="руб">р.</abbr></div>
+        <a href="#" class="to_cart_list">В корзину</a>
+      </div>
+      <div class="product_list">
+        <div class="photo_list"><a href=""><img src="/static/images/catalog/pic8.jpg" alt=""></a></div>
+        <h3><a href="">Стринги DRIVE LUX RED</a></h3>
+        <h4>Яркие микро стринги</h4>
+        <div class="product_price">4300<abbr title="руб">р.</abbr></div>
+        <a href="#" class="to_cart_list">В корзину</a>
+      </div>
+    </div>
+  {% endcomment %}
+
+  <div class="pagination_block">
+    <div class="wrapp_pagination">
+      <a href="#" class="yet_items"><span>Показать ещё 10</span></a>
+
+      {% comment %}
+        <div class="pagination">
+          <ul class="pagination_list" id="paginationUL">
+            <li class="pagi_bts pagi_back">
+              <a href="#">Назад</a>
+            </li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">&hellip;</a></li>
+            <li><a href="#">7</a></li>
+            <li><a href="#">8</a></li>
+            <li><a href="#">9</a></li>
+            <li><a href="#">10</a></li>
+            <li class="active_pagi"><a href="#">11</a></li>
+            <li><a href="#">12</a></li>
+            <li><a href="#">13</a></li>
+            <li><a href="#">14</a></li>
+            <li><a href="#">15</a></li>
+            <li><a href="#">16</a></li>
+            <li><a href="#">17</a></li>
+            <li><a href="#">18</a></li>
+            <li><a href="#">19</a></li>
+            <li><a href="#">20</a></li>
+            <li><a href="#">21</a></li>
+            <li><a href="#">22</a></li>
+            <li><a href="#">23</a></li>
+            <li><a href="#">24</a></li>
+            <li><a href="#">&hellip;</a></li>
+            <li><a href="#">38</a></li>
+            <li class="pagi_bts pagi_next">
+              <a href="#">Далее</a>
+            </li>
+          </ul>
+        </div>
+      {% endcomment %}
+
+    </div>
+  </div>
+
+{% else %}
+  <p><center style="margin: 100px 0;">В {% if category %}данной категории{% else %}этом разделе{% endif %} пока что нет товаров</center></p>
+{% endif %}

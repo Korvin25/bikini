@@ -1,6 +1,7 @@
 {% load i18n core_tags %}
 {% get_current_language as CURRENT_LANGUAGE %}
 {% get_current_path as CURRENT_PATH %}
+{% get_translated_path as TRANSLATED_PATH %}
 
 <div id="touch_menu">
   <div class="lang_head lng_header">
@@ -9,7 +10,7 @@
       {% for lang_code, lang_name in LANGUAGES %}
         <form action="{% url 'set_language' %}" method="post" id="i18n_{{ lang_code }}1">
           {% csrf_token %}
-          <input name="next" type="hidden" value="{{ CURRENT_PATH }}" />
+          <input name="next" type="hidden" value="{% get_translated_path lang=lang_code %}" />
           <input name="language" type="hidden" value="{{ lang_code }}" />
         </form>
         <li>{% if CURRENT_LANGUAGE == lang_code %}<img src="/static/i/arrow_list.png">{{ lang_name }}{% else %}<a href="#" onClick="document.getElementById('i18n_{{ lang_code }}1').submit()">{{ lang_name }}</a>{% endif %}</li>
@@ -25,8 +26,8 @@
   <div class="logo"><a href="/" title="МиниБикини"><img src="/static/i/logo.png" alt="МиниБикини" /></a></div>
   
   <ul class="cat_row_top">
-    <li><a href="#" title="">Мужчинам</a></li>
-    <li><a href="#" title="">Женщинам</a></li>
+    <li><a href="{% url 'men' %}" title="Мужчинам">Мужчинам</a></li>
+    <li><a href="{% url 'women' %}" title="Женщинам">Женщинам</a></li>
   </ul>
   
   <ul class="cat_row_top cat_row_top2">
@@ -50,7 +51,7 @@
           {% for lang_code, lang_name in LANGUAGES %}
             <form action="{% url 'set_language' %}" method="post" id="i18n_{{ lang_code }}">
               {% csrf_token %}
-              <input name="next" type="hidden" value="{{ CURRENT_PATH }}" />
+              <input name="next" type="hidden" value="{% get_translated_path lang=lang_code %}" />
               <input name="language" type="hidden" value="{{ lang_code }}" />
             </form>
             <li>{% if CURRENT_LANGUAGE == lang_code %}<img src="/static/i/arrow_list.png">{{ lang_name }}{% else %}<a href="#" onClick="document.getElementById('i18n_{{ lang_code }}').submit()">{{ lang_name }}</a>{% endif %}</li>

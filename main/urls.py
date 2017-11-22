@@ -10,6 +10,7 @@ from django.views.generic import TemplateView
 
 # from solid_i18n.urls import solid_i18n_patterns
 
+from apps.catalog.views import ProductsView, ProductView
 from apps.content.views import HomepageView
 
 
@@ -23,8 +24,7 @@ urlpatterns = i18n_patterns(
     url(r'^konkurs-itog/$', TemplateView.as_view(template_name='konkurs-itog.html'), name='konkurs-itog'),
     url(r'^konkurs-model/$', TemplateView.as_view(template_name='konkurs-model.html'), name='konkurs-model'),
     url(r'^konkurs1/$', TemplateView.as_view(template_name='konkurs1.html'), name='konkurs1'),
-    url(r'^men-detail/$', TemplateView.as_view(template_name='men-detail.html'), name='men-detail'),
-    url(r'^men/$', TemplateView.as_view(template_name='men.html'), name='men'),
+    url(r'^men-detail/$', TemplateView.as_view(template_name='catalog/men-detail.html'), name='men-detail'),
     url(r'^my-cut-1/$', TemplateView.as_view(template_name='my-cut-1.html'), name='my-cut-1'),
     url(r'^my-cut-2/$', TemplateView.as_view(template_name='my-cut-2.html'), name='my-cut-2'),
     url(r'^my-cut-3/$', TemplateView.as_view(template_name='my-cut-3.html'), name='my-cut-3'),
@@ -37,8 +37,14 @@ urlpatterns = i18n_patterns(
     url(r'^spisok-pokupok/$', TemplateView.as_view(template_name='spisok-pokupok.html'), name='spisok-pokupok'),
     url(r'^video-page/$', TemplateView.as_view(template_name='video-page.html'), name='video-page'),
     url(r'^video/$', TemplateView.as_view(template_name='video.html'), name='video'),
-    url(r'^women-detail/$', TemplateView.as_view(template_name='women-detail.html'), name='women-detail'),
-    url(r'^women/$', TemplateView.as_view(template_name='women.html'), name='women'),
+    url(r'^women-detail/$', TemplateView.as_view(template_name='catalog/women-detail.html'), name='women-detail'),
+
+    url(r'^women/$', ProductsView.as_view(with_category=False, sex='female'), name='women'),
+    url(r'^men/$', ProductsView.as_view(with_category=False, sex='male'), name='men'),
+    url(r'^women/(?P<slug>[^/]+)/$', ProductsView.as_view(with_category=True, sex='female'), name='women_category'),
+    url(r'^men/(?P<slug>[^/]+)/$', ProductsView.as_view(with_category=True, sex='male'), name='men_category'),
+    url(r'^women/(?P<category_slug>[^/]+)/(?P<slug>[^/]+)-(?P<pk>\d+)/$', ProductView.as_view(sex='female'), name='women_product'),
+    url(r'^men/(?P<category_slug>[^/]+)/(?P<slug>[^/]+)-(?P<pk>\d+)/$', ProductView.as_view(sex='male'), name='men_product'),
 
     prefix_default_language=False,
 )

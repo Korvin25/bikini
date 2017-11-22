@@ -6,6 +6,7 @@ from itertools import chain
 from django import template
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
+from django.utils import translation
 
 
 register = template.Library()
@@ -24,6 +25,20 @@ def get_current_path(context):
         if path.startswith(_lang):
             path = path.replace(_lang, '/', 1)
             break
+    return path
+
+
+@register.simple_tag(takes_context=True)
+def get_translated_path(context, lang=None):
+    path = context['request'].path
+    obj = context.get('product') or context.get('category')
+    if obj and lang:
+        current_language = translation.get_language()
+        translation.activate(lang)
+        path = obj.get_absolute_url()
+        translation.activate(current_language)
+    else:
+        path = get_current_path(context)
     return path
 
 

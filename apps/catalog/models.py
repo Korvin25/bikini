@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.postgres.fields import JSONField
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.safestring import mark_safe
 
@@ -154,6 +155,12 @@ class AttributeOption(models.Model):
             label = '{}&nbsp;&nbsp;{}'.format(label, self.title)
         return mark_safe(label)
 
+    # @property
+    # def color_style(self):
+    #     style = ('background: url("{}");'.format(self.picture_url) if self.picture
+    #              else 'background-color: {};'.format(self.color))
+    #     return mark_safe(style)
+
 
 class ExtraProduct(models.Model):
     admin_title = models.CharField('Название (в админке)', max_length=255)
@@ -214,16 +221,18 @@ class ExtraProduct(models.Model):
 
 class Category(MetatagModel):
     SEX_CHOICES = (
-        ('male', 'Мужчинам'),
         ('female', 'Женщинам'),
+        ('male', 'Мужчинам'),
     )
     title = models.CharField('Название', max_length=255)
+    slug = models.SlugField('В URL', max_length=127)
     sex = models.CharField('Пол', max_length=7, choices=SEX_CHOICES, default='female')
     order = models.IntegerField('Порядок', default=10)
     attributes = SortedManyToManyField(Attribute, verbose_name='Атрибуты', related_name='categories', blank=True,
                                        limit_choices_to={'category': 'primary'})
 
     class Meta:
+        unique_together = [('sex', 'slug')]
         ordering = ['sex', 'order', 'id', ]
         verbose_name = 'категория'
         verbose_name_plural = 'категории'
@@ -231,10 +240,24 @@ class Category(MetatagModel):
     def __unicode__(self):
         return '({}) {}'.format(self.show_sex(), self.title)
 
+    def get_absolute_url(self):
+        reverse_name = {
+            'female': 'women_category',
+            'male': 'men_category',
+        }.get(self.sex, '')
+        return reverse(reverse_name, kwargs={'slug': self.slug})
+
+    def get_title(self):
+        SEX_TITLES = {
+            'female': 'Женщинам',
+            'male': 'Мужчинам',
+        }
+        return '{} — {}'.format(self.title, SEX_TITLES.get(self.sex))
+
     def show_sex(self):
         return {
-            'male': 'М',
             'female': 'Ж',
+            'male': 'М',
         }.get(self.sex, '')
     show_sex.allow_tags = True
     show_sex.short_description = 'Пол'
@@ -319,6 +342,7 @@ class Product(MetatagModel):
     category = models.ForeignKey(Category, verbose_name='Категория', related_name='products')
     title = models.CharField('Название', max_length=255)
     subtitle = models.CharField('Подзаголовок', max_length=255, blank=True)
+    slug = models.SlugField('В URL', max_length=127)
     vendor_code = models.CharField('Артикул', max_length=255, blank=True)
     photo = ThumbnailerImageField('Фото', upload_to='catalog/products/')
     price_rub = models.DecimalField('Цена, руб.', max_digits=9, decimal_places=2, default=0)
@@ -359,6 +383,12 @@ class Product(MetatagModel):
         if init_attributes:
             self.set_attributes_from_category(self.category)
         return s
+
+    def get_absolute_url(self):
+        return '{}{}-{}/'.format(self.category.get_absolute_url(), self.slug, self.id)
+
+    def get_title(self):
+        return '{} — {}'.format(self.title, self.category.get_title())
 
     def set_attributes_from_category(self, category):
         self.attributes = category.attributes.all()
@@ -461,6 +491,27 @@ class Product(MetatagModel):
         attrs = {k: list(set(v)) for k, v in attrs.iteritems()}
         self.attrs = attrs
         self.save()
+
+    def get_placeholder_image(self, image_attrs='', dimension=35, image_src='', border=True):
+        if not image_src:
+            image_src = 'http://via.placeholder.com/{}/{}'.format(dimension, image_attrs)
+        style = 'border-radius: {}px'.format(dimension)
+        if border:
+            style = '{}; border: 1px solid black'.format(style)
+        return '''<img src="{0}"
+                       style="height: {1}px; width: {1}px; {2}"
+                       title="{3}">'''.format(image_src, dimension, style, self.title)
+
+    @property
+    def admin_photo_url(self):
+        return self.photo['product_cover'].url if self.photo else ''
+
+    @mark_safe
+    def admin_show_photo(self):
+        return ('<img src="{}">'.format(self.admin_photo_url)
+                if self.photo else '-')
+    admin_show_photo.allow_tags = True
+    admin_show_photo.short_description = ' '
 
 
 class ProductOption(models.Model):

@@ -1,8 +1,8 @@
 <div class="item_list_wrapp" itemscope="" itemtype="http://schema.org/ItemList">
   {% for product in products %}
     <div class="product_list">
-      <div class="photo_list"><a href="#"><img src="{{ product.cover_thumb }}" alt="{{ product.title }}" /></a></div>
-      <h3><a href="#">{{ product.title }}</a></h3>
+      <div class="photo_list"><a href="{{ product.get_absolute_url }}"><img src="{{ product.cover_thumb }}" alt="{{ product.title }}" /></a></div>
+      <h3><a href="{{ product.get_absolute_url }}">{{ product.title }}</a></h3>
       <h4>{{ product.subtitle }}</h4>
       <div class="product_price">{{ product.get_price_rub }}<abbr title="руб">р.</abbr></div>
       <a href="#" class="to_cart_list">В корзину</a>

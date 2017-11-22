@@ -1,0 +1,590 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block meta_title %}{{ product.get_meta_title }}{% endblock %}
+{% block meta_desc %}{{ product.get_meta_desc }}{% endblock %}
+{% block meta_keyw %}{{ product.get_meta_keyw }}{% endblock %}
+
+{% block og_title %}{{ product.get_meta_title }}{% endblock %}
+{% block og_desc %}{{ product.get_meta_desc }}{% endblock %}
+
+{% block twitter_title %}{{ product.get_meta_title }}{% endblock %}
+{% block twitter_desc %}{{ product.get_meta_desc }}{% endblock %}
+
+{% block content %}
+  <main>
+    <div class="main_content">
+      
+      <ul id="touch_breadcrumb" class="breadcrumb">
+        <li><a href="{% url 'home' %}">Главная</a></li>
+        {% if sex == 'female' %}<li><a href="{% url 'women' %}">Женщинам</a></li>
+        {% elif sex == 'male' %}<li><a href="{% url 'men' %}">Мужчинам</a></li>
+        {% endif %}
+        <li><a href="{{ category.get_absolute_url }}">{{ category.title }}</a></li>
+        <li>{{ product.title }}</li>
+      </ul>
+    
+      <div id="main_content" class="wrapp_content">
+        <ul class="breadcrumb">
+          <li><a href="{% url 'home' %}">Главная</a></li>
+          {% if sex == 'female' %}<li><a href="{% url 'women' %}">Женщинам</a></li>
+          {% elif sex == 'male' %}<li><a href="{% url 'men' %}">Мужчинам</a></li>
+          {% endif %}
+          <li><a href="{{ category.get_absolute_url }}">{{ category.title }}</a></li>
+          <li>{{ product.title }}</li>
+        </ul>
+
+        <h1 class="title_block">{{ product.title }}</h1>
+        
+        <div class="item_content_block">
+        
+        <!-- SLIDER ITEM >>> -->
+          <div class="nom_img">
+          <script language="javascript" src="/static/js/highslide/jquery.jcarousel.min.js"></script>
+          <script type="text/javascript">
+            var connector = function(itemNavigation, carouselStage) {
+              return carouselStage.jcarousel('items').eq(itemNavigation.index()); 
+            }; 
+            $(function() {
+              var carouselStage    = $('.nom_img_med_wrap').jcarousel({wrap: 'circular'}); 
+              var carouselNavigation = $('.carousel-navigation').jcarousel();
+              carouselNavigation.jcarousel('items').each(function() { 
+                var item = $(this); 
+                var target = connector(item, carouselStage); 
+                item .on(
+                  'jcarouselcontrol:active', function() {
+                    carouselNavigation.jcarousel('scrollIntoView', this); 
+                    item.addClass('active'); 
+                  }).on('jcarouselcontrol:inactive', function() { 
+                    item.removeClass('active'); 
+                  }).jcarouselControl({ target: target, carousel: carouselStage }); 
+              });
+              
+              $('#l_arr_nom_img').on('jcarouselcontrol:inactive', function() {
+                  $(this).addClass('inactive'); 
+                }
+              ).on('jcarouselcontrol:active', function() {
+                  $(this).removeClass('inactive'); 
+                }
+              ).jcarouselControl({ target: '-=1' }); 
+              
+              $('#r_arr_nom_img').on('jcarouselcontrol:inactive', function() {
+                  $(this).addClass('inactive');
+                }
+              ).on('jcarouselcontrol:active', function() {
+                  $(this).removeClass('inactive');
+                }
+              ).jcarouselControl({ target: '+=1' }); 
+            });
+          </script>
+          <!-- УВЕЛИЧЕНИЕ КАРТИНКИ -->
+            <script type="text/javascript" src="/static/js/highslide/highslide-with-gallery.js"></script>
+            <link rel="stylesheet" type="text/css" href="/static/js/highslide/highslide.css" />
+            <script type="text/javascript">
+            hs.graphicsDir = '/static/js/highslide/graphics/'; 
+            hs.align = 'center';
+            hs.transitions = ['expand', 'crossfade']; 
+            hs.outlineType = 'rounded-white';
+            hs.fadeInOut = true; 
+            hs.dimmingOpacity = 0.5; 
+            hs.addSlideshow({
+              interval: 5000, 
+              repeat: false, 
+              useControls: true, 
+              fixedControls: 'fit', 
+              overlayOptions: { 
+                opacity: 0.75, 
+                position: 'bottom center', 
+                hideOnMouseOut: true
+              }
+
+            });
+          </script>
+          <!-- УВЕЛИЧЕНИЕ КАРТИНКИ <<< -->
+          
+            
+            <div class="nom_img_med_wrap highslide-gallery">
+              <ul class="nom_img_list">
+                <li>
+                  <a href="/static/images/item1/1.jpg" target="_blank" class="highslide" onclick="return hs.expand(this)" title="">
+                  <img src="/static/images/item1/1.jpg" /></a>
+                </li>
+                <li>
+                  <a href="/static/images/item1/2.jpg" target="_blank" class="highslide" onclick="return hs.expand(this)" title="">
+                  <img src="/static/images/item1/2.jpg" /></a>
+                </li>
+                <li>
+                  <a href="/static/images/item1/3.jpg" target="_blank" class="highslide" onclick="return hs.expand(this)" title="">
+                  <img src="/static/images/item1/3.jpg" /></a>
+                </li>
+                <li>
+                  <a href="/static/images/item1/4.jpg" target="_blank" class="highslide" onclick="return hs.expand(this)" title="">
+                  <img src="/static/images/item1/4.jpg" /></a>
+                </li>
+                <li>
+                  <a href="/static/images/item1/5.jpg" target="_blank" class="highslide" onclick="return hs.expand(this)" title="">
+                  <img src="/static/images/item1/5.jpg" /></a>
+                </li>
+                <!--li>
+                  <a href="/static/images/item1/1.jpg" target="_blank" class="highslide" onclick="return hs.expand(this)" title="">
+                  <img src="/static/images/item1/1.jpg" /></a>
+                </li-->
+                
+              </ul>
+            </div>
+            <div class="C_navigation">
+              <div class="l_arr" id="l_arr_nom_img"><img src="/static/i/arrow_slide.png" /></div>
+              <div class="r_arr" id="r_arr_nom_img"><img src="/static/i/arrow_slide.png" /></div>
+              <div class="carousel-navigation">
+                <ul class="jcarousel">
+                  <li class=""><img src="/static/images/item1/1.jpg" /></li>
+                  <li class=""><img src="/static/images/item1/2.jpg" /></li>
+                  <li class=""><img src="/static/images/item1/3.jpg" /></li>
+                  <li class=""><img src="/static/images/item1/4.jpg" /></li>
+                  <li class=""><img src="/static/images/item1/5.jpg" /></li>
+                  <!--li class=""><img src="/static/images/item1/1.jpg" /></li-->
+                </ul>
+              </div>
+            </div>
+            
+          </div>
+          <div class="highslide-dimming"></div>
+        <!-- SLIDER ITEM <<< -->
+          
+        <!-- FORM chars ITEM >>> -->
+          <form class="wrapp_chars_item_cols">
+            <div class="chars_item_cols">
+              <div class="filtr_title ch_title_item">Возможные цвета:</div>
+              <div class="check_box check_mini check_mini_item">
+                <label for="color_1">
+                  <input type="checkbox" name="color" id="color_1" value="lightyellow" />
+                  <span style="background-color:#ddddc7;" title="Бежевый">Бежевый</span>
+                </label>
+                <label for="color_2">
+                  <input type="checkbox" name="color"  id="color_2" value="palegreen" />
+                  <span style="background-color:palegreen;" title="Бледно-зеленый">Бледно-зеленый</span>
+                </label>
+                <label for="color_3">
+                  <input type="checkbox" name="color"  id="color_3" value="fuchsia" />
+                  <span style="background-color:fuchsia;" title="Фуксия">Фуксия</span>
+                </label>
+                <label for="color_4">
+                  <input type="checkbox" name="color"  id="color_4" value="red" />
+                  <span style="background-color:red;" title="Красный">Красный</span>
+                </label>
+              </div>
+              <a href="" class="yet_more" onclick="return false">Ещё цвета</a>
+              <div class="clr"></div>
+              
+              <div class="row_chars_item">
+                <script type="text/javascript">
+                  var connector = function(itemNavigation, carouselStage) {
+                    return carouselStage.jcarousel('items').eq(itemNavigation.index()); 
+                  }; 
+                  $(function() {
+                    var carouselNavigation = $('#check_photo_chars').jcarousel();
+                    carouselNavigation.jcarousel('items').each(function() { 
+                      var item = $(this); 
+                      var target = connector(item, carouselNavigation);
+                       
+                    });
+                    
+                    $('#l_arr_nom_img_ch').on('jcarouselcontrol:inactive', function() {
+                        $(this).addClass('inactive'); 
+                      }
+                    ).on('jcarouselcontrol:active', function() {
+                        $(this).removeClass('inactive'); 
+                      }
+                    ).jcarouselControl({ target: '-=1' }); 
+                    
+                    $('#r_arr_nom_img_ch').on('jcarouselcontrol:inactive', function() {
+                        $(this).addClass('inactive');
+                      }
+                    ).on('jcarouselcontrol:active', function() {
+                        $(this).removeClass('inactive');
+                      }
+                    ).jcarouselControl({ target: '+=1' }); 
+                  });
+                </script>
+                <div class="filtr_title ch_title_item">Фасон верха:</div>
+                <div class="carousel_chars_check">
+                  <div class="check_box check_mini check_photo check_photo_chars" id="check_photo_chars">
+                    <ul>
+                      <li>
+                        <label for="trusy1">
+                          <input type="checkbox" name="bottom" id="trusy1" value="trusy1" />
+                          <span>
+                            <img src="/static/images/item1/4.jpg" />
+                          </span>
+                        </label>
+                      </li>
+                      
+                      <li>
+                        <label for="trusy2">
+                          <input type="checkbox" name="bottom"  id="trusy2" value="trusy2" />
+                          <span>
+                            <img src="/static/images/item1/3.jpg" />
+                          </span>
+                        </label>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="l_arr" id="l_arr_nom_img_ch"><img src="/static/i/arrow_slide.png" /></div>
+                  <div class="r_arr" id="r_arr_nom_img_ch"><img src="/static/i/arrow_slide.png" /></div>
+                </div>
+              </div>
+              <div class="row_chars_item row_chars_mrg">
+                <div class="filtr_title ch_title_item">Размер:</div>
+                <div class="check_box check_size check_mini_item">
+                  <label for="XS">
+                    <input type="checkbox" name="size" id="XS" value="XS" />
+                    <span title="XS">XS</span>
+                  </label>
+                  <label for="S">
+                    <input type="checkbox" name="size"  id="S" value="S" />
+                    <span title="S">S</span>
+                  </label>
+                  <label for="M">
+                    <input type="checkbox" name="size"  id="M" value="M" />
+                    <span title="M">M</span>
+                  </label>
+                  <label for="L">
+                    <input type="checkbox" name="size"  id="L" value="L" />
+                    <span title="L">L</span>
+                  </label>
+                  <label for="XL">
+                    <input type="checkbox" name="size" id="XL" value="XL" />
+                    <span title="XL">XL</span>
+                  </label>
+                </div>
+                
+                <div class="check_bx_check">
+                  <label for="fason-1">
+                    <input type="checkbox" name="fason-1" id="fason-1" value="1" />
+                    <abbr class="abbr_check">Выбрать этот фасон</abbr>
+                    
+                    <div class="del_check">
+                      Убрать из комплекта
+                    </div>
+                  </label>
+                  <label for="fason-2" class="check_pr_input">
+                    <input type="checkbox" name="fason-2" id="fason-2" value="1" />
+                    <abbr class="abbr_check">Вставить<br />чашки</abbr>
+                    
+                    <div class="product_price"><span id="price_ID--373">500</span><abbr title="руб">р.</abbr></div>
+                  </label>
+                </div>
+                
+              </div>
+              <div class="clr"></div>
+              
+              <div class="row_chars_item">
+                <script type="text/javascript">
+                  var connector = function(itemNavigation, carouselStage) {
+                    return carouselStage.jcarousel('items').eq(itemNavigation.index()); 
+                  }; 
+                  $(function() {
+                    var carouselNavigation = $('#check_photo_chars2').jcarousel();
+                    carouselNavigation.jcarousel('items').each(function() { 
+                      var item = $(this); 
+                      var target = connector(item, carouselNavigation);
+                       
+                    });
+                    
+                    $('#l_arr_nom_img_ch2').on('jcarouselcontrol:inactive', function() {
+                        $(this).addClass('inactive'); 
+                      }
+                    ).on('jcarouselcontrol:active', function() {
+                        $(this).removeClass('inactive'); 
+                      }
+                    ).jcarouselControl({ target: '-=1' }); 
+                    
+                    $('#r_arr_nom_img_ch2').on('jcarouselcontrol:inactive', function() {
+                        $(this).addClass('inactive');
+                      }
+                    ).on('jcarouselcontrol:active', function() {
+                        $(this).removeClass('inactive');
+                      }
+                    ).jcarouselControl({ target: '+=1' }); 
+                  });
+                </script>
+                <div class="filtr_title ch_title_item">Фасон низа:</div>
+                <div class="carousel_chars_check">
+                  <div class="check_box check_mini check_photo check_photo_chars" id="check_photo_chars2">
+                    <ul>
+                      <li>
+                        <label for="trusy11">
+                          <input type="checkbox" name="bottom" id="trusy11" value="trusy1" />
+                          <span>
+                            <img src="/static/images/item1/4.jpg" />
+                          </span>
+                        </label>
+                      </li>
+                      
+                      <li>
+                        <label for="trusy22">
+                          <input type="checkbox" name="bottom"  id="trusy22" value="trusy2" />
+                          <span>
+                            <img src="/static/images/item1/3.jpg" />
+                          </span>
+                        </label>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="l_arr" id="l_arr_nom_img_ch2"><img src="/static/i/arrow_slide.png" /></div>
+                  <div class="r_arr" id="r_arr_nom_img_ch2"><img src="/static/i/arrow_slide.png" /></div>
+                </div>
+              </div>
+              <div class="row_chars_item row_chars_mrg">
+                <div class="filtr_title ch_title_item">Размер:</div>
+                <div class="check_box check_size check_mini_item">
+                  <label for="XS2">
+                    <input type="checkbox" name="size" id="XS" value="XS" />
+                    <span title="XS">XS</span>
+                  </label>
+                  <label for="S2">
+                    <input type="checkbox" name="size"  id="S2" value="S" />
+                    <span title="S">S</span>
+                  </label>
+                  <label for="M2">
+                    <input type="checkbox" name="size"  id="M2" value="M" />
+                    <span title="M">M</span>
+                  </label>
+                  <label for="L2">
+                    <input type="checkbox" name="size"  id="L2" value="L" />
+                    <span title="L">L</span>
+                  </label>
+                  <label for="XL2">
+                    <input type="checkbox" name="size" id="XL2" value="XL" />
+                    <span title="XL">XL</span>
+                  </label>
+                </div>
+                
+                <div class="check_bx_check">
+                  <label for="fason-22">
+                    <input type="checkbox" name="fason-1" id="fason-22" value="1" />
+                    <abbr class="abbr_check">Выбрать этот фасон</abbr>
+                    
+                    <div class="del_check">
+                      Убрать из комплекта
+                    </div>
+                  </label>
+                  
+                </div>
+                
+              </div>
+              <div class="clr"></div>
+              
+              <div class="row_chars_item">
+                <script type="text/javascript">
+                  var connector = function(itemNavigation, carouselStage) {
+                    return carouselStage.jcarousel('items').eq(itemNavigation.index()); 
+                  }; 
+                  $(function() {
+                    var carouselNavigation = $('#check_photo_chars3').jcarousel();
+                    carouselNavigation.jcarousel('items').each(function() { 
+                      var item = $(this); 
+                      var target = connector(item, carouselNavigation);
+                       
+                    });
+                    
+                    $('#l_arr_nom_img_ch3').on('jcarouselcontrol:inactive', function() {
+                        $(this).addClass('inactive'); 
+                      }
+                    ).on('jcarouselcontrol:active', function() {
+                        $(this).removeClass('inactive'); 
+                      }
+                    ).jcarouselControl({ target: '-=1' }); 
+                    
+                    $('#r_arr_nom_img_ch3').on('jcarouselcontrol:inactive', function() {
+                        $(this).addClass('inactive');
+                      }
+                    ).on('jcarouselcontrol:active', function() {
+                        $(this).removeClass('inactive');
+                      }
+                    ).jcarouselControl({ target: '+=1' }); 
+                  });
+                </script>
+                <div class="filtr_title ch_title_item">Фасон низа:</div>
+                <div class="carousel_chars_check">
+                  <div class="check_box check_mini check_photo check_photo_chars" id="check_photo_chars3">
+                    <ul>
+                      <li>
+                        <label for="trusy444">
+                          <input type="checkbox" name="bottom" id="trusy444" value="trusy1" />
+                          <span>
+                            <img src="/static/images/item1/4.jpg" />
+                          </span>
+                        </label>
+                      </li>
+                      
+                      <li>
+                        <label for="trusy333">
+                          <input type="checkbox" name="bottom"  id="trusy333" value="trusy2" />
+                          <span>
+                            <img src="/static/images/item1/3.jpg" />
+                          </span>
+                        </label>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="l_arr" id="l_arr_nom_img_ch3"><img src="/static/i/arrow_slide.png" /></div>
+                  <div class="r_arr" id="r_arr_nom_img_ch3"><img src="/static/i/arrow_slide.png" /></div>
+                </div>
+              </div>
+              <div class="row_chars_item row_chars_mrg">
+                <div class="filtr_title ch_title_item">Размер:</div>
+                <div class="check_box check_size check_mini_item">
+                  <label for="XS23">
+                    <input type="checkbox" name="size" id="XS23" value="XS" />
+                    <span title="XS">XS</span>
+                  </label>
+                  <label for="S23">
+                    <input type="checkbox" name="size"  id="S23" value="S" />
+                    <span title="S">S</span>
+                  </label>
+                  <label for="M23">
+                    <input type="checkbox" name="size"  id="M23" value="M" />
+                    <span title="M">M</span>
+                  </label>
+                  <label for="L23">
+                    <input type="checkbox" name="size"  id="L23" value="L" />
+                    <span title="L">L</span>
+                  </label>
+                  <label for="XL23">
+                    <input type="checkbox" name="size" id="XL23" value="XL" />
+                    <span title="XL">XL</span>
+                  </label>
+                </div>
+                
+                <div class="check_bx_check">
+                  <label for="fason-33">
+                    <input type="checkbox" name="fason-1" id="fason-33" value="1" />
+                    <abbr class="abbr_check">Выбрать этот фасон</abbr>
+                    
+                    <div class="del_check">
+                      Убрать из комплекта
+                    </div>
+                  </label>
+                  
+                </div>
+                
+              </div>
+              <div class="clr"></div>
+              
+              <div class="row_chars_item">
+                
+                <script type="text/javascript" >
+                  // ПЛЮС - МИНУС
+                  $(document).ready(function() {
+                    $('.minus').click(function () {
+                      var $input = $(this).parent().find('input');
+                      var count = parseInt($input.val()) - 1;
+                      count = count < 1 ? 1 : count;
+                      $input.val(count);
+                      $input.change();
+                      return false;
+                    });
+                    $('.plus').click(function () {
+                      var $input = $(this).parent().find('input');
+                      $input.val(parseInt($input.val()) + 1);
+                      $input.change();
+                      return false;
+                    });
+                  });
+                </script>
+                
+                <script type="text/javascript" >
+                  // ПЕРЕДАЁМ УМНОЖЕННУЮ ЦЕНУ В СКРЫТЫЙ input=hidden => price-item
+                  $(document).ready(function() {
+                    $('#cnt_item').change('keyup input', function() {
+                      var value = this.value;
+                      if (value > 0) {
+                      $("#price_ID-373").html(value * 4300);
+                      $("#price-hidd-val").val(value * 4300);
+                      }
+                    });
+                  });
+                </script>
+                
+                <a href="#" onclick="return false" class="move_butt_item">
+                  Переместить товар из корзины<br />в  список желаемых покупок
+                </a>
+                
+                <div class="filtr_title ch_title_item">Кол-во:</div>
+                <div class="number">
+                  <span class="minus">-</span>
+                  <input type="text" name="count_item" value="1" maxlength="3" onkeyup="this.value = this.value.replace (/\D/, '')" id="cnt_item" />
+                  <span class="plus" id="plus">+</span>
+                </div>
+                <div class="product_price"><span id="price_ID-373">4300</span><abbr title="руб">р.</abbr></div>
+                <input type="hidden" name="price-item" id="price-hidd-val" value="4300">
+                <button class="to_cart_list" type="submit">В корзину</button>
+                
+                <label for="pak" class="check_pr_input checke_lab">
+                  <input type="checkbox" name="pak" id="pak" value="1" />
+                  <abbr class="abbr_check">Подарочная<br />упаковка</abbr>
+                  
+                  <div class="product_price"><span id="price_ID--373">200</span><abbr title="руб">р.</abbr></div>
+                </label>
+              </div>
+              
+            </div>
+          </form>
+        <!-- FORM chars ITEM <<< -->
+          
+        </div>
+        <div class="text_preview_page text_item">
+          <div class="text_preview_inner">
+            <p>Говорить о «купальном костюме» древности, Средневековья, Ренессанса и последующих эпох не приходится. В те времена люди купались либо вовсе без одежды, либо в нижнем белье, которое не было приспособлено специально для купания.</p>
+            <p>На фресках в Помпеях и в некоторых других местах бывшей Римской империи изображены женщины в костюмах, напоминающих современные бикини, однако позже эта традиция была забыта на долгие века.</p>
+            <p>Античное восхищение обнажённым телом уступило место презрению и даже «умерщвлению» грешной плоти. Однако купание всё же оставалось излюбленным развлечением людей.</p>
+            <p>В эпоху Людовика XIV дамы и кавалеры купались в нижнем белье, что приводило в недоумение испанцев — в Испании было немыслимым увидеть даже краешек ноги женщины, не то что созерцать женщину в намокшей белой сорочке.</p>
+            
+            
+            <div id="player_item">
+              <div class="wrapp_player_item">
+                <div class="inner_player_item" style="background-image:url(/static/images/picture_video2.jpg);">
+                </div>
+                <a href="#" onclick="return false" class="play">play</a>
+              </div>
+              <div class="bt_req_call"><a href="#" onclick="return false">Смотреть всё видео</a></div>
+            </div>
+          </div>
+        </div>
+        <h2 class="title_block">С этим товаром также покупают:</h2>
+        <div class="item_list_wrapp" itemscope="" itemtype="http://schema.org/ItemList">
+          <div class="product_list">
+            <div class="photo_list"><a href=""><img src="/static/images/catalog/pic6.jpg" alt=""></a></div>
+            <h3><a href="">Стринги DRIVE LUX RED</a></h3>
+            <h4>Яркие микро стринги</h4>
+            <div class="product_price">4300<abbr title="руб">р.</abbr></div>
+            <a href="#" class="to_cart_list">В корзину</a>
+          </div>
+          <div class="product_list">
+            <div class="photo_list"><a href=""><img src="/static/images/catalog/pic6.jpg" alt=""></a></div>
+            <h3><a href="">Стринги DRIVE LUX RED</a></h3>
+            <h4>Яркие микро стринги</h4>
+            <div class="product_price">4300<abbr title="руб">р.</abbr></div>
+            <a href="#" class="to_cart_list">В корзину</a>
+          </div>
+          <div class="product_list">
+            <div class="photo_list"><a href=""><img src="/static/images/catalog/pic7.jpg" alt=""></a></div>
+            <h3><a href="">Стринги DRIVE LUX RED</a></h3>
+            <h4>Яркие микро стринги</h4>
+            <div class="product_price">4300<abbr title="руб">р.</abbr></div>
+            <a href="#" class="to_cart_list">В корзину</a>
+          </div>
+          <div class="product_list">
+            <div class="photo_list"><a href=""><img src="/static/images/catalog/pic8.jpg" alt=""></a></div>
+            <h3><a href="">Стринги DRIVE LUX RED</a></h3>
+            <h4>Яркие микро стринги</h4>
+            <div class="product_price">4300<abbr title="руб">р.</abbr></div>
+            <a href="#" class="to_cart_list">В корзину</a>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </main>
+{% endblock %}

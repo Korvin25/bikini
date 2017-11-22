@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block meta_title %}{{ category.get_meta_title }}{% endblock %}
+{% block meta_desc %}{{ category.get_meta_desc }}{% endblock %}
+{% block meta_keyw %}{{ category.get_meta_keyw }}{% endblock %}
+
+{% block og_title %}{{ category.get_meta_title }}{% endblock %}
+{% block og_desc %}{{ category.get_meta_desc }}{% endblock %}
+
+{% block twitter_title %}{{ category.get_meta_title }}{% endblock %}
+{% block twitter_desc %}{{ category.get_meta_desc }}{% endblock %}
+
+{% block content %}
+  <main>
+    <div class="main_content">
+
+      {% block touch_breadcrumbs %}
+        <ul id="touch_breadcrumb" class="breadcrumb">
+          <li><a href="{% url 'home' %}">Главная</a></li>
+          {% if sex == 'female' %}<li><a href="{% url 'women' %}">Женщинам</a></li>
+          {% elif sex == 'male' %}<li><a href="{% url 'men' %}">Мужчинам</a></li>
+          {% endif %}
+          <li>{{ category.title }}</li>
+        </ul>
+      {% endblock %}
+
+      <div class="sec_block">
+        
+        <div class="sec_menu">
+          <ul>
+            <li class="title_sec_block">Категории</li>
+            {% for cat in categories %}
+              <li{% if cat == category %} class="title_sec_block"{% endif %}><a href="{{ cat.get_absolute_url }}"><strong>{{ cat.title }}</strong></a></li>
+            {% endfor %}
+            <li{% if not category %} class="title_sec_block"{% endif %}><a href="{% if sex == 'female' %}{% url 'women' %}{% else %}{% url 'men' %}{% endif %}">Смотреть все</a></li>
+          </ul>
+        </div>
+        
+        <div class="sec_filtr">
+          <form method="get" action="" class="sec_filtr_wrapp">
+            <div class="title_sec_block">Фильтр</div>
+            {% for attr in attrs.color %}
+              <div class="filtr_title">{{ attr.title }}:</div>
+              <div class="check_box check_mini">
+                {% for option in attr.options.all %}
+                  <label for="{{ attr.slug }}_{{ option.id }}">
+                    <input type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
+                    {% if option.picture %}
+                      <span style="background: url('{{ option.picture_url }}')" title="{{ option.title }}">{{ option.title }}</span>
+                    {% else %}
+                      <span style="background-color: {{ option.color }}" title="{{ option.title }}">{{ option.title }}</span>
+                    {% endif %}
+                  </label>
+                {% endfor %}
+              </div>
+            {% endfor %}
+
+            {% for attr in attrs.size %}
+              <div class="filtr_title">{{ attr.title }}:</div>
+              <div class="check_box check_size">
+                {% for option in attr.options.all %}
+                  <label for="{{ attr.slug }}_{{ option.id }}">
+                    <input type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
+                    <span title="{{ option.title }}">{{ option.title }}</span>
+                  </label>
+                {% endfor %}
+              </div>
+            {% endfor %}
+
+            <div class="filtr_title">Цена:</div>
+            <div class="check_box check_input">
+              <input type="text" name="min_price" value="" placeholder="0 p." />
+              <span>&mdash;</span>
+              <input type="text" name="max_price" value="" placeholder="10 000 p." />
+            </div>
+
+            {% for attr in attrs.style %}
+              <div class="filtr_title">{{ attr.title }}:</div>
+              <div class="check_box check_mini check_photo">
+                {% for option in attr.options.all %}
+                  <label for="{{ attr.slug }}_{{ option.id }}">
+                    <input type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
+                    <span title="{{ option.title }}">
+                      <img src="{{ option.picture_url }}" />
+                    </span>
+                  </label>
+                {% endfor %}
+              </div>
+            {% endfor %}
+
+            {% for attr in attrs.text %}
+              <div class="filtr_title">{{ attr.title }}:</div>
+              <div class="check_box check_size">
+                {% for option in attr.options.all %}
+                  <label for="{{ attr.slug }}_{{ option.id }}">
+                    <input type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
+                    <span title="{{ option.title }}">{{ option.title }}</span>
+                  </label>
+                {% endfor %}
+              </div>
+            {% endfor %}
+
+            <button class="bt_red">Показать</button>
+            <button class="reset_frm" type="reset">Сбросить</button>
+          </form>
+        </div>
+        
+      </div>
+    
+      <div id="main_content">
+
+        {% block breadcrumbs %}
+          <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Главная</a></li>
+            {% if sex == 'female' %}<li><a href="{% url 'women' %}">Женщинам</a></li>
+            {% elif sex == 'male' %}<li><a href="{% url 'men' %}">Мужчинам</a></li>
+            {% endif %}
+            <li>{{ category.title }}</li>
+          </ul>
+        {% endblock %}
+
+        {% include 'catalog/include/products.html' %}
+        
+        <div class="text_preview_page">
+          <div class="text_preview_inner">
+            <h2 class="title_block">Наши преимущества</h2>
+            <p><strong>Наш интернет магазин предлагает вам большой ассортимент купальников</strong>, а также мини и микро одежды. Благодаря этому каждая девушка сможет подобрать для себя идеальную пляжную одежду, выгодно подчеркивающую все прелести фигуры. К тому же, на Bikinimini представлено экстремальное бикини разных размеров, стилей и цветов.</p>
+            <p><strong>На нашем сайте вы найдете более сотни моделей купальников</strong>, нижнего белья и верхней мини и микро одежды. Не разочарует также выбор цветов и материалов. Среди многочисленных шортиков, трусиков, топов и боди вы сможете найти действительно идеальную для себя модель. Экстрим бикини купить на сайте Bikinimini не составит никакого труда, поскольку у нас найдётся достаточное многообразие одежды такого фасона. Благодаря нашим купальникам вы сможете создать уникальный пляжный образ на всех курортах. К тому же можно не бояться, что вы неожиданного встретите купальник-двойник.</p>
+            <p><strong>При желании вы можете выбрать полноценный купальник</strong>, а также сочетать его с топом, шортами и юбкой на свое усмотрение. Экстрим бикини магазин представляет только высшего качества, поэтому в нашей микро одежде вы можете отправиться не только на купание, но и престижную пляжную вечеринку. К тому же нашу верхнюю одежду вы можете использовать и для гоу-гоу. Стоит отметить, что столь качественные экстрим бикини интернет магазин предлагает по доступным ценам.</p>
+            <p><strong>Мы предлагаем своим клиентам обслуживание на должном уровне</strong> и обращаем внимание на обсуждения наших моделей. При желании наши клиенты могут принять участие в многочисленных конкурсах, которые мы регулярно проводим на нашем сайте.</p>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </main>
+{% endblock %}

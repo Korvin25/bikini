@@ -1,0 +1,26 @@
+{% extends 'catalog/products.html' %}
+{% load i18n %}
+
+{% block meta_title %}{{ seo_settings.women.get_meta_title }}{% endblock %}
+{% block meta_desc %}{{ seo_settings.women.get_meta_desc }}{% endblock %}
+{% block meta_keyw %}{{ seo_settings.women.get_meta_keyw }}{% endblock %}
+
+{% block og_title %}{{ seo_settings.women.get_meta_title }}{% endblock %}
+{% block og_desc %}{{ seo_settings.women.get_meta_desc }}{% endblock %}
+
+{% block twitter_title %}{{ seo_settings.women.get_meta_title }}{% endblock %}
+{% block twitter_desc %}{{ seo_settings.women.get_meta_desc }}{% endblock %}
+
+{% block touch_breadcrumbs %}
+  <ul id="touch_breadcrumb" class="breadcrumb">
+    <li><a href="{% url 'home' %}">Главная</a></li>
+    <li>Женщинам</li>
+  </ul>
+{% endblock %}
+
+{% block breadcrumbs %}
+  <ul class="breadcrumb">
+    <li><a href="{% url 'home' %}">Главная</a></li>
+    <li>Женщинам</li>
+  </ul>
+{% endblock %}
