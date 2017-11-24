@@ -82,7 +82,8 @@
                   <label for="{{ attr.slug }}_{{ option.id }}">
                     <input type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
                     <span title="{{ option.title }}">
-                      <img src="{{ option.picture_url }}" />
+                      {# <img src="{{ option.picture_url }}" /> #}
+                      <img src="{{ option.style_photo_url }}" />
                     </span>
                   </label>
                 {% endfor %}
