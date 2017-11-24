@@ -110,6 +110,11 @@
                     <a href="{{ photo.big_url }}" target="_blank" class="highslide" onclick="return hs.expand(this)" title="">
                     <img src="{{ photo.preview_url }}" /></a>
                   </li>
+                {% empty %}
+                  <li>
+                    <a href="{{ product.big_url }}" target="_blank" class="highslide" onclick="return hs.expand(this)" title="">
+                    <img src="{{ product.preview_url }}" /></a>
+                  </li>
                 {% endfor %}
               </ul>
             </div>
@@ -120,6 +125,8 @@
                 <ul class="jcarousel">
                   {% for photo in photos %}
                     <li class=""><img src="{{ photo.thumb_url }}" /></li>
+                  {% empty %}
+                    <li class=""><img src="{{ product.thumb_url }}" /></li>
                   {% endfor %}
                 </ul>
               </div>
@@ -385,9 +392,11 @@
                   });
                 </script>
                 
-                <a href="#" onclick="return false" class="move_butt_item">
-                  Переместить товар из корзины<br />в  список желаемых покупок
-                </a>
+                {% if attrs_ids|length %}
+                  <a href="#" onclick="return false" class="move_butt_item">
+                    Переместить товар из корзины<br />в  список желаемых покупок
+                  </a>
+                {% endif %}
                 
                 <div class="filtr_title ch_title_item">Кол-во:</div>
                 <div class="number">

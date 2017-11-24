@@ -420,7 +420,19 @@ class Product(MetatagModel):
 
     @property
     def cover_thumb(self):
-        return self.photo['product_cover'].url if self.photo else ''
+        return self.photo['product_cover'].url
+
+    @property
+    def preview_url(self):
+        return self.photo['product_photo_preview'].url
+
+    @property
+    def thumb_url(self):
+        return self.photo['product_photo_thumb'].url
+
+    @property
+    def big_url(self):
+        return self.photo['product_photo_big'].url
 
     def get_price_rub(self):
         price = self.price_rub

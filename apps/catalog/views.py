@@ -78,9 +78,10 @@ class ProductView(TemplateView):
         attrs_dict = {}
         attrs_ids = []
         for attr in _attrs:
-            attrs[attr.attr_type].append(attr)
-            attrs_dict[attr.id] = attr
-            attrs_ids.append(attr.id)
+            if self.product.attrs.get(attr.slug):
+                attrs[attr.attr_type].append(attr)
+                attrs_dict[attr.id] = attr
+                attrs_ids.append(attr.id)
 
         self.attrs = attrs
         self.attrs_dict = attrs_dict
