@@ -20,7 +20,7 @@ from .admin_dynamic import (ProductOptionInlineFormset, ProductPhotoInlineFormse
                             ProductOptionAdmin, ProductPhotoAdmin, ProductExtraOptionAdmin,)
 from .admin_forms import AttributeOptionInlineFormset, AttributeOptionAdminForm, ChangeCategoryForm, ChangeAttributesForm
 from .models import (Attribute, AttributeOption, ExtraProduct, Category,
-                     AdditionalProduct, Certificate,
+                     AdditionalProduct, Certificate, GiftWrapping,
                      Product, ProductOption, ProductExtraOption, ProductPhoto,)
 from .translation import *
 
@@ -202,6 +202,25 @@ class CertificateProductAdmin(TabbedTranslationAdmin):
         }),
     )
     search_fields = ['title', 'vendor_code', ]
+
+
+@admin.register(GiftWrapping)
+class GiftWrappingAdmin(admin.ModelAdmin):
+    list_display = ('show_name', 'price_rub', 'price_eur', 'price_usd',)
+    fieldsets = (
+        (None, {
+            'fields': ('show_name', 'price_rub', 'price_eur', 'price_usd',),
+        }),
+    )
+    readonly_fields = ('show_name',)
+
+    def has_add_permission(self, request):
+        if GiftWrapping.objects.count():
+            return None
+        return super(GiftWrappingAdmin, self).has_add_permission(request)
+
+    def has_delete_permission(self, request, obj=None):
+        return None
 
 
 # === Товары ===

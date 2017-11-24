@@ -34,8 +34,15 @@
           <li>{{ product.title }}</li>
         </ul>
 
+        <style>
+          .ch_title_item._custom:after { content: none; }
+        </style>
+
         <h1 class="title_block">{{ product.title }}</h1>
-        
+        {% if product.vendor_code %}
+          <div style="margin: -20px 0 20px;"><span class="ch_title_item _custom">Артикул: </span>{{ product.vendor_code }}</div> 
+        {% endif %}
+
         <div class="item_content_block">
         
         <!-- SLIDER ITEM >>> -->
@@ -260,7 +267,7 @@
                       {% for option in attr.options.all %}
                         {% if option|in_product:product %}
                           <label for="{{ attr.slug }}_{{ option.id }}">
-                            <input type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
+                            <input class="js-not-checkbox" data-attr-id="{{ attr.id }}" type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
                             <span title="{{ option.title }}">{{ option.title }}</span>
                           </label>
                         {% endif %}
@@ -408,14 +415,12 @@
                 <input type="hidden" name="price-item" id="price-hidd-val" value="{{ product.price|to_int_str }}">
                 <button class="to_cart_list" type="submit">В корзину</button>
                 
-                {% comment %}
-                  <label for="pak" class="check_pr_input checke_lab">
-                    <input type="checkbox" name="pak" id="pak" value="1" />
-                    <abbr class="abbr_check">Подарочная<br />упаковка</abbr>
-                    
-                    <div class="product_price"><span id="price_ID--373">200</span><abbr title="руб">р.</abbr></div>
-                  </label>
-                {% endcomment %}
+                <label for="pak" class="check_pr_input checke_lab">
+                  <input type="checkbox" name="gift_wrapping" id="pak" value="1" />
+                  <abbr class="abbr_check">Подарочная<br />упаковка</abbr>
+                  
+                  <div class="product_price"><span id="price_ID--gift-wrapping">{{ gift_wrapping_price|to_int_str }}</span><abbr title="руб">р.</abbr></div>
+                </label>
               </div>
               
             </div>

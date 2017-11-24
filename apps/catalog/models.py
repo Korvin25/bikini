@@ -340,6 +340,30 @@ class Certificate(models.Model):
         return self.price_rub
 
 
+class GiftWrapping(models.Model):
+    price_rub = models.DecimalField('Цена, руб.', max_digits=9, decimal_places=2, default=0)
+    price_eur = models.DecimalField('Цена, eur.', max_digits=9, decimal_places=2, default=0)
+    price_usd = models.DecimalField('Цена, usd.', max_digits=9, decimal_places=2, default=0)
+
+    class Meta:
+        verbose_name = 'подарочная упаковка'
+        verbose_name_plural = 'подарочная упаковка'
+
+    def __unicode__(self):
+        return '#1'
+
+    def show_name(self):
+        return 'Подарочная упаковка'
+    show_name.allow_tags = True
+    show_name.short_description = ''
+
+    @classmethod
+    def get_price(cls):
+        obj = cls.objects.first()
+        # TODO: eur, usd
+        return obj.price_rub if obj else 200.0
+
+
 # === Товары ===
 
 class Product(MetatagModel):

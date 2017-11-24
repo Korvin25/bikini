@@ -5,7 +5,7 @@ from django.http import Http404
 from django.views.generic import TemplateView
 from django.shortcuts import get_object_or_404
 
-from .models import Category, Product, Attribute
+from .models import Category, GiftWrapping, Product, Attribute
 
 
 class ProductsView(TemplateView):
@@ -99,6 +99,7 @@ class ProductView(TemplateView):
             'attrs_dict': self.attrs_dict,
             'attrs_ids': self.attrs_ids,
             'photos': product.photos.all(),
+            'gift_wrapping_price': GiftWrapping.get_price(),
         }
         context.update(super(ProductView, self).get_context_data(**kwargs))
         return context
