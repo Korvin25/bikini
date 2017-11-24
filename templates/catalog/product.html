@@ -149,7 +149,7 @@
               {% for attr in attrs.color %}
                 <div class="filtr_title ch_title_item">{{ attr.title }}:</div>
                 <div class="check_box check_mini check_mini_item">
-                  {% for option in attr.options.all %}
+                  {% for option in attr.options %}
                     <label data-attr-id="{{ attr.id }}" for="{{ attr.slug }}_{{ option.id }}"{% if forloop.counter > 4 %} style="display: none;"{% endif %} class="color_option">
                       <input class="js-not-checkbox" data-attr-id="{{ attr.id }}" type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
                       {% if option.picture %}
@@ -201,22 +201,20 @@
                   <div class="carousel_chars_check">
                     <div class="check_box check_mini check_photo check_photo_chars" id="check_photo_chars{{ attr.id }}">
                       <ul>
-                        {% for option in attr.options.all %}
-                          {% if option|in_product:product %}
-                            <li>
-                              {% comment %}
-                                <span>
-                                  <img src="{{ option|get_photo_url:product }}" title="{{ option.title }}"/>
-                                </span>
-                              {% endcomment %}
-                              <label for="{{ attr.slug }}_{{ option.id }}" title="{{ option.title }}">
-                                <input class="js-not-checkbox" data-attr-id="{{ attr.id }}" type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
-                                <span>
-                                  <img src="{{ option|get_photo_url:product }}" />
-                                </span>
-                              </label>
-                            </li>
-                          {% endif %}
+                        {% for option in attr.options %}
+                          <li>
+                            {% comment %}
+                              <span>
+                                <img src="{{ option|get_photo_url:product }}" title="{{ option.title }}"/>
+                              </span>
+                            {% endcomment %}
+                            <label for="{{ attr.slug }}_{{ option.id }}" title="{{ option.title }}">
+                              <input class="js-not-checkbox" data-attr-id="{{ attr.id }}" type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
+                              <span>
+                                <img src="{{ option|get_photo_url:product }}" />
+                              </span>
+                            </label>
+                          </li>
                         {% endfor %}
                       </ul>
                     </div>
@@ -230,7 +228,7 @@
                       <div class="filtr_title ch_title_item">{{ attr_n.title }}:</div>
                       <div class="check_box check_size check_mini_item">
                         {% for option in attr_n.options.all %}
-                          {% if option|in_product:product %}
+                          {% if option.id in attr_n.options_ids %}
                             <label for="{{ attr_n.slug }}_{{ option.id }}">
                               <input class="js-not-checkbox" data-attr-id="{{ attr_n.id }}" type="checkbox" name="{{ attr_n.slug }}" id="{{ attr_n.slug }}_{{ option.id }}" value="{{ option.id }}" />
                               <span title="{{ option.title }}">{{ option.title }}</span>
@@ -264,13 +262,11 @@
                   <div class="row_chars_item">
                     <div class="filtr_title ch_title_item">{{ attr.title }}:</div>
                     <div class="check_box check_size check_mini_item">
-                      {% for option in attr.options.all %}
-                        {% if option|in_product:product %}
-                          <label for="{{ attr.slug }}_{{ option.id }}">
-                            <input class="js-not-checkbox" data-attr-id="{{ attr.id }}" type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
-                            <span title="{{ option.title }}">{{ option.title }}</span>
-                          </label>
-                        {% endif %}
+                      {% for option in attr.options %}
+                        <label for="{{ attr.slug }}_{{ option.id }}">
+                          <input class="js-not-checkbox" data-attr-id="{{ attr.id }}" type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
+                          <span title="{{ option.title }}">{{ option.title }}</span>
+                        </label>
                       {% endfor %}
                     </div>
                   </div>
