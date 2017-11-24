@@ -207,6 +207,8 @@ class CertificateProductAdmin(TabbedTranslationAdmin):
 @admin.register(GiftWrapping)
 class GiftWrappingAdmin(admin.ModelAdmin):
     list_display = ('show_name', 'price_rub', 'price_eur', 'price_usd',)
+    list_display_links = None
+    list_editable = ('price_rub', 'price_eur', 'price_usd',)
     fieldsets = (
         (None, {
             'fields': ('show_name', 'price_rub', 'price_eur', 'price_usd',),
