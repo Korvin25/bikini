@@ -12,7 +12,7 @@ register = template.Library()
 
 @register.filter
 def in_product(option, product):
-    in_product = option.id in product.attrs.get(option.attribute.slug)
+    in_product = option.id in product.attrs.get(option.attribute.slug, list())
     return in_product
 
 
