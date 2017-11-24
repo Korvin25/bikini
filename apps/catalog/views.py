@@ -71,13 +71,33 @@ class ProductView(TemplateView):
                                                 slug=self.kwargs.get('slug'), pk=self.kwargs.get('pk'))
         return self.product
 
+    def get_attributes(self):
+        _attrs = self.product.attributes.prefetch_related('options').filter(display_type__gte=1)
+
+        attrs = {'color': [], 'size': [], 'style': [], 'text': []}
+        attrs_dict = {}
+        attrs_ids = []
+        for attr in _attrs:
+            attrs[attr.attr_type].append(attr)
+            attrs_dict[attr.id] = attr
+            attrs_ids.append(attr.id)
+
+        self.attrs = attrs
+        self.attrs_dict = attrs_dict
+        self.attrs_ids = attrs_ids
+
     def get_context_data(self, **kwargs):
         product = self.get_product()
         category = self.category
+        self.get_attributes()
         context = {
             'product': product,
             'category': category,
             'sex': self.sex,
+            'attrs': self.attrs,
+            'attrs_dict': self.attrs_dict,
+            'attrs_ids': self.attrs_ids,
+            'photos': product.photos.all(),
         }
         context.update(super(ProductView, self).get_context_data(**kwargs))
         return context

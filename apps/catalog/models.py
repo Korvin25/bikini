@@ -517,6 +517,11 @@ class Product(MetatagModel):
     admin_show_photo.allow_tags = True
     admin_show_photo.short_description = ' '
 
+    @property
+    def extra_products(self):
+        extra_products = self.extra_options.prefetch_related('extra_product', 'extra_product__attributes').all()
+        return [extra_p for extra_p in extra_products if extra_p.attrs]
+
 
 class ProductOption(models.Model):
     product = models.ForeignKey(Product, verbose_name='Товар', related_name='options')
@@ -593,3 +598,7 @@ class ProductPhoto(models.Model):
     @property
     def big_url(self):
         return self.photo['product_photo_big'].url
+
+    @property
+    def style_photo_url(self):
+        return self.photo['product_style'].url

@@ -102,3 +102,14 @@ def to_phone(phone_number):
 @register.filter
 def get_value(dict_value, key):
     return dict_value.get(key)
+
+
+@register.filter
+def to_int(value):
+    return int(value)
+
+
+@register.filter
+def to_int_str(value):
+    value = int(value) if int(value) == value else value
+    return str(value)

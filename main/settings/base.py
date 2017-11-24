@@ -53,6 +53,7 @@ INSTALLED_APPS = (
     'django_cleanup',
     'django_object_actions',
     'easy_thumbnails',
+    'embed_video',
     'modeltranslation',
     'request',
     'rosetta',
@@ -302,6 +303,10 @@ THUMBNAIL_ALIASES = {
         'footer_banner': {'size': (1407, 408), 'crop': True, 'upscale': True, 'quality': 100},
         'attribute_option': {'size': (37, 37), 'crop': True, 'quality': 100, 'upscale': True},
         'admin_attribute_option': {'size': (200, 200), 'crop': True, 'quality': 100, 'upscale': True},
+        'product_photo_preview': {'size': (387, 396), 'crop': True, 'quality': 100, 'upscale': True},
+        'product_photo_thumb': {'size': (70, 70), 'crop': True, 'quality': 100, 'upscale': True},
+        'product_photo_big': {'size': (1000, 1000), 'crop': False, 'quality': 100, 'upscale': True},
+        'product_style': {'size': (134, 134), 'crop': True, 'quality': 100, 'upscale': True},
     },
 }
 

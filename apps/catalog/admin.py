@@ -14,6 +14,7 @@ from jet.admin import CompactInline
 from modeltranslation.admin import TabbedTranslationAdmin, TranslationInlineModelAdmin
 from salmonella.admin import SalmonellaMixin
 
+from ..content.models import Video
 from .admin_dynamic import (ProductOptionInlineFormset, ProductPhotoInlineFormset,
                             ProductOptionInlineForm, ProductPhotoInlineForm, ProductExtraOptionInlineForm,
                             ProductOptionAdmin, ProductPhotoAdmin, ProductExtraOptionAdmin,)
@@ -255,6 +256,12 @@ class ProductPhotoInline(ProductPhotoAdmin):
         return extra
 
 
+class ProductVideoInline(TranslationInlineModelAdmin, CompactInline):
+    model = Video
+    min_num = 0
+    extra = 1
+
+
 @admin.register(Product)
 class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
     change_category_template = 'admin/catalog/product/change_category.html'
@@ -395,10 +402,8 @@ class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
     prepopulated_fields = {'slug': ('title',)}
     readonly_fields = ('id', 'add_dt', 'options_instruction', 'extra_options_instruction', 'photos_instruction',
                        'show_category', 'show_attributes', 'admin_show_photo',)
-    inlines = [ProductOptionInline, ProductPhotoInline, ProductExtraOptionInline, ]
-    # # raw_id_fields = ('additional_products', 'associated_products', 'also_products',)
-    # salmonella_fields = ('additional_products', 'associated_products', 'also_products',)
-    salmonella_fields = ('associated_products', 'also_products',)
+    inlines = [ProductOptionInline, ProductPhotoInline, ProductVideoInline, ProductExtraOptionInline, ]
+    raw_id_fields = ('associated_products', 'also_products',)
     search_fields = ['title', 'vendor_code', 'subtitle', 'text', ]
 
     def get_fieldsets(self, request, obj=None):
@@ -420,11 +425,11 @@ class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
         """
         Если объект уже создан (а главное, выбрана категория), показываем инлайны
         """
-        if not obj:
-            return []
         s = super(ProductAdmin, self).get_inline_instances(request, obj)
-        if not obj.extra_options.count():
-            s = s[:2]
+        if not obj:
+            s = s[2:3]
+        elif not obj.extra_options.count():
+            s = s[:3]
         return s
 
     def get_readonly_fields(self, request, obj=None):

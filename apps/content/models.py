@@ -6,16 +6,15 @@ from django.utils.translation import ugettext_lazy as _
 
 from ckeditor_uploader.fields import RichTextUploadingField
 from easy_thumbnails.fields import ThumbnailerImageField
+from embed_video.fields import EmbedVideoField
 
 from ..catalog.models import Product
-from ..core.utils import get_youtube_video_id, get_youtube_embed_video
 from ..settings.models import MetatagModel
 
 
 class Video(models.Model):
     title = models.CharField('Название', max_length=255)
-    video = models.URLField('Видео', help_text='Ссылка на youtube.com')
-    video_id = models.CharField(null=True, blank=True, max_length=31, editable=False)
+    video = EmbedVideoField('Ссылка на видео')
     cover = ThumbnailerImageField('Обложка', upload_to='videos/covers/', null=True, blank=True)
     text = RichTextUploadingField('Текст', blank=True, null=True)
     product = models.ForeignKey(Product, verbose_name='Товар', related_name='videos', null=True, blank=True)
@@ -30,12 +29,9 @@ class Video(models.Model):
     def __unicode__(self):
         return self.title
 
-    def get_cover_url(self):
-        return (self.cover.url if self.cover
-                else 'http://img.youtube.com/vi/{}/mqdefault.jpg'.format(self.video_id))
-
-    def get_iframe_video_link(self):
-        return get_youtube_embed_video(video_id=self.video_id)
+    # def get_cover_url(self):
+    #     return (self.cover.url if self.cover
+    #             else 'http://img.youtube.com/vi/{}/mqdefault.jpg'.format(self.video_id))
 
 
 class Page(MetatagModel):

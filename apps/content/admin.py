@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 
+from embed_video.admin import AdminVideoMixin
 from jet.admin import CompactInline
 from modeltranslation.admin import TabbedTranslationAdmin
 
@@ -12,19 +13,19 @@ from .translation import *
 
 
 @admin.register(Video)
-class VideoAdmin(TabbedTranslationAdmin):
-    list_display = ('title_ru', 'video', 'video_id', 'order', 'cover', 'product', 'add_dt',)
+class VideoAdmin(AdminVideoMixin, TabbedTranslationAdmin):
+    list_display = ('title_ru', 'video', 'order', 'cover', 'product', 'add_dt',)
     list_editable = ('order',)
     form = VideoAdminForm
     fieldsets = (
         (None, {
-            'fields': ('title', 'video', 'video_id', 'cover', 'text', 'product', 'order', 'add_dt',),
+            'fields': ('title', 'video', 'cover', 'text', 'product', 'order', 'add_dt',),
         }),
         # ('SEO', {
         #     'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'seo_text',),
         # }),
     )
-    readonly_fields = ('video_id', 'add_dt',)
+    readonly_fields = ('add_dt',)
     raw_id_fields = ('product',)
     search_fields = ['title', 'text', 'video', ]
 
