@@ -155,6 +155,10 @@ class AttributeOption(models.Model):
             label = '{}&nbsp;&nbsp;{}'.format(label, self.title)
         return mark_safe(label)
 
+    @property
+    def style_photo_url(self):
+        return self.picture['product_style'].url if self.picture else ''
+
     # @property
     # def color_style(self):
     #     style = ('background: url("{}");'.format(self.picture_url) if self.picture
@@ -486,7 +490,7 @@ class Product(MetatagModel):
         for _attrs in self.options.values_list('attrs', flat=True):
             for k, v in _attrs.iteritems():
                 if isinstance(v, list):
-                    if attrs.get(k):
+                    if k in attrs:
                         attrs[k].extend(v)
         attrs = {k: list(set(v)) for k, v in attrs.iteritems()}
         self.attrs = attrs
@@ -577,3 +581,15 @@ class ProductPhoto(models.Model):
 
     def __unicode__(self):
         return '#{}: {}'.format(self.id, self.photo.name)
+
+    @property
+    def preview_url(self):
+        return self.photo['product_photo_preview'].url
+
+    @property
+    def thumb_url(self):
+        return self.photo['product_photo_thumb'].url
+
+    @property
+    def big_url(self):
+        return self.photo['product_photo_big'].url
