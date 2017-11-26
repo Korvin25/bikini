@@ -25,7 +25,8 @@ class ProductsView(TemplateView):
         return self.category
 
     def get_queryset(self, **kwargs):
-        qs = Product.objects.select_related('category').filter(show=True)
+        qs = Product.objects.select_related('category').prefetch_related('options').filter(show=True)
+        self.base_qs = qs
         if self.category:
             qs = qs.filter(category_id=self.category.id)
         else:
@@ -40,6 +41,7 @@ class ProductsView(TemplateView):
         else:
             attrs = Attribute.objects.prefetch_related('options', 'categories').filter(display_type__gte=3,
                                                                                        categories__sex=self.sex).distinct()
+        # import ipdb; ipdb.set_trace()
         attrs_dict = {'color': [], 'size': [], 'style': [], 'text': []}
         for attr in attrs:
             attrs_dict[attr.attr_type].append(attr)

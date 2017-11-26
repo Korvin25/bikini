@@ -53,7 +53,7 @@
               return carouselStage.jcarousel('items').eq(itemNavigation.index()); 
             }; 
             $(function() {
-              var carouselStage    = $('.nom_img_med_wrap').jcarousel({wrap: 'circular'}); 
+              var carouselStage = $('.nom_img_med_wrap').jcarousel({wrap: 'circular'}); 
               var carouselNavigation = $('.carousel-navigation').jcarousel();
               carouselNavigation.jcarousel('items').each(function() { 
                 var item = $(this); 
@@ -85,7 +85,7 @@
             });
           </script>
           <!-- УВЕЛИЧЕНИЕ КАРТИНКИ -->
-            <script type="text/javascript" src="/static/js/highslide/highslide-with-gallery.js"></script>
+          <script type="text/javascript" src="/static/js/highslide/highslide-with-gallery.js"></script>
             <link rel="stylesheet" type="text/css" href="/static/js/highslide/highslide.css" />
             <script type="text/javascript">
             hs.graphicsDir = '/static/js/highslide/graphics/'; 
@@ -104,16 +104,15 @@
                 position: 'bottom center', 
                 hideOnMouseOut: true
               }
-
             });
           </script>
           <!-- УВЕЛИЧЕНИЕ КАРТИНКИ <<< -->
           
             
-            <div class="nom_img_med_wrap highslide-gallery">
-              <ul class="nom_img_list">
+            <div class="{% if photos %}js-with-photos {% endif %}nom_img_med_wrap highslide-gallery">
+              <ul class="nom_img_list js-photo-big-container">
                 {% for photo in photos %}
-                  <li>
+                  <li class="js-photo-big" data-attrs="{{ photo.attrs_json }}" data-order="{{ forloop.counter }}">
                     <a href="{{ photo.big_url }}" target="_blank" class="highslide" onclick="return hs.expand(this)" title="">
                     <img src="{{ photo.preview_url }}" /></a>
                   </li>
@@ -129,11 +128,15 @@
               <div class="l_arr" id="l_arr_nom_img"><img src="/static/i/arrow_slide.png" /></div>
               <div class="r_arr" id="r_arr_nom_img"><img src="/static/i/arrow_slide.png" /></div>
               <div class="carousel-navigation">
-                <ul class="jcarousel">
+                <ul class="jcarousel js-photo-thumb-container">
                   {% for photo in photos %}
-                    <li class=""><img src="{{ photo.thumb_url }}" /></li>
+                    <li class="js-photo-thumb" data-attrs="{{ photo.attrs_json }}" data-order="{{ forloop.counter }}">
+                      <img src="{{ photo.thumb_url }}" />
+                    </li>
                   {% empty %}
-                    <li class=""><img src="{{ product.thumb_url }}" /></li>
+                    <li class="">
+                      <img src="{{ product.thumb_url }}" />
+                    </li>
                   {% endfor %}
                 </ul>
               </div>
@@ -151,7 +154,7 @@
                 <div class="check_box check_mini check_mini_item">
                   {% for option in attr.options %}
                     <label data-attr-id="{{ attr.id }}" for="{{ attr.slug }}_{{ option.id }}"{% if forloop.counter > 4 %} style="display: none;"{% endif %} class="color_option">
-                      <input class="js-not-checkbox" data-attr-id="{{ attr.id }}" type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
+                      <input class="js-not-checkbox" data-attr-slug="{{ attr.slug }}" data-color-id="{{ option.id }}" type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
                       {% if option.picture %}
                         <span style="background: url('{{ option.picture_url }}')" title="{{ option.title }}">{{ option.title }}</span>
                       {% else %}
@@ -161,7 +164,7 @@
                   {% endfor %}
                 </div>
                 {% if attr.options.count > 4 %}
-                  <a href="#" class="yet_more" data-attr-id="{{ attr.id }}" class="js-show-colors">Ещё цвета</a>
+                  <a href="#" class="yet_more js-expand-colors" data-attr-id="{{ attr.id }}">Ещё цвета</a>
                 {% endif %}
                 <div class="clr"></div>
               {% endfor %}
@@ -209,7 +212,7 @@
                               </span>
                             {% endcomment %}
                             <label for="{{ attr.slug }}_{{ option.id }}" title="{{ option.title }}">
-                              <input class="js-not-checkbox" data-attr-id="{{ attr.id }}" type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
+                              <input class="js-not-checkbox" data-attr-slug="{{ attr.slug }}" type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
                               <span>
                                 <img src="{{ option|get_photo_url:product }}" />
                               </span>
@@ -230,7 +233,7 @@
                         {% for option in attr_n.options.all %}
                           {% if option.id in attr_n.options_ids %}
                             <label for="{{ attr_n.slug }}_{{ option.id }}">
-                              <input class="js-not-checkbox" data-attr-id="{{ attr_n.id }}" type="checkbox" name="{{ attr_n.slug }}" id="{{ attr_n.slug }}_{{ option.id }}" value="{{ option.id }}" />
+                              <input class="js-not-checkbox" data-attr-slug="{{ attr_n.slug }}" type="checkbox" name="{{ attr_n.slug }}" id="{{ attr_n.slug }}_{{ option.id }}" value="{{ option.id }}" />
                               <span title="{{ option.title }}">{{ option.title }}</span>
                             </label>
                           {% endif %}
@@ -264,7 +267,7 @@
                     <div class="check_box check_size check_mini_item">
                       {% for option in attr.options %}
                         <label for="{{ attr.slug }}_{{ option.id }}">
-                          <input class="js-not-checkbox" data-attr-id="{{ attr.id }}" type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
+                          <input class="js-not-checkbox" data-attr-slug="{{ attr.slug }}" type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
                           <span title="{{ option.title }}">{{ option.title }}</span>
                         </label>
                       {% endfor %}
@@ -469,31 +472,6 @@
   </main>
 
   <script type="text/javascript">
-    $('.js-not-checkbox').click(function(e) {
-      var $checkbox = $(this),
-          attr_id = $checkbox.attr('data-attr-id'),
-          is_checked = $checkbox.is(':checked');
-
-      $('.js-not-checkbox[data-attr-id="'+attr_id+'"]').not(this).attr('checked', false);
-    });
-
-
-    $('.yet_more').click(function(e) {
-      e.preventDefault();
-
-      var $button = $(this),
-          attr_id = $button.attr('data-attr-id');
-
-      $('label.color_option[data-attr-id="'+attr_id+'"]').show();
-      $button.hide();
-    });
-
-
-    $('.js-expand-videos').click(function(e) {
-      e.preventDefault();
-
-      $('.js-video-item:hidden').css('display', 'block').css('margin-top', '40px');
-      $(this).hide();
-    })
+    {% include 'catalog/include/product.js' %}
   </script>
 {% endblock %}

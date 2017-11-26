@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import json
+
 from django.contrib.postgres.fields import JSONField
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -638,3 +640,7 @@ class ProductPhoto(models.Model):
     @property
     def style_photo_url(self):
         return self.photo['product_style'].url
+
+    @property
+    def attrs_json(self):
+        return json.dumps(self.attrs)
