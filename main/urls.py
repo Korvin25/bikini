@@ -11,7 +11,7 @@ from django.views.generic import TemplateView
 # from solid_i18n.urls import solid_i18n_patterns
 
 from apps.catalog.views import ProductsView, ProductView
-from apps.content.views import HomepageView
+from apps.content.views import HomepageView, VideoListView, VideoDetailView
 
 
 urlpatterns = i18n_patterns(
@@ -36,7 +36,6 @@ urlpatterns = i18n_patterns(
     url(r'^podarochnyi-sertificat/$', TemplateView.as_view(template_name='podarochnyi-sertificat.html'), name='podarochnyi-sertificat'),
     url(r'^spisok-pokupok/$', TemplateView.as_view(template_name='spisok-pokupok.html'), name='spisok-pokupok'),
     url(r'^video-page/$', TemplateView.as_view(template_name='video-page.html'), name='video-page'),
-    url(r'^video/$', TemplateView.as_view(template_name='video.html'), name='video'),
     url(r'^women-detail/$', TemplateView.as_view(template_name='catalog/women-detail.html'), name='women-detail'),
 
     url(r'^women/$', ProductsView.as_view(with_category=False, sex='female'), name='women'),
@@ -45,6 +44,9 @@ urlpatterns = i18n_patterns(
     url(r'^men/(?P<slug>[^/]+)/$', ProductsView.as_view(with_category=True, sex='male'), name='men_category'),
     url(r'^women/(?P<category_slug>[^/]+)/(?P<slug>[^/]+)-(?P<pk>\d+)/$', ProductView.as_view(sex='female'), name='women_product'),
     url(r'^men/(?P<category_slug>[^/]+)/(?P<slug>[^/]+)-(?P<pk>\d+)/$', ProductView.as_view(sex='male'), name='men_product'),
+
+    url(r'^video/$', VideoListView.as_view(), name='videos'),
+    url(r'^video/(?P<slug>[^/]+)-(?P<pk>\d+)/$', VideoDetailView.as_view(), name='video'),
 
     prefix_default_language=False,
 )

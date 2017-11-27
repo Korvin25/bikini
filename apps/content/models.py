@@ -1,24 +1,28 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from ckeditor_uploader.fields import RichTextUploadingField
 from easy_thumbnails.fields import ThumbnailerImageField
 from embed_video.fields import EmbedVideoField
+from embed_video.backends import detect_backend
 
 from ..catalog.models import Product
 from ..settings.models import MetatagModel
 
 
-class Video(models.Model):
+class Video(MetatagModel):
     title = models.CharField('Название', max_length=255)
+    slug = models.SlugField('В URL', max_length=127)
     video = EmbedVideoField('Ссылка на видео')
     cover = ThumbnailerImageField('Обложка', upload_to='videos/covers/', null=True, blank=True)
     text = RichTextUploadingField('Текст', blank=True, null=True)
     product = models.ForeignKey(Product, verbose_name='Товар', related_name='videos', null=True, blank=True)
     add_dt = models.DateTimeField('Дата добавления', auto_now_add=True)
+    show_at_list = models.BooleanField('Показывать в списке на странице "видео"', default=True)
     order = models.IntegerField('Порядок', default=10)
 
     class Meta:
@@ -29,9 +33,21 @@ class Video(models.Model):
     def __unicode__(self):
         return self.title
 
-    # def get_cover_url(self):
-    #     return (self.cover.url if self.cover
-    #             else 'http://img.youtube.com/vi/{}/mqdefault.jpg'.format(self.video_id))
+    def get_absolute_url(self):
+        return reverse('video', kwargs={'slug': self.slug, 'pk': self.pk})
+
+    def get_cover_url(self):
+        return (self.cover['video_preview'].url if self.cover
+                else self.get_video_cover())
+
+    def get_video_cover(self):
+        url = self.video
+        backend = detect_backend(self.video)
+        code = backend.get_code()
+        return backend.thumbnail
+
+    def get_title(self):
+        return '{} — Видео'.format(self.title)
 
 
 class Page(MetatagModel):

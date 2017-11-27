@@ -1,26 +1,24 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from modeltranslation.translator import translator, TranslationOptions
+from modeltranslation.translator import register, translator, TranslationOptions
 
 from ..core.translation import TitleTranslationOptions
-from .models import Video, Page, Menu, MenuItem
+from .models import Video, Page, MenuItem
 
 
+@register(Video)
 class VideoTranslationOptions(TranslationOptions):
-    fields = ('title', 'text',)
+    fields = ('title', 'slug', 'text',
+              'meta_title', 'meta_desc', 'meta_keyw', 'seo_text',)
 
 
+@register(Page)
 class PageTranslationOptions(TranslationOptions):
     fields = ('title', 'text',
               'meta_title', 'meta_desc', 'meta_keyw', 'seo_text',)
 
 
+@register(MenuItem)
 class MenuItemTranslationOptions(TranslationOptions):
     fields = ('label', 'link',)
-
-
-translator.register(Video, VideoTranslationOptions)
-translator.register(Page, PageTranslationOptions)
-# translator.register(Menu, TitleTranslationOptions)
-translator.register(MenuItem, MenuItemTranslationOptions)

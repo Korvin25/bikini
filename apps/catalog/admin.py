@@ -279,6 +279,7 @@ class ProductPhotoInline(ProductPhotoAdmin):
 
 class ProductVideoInline(TranslationInlineModelAdmin, CompactInline):
     model = Video
+    fields = ('title', 'slug', 'video', 'cover', 'text', 'show_at_list')
     min_num = 0
     extra = 1
 

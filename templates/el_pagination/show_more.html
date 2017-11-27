@@ -1,0 +1,8 @@
+{% load i18n %}
+{% if querystring %}
+    <div class="endless_container bt_req_call red_bor_butt">
+        <a class="endless_more{% if class_name %} {{ class_name }}{% endif %}" href="{{ path }}{{ querystring }}"
+            data-el-querystring-key="{{ querystring_key }}">{% trans 'Показать ещё' %}</a>
+        <div class="endless_loading bt_req_call red_bor_butt" style="display: none;">{% trans 'Идет загрузка...' %}</div>
+    </div>
+{% endif %}

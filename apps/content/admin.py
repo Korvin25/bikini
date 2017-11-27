@@ -14,17 +14,19 @@ from .translation import *
 
 @admin.register(Video)
 class VideoAdmin(AdminVideoMixin, TabbedTranslationAdmin):
-    list_display = ('title_ru', 'video', 'order', 'cover', 'product', 'add_dt',)
+    list_display = ('title', 'slug', 'video', 'order', 'cover', 'product', 'add_dt',)
     list_editable = ('order',)
-    form = VideoAdminForm
+    list_filter = ('show_at_list',)
+    # form = VideoAdminForm
     fieldsets = (
         (None, {
-            'fields': ('title', 'video', 'cover', 'text', 'product', 'order', 'add_dt',),
+            'fields': ('title', 'slug', 'video', 'cover', 'text', 'product', 'show_at_list', 'order', 'add_dt',),
         }),
-        # ('SEO', {
-        #     'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'seo_text',),
-        # }),
+        ('SEO', {
+            'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'seo_text',),
+        }),
     )
+    prepopulated_fields = {'slug': ('title',)}
     readonly_fields = ('add_dt',)
     raw_id_fields = ('product',)
     search_fields = ['title', 'text', 'video', ]

@@ -53,6 +53,7 @@ INSTALLED_APPS = (
     'django_cleanup',
     'django_object_actions',
     'easy_thumbnails',
+    'el_pagination',
     'embed_video',
     'modeltranslation',
     'request',
@@ -307,6 +308,7 @@ THUMBNAIL_ALIASES = {
         'product_photo_thumb': {'size': (70, 70), 'crop': True, 'quality': 100, 'upscale': True},
         'product_photo_big': {'size': (1000, 1000), 'crop': False, 'quality': 100, 'upscale': True},
         'product_style': {'size': (134, 134), 'crop': True, 'quality': 100, 'upscale': True},
+        'video_preview': {'size': (352, 183), 'crop': True, 'quality': 100, 'upscale': True},
     },
 }
 
@@ -352,3 +354,6 @@ REQUEST_IGNORE_AJAX = True
 REQUEST_IGNORE_PATHS = (
     r'^admin/',
 )
+
+
+EL_PAGINATION_PER_PAGE = 6

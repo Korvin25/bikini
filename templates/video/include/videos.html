@@ -1,0 +1,31 @@
+{% load el_pagination_tags %}
+
+<div class="rows_videos">
+{% paginate videos %}
+{% for video in videos %}
+    <div class="row_video">
+      <div class="video_box" style="background-image:url({{ video.get_cover_url }});">
+        <a href="{{ video.get_absolute_url }}" class="play link_video_row">перейти</a>
+      </div>
+      <h3 class="title_video_row"><a href="{{ video.get_absolute_url }}">{{ video.title }}</a></h3>
+    </div>
+{% endfor %}
+</div>
+{% show_more %}
+
+{% comment %}
+    <div class="rows_videos">
+      {% for video in videos %}
+        <div class="row_video">
+          <div class="video_box" style="background-image:url({{ video.get_cover_url }});">
+            <a href="{{ video.get_absolute_url }}" class="play link_video_row">перейти</a>
+          </div>
+          <h3 class="title_video_row"><a href="{{ video.get_absolute_url }}">{{ video.title }}</a></h3>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="bt_req_call red_bor_butt">
+      <a href="#" onclick="return false">Показать ещё</a>
+    </div>
+{% endcomment %}
