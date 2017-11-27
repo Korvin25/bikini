@@ -41,7 +41,7 @@ $('.js-filter-form').on('submit', function(e){
         $container = $('#'+$form.attr('data-container-id')),
         url = $form.attr('action');
 
-    $form.find('js-form-button').blur();
+    $(document.activeElement).blur();
 
     var filter = $form.serializeArray();
     filter = jQuery.grep(filter, function(element) {
