@@ -1,22 +1,38 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.db.models import Q, Max, Min
 from django.http import Http404
 from django.views.generic import TemplateView
 from django.shortcuts import get_object_or_404
 
-from .models import Category, GiftWrapping, Product, Attribute
+from .models import Attribute, Category, GiftWrapping, Product, ProductOption
 
 
 class ProductsView(TemplateView):
     with_category = False
     sex = 'female'
+    TEMPLATES = {
+        'default': 'catalog/products.html',
+        'men': 'catalog/products_men.html',
+        'women': 'catalog/products_women.html',
+        'ajax': 'catalog/include/products.html',
+    }
 
     def get_template_names(self):
+        if self.request.is_ajax():
+            return self.TEMPLATES['ajax'] if self.map is False else self.TEMPLATES['map_ajax']
+        return self.TEMPLATES['default']
+
+    def get_template_names(self):
+        TEMPLATES = self.TEMPLATES
+        is_ajax = self.request.is_ajax()
+        with_category = self.with_category
         return {
-            self.with_category: 'catalog/products.html',
-            (not self.with_category and self.sex == 'female'): 'catalog/products_women.html',
-            (not self.with_category and self.sex == 'male'): 'catalog/products_men.html',
+            is_ajax: TEMPLATES['ajax'],
+            (not is_ajax and with_category): TEMPLATES['default'],
+            (not is_ajax and not with_category and self.sex == 'female'): TEMPLATES['women'],
+            (not is_ajax and not with_category and self.sex == 'male'): TEMPLATES['men'],
         }.get(True)
 
     def get_category(self):
@@ -24,30 +40,111 @@ class ProductsView(TemplateView):
                          else _get_category_from_kwargs(request=self.request, sex=self.sex, slug=self.kwargs.get('slug')))
         return self.category
 
-    def get_queryset(self, **kwargs):
-        qs = Product.objects.select_related('category').prefetch_related('options').filter(show=True)
-        self.base_qs = qs
-        if self.category:
-            qs = qs.filter(category_id=self.category.id)
-        else:
-            qs = qs.filter(category__sex=self.sex)
-        qs = qs.order_by('-id')
-        self.qs = qs
-        return qs
-
     def get_attributes(self):
+        all_attrs_values = ProductOption.objects.select_related('product').filter(product__in=self.base_qs).values_list('attrs', flat=True)
+
+        a_keys = set()
+        a_values = list()
+        for attrs in all_attrs_values:
+            for k, v in attrs.items():
+                a_keys.add(k)
+                a_values.extend(v)
+        a_values = set(a_values)
+
         if self.category:
             attrs = self.category.attributes.prefetch_related('options').filter(display_type__gte=2)
         else:
             attrs = Attribute.objects.prefetch_related('options', 'categories').filter(display_type__gte=3,
                                                                                        categories__sex=self.sex).distinct()
-        # import ipdb; ipdb.set_trace()
+
         attrs_dict = {'color': [], 'size': [], 'style': [], 'text': []}
         for attr in attrs:
-            attrs_dict[attr.attr_type].append(attr)
+            if attr.slug in a_keys:
+                attrs_dict[attr.attr_type].append(attr)
 
         self.attrs = attrs_dict
+        self.a_keys = a_keys
+        self.a_values = a_values
         return self.attrs
+
+    def get_attrs_filter(self):
+
+        def _get_attrs_queries(query):
+            queries = []
+            for k, v in query.iteritems():
+                _lookups = []
+                for value in v:
+                    q = 'Q(attrs__{}__contains={})'.format(k, value)
+                    _lookups.append(eval(q))
+                _query = _lookups[0]
+                for q in _lookups[1:]:
+                    _query |= q
+                queries.append(_query)
+            return queries
+
+        queries = _get_attrs_queries(self.f.get('attrs', dict()))
+        self.attrs_filter = queries
+        return queries
+
+    def get_filter(self):
+        f = {}
+        if self.f.get('price_from'):
+            f['price_rub__gte'] = self.f['price_from']
+        if self.f.get('price_to'):
+            f['price_rub__lte'] = self.f['price_to']
+        self.filter = f
+        return f
+
+    def get_queryset(self, **kwargs):
+        GET = self.request.GET
+        self.f = {'attrs': {}, 'attrs_values': []}
+
+        qs = Product.objects.select_related('category').prefetch_related('options').filter(show=True)
+        if self.category:
+            qs = qs.filter(category_id=self.category.id)
+        else:
+            qs = qs.filter(category__sex=self.sex)
+
+        self.base_qs = qs
+        self.price_min_max = qs.aggregate(Min('price_rub'), Max('price_rub'))
+        self.get_attributes()
+
+        price_from = GET.get('price_from')
+        price_to = GET.get('price_to')
+        if price_from:
+            try:
+                self.f['price_from'] = int(price_from)
+            except ValueError:
+                pass
+        if price_to:
+            try:
+                self.f['price_to'] = int(price_to)
+            except ValueError:
+                pass
+
+        for k in GET.keys():
+            if k.startswith('_') and k != '_':
+                key = k[1:]
+                if key in self.a_keys:
+                    _values = GET.getlist(k)
+                    values = []
+                    for v in _values:
+                        try:
+                            option_id = int(v)
+                            if option_id in self.a_values:
+                                values.append(option_id)
+                                self.f['attrs_values'].append(option_id)
+                        except ValueError:
+                            pass
+                    if values:
+                        self.f['attrs'][key] = values
+
+        qs = qs.filter(*self.get_attrs_filter())
+        qs = qs.filter(**self.get_filter()).distinct()
+        qs = qs.order_by('-id')
+
+        self.qs = qs
+        return qs
 
     def get_context_data(self, **kwargs):
         category = self.get_category()
@@ -57,7 +154,11 @@ class ProductsView(TemplateView):
             'sex': self.sex,
             'categories': Category.objects.filter(sex=self.sex),
             'products': products,
-            'attrs': self.get_attributes(),
+            'attrs': self.attrs,
+            'attrs_options': self.a_values,
+            'price_min_max': self.price_min_max,
+            'f': self.f,
+            'filter': self.filter,
         }
         context.update(super(ProductsView, self).get_context_data(**kwargs))
         return context

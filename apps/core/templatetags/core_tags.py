@@ -113,3 +113,15 @@ def to_int(value):
 def to_int_str(value):
     value = int(value) if int(value) == value else value
     return str(value)
+
+
+@register.filter
+def with_delimeter(value):
+    return '{0:,}'.format(value).replace(',', ' ')
+
+
+@register.filter
+def to_int_plus(value):
+    int_value = int(value)
+    return (int_value if int_value == value
+            else int_value + 1)
