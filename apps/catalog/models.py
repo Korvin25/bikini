@@ -369,7 +369,7 @@ class GiftWrapping(models.Model):
 # === Товары ===
 
 class Product(MetatagModel):
-    category = models.ForeignKey(Category, verbose_name='Категория', related_name='products')
+    category = models.ForeignKey(Category, verbose_name='Категория', related_name='products', default=1)
     title = models.CharField('Название', max_length=255)
     subtitle = models.CharField('Подзаголовок', max_length=255, blank=True)
     slug = models.SlugField('В URL', max_length=127)
