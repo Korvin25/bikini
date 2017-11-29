@@ -156,7 +156,7 @@
                     <label data-attr-id="{{ attr.id }}" for="{{ attr.slug }}_{{ option.id }}"{% if forloop.counter > 4 %} style="display: none;"{% endif %} class="color_option">
                       <input class="js-not-checkbox" data-attr-slug="{{ attr.slug }}" data-color-id="{{ option.id }}" type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
                       {% if option.picture %}
-                        <span style="background: url('{{ option.picture_url }}')" title="{{ option.title }}">{{ option.title }}</span>
+                        <span style="background: url('{{ option.detail_picture_url }}')" title="{{ option.title }}">{{ option.title }}</span>
                       {% else %}
                         <span style="background-color: {{ option.color }};{% if option.color|lower == '#ffffff' %} border: 1px solid #ccc;{% endif %}" title="{{ option.title }}">{{ option.title }}</span>
                       {% endif %}

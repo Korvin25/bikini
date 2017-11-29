@@ -142,6 +142,10 @@ class AttributeOption(models.Model):
     def picture_url(self):
         return self.picture['attribute_option'].url if self.picture else ''
 
+    @property
+    def detail_picture_url(self):
+        return self.picture['attribute_option_detail'].url if self.picture else ''
+
     def get_label(self, attr_type=None):
         attr_type = attr_type or self.attribute.attr_type
         label = (self.get_placeholder_image(image_src=self.admin_picture_url, dimension=35)
