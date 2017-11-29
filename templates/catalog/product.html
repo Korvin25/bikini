@@ -49,40 +49,7 @@
           <div class="nom_img">
           <script language="javascript" src="/static/js/highslide/jquery.jcarousel.min.js"></script>
           <script type="text/javascript">
-            var connector = function(itemNavigation, carouselStage) {
-              return carouselStage.jcarousel('items').eq(itemNavigation.index()); 
-            }; 
-            $(function() {
-              var carouselStage = $('.nom_img_med_wrap').jcarousel({wrap: 'circular'}); 
-              var carouselNavigation = $('.carousel-navigation').jcarousel();
-              carouselNavigation.jcarousel('items').each(function() { 
-                var item = $(this); 
-                var target = connector(item, carouselStage); 
-                item .on(
-                  'jcarouselcontrol:active', function() {
-                    carouselNavigation.jcarousel('scrollIntoView', this); 
-                    item.addClass('active'); 
-                  }).on('jcarouselcontrol:inactive', function() { 
-                    item.removeClass('active'); 
-                  }).jcarouselControl({ target: target, carousel: carouselStage }); 
-              });
-              
-              $('#l_arr_nom_img').on('jcarouselcontrol:inactive', function() {
-                  $(this).addClass('inactive'); 
-                }
-              ).on('jcarouselcontrol:active', function() {
-                  $(this).removeClass('inactive'); 
-                }
-              ).jcarouselControl({ target: '-=1' }); 
-              
-              $('#r_arr_nom_img').on('jcarouselcontrol:inactive', function() {
-                  $(this).addClass('inactive');
-                }
-              ).on('jcarouselcontrol:active', function() {
-                  $(this).removeClass('inactive');
-                }
-              ).jcarouselControl({ target: '+=1' }); 
-            });
+            {% include 'catalog/include/init_product_photos.js' %}
           </script>
           <!-- УВЕЛИЧЕНИЕ КАРТИНКИ -->
           <script type="text/javascript" src="/static/js/highslide/highslide-with-gallery.js"></script>
@@ -125,8 +92,10 @@
               </ul>
             </div>
             <div class="C_navigation">
-              <div class="l_arr" id="l_arr_nom_img"><img src="/static/i/arrow_slide.png" /></div>
-              <div class="r_arr" id="r_arr_nom_img"><img src="/static/i/arrow_slide.png" /></div>
+              <div class="js-navigation-buttons">
+                <div class="l_arr js-navigation-button" id="l_arr_nom_img"><img src="/static/i/arrow_slide.png" /></div>
+                <div class="r_arr js-navigation-button" id="r_arr_nom_img"><img src="/static/i/arrow_slide.png" /></div>
+              </div>
               <div class="carousel-navigation">
                 <ul class="jcarousel js-photo-thumb-container">
                   {% for photo in photos %}

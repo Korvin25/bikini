@@ -550,11 +550,11 @@ class Product(MetatagModel):
 
     @property
     def admin_photo_url(self):
-        return self.photo['product_cover'].url if self.photo else ''
+        return self.photo['admin_product_photo'].url if self.photo else ''
 
     @mark_safe
     def admin_show_photo(self):
-        return ('<img src="{}">'.format(self.admin_photo_url)
+        return ('<a href="{}" target="_blank"><img src="{}"></a>'.format(self.photo.url, self.admin_photo_url)
                 if self.photo else '-')
     admin_show_photo.allow_tags = True
     admin_show_photo.short_description = ' '
@@ -648,3 +648,14 @@ class ProductPhoto(models.Model):
     @property
     def attrs_json(self):
         return json.dumps(self.attrs)
+
+    @property
+    def admin_photo_url(self):
+        return self.photo['admin_product_photo'].url if self.photo else ''
+
+    @mark_safe
+    def admin_show_photo(self):
+        return ('<a href="{}" target="_blank"><img src="{}"></a>'.format(self.photo.url, self.admin_photo_url)
+                if self.photo else '-')
+    admin_show_photo.allow_tags = True
+    admin_show_photo.short_description = ' '

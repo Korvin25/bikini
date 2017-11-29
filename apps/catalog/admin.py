@@ -269,7 +269,8 @@ class ProductPhotoInline(ProductPhotoAdmin):
     model = ProductPhoto
     form = ProductPhotoInlineForm
     formset = ProductPhotoInlineFormset
-    fields = ('photo',)
+    fields = ('photo', 'admin_show_photo',)
+    readonly_fields = ('admin_show_photo',)
 
     def get_extra(self, request, obj=None):
         extra = (0 if obj and obj.photos.count()

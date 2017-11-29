@@ -299,6 +299,7 @@ ROSETTA_SHOW_AT_ADMIN_PANEL = False
 THUMBNAIL_ALIASES = {
     '': {
         'product_cover': {'size': (220, 220), 'crop': True, 'quality': 100},
+        'admin_product_photo': {'size': (140, 140), 'crop': True, 'quality': 100},
         'homepage_cover': {'size': (1939, 937), 'crop': True, 'quality': 100},
         'homepage_girl': {'size': (737, 737), 'crop': False, 'upscale': True, 'quality': 100},
         'footer_banner': {'size': (1407, 408), 'crop': True, 'upscale': True, 'quality': 100},
