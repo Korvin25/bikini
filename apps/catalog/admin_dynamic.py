@@ -44,6 +44,11 @@ class AttrsBasedInlineFormMixin(object):
         """
         super(AttrsBasedInlineFormMixin, self).__init__(*args, **kwargs)
 
+        for field in self.fields.keys():
+            # избавляемся от динамических полей, оставшихся с других моделей
+            if field not in self.Meta.default_fields:
+                del self.fields[field]
+
         self.attrs_list = attrs_list
         for attr in self.attrs_list:
             self.fields[attr['slug']] = MultiSelectFormField(label=attr['title'], choices=attr['choices'],
@@ -70,7 +75,8 @@ class ProductOptionInlineForm(AttrsBasedInlineFormMixin, forms.ModelForm):
 
     class Meta:
         model = ProductOption
-        fields = '__all__'
+        fields = ('title', 'vendor_code', 'price_rub', 'price_eur', 'price_usd', 'in_stock',)
+        default_fields = ('title', 'vendor_code', 'price_rub', 'price_eur', 'price_usd', 'in_stock',)
 
 
 class ProductPhotoInlineForm(AttrsBasedInlineFormMixin, forms.ModelForm):
@@ -78,7 +84,8 @@ class ProductPhotoInlineForm(AttrsBasedInlineFormMixin, forms.ModelForm):
 
     class Meta:
         model = ProductPhoto
-        fields = '__all__'
+        fields = ('title', 'photo',)
+        default_fields = ('title', 'photo',)
 
 
 class ProductExtraOptionInlineForm(forms.ModelForm):
@@ -86,7 +93,8 @@ class ProductExtraOptionInlineForm(forms.ModelForm):
 
     class Meta:
         model = ProductExtraOption
-        fields = '__all__'
+        fields = ('title', 'vendor_code', 'price_rub', 'price_eur', 'price_usd', 'in_stock',)
+        default_fields = ('title', 'vendor_code', 'price_rub', 'price_eur', 'price_usd', 'in_stock',)
 
     def __init__(self, *args, **kwargs):
         super(ProductExtraOptionInlineForm, self).__init__(*args, **kwargs)
