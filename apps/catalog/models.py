@@ -11,7 +11,10 @@ from django.utils.safestring import mark_safe
 from ckeditor_uploader.fields import RichTextUploadingField
 from colorfield.fields import ColorField
 from easy_thumbnails.fields import ThumbnailerImageField
+from easy_thumbnails.files import get_thumbnailer
+from filer.fields.image import FilerImageField
 from sortedm2m.fields import SortedManyToManyField
+from tinymce.models import HTMLField
 
 from ..settings.models import MetatagModel
 
@@ -136,7 +139,7 @@ class AttributeOption(models.Model):
         return (self.get_placeholder_image(image_src=self.admin_picture_url, dimension=200, border=False)
                 if self.picture else '-')
     admin_show_picture.allow_tags = True
-    admin_show_picture.short_description = ' '
+    admin_show_picture.short_description = 'Превью'
 
     @property
     def picture_url(self):
@@ -379,10 +382,11 @@ class Product(MetatagModel):
     slug = models.SlugField('В URL', max_length=127)
     vendor_code = models.CharField('Артикул', max_length=255, blank=True)
     photo = ThumbnailerImageField('Фото', upload_to='catalog/products/')
+    photo_f = FilerImageField(verbose_name='Фото', null=True, blank=True)
     price_rub = models.DecimalField('Цена, руб.', max_digits=9, decimal_places=2, default=0)
     price_eur = models.DecimalField('Цена, eur.', max_digits=9, decimal_places=2, default=0)
     price_usd = models.DecimalField('Цена, usd.', max_digits=9, decimal_places=2, default=0)
-    text = RichTextUploadingField('Текст', blank=True, null=True)
+    text = HTMLField('Текст', blank=True, null=True)
     in_stock = models.SmallIntegerField('Количество на складе', default=5)
 
     show = models.BooleanField('Показывать на сайте', default=True)
@@ -450,19 +454,23 @@ class Product(MetatagModel):
 
     @property
     def cover_thumb(self):
-        return self.photo['product_cover'].url
+        # return self.photo['product_cover'].url
+        return get_thumbnailer(self.photo_f)['product_cover'].url
 
     @property
     def preview_url(self):
-        return self.photo['product_photo_preview'].url
+        # return self.photo['product_photo_preview'].url
+        return get_thumbnailer(self.photo_f)['product_photo_preview'].url
 
     @property
     def thumb_url(self):
-        return self.photo['product_photo_thumb'].url
+        # return self.photo['product_photo_thumb'].url
+        return get_thumbnailer(self.photo_f)['product_photo_thumb'].url
 
     @property
     def big_url(self):
-        return self.photo['product_photo_big'].url
+        # return self.photo['product_photo_big'].url
+        return get_thumbnailer(self.photo_f)['product_photo_big'].url
 
     def get_price_rub(self):
         price = self.price_rub
@@ -476,17 +484,14 @@ class Product(MetatagModel):
 
     @mark_safe
     def extra_options_instruction(self):
-        return '''для заполнения дополнительных товаров сначала выберите их на
-                  <a href="/admin/catalog/product/{}/change_attributes/">странице изменения атрибутов</a>'''.format(self.id)
+        if self.id:
+            return '''для заполнения дополнительных товаров сначала выберите их на
+                      <a href="/admin/catalog/product/{}/change_attributes/">странице изменения атрибутов</a>'''.format(self.id)
+        else:
+            return '''для заполнения дополнительных товаров сначала сохраните объект,
+                      а потом выберите их на странице изменения атрибутов'''.format(self.id)
     extra_options_instruction.allow_tags = True
     extra_options_instruction.short_description = 'Дополнительные товары'
-
-    @mark_safe
-    def show_attributes(self):
-        attrs_str = list(self.attributes.values_list('admin_title', flat=True))
-        return '{} (<a href="/admin/catalog/product/{}/change_attributes/">изменить</a>)'.format(attrs_str, self.id)
-    show_attributes.allow_tags = True
-    show_attributes.short_description = 'Атрибуты'
 
     @mark_safe
     def photos_instruction(self):
@@ -496,9 +501,12 @@ class Product(MetatagModel):
 
     @mark_safe
     def show_category(self):
-        return '{} (<a href="/admin/catalog/product/{}/change_category/">изменить</a>)'.format(
-            self.category.__unicode__(), self.id
-        )
+        if self.id:
+            return '{} (<a href="/admin/catalog/product/{}/change_category/">изменить</a>)'.format(
+                self.category.__unicode__(), self.id
+            )
+        else:
+            return '-'
     show_category.allow_tags = True
     show_category.short_description = 'Категория'
 
@@ -548,16 +556,16 @@ class Product(MetatagModel):
                        style="height: {1}px; width: {1}px; {2}"
                        title="{3}">'''.format(image_src, dimension, style, self.title)
 
-    @property
-    def admin_photo_url(self):
-        return self.photo['admin_product_photo'].url if self.photo else ''
+    # @property
+    # def admin_photo_url(self):
+    #     return self.photo['admin_product_photo'].url if self.photo else ''
 
-    @mark_safe
-    def admin_show_photo(self):
-        return ('<a href="{}" target="_blank"><img src="{}"></a>'.format(self.photo.url, self.admin_photo_url)
-                if self.photo else '-')
-    admin_show_photo.allow_tags = True
-    admin_show_photo.short_description = ' '
+    # @mark_safe
+    # def admin_show_photo(self):
+    #     return ('<a href="{}" target="_blank"><img src="{}"></a>'.format(self.photo.url, self.admin_photo_url)
+    #             if self.photo else '-')
+    # admin_show_photo.allow_tags = True
+    # admin_show_photo.short_description = 'Превью'
 
     @property
     def extra_products(self):
@@ -618,7 +626,9 @@ class ProductExtraOption(models.Model):
 
 class ProductPhoto(models.Model):
     product = models.ForeignKey(Product, verbose_name='Товар', related_name='photos')
+    title = models.CharField('Название', blank=True, max_length=255, help_text='для показа в админке')
     photo = ThumbnailerImageField('Фото', upload_to='catalog/products/')
+    photo_f = FilerImageField(verbose_name='Фото', null=True, blank=True)
     attrs = JSONField(default=dict)
 
     class Meta:
@@ -627,35 +637,39 @@ class ProductPhoto(models.Model):
         verbose_name_plural = 'фото'
 
     def __unicode__(self):
-        return '#{}: {}'.format(self.id, self.photo.name)
+        return '#{}: {}'.format(self.id, self.title or self.photo.name)
 
     @property
     def preview_url(self):
-        return self.photo['product_photo_preview'].url
+        # return self.photo['product_photo_preview'].url
+        return get_thumbnailer(self.photo_f)['product_photo_preview'].url
 
     @property
     def thumb_url(self):
-        return self.photo['product_photo_thumb'].url
+        # return self.photo['product_photo_thumb'].url
+        return get_thumbnailer(self.photo_f)['product_photo_thumb'].url
 
     @property
     def big_url(self):
-        return self.photo['product_photo_big'].url
+        # return self.photo['product_photo_big'].url
+        return get_thumbnailer(self.photo_f)['product_photo_big'].url
 
     @property
     def style_photo_url(self):
-        return self.photo['product_style'].url
+        # return self.photo['product_style'].url
+        return get_thumbnailer(self.photo_f)['product_style'].url
 
     @property
     def attrs_json(self):
         return json.dumps(self.attrs)
 
-    @property
-    def admin_photo_url(self):
-        return self.photo['admin_product_photo'].url if self.photo else ''
+    # @property
+    # def admin_photo_url(self):
+    #     return self.photo['admin_product_photo'].url if self.photo else ''
 
-    @mark_safe
-    def admin_show_photo(self):
-        return ('<a href="{}" target="_blank"><img src="{}"></a>'.format(self.photo.url, self.admin_photo_url)
-                if self.photo else '-')
-    admin_show_photo.allow_tags = True
-    admin_show_photo.short_description = ' '
+    # @mark_safe
+    # def admin_show_photo(self):
+    #     return ('<a href="{}" target="_blank"><img src="{}"></a>'.format(self.photo.url, self.admin_photo_url)
+    #             if self.photo else '-')
+    # admin_show_photo.allow_tags = True
+    # admin_show_photo.short_description = 'Превью'

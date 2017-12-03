@@ -2,6 +2,7 @@
 {% load admin_urls admin_static admin_modify %}
 
 {% block extrastyle %}
+    {{ block.super }}
     <style type="text/css">
         .form-row input[type=checkbox] { display: inline !important; }
         .form-row li { margin-bottom: 5px; }

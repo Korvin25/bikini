@@ -10,9 +10,10 @@ from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.utils.safestring import mark_safe
 
-from jet.admin import CompactInline
+# from jet.admin import CompactInline
 from modeltranslation.admin import TabbedTranslationAdmin, TranslationInlineModelAdmin
 from salmonella.admin import SalmonellaMixin
+from suit import apps
 
 from ..content.models import Video
 from .admin_dynamic import (ProductOptionInlineFormset, ProductPhotoInlineFormset,
@@ -33,12 +34,13 @@ def _pop(_list, name):
 
 # === Атрибуты (справочники) ===
 
-class AttributeOptionInline(TranslationInlineModelAdmin, CompactInline):
+class AttributeOptionInline(TranslationInlineModelAdmin, admin.StackedInline):  # CompactInline
     model = AttributeOption
     form = AttributeOptionAdminForm
     formset = AttributeOptionInlineFormset
     fields = ('title', 'color', 'picture', 'admin_show_picture', 'order',)
     readonly_fields = ('admin_show_picture',)
+    suit_classes = 'suit-tab suit-tab-options'
     min_num = 1
     extra = 0
 
@@ -70,13 +72,19 @@ class AttributeAdmin(TabbedTranslationAdmin):
     list_editable = ('order',)
     list_filter = ('attr_type', 'category', 'display_type',)
     ordering = ['-category', 'attr_type', 'order', 'id', ]
+    suit_form_tabs = (
+        ('default', 'Атрибут'),
+        ('options', 'Варианты'),
+    )
     fieldsets = (
         (None, {
+            'classes': ('suit-tab suit-tab-default',),
             'fields': ('admin_title', 'title', 'slug', 'category', 'attr_type', 'neighbor',
                        # 'position', 'add_to_price',
                        'display_type', 'order',),
         }),
         ('Варианты', {
+            'classes': ('suit-tab suit-tab-options',),
             'fields': ('options_instruction',),
         }),
     )
@@ -139,8 +147,11 @@ class ExtraProductAdmin(TabbedTranslationAdmin):
     list_display = ('admin_title', 'title_ru', 'slug', 'order', 'show_attributes',)
     list_editable = ('order',)
     fieldsets = (
-        (None, {
-            'fields': ('admin_title', 'title', 'slug', 'order', 'attributes',),
+        ('Товар', {
+            'fields': ('admin_title', 'title', 'slug', 'order',),
+        }),
+        ('Атрибуты', {
+            'fields': ('attributes',),
         }),
     )
 
@@ -160,11 +171,21 @@ class CategoryAdmin(TabbedTranslationAdmin):
     list_editable = ('order',)
     list_filter = ('sex',)
     list_per_page = 200
+    suit_form_tabs = (
+        ('default', 'Категория'),
+        ('seo', 'SEO'),
+    )
     fieldsets = (
-        (None, {
-            'fields': ('sex', 'title', 'slug', 'order', 'attributes',),
+        ('Категория', {
+            'classes': ('suit-tab suit-tab-default',),
+            'fields': ('sex', 'title', 'slug', 'order',),
+        }),
+        ('Атрибуты', {
+            'classes': ('suit-tab suit-tab-default',),
+            'fields': ('attributes',),
         }),
         ('SEO', {
+            'classes': ('suit-tab suit-tab-seo',),
             'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'seo_text',),
         }),
     )
@@ -248,6 +269,7 @@ class ProductOptionInline(ProductOptionAdmin):
     form = ProductOptionInlineForm
     formset = ProductOptionInlineFormset
     fields = ('title', 'vendor_code', 'price_rub', 'price_eur', 'price_usd', 'in_stock')
+    suit_classes = 'suit-tab suit-tab-options'
     min_num = 1
     extra = 0
 
@@ -257,6 +279,7 @@ class ProductExtraOptionInline(ProductExtraOptionAdmin):
     form = ProductExtraOptionInlineForm
     fields = ('title', 'extra_product', 'vendor_code', 'price_rub', 'price_eur', 'price_usd', 'in_stock',)
     readonly_fields = ('extra_product',)
+    suit_classes = 'suit-tab suit-tab-extra'
 
     def has_add_permission(self, request):
         return None
@@ -269,8 +292,9 @@ class ProductPhotoInline(ProductPhotoAdmin):
     model = ProductPhoto
     form = ProductPhotoInlineForm
     formset = ProductPhotoInlineFormset
-    fields = ('photo', 'admin_show_photo',)
-    readonly_fields = ('admin_show_photo',)
+    fields = ('title', 'photo', 'photo_f',)
+    # fields = ('title', 'photo',)
+    suit_classes = 'suit-tab suit-tab-photos'
 
     def get_extra(self, request, obj=None):
         extra = (0 if obj and obj.photos.count()
@@ -278,9 +302,10 @@ class ProductPhotoInline(ProductPhotoAdmin):
         return extra
 
 
-class ProductVideoInline(TranslationInlineModelAdmin, CompactInline):
+class ProductVideoInline(TranslationInlineModelAdmin, admin.StackedInline):  # CompactInline
     model = Video
     fields = ('title', 'slug', 'video', 'cover', 'text', 'show_at_list')
+    suit_classes = 'suit-tab suit-tab-video'
     min_num = 0
     extra = 1
 
@@ -397,34 +422,60 @@ class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
     list_editable = ('order_at_homepage', 'in_stock', 'vendor_code')
     list_filter = ('show', HasAttrsFilter, 'show_at_homepage', 'add_dt', 'category',)
     list_per_page = 200
+    suit_form_tabs = (
+        ('default', 'Товар'),
+        ('also', 'Сопутствующие товары'),
+        ('seo', 'SEO'),
+        ('options', 'Варианты товара'),
+        ('photos', 'Фото'),
+        ('video', 'Видео'),
+        ('extra', 'Дополнительные товары'),
+    )
+    suit_form_size = {
+        'fields': {
+            'text': apps.SUIT_FORM_SIZE_FULL,
+            'seo_text': apps.SUIT_FORM_SIZE_FULL,
+            # 'color': apps.SUIT_FORM_SIZE_SMALL,
+        },
+        # 'widgets': {
+        #     'AutosizedTextarea': apps.SUIT_FORM_SIZE_XXX_LARGE,
+        # },
+    }
     fieldsets = (
-        (None, {
-            'fields': ('title', 'subtitle', 'slug', 'category', 'vendor_code', 'photo', 'admin_show_photo',
+        ('Товар', {
+            'classes': ('suit-tab suit-tab-default',),
+            'fields': ('title', 'subtitle', 'slug', 'category', 'vendor_code', 'photo', 'photo_f',
                        ('price_rub', 'price_eur', 'price_usd',), 'text', 'in_stock',),
         }),
         ('Настройки показа на сайте', {
+            'classes': ('suit-tab suit-tab-default',),
             'fields': ('show', 'show_at_homepage', 'order_at_homepage', 'add_dt',),
         }),
         ('Сопутствующие товары', {
+            'classes': ('suit-tab suit-tab-also',),
             # 'fields': ('additional_products', 'associated_products', 'also_products',),
             'fields': ('associated_products', 'also_products',),
         }),
         ('SEO', {
+            'classes': ('suit-tab suit-tab-seo',),
             'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'seo_text',),
         }),
         ('Варианты товара', {
+            'classes': ('suit-tab suit-tab-options',),
             'fields': ('options_instruction',),
         }),
         ('Фото', {
+            'classes': ('suit-tab suit-tab-photos',),
             'fields': ('photos_instruction',),
         }),
         ('Дополнительные товары', {
+            'classes': ('suit-tab suit-tab-extra',),
             'fields': ('extra_options_instruction',),
         }),
     )
     prepopulated_fields = {'slug': ('title',)}
     readonly_fields = ('id', 'add_dt', 'options_instruction', 'extra_options_instruction', 'photos_instruction',
-                       'show_category', 'show_attributes', 'admin_show_photo',)
+                       'show_category', 'show_attributes',)
     inlines = [ProductOptionInline, ProductPhotoInline, ProductVideoInline, ProductExtraOptionInline, ]
     raw_id_fields = ('associated_products', 'also_products',)
     search_fields = ['title', 'vendor_code', 'subtitle', 'text', ]

@@ -2,6 +2,7 @@
 {% load admin_urls admin_static admin_modify %}
 
 {% block extrastyle %}
+    {{ block.super }}
     <style type="text/css">
         .form-row input[type=checkbox] { display: inline !important; }
         .form-row li { margin-bottom: 5px; }
@@ -13,6 +14,8 @@
         <li>
             {% url opts|admin_urlname:'change_category' original.pk|admin_urlquote as change_category_url %}
             <a href="{% add_preserved_filters change_category_url %}" class="historylink">Изменить категорию</a>
+        </li>
+        <li>
             {% url opts|admin_urlname:'change_attributes' original.pk|admin_urlquote as change_attributes_url %}
             <a href="{% add_preserved_filters change_attributes_url %}" class="historylink">Изменить атрибуты</a>
         </li>

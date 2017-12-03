@@ -2,8 +2,9 @@
 from __future__ import unicode_literals
 
 from django import forms
+from django.contrib import admin
 
-from jet.admin import CompactInline
+# from jet.admin import CompactInline
 from multiselectfield.forms.fields import MultiSelectFormField
 
 from .models import ExtraProduct, ProductOption, ProductExtraOption, ProductPhoto, Category
@@ -84,8 +85,8 @@ class ProductPhotoInlineForm(AttrsBasedInlineFormMixin, forms.ModelForm):
 
     class Meta:
         model = ProductPhoto
-        fields = ('title', 'photo',)
-        default_fields = ('title', 'photo',)
+        fields = ('title', 'photo', 'photo_f',)
+        default_fields = ('title', 'photo', 'photo_f',)
 
 
 class ProductExtraOptionInlineForm(forms.ModelForm):
@@ -163,11 +164,11 @@ class AttrsBasedAdminMixin(object):
         return fieldsets
 
 
-class ProductOptionAdmin(AttrsBasedAdminMixin, CompactInline):
+class ProductOptionAdmin(AttrsBasedAdminMixin, admin.StackedInline):  # CompactInline
     pass
 
 
-class ProductPhotoAdmin(AttrsBasedAdminMixin, CompactInline):
+class ProductPhotoAdmin(AttrsBasedAdminMixin, admin.StackedInline):  # CompactInline
     attrs_min_choices = 0
 
     def get_attrs_list(self, obj):
@@ -177,7 +178,7 @@ class ProductPhotoAdmin(AttrsBasedAdminMixin, CompactInline):
         return obj.get_attrs_slugs(filter='photos')
 
 
-class ProductExtraOptionAdmin(AttrsBasedAdminMixin, CompactInline):
+class ProductExtraOptionAdmin(AttrsBasedAdminMixin, admin.StackedInline):  # CompactInline
     attrs_min_choices = 0
 
     def get_attrs_list(self, obj):

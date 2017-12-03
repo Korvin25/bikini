@@ -1,0 +1,16 @@
+form .form-row .filer-dropzone .filerFile .related-lookup:before {
+    display: inline !important;
+}
+form .form-row .filerFile.js-file-selector {
+    margin-top: -10px !important;
+}
+form .form-row .filer-dropzone .filerFile span:empty+.related-lookup {
+    float: left !important;
+    margin-left: 0 !important;
+}
+form .form-row .filerFile.js-file-selector br {
+    display: none;
+}
+form .form-row.field-photo_f .related-widget-wrapper {
+    margin-left: 170px;
+}

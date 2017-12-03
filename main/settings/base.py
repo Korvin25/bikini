@@ -36,7 +36,8 @@ SITE_ID = 1
 # Application definition
 
 INSTALLED_APPS = (
-    'jet',
+    # 'suit',
+    'apps.content.suit_apps.SuitConfig',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -52,14 +53,19 @@ INSTALLED_APPS = (
     'crequest',
     'django_cleanup',
     'django_object_actions',
+    'django_select2',
     'easy_thumbnails',
     'el_pagination',
     'embed_video',
+    'filer',
     'modeltranslation',
+    'mptt',
     'request',
     'rosetta',
     'salmonella',
     'sortedm2m',
+    # 'tabbed_admin',
+    'tinymce',
 
     'apps.core',
     'apps.geo',
@@ -156,7 +162,7 @@ LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'apps/lang/locale'),
 )
 
-MODELTRANSLATION_CUSTOM_FIELDS = ('RichTextField', 'RichTextUploadingField',)
+MODELTRANSLATION_CUSTOM_FIELDS = ('RichTextField', 'RichTextUploadingField', 'HTMLField',)
 MODELTRANSLATION_DEFAULT_LANGUAGE = 'ru'
 MODELTRANSLATION_FALLBACK_LANGUAGES = {'default': ('ru',), 'de': ('en', 'ru',), 'fr': ('en', 'ru',),
                                                            'it': ('en', 'ru',), 'es': ('en', 'ru',),}
@@ -292,10 +298,52 @@ LOGGING = {
 }
 
 
+TINYMCE_DEFAULT_CONFIG = {
+    # 'plugins': "table,spellchecker,paste,searchreplace",
+    'theme': "advanced",
+    'width': 900,
+    'height': 300,
+    # 'cleanup_on_startup': True,
+    # 'custom_undo_redo_levels': 10,
+}
+
+
+# SUIT_CONFIG = {
+#     'ADMIN_NAME': 'Bikinimini.ru',
+
+#     'HEADER_DATE_FORMAT': 'l, d.m.Y',
+#     'HEADER_TIME_FORMAT': 'H:i',
+
+#     'CONFIRM_UNSAVED_CHANGES': False,
+
+#     'MENU_EXCLUDE': ('auth', 'sites', 'djcelery', 'watermarker',),
+#     'MENU_OPEN_FIRST_CHILD': True,
+#     # 'MENU_ICONS': {
+#     #     'settings': 'icon-cog',
+#     #     'treenav': 'icon-list',
+#     #     'geo': 'icon-map-marker',
+#     #     'content': 'icon-pencil',
+#     #     'lk': 'icon-user',
+#     #     'ads': 'icon-warning-sign',
+#     #     'vacancies': 'icon-briefcase',
+#     #     'contests': 'icon-star',
+#     #     'jobroom_production': 'icon-home',
+#     #     'support': 'icon-info-sign',
+#     #     'feedback': 'icon-comment',
+#     #     'payments': 'icon-shopping-cart',
+#     #     'user_messages': 'icon-envelope',
+#     #     'search': 'icon-search',
+#     # }
+# }
+
+# TABBED_ADMIN_USE_JQUERY_UI = True
+
+
 ROSETTA_MESSAGES_PER_PAGE = 50
 ROSETTA_SHOW_AT_ADMIN_PANEL = False
 
 
+THUMBNAIL_HIGH_RESOLUTION = True
 THUMBNAIL_ALIASES = {
     '': {
         'product_cover': {'size': (220, 220), 'crop': True, 'quality': 100},
@@ -315,42 +363,6 @@ THUMBNAIL_ALIASES = {
 }
 
 
-ADMIN_SITE_HEADER = 'Bikinimini'
-
-JET_DEFAULT_THEME = 'light-gray'
-JET_THEMES = [
-    {
-        'theme': 'default', # theme folder name
-        'color': '#47bac1', # color of the theme's button in user menu
-        'title': 'Default' # theme title
-    },
-    {
-        'theme': 'green',
-        'color': '#44b78b',
-        'title': 'Green'
-    },
-    {
-        'theme': 'light-green',
-        'color': '#2faa60',
-        'title': 'Light Green'
-    },
-    {
-        'theme': 'light-violet',
-        'color': '#a464c4',
-        'title': 'Light Violet'
-    },
-    {
-        'theme': 'light-blue',
-        'color': '#5EADDE',
-        'title': 'Light Blue'
-    },
-    {
-        'theme': 'light-gray',
-        'color': '#222',
-        'title': 'Light Gray'
-    }
-]
-
 # https://django-request.readthedocs.io/en/latest/settings.html
 REQUEST_IGNORE_AJAX = True
 REQUEST_IGNORE_PATHS = (
@@ -358,4 +370,4 @@ REQUEST_IGNORE_PATHS = (
 )
 
 
-EL_PAGINATION_PER_PAGE = 6
+EL_PAGINATION_PER_PAGE = 15

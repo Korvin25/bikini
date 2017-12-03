@@ -5,6 +5,7 @@ from django.db import models
 
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
+from tinymce.models import HTMLField
 
 
 class Setting(models.Model):
@@ -25,6 +26,7 @@ class VisualSetting(models.Model):
     key = models.SlugField('Код', max_length=255, unique=True)
     # value = RichTextField('Значение', null=True, blank=True)
     value = RichTextUploadingField('Значение', null=True, blank=True)
+    value = HTMLField('Значение', null=True, blank=True)
     description = models.TextField('Описание')
 
     class Meta:
@@ -55,7 +57,8 @@ class SEOSetting(models.Model):
         help_text='Оставьте пустым, чтобы использовать название страницы (выше)',
     )
     # seo_text = RichTextField('SEO-текст', blank=True)
-    seo_text = RichTextUploadingField('SEO-текст', blank=True)
+    # seo_text = RichTextUploadingField('SEO-текст', blank=True)
+    seo_text = HTMLField('SEO-текст', blank=True)
 
     class Meta:
         ordering = ['key', ]
@@ -112,7 +115,7 @@ class MetatagModel(models.Model):
         max_length=255, blank=True,
         help_text='Оставьте пустым, чтобы использовать поле "Заголовок"',
     )
-    seo_text = RichTextField('SEO-текст', blank=True)
+    seo_text = HTMLField('SEO-текст', blank=True)
 
     class Meta:
         abstract = True

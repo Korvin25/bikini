@@ -4,12 +4,15 @@ from __future__ import unicode_literals
 from django.contrib import admin
 
 from embed_video.admin import AdminVideoMixin
-from jet.admin import CompactInline
-from modeltranslation.admin import TabbedTranslationAdmin
+# from jet.admin import CompactInline
+from modeltranslation.admin import TranslationInlineModelAdmin, TabbedTranslationAdmin
 
 from .admin_forms import VideoAdminForm
 from .models import Video, Page, Menu, MenuItem
 from .translation import *
+
+
+admin.site.site_header = 'Bikinimini.ru'
 
 
 @admin.register(Video)
@@ -47,10 +50,9 @@ class PageAdmin(TabbedTranslationAdmin):
     search_fields = ['title', 'slug', 'text', ]
 
 
-class MenuItemInline(CompactInline):
+class MenuItemInline(TranslationInlineModelAdmin, admin.StackedInline):  # CompactInline
     model = MenuItem
-    fields = ('label_ru', 'label_en', 'label_de', 'label_fr', 'label_it', 'label_es',
-              'link_ru', 'link_en', 'link_de', 'link_fr', 'link_it', 'link_es', 'target_blank', 'order',)
+    fields = ('label', 'link', 'target_blank', 'order',)
     extra = 0
 
 

@@ -5,8 +5,8 @@ from django.contrib import admin
 from django.contrib.admin.filters import SimpleListFilter
 from django.utils import timezone
 
-from jet.admin import CompactInline
-from modeltranslation.admin import TabbedTranslationAdmin
+# from jet.admin import CompactInline
+from modeltranslation.admin import TranslationInlineModelAdmin, TabbedTranslationAdmin
 
 from .models import Banner, BannerTextLine, PromoBanner, PromoBannerGirl
 from .translation import *
@@ -40,9 +40,9 @@ class IsPublishedNow(SimpleListFilter):
             return queryset.exclude(**published_filter)
 
 
-class BannerTextLineInline(CompactInline):
+class BannerTextLineInline(TranslationInlineModelAdmin, admin.StackedInline):  # CompactInline
     model = BannerTextLine
-    fields = ('line_ru', 'line_en', 'line_de', 'line_fr', 'line_it', 'line_es', 'big', 'order',)
+    fields = ('line', 'big', 'order',)
     extra = 1
 
 

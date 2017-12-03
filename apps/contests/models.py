@@ -6,6 +6,7 @@ from django.db import models
 from django.utils import timezone
 
 from ckeditor.fields import RichTextField
+from tinymce.models import HTMLField
 
 from ..lk.models import Profile
 from ..settings.models import MetatagModel
@@ -33,7 +34,7 @@ class Contest(MetatagModel):
     cover_title = models.CharField('Атрибут title у обложки', max_length=255, blank=True,
                                    help_text='По умолчанию берется из поля "Заголовок"')
 
-    terms = RichTextField('Условия участия')
+    terms = HTMLField('Условия участия')
 
     branding_title = models.CharField('Генеральный спонсор (название'), max_length=255, null=True, blank=True)
     branding_link = models.URLField('Генеральный спонсор (ссылка'), max_length=255, null=True, blank=True)
