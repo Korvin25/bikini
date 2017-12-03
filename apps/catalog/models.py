@@ -381,8 +381,8 @@ class Product(MetatagModel):
     subtitle = models.CharField('Подзаголовок', max_length=255, blank=True)
     slug = models.SlugField('В URL', max_length=127)
     vendor_code = models.CharField('Артикул', max_length=255, blank=True)
-    photo = ThumbnailerImageField('Фото', upload_to='catalog/products/')
-    photo_f = FilerImageField(verbose_name='Фото', null=True, blank=True)
+    # photo = ThumbnailerImageField('Фото', upload_to='catalog/products/')
+    photo_f = FilerImageField(verbose_name='Фото')
     price_rub = models.DecimalField('Цена, руб.', max_digits=9, decimal_places=2, default=0)
     price_eur = models.DecimalField('Цена, eur.', max_digits=9, decimal_places=2, default=0)
     price_usd = models.DecimalField('Цена, usd.', max_digits=9, decimal_places=2, default=0)
@@ -626,9 +626,9 @@ class ProductExtraOption(models.Model):
 
 class ProductPhoto(models.Model):
     product = models.ForeignKey(Product, verbose_name='Товар', related_name='photos')
-    title = models.CharField('Название', blank=True, max_length=255, help_text='для показа в админке')
-    photo = ThumbnailerImageField('Фото', upload_to='catalog/products/')
-    photo_f = FilerImageField(verbose_name='Фото', null=True, blank=True)
+    title = models.CharField('Название', blank=True, max_length=255, help_text='необязательно; для показа в админке')
+    # photo = ThumbnailerImageField('Фото', upload_to='catalog/products/')
+    photo_f = FilerImageField(verbose_name='Фото')
     attrs = JSONField(default=dict)
 
     class Meta:
