@@ -110,7 +110,11 @@
                 </ul>
               </div>
             </div>
-            
+            {% if attrs_ids|length %}
+              <a href="#" onclick="return false" class="move_butt_item">
+                Переместить товар из корзины<br />в  список желаемых покупок
+              </a>
+            {% endif %}
           </div>
           <div class="highslide-dimming"></div>
         <!-- SLIDER ITEM <<< -->
@@ -367,11 +371,7 @@
                   });
                 </script>
                 
-                {% if attrs_ids|length %}
-                  <a href="#" onclick="return false" class="move_butt_item">
-                    Переместить товар из корзины<br />в  список желаемых покупок
-                  </a>
-                {% endif %}
+                
                 
                 <div class="filtr_title ch_title_item">Кол-во:</div>
                 <div class="number">
