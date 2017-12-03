@@ -637,7 +637,7 @@ class ProductPhoto(models.Model):
         verbose_name_plural = 'фото'
 
     def __unicode__(self):
-        return '#{}: {}'.format(self.id, self.title or self.photo.name)
+        return '#{}: {}'.format(self.id, self.title or self.photo_f.original_filename)
 
     @property
     def preview_url(self):

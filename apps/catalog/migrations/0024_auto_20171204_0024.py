@@ -26,12 +26,12 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='product',
             name='photo_f',
-            field=filer.fields.image.FilerImageField(on_delete=django.db.models.deletion.CASCADE, to=settings.FILER_IMAGE_MODEL, verbose_name='\u0424\u043e\u0442\u043e'),
+            field=filer.fields.image.FilerImageField(default=1, on_delete=django.db.models.deletion.CASCADE, to=settings.FILER_IMAGE_MODEL, verbose_name='\u0424\u043e\u0442\u043e'),
         ),
         migrations.AlterField(
             model_name='productphoto',
             name='photo_f',
-            field=filer.fields.image.FilerImageField(on_delete=django.db.models.deletion.CASCADE, to=settings.FILER_IMAGE_MODEL, verbose_name='\u0424\u043e\u0442\u043e'),
+            field=filer.fields.image.FilerImageField(default=1, on_delete=django.db.models.deletion.CASCADE, to=settings.FILER_IMAGE_MODEL, verbose_name='\u0424\u043e\u0442\u043e'),
         ),
         migrations.AlterField(
             model_name='productphoto',
