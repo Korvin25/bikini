@@ -292,7 +292,8 @@ class ProductPhotoInline(ProductPhotoAdmin):
     model = ProductPhoto
     form = ProductPhotoInlineForm
     formset = ProductPhotoInlineFormset
-    fields = ('title', 'photo', 'photo_f',)
+    fields = ('title', 'photo_f',)
+    # fields = ('title', 'photo', 'photo_f',)
     # fields = ('title', 'photo',)
     suit_classes = 'suit-tab suit-tab-photos'
 
@@ -444,7 +445,9 @@ class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
     fieldsets = (
         ('Товар', {
             'classes': ('suit-tab suit-tab-default',),
-            'fields': ('title', 'subtitle', 'slug', 'category', 'vendor_code', 'photo', 'photo_f',
+            'fields': ('title', 'subtitle', 'slug', 'category', 'vendor_code',
+                       # 'photo', 'photo_f',
+                       'photo_f',
                        ('price_rub', 'price_eur', 'price_usd',), 'text', 'in_stock',),
         }),
         ('Настройки показа на сайте', {
@@ -486,13 +489,15 @@ class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
         Также вместо поля выбора категории показываем ридонли-поле с ссылкой на страниу выбора
         """
         fieldsets = list(super(ProductAdmin, self).get_fieldsets(request, obj))
-        if obj:
+        if obj and obj.id:
             # fieldsets[0][1]['fields'][3] = 'show_category'  # меняем 'category' на 'show_category'
             fieldsets[0][1]['fields'][18] = 'show_category'  # увеличиваем index из-за modeltranslation
             del fieldsets[4]
             del fieldsets[4]
             if obj.extra_options.count():
                 del fieldsets[4]
+        else:
+            fieldsets[0][1]['fields'][18] = 'category'
         return fieldsets
 
     def get_inline_instances(self, request, obj=None):
