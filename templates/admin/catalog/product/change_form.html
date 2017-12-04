@@ -1,6 +1,11 @@
 {% extends "admin/change_form.html" %}
 {% load admin_urls admin_static admin_modify %}
 
+{% block extrahead %}
+    {{ block.super }}
+    <script type="text/javascript" src="/static/admin/js/collapse_photos_attrs.js"></script>
+{% endblock %}
+
 {% block extrastyle %}
     {{ block.super }}
     <style type="text/css">

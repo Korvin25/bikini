@@ -181,7 +181,7 @@ class CategoryAdmin(TabbedTranslationAdmin):
             'fields': ('sex', 'title', 'slug', 'order',),
         }),
         ('Атрибуты', {
-            'classes': ('suit-tab suit-tab-default',),
+            'classes': ('suit-tab suit-tab-default collapse',),
             'fields': ('attributes',),
         }),
         ('SEO', {

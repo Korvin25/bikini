@@ -55,6 +55,8 @@ class AttrsBasedInlineFormMixin(object):
             self.fields[attr['slug']] = MultiSelectFormField(label=attr['title'], choices=attr['choices'],
                                                              required=(self.attrs_min_choices>0),
                                                              min_choices=self.attrs_min_choices)
+            if self.attrs_min_choices == 0:
+                self.fields[attr['slug']].widget.attrs = {'class': 'can-be-collapsed'}
             if self.instance:
                 self.fields[attr['slug']].initial = self.instance.attrs.get(attr['slug'])
 
