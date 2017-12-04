@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import json
+
 from django.db.models import Q, Max, Min
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 
 from .models import Attribute, Category, GiftWrapping, Product, ProductOption
+from ..core.templatetags.core_tags import to_int_plus
 
 
 class ProductsView(TemplateView):
@@ -211,6 +214,32 @@ class ProductView(TemplateView):
         self.attrs_dict = attrs_dict
         self.attrs_ids = attrs_ids
 
+    def get_attrs_json(self):
+        attrs_data = {
+            'attrs': {},
+            'options': {},
+            'option': {},
+        }
+
+        for type, attr_list in self.attrs.iteritems():
+            for attr in attr_list:
+                attrs_data['attrs'][attr['slug']] = type
+
+        for i, option in enumerate(self.product.options.all()):
+            option_dict = {
+                'id': option.id,
+                'attrs': option.attrs,
+                'price': to_int_plus(option.price_rub or self.product.price_rub or 0),
+                'in_stock': option.in_stock,
+            }
+            attrs_data['options'][option.id] = option_dict
+            if i == 0:
+                attrs_data['option'] = option_dict
+
+        print attrs_data
+        attrs_json = json.dumps(attrs_data)
+        return attrs_json
+
     def get_context_data(self, **kwargs):
         product = self.get_product()
         category = self.category
@@ -224,6 +253,7 @@ class ProductView(TemplateView):
             'attrs_ids': self.attrs_ids,
             'photos': product.photos.all(),
             'gift_wrapping_price': GiftWrapping.get_price(),
+            'attrs_json': self.get_attrs_json(),
         }
         context.update(super(ProductView, self).get_context_data(**kwargs))
         return context

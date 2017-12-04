@@ -573,6 +573,10 @@ class Product(MetatagModel):
         extra_products = self.extra_options.prefetch_related('extra_product', 'extra_product__attributes').all()
         return [extra_p for extra_p in extra_products if extra_p.attrs]
 
+    @property
+    def attrs_json(self):
+        return json.dumps(self.attrs)
+
 
 class ProductOption(models.Model):
     product = models.ForeignKey(Product, verbose_name='Товар', related_name='options')

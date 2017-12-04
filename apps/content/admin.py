@@ -7,12 +7,23 @@ from embed_video.admin import AdminVideoMixin
 # from jet.admin import CompactInline
 from modeltranslation.admin import TranslationInlineModelAdmin, TabbedTranslationAdmin
 
+from filer.admin import FolderAdmin as _FolderAdmin
+from filer.models import Folder
+
 from .admin_forms import VideoAdminForm
 from .models import Video, Page, Menu, MenuItem
 from .translation import *
 
 
 admin.site.site_header = 'Bikinimini.ru'
+
+
+class FolderAdmin(_FolderAdmin):
+    order_by_file_fields = ('-uploaded_at', 'original_filename', )
+
+
+admin.site.unregister(Folder)
+admin.site.register(Folder, FolderAdmin)
 
 
 @admin.register(Video)
