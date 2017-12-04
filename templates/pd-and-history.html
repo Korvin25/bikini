@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block meta_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
-{% block meta_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
-{% block meta_keyw %}{{ seo_settings.global.get_meta_keyw }}{% endblock %}
+{% block meta_title %}{{ seo_settings.profile.get_meta_title }}{% endblock %}
+{% block meta_desc %}{{ seo_settings.profile.get_meta_desc }}{% endblock %}
+{% block meta_keyw %}{{ seo_settings.profile.get_meta_keyw }}{% endblock %}
 
-{% block og_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
-{% block og_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
+{% block og_title %}{{ seo_settings.profile.get_meta_title }}{% endblock %}
+{% block og_desc %}{{ seo_settings.profile.get_meta_desc }}{% endblock %}
 
-{% block twitter_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
-{% block twitter_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
+{% block twitter_title %}{{ seo_settings.profile.get_meta_title }}{% endblock %}
+{% block twitter_desc %}{{ seo_settings.profile.get_meta_desc }}{% endblock %}
 
 {% block content %}
   <main>
