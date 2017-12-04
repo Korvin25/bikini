@@ -6,7 +6,8 @@ from urlparse import urlparse, parse_qs
 from watermarker.templatetags.watermark import watermark
 
 
-def with_watermark(image, watermark_name='default', position='C', opacity=100):
+# def with_watermark(image, watermark_name='default', position='C', opacity=100):
+def with_watermark(image, watermark_name='default', position='C', opacity=66):
     return watermark(image, '{},position={},opacity={}'.format(watermark_name, position, opacity))
 
 
