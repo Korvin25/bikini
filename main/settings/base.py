@@ -215,7 +215,7 @@ CKEDITOR_CONFIGS = {
     'simple': {
         'forcePasteAsPlainText': True,
         'language': 'ru',
-        'width': '70%',
+        'width': '100%',
         'height': '80%',
         'toolbar': [
             {'name': 'document', 'items': ['Source']},

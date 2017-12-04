@@ -9,7 +9,7 @@ from el_pagination.views import AjaxListView
 
 from ..catalog.models import Product
 from ..banners.models import PromoBanner
-from .models import Video
+from .models import Video, Page
 
 
 class HomepageView(TemplateView):
@@ -62,3 +62,9 @@ def _get_video_from_kwargs(request, slug, pk):
         else:
             raise exc
     return video
+
+
+class PageView(DetailView):
+    template_name = 'page.html'
+    model = Page
+    context_object_name = 'page'

@@ -9,6 +9,7 @@ from django.db import models
 from django.utils.safestring import mark_safe
 
 from ckeditor_uploader.fields import RichTextUploadingField
+from ckeditor.fields import RichTextField
 from colorfield.fields import ColorField
 from easy_thumbnails.fields import ThumbnailerImageField
 from easy_thumbnails.files import get_thumbnailer
@@ -387,7 +388,8 @@ class Product(MetatagModel):
     price_rub = models.DecimalField('Цена, руб.', max_digits=9, decimal_places=2, default=0)
     price_eur = models.DecimalField('Цена, eur.', max_digits=9, decimal_places=2, default=0)
     price_usd = models.DecimalField('Цена, usd.', max_digits=9, decimal_places=2, default=0)
-    text = HTMLField('Текст', blank=True, null=True)
+    # text = HTMLField('Текст', blank=True, null=True)
+    text = RichTextField('Текст', blank=True, null=True)
     in_stock = models.SmallIntegerField('Количество на складе', default=5)
 
     show = models.BooleanField('Показывать на сайте', default=True)

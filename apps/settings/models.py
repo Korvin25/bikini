@@ -24,9 +24,9 @@ class Setting(models.Model):
 
 class VisualSetting(models.Model):
     key = models.SlugField('Код', max_length=255, unique=True)
-    # value = RichTextField('Значение', null=True, blank=True)
-    value = RichTextUploadingField('Значение', null=True, blank=True)
-    value = HTMLField('Значение', null=True, blank=True)
+    value = RichTextField('Значение', null=True, blank=True)
+    # value = RichTextUploadingField('Значение', null=True, blank=True)
+    # value = HTMLField('Значение', null=True, blank=True)
     description = models.TextField('Описание')
 
     class Meta:

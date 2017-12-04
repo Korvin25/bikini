@@ -1,4 +1,6 @@
 jQuery(function($) {
+    // FROM: https://djangosnippets.org/snippets/1492/
+
     $('ul.can-be-collapsed').each(function() {
         var $ul = $(this), $label = $ul.siblings('label');
 

@@ -11,7 +11,7 @@ from django.views.generic import TemplateView
 # from solid_i18n.urls import solid_i18n_patterns
 
 from apps.catalog.views import ProductsView, ProductView
-from apps.content.views import HomepageView, VideoListView, VideoDetailView
+from apps.content.views import HomepageView, VideoListView, VideoDetailView, PageView
 
 
 urlpatterns = i18n_patterns(
@@ -49,6 +49,7 @@ urlpatterns = i18n_patterns(
     url(r'^blog/$', TemplateView.as_view(template_name='blog.html'), name='blog'),
     url(r'^blog-page/$', TemplateView.as_view(template_name='blog-page.html'), name='blog-page'),
 
+    url(r'^(?P<slug>[^/]+)/$', PageView.as_view(), name='page'),
     prefix_default_language=False,
 )
 
