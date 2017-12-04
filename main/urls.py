@@ -14,7 +14,24 @@ from apps.catalog.views import ProductsView, ProductView
 from apps.content.views import HomepageView, VideoListView, VideoDetailView, PageView
 
 
-urlpatterns = i18n_patterns(
+urlpatterns = [
+    url(r'^i18n/', include('django.conf.urls.i18n')),
+
+    # pages without language prefixes
+    # url(r'^forms/', include('apps.feedback.urls', namespace='forms')),
+
+    # 3rd party apps
+    # url(r'^jet/', include('jet.urls', 'jet')),
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
+    url(r'^admin/rosetta/', include('rosetta.urls')),
+    url(r'^admin/salmonella/', include('salmonella.urls')),
+    url(r'^filer/', include('filer.urls')),
+    url(r'^tinymce/', include('tinymce.urls')),
+]
+
+
+urlpatterns += i18n_patterns(
     # pages
     url(r'^$', HomepageView.as_view(), name='home'),
     url(r'^pages/$', TemplateView.as_view(template_name='pages.html'), name='pages'),
@@ -52,22 +69,6 @@ urlpatterns = i18n_patterns(
     url(r'^(?P<slug>[^/]+)/$', PageView.as_view(), name='page'),
     prefix_default_language=False,
 )
-
-urlpatterns += [
-    url(r'^i18n/', include('django.conf.urls.i18n')),
-
-    # pages without language prefixes
-    # url(r'^forms/', include('apps.feedback.urls', namespace='forms')),
-
-    # 3rd party apps
-    # url(r'^jet/', include('jet.urls', 'jet')),
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
-    url(r'^admin/rosetta/', include('rosetta.urls')),
-    url(r'^admin/salmonella/', include('salmonella.urls')),
-    url(r'^filer/', include('filer.urls')),
-    url(r'^tinymce/', include('tinymce.urls')),
-]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
