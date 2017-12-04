@@ -54,7 +54,8 @@ class VideoAdmin(AdminVideoMixin, TabbedTranslationAdmin):
 
 @admin.register(Page)
 class PageAdmin(TabbedTranslationAdmin):
-    list_display = ('title_ru', 'slug', 'image', 'order',)
+    # list_display = ('title_ru', 'slug', 'image', 'order',)
+    list_display = ('title_ru', 'slug', 'order',)
     list_editable = ('order',)
     suit_form_tabs = (
         ('default', 'Страница'),
@@ -63,7 +64,8 @@ class PageAdmin(TabbedTranslationAdmin):
     fieldsets = (
         ('Страница', {
             'classes': ('suit-tab suit-tab-default',),
-            'fields': ('title', 'slug', 'image', 'image_attributes', 'text', 'order',),
+            # 'fields': ('title', 'slug', 'image', 'image_attributes', 'text', 'order',),
+            'fields': ('title', 'slug', 'text', 'order',),
         }),
         ('SEO', {
             'classes': ('suit-tab suit-tab-seo',),
