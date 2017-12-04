@@ -32,11 +32,17 @@ class VideoAdmin(AdminVideoMixin, TabbedTranslationAdmin):
     list_editable = ('order',)
     list_filter = ('show_at_list',)
     # form = VideoAdminForm
+    suit_form_tabs = (
+        ('default', 'Видео'),
+        ('seo', 'SEO'),
+    )
     fieldsets = (
-        (None, {
+        ('Видео', {
+            'classes': ('suit-tab suit-tab-default',),
             'fields': ('title', 'slug', 'video', 'cover', 'text', 'product', 'show_at_list', 'order', 'add_dt',),
         }),
         ('SEO', {
+            'classes': ('suit-tab suit-tab-seo',),
             'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'seo_text',),
         }),
     )
@@ -50,11 +56,17 @@ class VideoAdmin(AdminVideoMixin, TabbedTranslationAdmin):
 class PageAdmin(TabbedTranslationAdmin):
     list_display = ('title_ru', 'slug', 'image', 'order',)
     list_editable = ('order',)
+    suit_form_tabs = (
+        ('default', 'Страница'),
+        ('seo', 'SEO'),
+    )
     fieldsets = (
-        (None, {
+        ('Страница', {
+            'classes': ('suit-tab suit-tab-default',),
             'fields': ('title', 'slug', 'image', 'image_attributes', 'text', 'order',),
         }),
         ('SEO', {
+            'classes': ('suit-tab suit-tab-seo',),
             'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'seo_text',),
         }),
     )
