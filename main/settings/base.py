@@ -66,6 +66,7 @@ INSTALLED_APPS = (
     'sortedm2m',
     # 'tabbed_admin',
     'tinymce',
+    'watermarker',
 
     'apps.core',
     'apps.geo',
@@ -371,3 +372,6 @@ REQUEST_IGNORE_PATHS = (
 
 
 EL_PAGINATION_PER_PAGE = 15
+
+
+WATERMARK_QUALITY = 100

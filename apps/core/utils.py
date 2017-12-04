@@ -3,6 +3,12 @@ from __future__ import unicode_literals
 
 from urlparse import urlparse, parse_qs
 
+from watermarker.templatetags.watermark import watermark
+
+
+def with_watermark(image, watermark_name='default', position='C', opacity=100):
+    return watermark(image, '{},position={},opacity={}'.format(watermark_name, position, opacity))
+
 
 def get_youtube_video_id(link):
     query = urlparse(link)

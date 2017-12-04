@@ -16,6 +16,7 @@ from filer.fields.image import FilerImageField
 from sortedm2m.fields import SortedManyToManyField
 from tinymce.models import HTMLField
 
+from ..core.utils import with_watermark
 from ..settings.models import MetatagModel
 
 
@@ -460,7 +461,7 @@ class Product(MetatagModel):
     @property
     def preview_url(self):
         # return self.photo['product_photo_preview'].url
-        return get_thumbnailer(self.photo_f)['product_photo_preview'].url
+        return with_watermark(get_thumbnailer(self.photo_f)['product_photo_preview'].url)
 
     @property
     def thumb_url(self):
@@ -470,7 +471,7 @@ class Product(MetatagModel):
     @property
     def big_url(self):
         # return self.photo['product_photo_big'].url
-        return get_thumbnailer(self.photo_f)['product_photo_big'].url
+        return with_watermark(get_thumbnailer(self.photo_f)['product_photo_big'].url)
 
     def get_price_rub(self):
         price = self.price_rub
@@ -642,7 +643,7 @@ class ProductPhoto(models.Model):
     @property
     def preview_url(self):
         # return self.photo['product_photo_preview'].url
-        return get_thumbnailer(self.photo_f)['product_photo_preview'].url
+        return with_watermark(get_thumbnailer(self.photo_f)['product_photo_preview'].url)
 
     @property
     def thumb_url(self):
@@ -652,7 +653,7 @@ class ProductPhoto(models.Model):
     @property
     def big_url(self):
         # return self.photo['product_photo_big'].url
-        return get_thumbnailer(self.photo_f)['product_photo_big'].url
+        return with_watermark(get_thumbnailer(self.photo_f)['product_photo_big'].url)
 
     @property
     def style_photo_url(self):
