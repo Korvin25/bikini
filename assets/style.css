@@ -199,14 +199,21 @@ header,main,nav,footer {display:block;}
 			
 	/* >>> CATALOG */
 		.item_list_wrapp {margin-left:-56px;padding-bottom: 57px;text-align: center;}
-			.product_list {/* float:left; */width: 247px;height: 418px;border:5px solid rgba(0,0,0,.050);overflow: hidden;text-align: center;margin-left:56px;margin-top:5px;margin-bottom:21px;display: inline-block;}
+			.product_list {/* float:left; */width: 247px;height: 418px;border:5px solid rgba(0,0,0,.050);overflow: hidden;text-align: center;margin-left:56px;margin-top:5px;margin-bottom:21px;display: inline-block;vertical-align: top;}
 				.product_list:hover {border-color:rgba(185,55,65,.340);}
-				.photo_list {margin:31px auto 33px;width:199px;height:199px;overflow:hidden;border-radius:50%;-webkit-border-radius:50%;line-height:199px;
-				border-radius:0;-webkit-border-radius:0;
-				margin:16px auto 25px;
+				.photo_list {margin: 31px auto 33px;
+					width: 215px;
+					height: auto;
+					overflow: hidden;
+					border-radius: 50%;
+					-webkit-border-radius: 50%;
+					/* line-height: 199px; */
+					border-radius: 0;
+					-webkit-border-radius: 0;
+					margin: 7px auto 11px;
 				}
 				.photo_list a {text-decoration:none;display:block;height:100%;vertical-align:middle;}
-				.photo_list img {display:inline-block;line-height:199px;min-height:100%;min-width:100%;border-radius:50%;-webkit-border-radius:50%;
+				.photo_list img {display:inline-block;line-height:199px;min-width:100%;border-radius:50%;-webkit-border-radius:50%;
 				border-radius:inherit;-webkit-border-radius:inherit;
 				}
 				
@@ -573,7 +580,7 @@ header,main,nav,footer {display:block;}
 			
 			
 			.move_butt_item {display:inline-block;position:relative;padding-left:37px;font-size:12px;line-height:14px;color:#3c3c3c;text-decoration:none;
-			margin-top: 10px;}
+			margin-top: 28px;}
 				.move_butt_item:hover {text-decoration:underline;}
 				.move_butt_item:before {content:'';display:block;width:20px;height:15px;background:url(i/heart_icon.png) no-repeat 50% 50%;position:absolute;left:0;top:50%;margin-top:-7.5px;}
 				.row_chars_item .move_butt_item {position: absolute;left: -495px;bottom: 6px;    background-color: #fff;padding-right: 5px;padding-top: 3px;padding-bottom: 3px;}
@@ -2147,7 +2154,7 @@ header,main,nav,footer {display:block;}
 		.sec_filtr .bt_red {margin-left:80px;}
 
 		.filtr_title, .check_box {margin-left:0;padding-left:80px;padding-right:80px;text-align: left;}
-		.check_photo label {float:left;margin-left:0;margin-right: 19px;}
+		.check_photo label {float:left;margin-left:0;margin-right: 19px !important;}
 		
 		.check_photo_plus label {margin-left: 5px !important;margin-right: 0 !important;}
 		.check_photo label:nth-child(2n) {margin-right: 0;}
