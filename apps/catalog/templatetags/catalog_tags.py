@@ -45,5 +45,5 @@ def get_product_url(product, category_or_sex=None):
 
 
 @register.filter
-def get_product_meta_title(product, category=None, sex=None):
-    return product.get_meta_title(category=category, sex=sex)
+def get_product_meta_title(product, category=None):
+    return product.get_meta_title(category=category)
