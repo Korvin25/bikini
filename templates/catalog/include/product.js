@@ -8,8 +8,8 @@ $('.js-not-checkbox').click(function(e) {
       is_checked = $checkbox.is(':checked'),
       color_id = parseInt($checkbox.attr('data-color-id'));
 
-  if (!is_checked) { e.preventDefault(); }
-  else {
+  // if (!is_checked) { e.preventDefault(); }
+  if (is_checked) {
     $('.js-not-checkbox[data-attr-slug="'+attr_slug+'"]').not(this).attr('checked', false); 
     if (color_id) { 
       // смена порядка фото при выборе цвета
