@@ -425,8 +425,8 @@ class Product(MetatagModel):
     #         self.set_attributes_from_category(self.category)
     #     return s
 
-    def get_absolute_url(self, category=None):
-        category = category or self.categories.first()
+    def get_absolute_url(self, category=None, sex=None):
+        category = category or (self.categories.first() if not sex else self.categories.filter(sex=sex).first())
         return ('{}{}-{}/'.format(category.get_absolute_url(), self.slug, self.id) if category
                 else None)
 

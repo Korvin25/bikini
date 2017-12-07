@@ -5,7 +5,7 @@
   <div class="item_list_wrapp" itemscope="" itemtype="http://schema.org/ItemList">
     {% for product in products %}
       <div class="product_list">
-        {% with product|get_product_url:category as product_url %}
+        {% with product|get_product_url:category_or_sex as product_url %}
           <div class="photo_list"><a href="{{ product_url }}"><img src="{{ product.cover_thumb }}" alt="{{ product.title }}" /></a></div>
           <h3><a href="{{ product_url }}">{{ product.title }}</a></h3>
           <h4>{{ product.subtitle }}</h4>

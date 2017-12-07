@@ -6,6 +6,8 @@ from itertools import chain
 from django import template
 from django.conf import settings
 
+from apps.catalog.models import Category
+
 
 register = template.Library()
 
@@ -33,10 +35,15 @@ def get_photo_url(option, product):
 
 
 @register.filter
-def get_product_url(product, category=None):
-    return product.get_absolute_url(category=category)
+def get_product_url(product, category_or_sex=None):
+    category = sex = None
+    if isinstance(category_or_sex, Category):
+        category = category_or_sex
+    else:
+        sex = category_or_sex
+    return product.get_absolute_url(category=category, sex=sex)
 
 
 @register.filter
-def get_product_meta_title(product, category=None):
-    return product.get_meta_title(category=category)
+def get_product_meta_title(product, category=None, sex=None):
+    return product.get_meta_title(category=category, sex=sex)

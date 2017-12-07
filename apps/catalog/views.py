@@ -155,6 +155,7 @@ class ProductsView(TemplateView):
         context = {
             'category': category,
             'sex': self.sex,
+            'category_or_sex': category or self.sex,
             'categories': Category.objects.filter(sex=self.sex),
             'products': products,
             'attrs': self.attrs,
