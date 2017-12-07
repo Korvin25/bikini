@@ -13,8 +13,21 @@
 {% block content %}
   <main>
     <div class="main_content">
-        <h1>{{ page.title }}</h1>
-        {{ page.text|safe }}
+		<div class="blog_title">
+			{% block breadcrumbs %}
+			  <ul class="breadcrumb">
+				<li><a href="{% url 'home' %}">Главная</a></li>
+				<li>{{ page.title }}</li>
+			  </ul>
+			{% endblock %}
+			
+			<h1 class="title_block">{{ page.title }}</h1>
+		</div>
+		<div id="main_content" class="content_video list_push cnt_left">
+			<div class="text_preview_left txt_black text_light_page">
+				{{ page.text|safe }}
+			</div>
+		</div>
     </div>
   </main>
 {% endblock %}

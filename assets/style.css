@@ -1157,6 +1157,23 @@ header,main,nav,footer {display:block;}
 /* Blog <<< */
 
 
+/* text  page >>> */
+	.text_light_page ul,.text_light_page ol {display:block;margin-left: 23px;margin-bottom:30px;}
+		.text_light_page li {display:block;margin-bottom:15px;font-size:15px;line-height:17px;position:relative;}
+			.text_light_page ul li:before {content:'';display:block;width:5px;height:5px;background-color:#e1312f;position:absolute;left:-15px;top:7px;}
+			
+			.text_light_page ol {counter-reset: myCounter;}
+				.text_light_page ol li {list-style: none;}
+				.text_light_page ol li:before {counter-increment: myCounter;content:counter(myCounter)'.';color: #e1312f;display: inline-block;text-align: center;position: absolute;left: -15px;top: 1px;font-size: 12px;font-family: 'NeoBold';}
+	
+	.text_light_page h2, .text_light_page h3, .text_light_page h4, .text_light_page h5 {text-transform:uppercase;font-family: 'NeoBold';font-weight:normal;margin-bottom:25px;margin-top:50px;}
+	
+	.text_light_page table {width:100%;border-collapse:collapse;}
+		.text_light_page table td {text-align:center;vertical-align:middle;font-size:15px;line-height:17px;padding:26px 15px;color:#323232;border:5px solid #f4f4f4;text-transform:uppercase;}
+		.text_light_page table thead, .text_light_page table th {background-color:#f4f4f4;font-family: 'NeoBold';}
+	
+	
+/* text  page <<< */
 
 /* video >>> */
 	.main_content_video {display:block !important;}
