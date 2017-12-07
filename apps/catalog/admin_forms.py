@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django import forms
 from multiselectfield.forms.fields import MultiSelectFormField
 
-from .models import AttributeOption, ExtraProduct, Product
+from .models import Attribute, AttributeOption, ExtraProduct, Category, Product
 
 
 class AttributeOptionInlineFormset(forms.BaseInlineFormSet):
@@ -41,15 +41,56 @@ class AttributeOptionAdminForm(forms.ModelForm):
         return picture
 
 
-class ChangeCategoryForm(forms.ModelForm):
+# class ChangeCategoryForm(forms.ModelForm):
+
+#     class Meta:
+#         model = Product
+#         fields = ['category', ]
+
+#     def __init__(self, *args, **kwargs):
+#         super(ChangeCategoryForm, self).__init__(*args, **kwargs)
+#         self.fields['category'].required = True
+
+
+class ProductAdminForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ['category', ]
+        fields = '__all__'
 
     def __init__(self, *args, **kwargs):
-        super(ChangeCategoryForm, self).__init__(*args, **kwargs)
-        self.fields['category'].required = True
+        super(ProductAdminForm, self).__init__(*args, **kwargs)
+        categories_choices = [(cat.id, cat.__unicode__()) for cat in Category.objects.all()]
+        self.fields['categories'] = MultiSelectFormField(label='Категории',
+                                                         choices=categories_choices,
+                                                         required=True,
+                                                         min_choices=1)
+        # self.fields['categories'].initial = list(self.instance.categories.values_list('id', flat=True))
+
+
+class ChangeCategoriesForm(forms.ModelForm):
+
+    class Meta:
+        model = Product
+        # fields = ['categories', ]
+        fields = ('id', )
+
+    def __init__(self, *args, **kwargs):
+        super(ChangeCategoriesForm, self).__init__(*args, **kwargs)
+        categories_choices = [(cat.id, cat.__unicode__()) for cat in Category.objects.all()]
+        self.fields['categories'] = MultiSelectFormField(label='Категории',
+                                                         choices=categories_choices,
+                                                         required=True,
+                                                         min_choices=1)
+        self.fields['categories'].initial = list(self.instance.categories.values_list('id', flat=True))
+
+    def save(self, commit=True):
+        obj = super(ChangeCategoriesForm, self).save(commit=False)
+        categories = self.cleaned_data.get('categories')
+        obj.categories = categories
+        if commit:
+            obj.save()
+        return obj
 
 
 class ChangeAttributesForm(forms.ModelForm):
@@ -60,8 +101,9 @@ class ChangeAttributesForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ChangeAttributesForm, self).__init__(*args, **kwargs)
+        categories_attrs = Attribute.objects.filter(categories__in=self.instance.categories.all()).distinct()
         self.fields['attributes'] = MultiSelectFormField(label='Атрибуты',
-                                                         choices=self.instance.category.attributes.values_list(
+                                                         choices=categories_attrs.values_list(
                                                             'id', 'admin_title'
                                                          ),
                                                          required=False,

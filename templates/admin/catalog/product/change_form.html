@@ -15,10 +15,16 @@
 {% endblock %}
 
 {% block object-tools-items %}
-    {% if original.category %}
+    {% if original.id %}
+        {% comment %}
+            <li>
+                {% url opts|admin_urlname:'change_category' original.pk|admin_urlquote as change_category_url %}
+                <a href="{% add_preserved_filters change_category_url %}" class="historylink">Изменить категорию</a>
+            </li>
+        {% endcomment %}
         <li>
-            {% url opts|admin_urlname:'change_category' original.pk|admin_urlquote as change_category_url %}
-            <a href="{% add_preserved_filters change_category_url %}" class="historylink">Изменить категорию</a>
+            {% url opts|admin_urlname:'change_categories' original.pk|admin_urlquote as change_categories_url %}
+            <a href="{% add_preserved_filters change_categories_url %}" class="historylink">Изменить категории</a>
         </li>
         <li>
             {% url opts|admin_urlname:'change_attributes' original.pk|admin_urlquote as change_attributes_url %}

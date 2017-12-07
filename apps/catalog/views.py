@@ -102,11 +102,11 @@ class ProductsView(TemplateView):
         GET = self.request.GET
         self.f = {'attrs': {}, 'attrs_values': []}
 
-        qs = Product.objects.select_related('category').prefetch_related('options').filter(show=True)
+        qs = Product.objects.prefetch_related('categories', 'options').filter(show=True)
         if self.category:
-            qs = qs.filter(category_id=self.category.id)
+            qs = qs.filter(categories=self.category.id)
         else:
-            qs = qs.filter(category__sex=self.sex)
+            qs = qs.filter(categories__sex=self.sex)
 
         self.base_qs = qs
         self.price_min_max = qs.aggregate(Min('price_rub'), Max('price_rub'))
@@ -277,13 +277,13 @@ def _get_category_from_kwargs(request, sex, slug):
 def _get_product_from_kwargs(request, category, slug, pk):
     product = None
     try:
-        product = get_object_or_404(Product, category_id=category.id, slug=slug, pk=pk, show=True)
+        product = get_object_or_404(Product, categories=category, slug=slug, pk=pk, show=True)
     except Http404 as exc:
         if request.LANGUAGE_CODE != 'ru':
             try:
-                product = get_object_or_404(Product, category_id=category.id, slug_en=slug, pk=pk, show=True)
+                product = get_object_or_404(Product, categories=category, slug_en=slug, pk=pk, show=True)
             except Http404:
-                product = get_object_or_404(Product, category_id=category.id, slug_ru=slug, pk=pk, show=True)
+                product = get_object_or_404(Product, categories=category, slug_ru=slug, pk=pk, show=True)
         else:
             raise exc
     return product

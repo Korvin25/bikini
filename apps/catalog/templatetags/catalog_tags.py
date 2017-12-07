@@ -30,3 +30,13 @@ def get_photo_url(option, product):
     # import ipdb; ipdb.set_trace()
     return (photo.style_photo_url if photo
             else option.style_photo_url)
+
+
+@register.filter
+def get_product_url(product, category=None):
+    return product.get_absolute_url(category=category)
+
+
+@register.filter
+def get_product_meta_title(product, category=None):
+    return product.get_meta_title(category=category)

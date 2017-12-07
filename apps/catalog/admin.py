@@ -19,7 +19,8 @@ from ..content.models import Video
 from .admin_dynamic import (ProductOptionInlineFormset, ProductPhotoInlineFormset,
                             ProductOptionInlineForm, ProductPhotoInlineForm, ProductExtraOptionInlineForm,
                             ProductOptionAdmin, ProductPhotoAdmin, ProductExtraOptionAdmin,)
-from .admin_forms import AttributeOptionInlineFormset, AttributeOptionAdminForm, ChangeCategoryForm, ChangeAttributesForm
+from .admin_forms import (AttributeOptionInlineFormset, AttributeOptionAdminForm,
+                          ProductAdminForm, ChangeCategoriesForm, ChangeAttributesForm,)
 from .models import (Attribute, AttributeOption, ExtraProduct, Category,
                      AdditionalProduct, Certificate, GiftWrapping,
                      Product, ProductOption, ProductExtraOption, ProductPhoto,)
@@ -313,35 +314,37 @@ class ProductVideoInline(TranslationInlineModelAdmin, admin.StackedInline):  # C
 
 @admin.register(Product)
 class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
-    change_category_template = 'admin/catalog/product/change_category.html'
+    # change_category_template = 'admin/catalog/product/change_category.html'
+    change_categories_template = 'admin/catalog/product/change_categories.html'
     change_attributes_template = 'admin/catalog/product/change_attributes.html'
 
-    def change_category_view(self, request, id, form_url='', extra_context=None):
+    def change_categories_view(self, request, id, form_url='', extra_context=None):
         opts = Product._meta
         try:
             obj = Product.objects.get(pk=id)
         except (Product.DoesNotExist, ValueError) as e:
             raise Http404
-        form = ChangeCategoryForm(request.POST, instance=obj) if request.POST else ChangeCategoryForm(instance=obj)
+        form = ChangeCategoriesForm(request.POST, instance=obj) if request.POST else ChangeCategoriesForm(instance=obj)
 
         if not self.has_change_permission(request, obj):
             raise PermissionDenied
 
         if obj:
-            old_category = obj.category
+            old_categories = set(obj.categories.values_list('id', flat=True))
 
         if form.is_valid():
-            new_category = form.cleaned_data['category']
+            new_categories = set([int(cat_id) for cat_id in form.cleaned_data['categories']])
             form.save()
 
-            if new_category != old_category:
-                obj.set_attributes_from_category(new_category)
+            # import ipdb; ipdb.set_trace()
 
-            category = obj.category
+            if new_categories != old_categories:
+                obj.set_attributes_from_categories(new_categories)
+
             self.message_user(request,
-                              mark_safe('''Категория у товара "<a href="/admin/catalog/product/{}/change/">{}</a>"
-                                 изменена на "<a href="/admin/catalog/category/{}/change/">{}</a>".'''.format(
-                                    id, obj.__unicode__(), category.id, category.__unicode__(),
+                              mark_safe('''Категории у товара "<a href="/admin/catalog/product/{}/change/">{}</a>"
+                                 изменены на "{}".'''.format(
+                                    id, obj.__unicode__(), obj.list_categories(),
                                 )),
                               messages.SUCCESS)
             return HttpResponseRedirect('/admin/catalog/product/{}/change_attributes/'.format(id))
@@ -350,7 +353,7 @@ class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
         form_url = add_preserved_filters({'preserved_filters': preserved_filters, 'opts': opts}, form_url)
 
         context = {
-            'title': 'Изменить категорию у товара %s' % obj,
+            'title': 'Изменить категории у товара %s' % obj,
             'has_change_permission': self.has_change_permission(request, obj),
             'form_url': form_url,
             'form': form,
@@ -360,7 +363,7 @@ class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
             'original': obj,
         }
         context.update(extra_context or {})
-        return render(request, self.change_category_template, context)
+        return render(request, self.change_categories_template, context)
 
     def change_attributes_view(self, request, id, form_url='', extra_context=None):
         opts = Product._meta
@@ -407,9 +410,12 @@ class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
 
         info = self.model._meta.app_label, self.model._meta.model_name
         urls = [
-            url(r'^(.+)/change_category/$',
-                wrap(self.change_category_view),
-                name='%s_%s_change_category' % info),
+            # url(r'^(.+)/change_category/$',
+            #     wrap(self.change_category_view),
+            #     name='%s_%s_change_category' % info),
+            url(r'^(.+)/change_categories/$',
+                wrap(self.change_categories_view),
+                name='%s_%s_change_categories' % info),
             url(r'^(.+)/change_attributes/$',
                 wrap(self.change_attributes_view),
                 name='%s_%s_change_attributes' % info),
@@ -417,11 +423,12 @@ class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
         super_urls = super(ProductAdmin, self).get_urls()
         return urls + super_urls
 
-    list_display = ('id', 'title', 'slug', 'category', 'show', 'has_attrs', 'show_at_homepage',
+    list_display = ('id', 'title', 'slug', 'list_categories', 'show', 'has_attrs', 'show_at_homepage',
                     'order_at_homepage', 'add_dt', 'in_stock', 'vendor_code')
     list_display_links = ('id', 'title',)
     list_editable = ('order_at_homepage', 'in_stock', 'vendor_code')
-    list_filter = ('show', HasAttrsFilter, 'show_at_homepage', 'add_dt', 'category',)
+    list_filter = ('show', HasAttrsFilter, 'show_at_homepage', 'add_dt', 'categories',)
+    suit_list_filter_horizontal = ('show', 'show_at_homepage', 'categories',)
     list_per_page = 200
     suit_form_tabs = (
         ('default', 'Товар'),
@@ -442,10 +449,11 @@ class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
         #     'AutosizedTextarea': apps.SUIT_FORM_SIZE_XXX_LARGE,
         # },
     }
+    form = ProductAdminForm
     fieldsets = (
         ('Товар', {
             'classes': ('suit-tab suit-tab-default',),
-            'fields': ('title', 'subtitle', 'slug', 'category', 'vendor_code',
+            'fields': ('title', 'subtitle', 'slug', 'categories', 'vendor_code',
                        # 'photo', 'photo_f',
                        'photo_f',
                        ('price_rub', 'price_eur', 'price_usd',), 'text', 'in_stock',),
@@ -478,7 +486,8 @@ class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
     )
     prepopulated_fields = {'slug': ('title',)}
     readonly_fields = ('id', 'add_dt', 'options_instruction', 'extra_options_instruction', 'photos_instruction',
-                       'show_category', 'show_attributes',)
+                       'show_categories', 'show_attributes',)
+    filter_vertical = ['categories', ]
     inlines = [ProductOptionInline, ProductPhotoInline, ProductVideoInline, ProductExtraOptionInline, ]
     raw_id_fields = ('associated_products', 'also_products',)
     search_fields = ['title', 'vendor_code', 'subtitle', 'text', ]
@@ -490,14 +499,14 @@ class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
         """
         fieldsets = list(super(ProductAdmin, self).get_fieldsets(request, obj))
         if obj and obj.id:
-            # fieldsets[0][1]['fields'][3] = 'show_category'  # меняем 'category' на 'show_category'
-            fieldsets[0][1]['fields'][18] = 'show_category'  # увеличиваем index из-за modeltranslation
+            # fieldsets[0][1]['fields'][3] = 'show_categories'  # меняем 'categories' на 'show_categories'
+            fieldsets[0][1]['fields'][18] = 'show_categories'  # увеличиваем index из-за modeltranslation
             del fieldsets[4]
             del fieldsets[4]
             if obj.extra_options.count():
                 del fieldsets[4]
         else:
-            fieldsets[0][1]['fields'][18] = 'category'
+            fieldsets[0][1]['fields'][18] = 'categories'
         return fieldsets
 
     def get_inline_instances(self, request, obj=None):
@@ -513,12 +522,24 @@ class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         """
-        Если объект уже создан, не даем менять категорию (только на отдельной странице)
+        Если объект уже создан, не даем менять категории (только на отдельной странице)
         """
         readonly_fields = list(super(ProductAdmin, self).get_readonly_fields(request, obj))
         if obj:
-            readonly_fields.append('category')
+            readonly_fields.append('categories')
         return readonly_fields
+
+    def save_model(self, request, obj, form, change):
+        """
+        Заполняем атрибуты у товара сразу полсле создания из его категорий
+        """
+        if not obj.id:
+            set_attributes = True
+        s = super(ProductAdmin, self).save_model(request, obj, form, change)
+        if set_attributes:
+            categories_ids = form.cleaned_data.get('categories')
+            obj.set_attributes_from_categories(categories_ids)
+        return s
 
     def save_formset(self, request, form, formset, change):
         """

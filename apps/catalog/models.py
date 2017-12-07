@@ -378,7 +378,7 @@ class GiftWrapping(models.Model):
 # === Товары ===
 
 class Product(MetatagModel):
-    category = models.ForeignKey(Category, verbose_name='Категория', related_name='products', default=1)
+    categories = models.ManyToManyField(Category, verbose_name='Категории', related_name='products')
     title = models.CharField('Название', max_length=255)
     subtitle = models.CharField('Подзаголовок', max_length=255, blank=True)
     slug = models.SlugField('В URL', max_length=127)
@@ -417,22 +417,37 @@ class Product(MetatagModel):
     def __unicode__(self):
         return self.title
 
-    def save(self, *args, **kwargs):
-        init_attributes = (True if (not self.id and getattr(self, 'category', None))
-                          else False)
-        s = super(Product, self).save(*args, **kwargs)
-        if init_attributes:
-            self.set_attributes_from_category(self.category)
-        return s
+    # def save(self, *args, **kwargs):
+    #     init_attributes = (True if (not self.id and getattr(self, 'category', None))
+    #                       else False)
+    #     s = super(Product, self).save(*args, **kwargs)
+    #     if init_attributes:
+    #         self.set_attributes_from_category(self.category)
+    #     return s
 
-    def get_absolute_url(self):
-        return '{}{}-{}/'.format(self.category.get_absolute_url(), self.slug, self.id)
+    def get_absolute_url(self, category=None):
+        category = category or self.categories.first()
+        return ('{}{}-{}/'.format(category.get_absolute_url(), self.slug, self.id) if category
+                else None)
 
-    def get_title(self):
-        return '{} — {}'.format(self.title, self.category.get_title())
+    # def get_title(self):
+    #     return '{} — {}'.format(self.title, self.category.get_title())
 
-    def set_attributes_from_category(self, category):
-        self.attributes = category.attributes.all()
+    def get_meta_title(self, category=None):
+        title = self.title
+        if self.meta_title:
+            title = self.meta_title
+        else:
+            category = category or self.categories.first()
+            title = '{} — {} — Bikinimini.ru'.format(self.title, category.get_title())
+        return title
+
+    # def set_attributes_from_category(self, category):
+    #     self.attributes = category.attributes.all()
+    #     self.set_attrs()
+
+    def set_attributes_from_categories(self, categories_ids):
+        self.attributes = Attribute.objects.filter(categories__id__in=categories_ids).distinct()
         self.set_attrs()
 
     def create_extra_products(self, extra_products_ids):
@@ -503,15 +518,32 @@ class Product(MetatagModel):
     photos_instruction.short_description = 'Фото'
 
     @mark_safe
-    def show_category(self):
+    def list_categories(self):
+        return ', '.join([cat.__unicode__() for cat in self.categories.all()]) or '-'
+    list_categories.allow_tags = True
+    list_categories.short_description = 'Категории'
+
+    @mark_safe
+    def show_categories(self):
         if self.id:
-            return '{} (<a href="/admin/catalog/product/{}/change_category/">изменить</a>)'.format(
-                self.category.__unicode__(), self.id
+            return '{} (<a href="/admin/catalog/product/{}/change_categories/">изменить</a>)'.format(
+                self.list_categories(), self.id
             )
         else:
             return '-'
-    show_category.allow_tags = True
-    show_category.short_description = 'Категория'
+    show_categories.allow_tags = True
+    show_categories.short_description = 'Категории'
+
+    # @mark_safe
+    # def show_category(self):
+    #     if self.id:
+    #         return '{} (<a href="/admin/catalog/product/{}/change_category/">изменить</a>)'.format(
+    #             self.category.__unicode__(), self.id
+    #         )
+    #     else:
+    #         return '-'
+    # show_category.allow_tags = True
+    # show_category.short_description = 'Категория'
 
     @mark_safe
     def show_attributes(self):

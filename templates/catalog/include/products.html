@@ -1,13 +1,17 @@
+{% load catalog_tags %}
+
 {% if products.count %}
 
   <div class="item_list_wrapp" itemscope="" itemtype="http://schema.org/ItemList">
     {% for product in products %}
       <div class="product_list">
-        <div class="photo_list"><a href="{{ product.get_absolute_url }}"><img src="{{ product.cover_thumb }}" alt="{{ product.title }}" /></a></div>
-        <h3><a href="{{ product.get_absolute_url }}">{{ product.title }}</a></h3>
-        <h4>{{ product.subtitle }}</h4>
-        <div class="product_price">{{ product.get_price_rub }}<abbr title="руб">р.</abbr></div>
-        <a href="#" class="to_cart_list">В корзину</a>
+        {% with product|get_product_url:category as product_url %}
+          <div class="photo_list"><a href="{{ product_url }}"><img src="{{ product.cover_thumb }}" alt="{{ product.title }}" /></a></div>
+          <h3><a href="{{ product_url }}">{{ product.title }}</a></h3>
+          <h4>{{ product.subtitle }}</h4>
+          <div class="product_price">{{ product.get_price_rub }}<abbr title="руб">р.</abbr></div>
+          <a href="#" class="to_cart_list">В корзину</a>
+        {% endwith %}
       </div>
     {% endfor %}
   </div>

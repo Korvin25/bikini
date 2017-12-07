@@ -300,7 +300,7 @@ LOGGING = {
 
 
 TINYMCE_DEFAULT_CONFIG = {
-    # 'plugins': "table,spellchecker,paste,searchreplace",
+    'plugins': "table,spellchecker,paste,searchreplace",
     'theme': "advanced",
     'width': 900,
     'height': 300,

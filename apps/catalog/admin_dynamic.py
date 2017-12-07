@@ -41,7 +41,7 @@ class AttrsBasedInlineFormMixin(object):
 
     def __init__(self, attrs_list, *args, **kwargs):
         """
-        Создаем динамические поля на основе product.category.attrs
+        Создаем динамические поля на основе product.attrs
         """
         super(AttrsBasedInlineFormMixin, self).__init__(*args, **kwargs)
 

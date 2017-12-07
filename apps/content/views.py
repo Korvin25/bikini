@@ -19,8 +19,9 @@ class HomepageView(TemplateView):
         banner = PromoBanner.objects.prefetch_related('girls').filter(is_enabled=True).order_by('?').first()
         if not banner:
             banner = PromoBanner.objects.prefetch_related('girls').all().order_by('?').first()
-        products = Product.objects.select_related('category').filter(show=True,
-                                                                     show_at_homepage=True).order_by('order_at_homepage', '-id')
+        products = Product.objects.prefetch_related('categories').filter(show=True,
+                                                                         show_at_homepage=True).order_by('order_at_homepage',
+                                                                                                         '-id')
         context = {
             'promo_banner': banner,
             'products': products,
