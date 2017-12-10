@@ -16,7 +16,63 @@
     
     <ul class="menu_foot contacts_foot">
       <li class="bt_phone"><a href="tel:{{ settings.phone|to_phone }}">{{ settings.phone|safe }}</strong></a></li>
-      <li class="bt_req_call"><a href="#"><strong>Обратный звонок</strong></a></li>
+      <li class="bt_req_call"><a rel="leanModal1" name="callback" href="#callback"><strong>Обратный звонок</strong></a></li>
     </ul>
   </div>
 </footer>
+
+
+<!-- высота карточек в каталоге и на всём сайте >>> -->
+	<script type="text/javascript" src="/static/js/query.matchHeight.js"></script>
+	<script type="text/javascript">
+		(function() {
+			$(function() {
+				var byRow = $('div').hasClass('shell_wrapp');
+				$('div.item_list_wrapp').each(function() {
+					$(this).children('div.product_list').matchHeight({
+						byRow: byRow
+					});
+				});
+			});
+		})();
+	</script>
+<!-- высота карточек в каталоге и на всём сайте <<< -->
+
+
+<!--callback >>> -->
+<div class="window_popap no_float mini_window_popup callback_form" id="callback" style="display:none;">
+	<div class="close_popap call_close"><img src="/static/i/close_white_45.png" alt="Закрыть"></div>
+	<div class="wrap_window_popap bg_wrapp_window">
+		<div class="popap_row">
+			<div class="popap_row_wrapp">
+				<h2>Заказать звонок</h2>
+				<p class="call_introtext">Заполните форму и мы вам перезвоним.</p>
+				<div class="row_form_popup">
+					<form class="callBackForm">
+						<label for="name_callBack">
+							<span>Ваше имя:</span>
+							<input type="text" value="" id="name_callBack" class="input_text" />
+						</label>
+						
+						<label for="phone_callBack">
+							<span>Телефон:</span>
+							<input type="text" value="" id="phone_callBack" class="input_text" />
+						</label>
+						<div class="bt_req_call red_bor_butt">
+							<button class="butt_border">Заказать звонок</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+	<script type="text/javascript" src="/static/js/modal.js"></script>
+	<script type="text/javascript">
+    	$(function() {
+    		$('a[rel*=leanModal1]').leanModal({ top : 200, closeButton: ".call_close" });		
+    	});
+    </script>
+<!--callback <<< -->

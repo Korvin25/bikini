@@ -37,7 +37,7 @@ button {-webkit-appearance: none;background:transparent;cursor:pointer;}
 header,main,nav,footer {display:block;}
 
 /*  TRANSITION  >>> */
-    .cat_row_top li a, .list_menu_lev1 li a, .bt_req_call a, .bt_contacts li a, .text_link_cat, .link_arrow_text, .product_list, .product_list h3 a, .butt_with, .menu_foot li a, .sl_text, .check_box label input ~ span, .sec_menu li a, .bt_red, .reset_frm , .yet_items span, .pagination_list li a,.l_arr, .r_arr,.carousel-navigation ul li, .yet_more,.number span,.object_movie:before,.video_box:before,.red_button,.arhive_list_jpg .product_face:before
+    .cat_row_top li a, .list_menu_lev1 li a, .bt_req_call a, .bt_contacts li a, .text_link_cat, .link_arrow_text, .product_list, .product_list h3 a, .butt_with, .menu_foot li a, .sl_text, .check_box label input ~ span, .sec_menu li a, .bt_red, .reset_frm , .yet_items span, .pagination_list li a,.l_arr, .r_arr,.carousel-navigation ul li, .yet_more,.number span,.object_movie:before,.video_box:before,.red_button,.arhive_list_jpg .product_face:before,.butt_border
           {-moz-transition: .30s ease-in-out;-o-transition: .30s ease-in-out;transition: .30s ease-in-out;-webkit-transition: .30s ease-in-out;}
 
 /*  OPACITY: .7 >>> */
@@ -45,12 +45,12 @@ header,main,nav,footer {display:block;}
           {opacity:.65;}
 
 /* relative AND clear >>> */
-    .menu_top_line, .list_menu_lev1, .menu_top_line_wrapp, .cat_row_top, .list_top_menu_wrapp, .bt_contacts, .text_head_block, main, .main_content, .item_list_wrapp, .photo_list, .text_preview_wrapp, .text_preview_inner, .with_banner_wrapp, .with_banner_padd, .footer_wrapp, .menu_foot, header, #touch_menu, #foot_menu, .sec_block, #main_content, .sec_menu, .sec_menu ul, .breadcrumb, .sec_filtr, .check_box, .filtr_title, .sec_filtr_wrapp, .check_box, .yet_items, .pagination_list,.wrapp_content,.item_content_block, .wrapp_item_content,.nom_img,.nom_img_med_wrap,.C_navigation,.nom_img_list,.carousel-navigation ul,.wrapp_chars_item_cols,.chars_item_cols,.wrapp_check_photo_chars,.wrapp_check_photo_chars ul,.carousel_chars_check,.check_photo_chars ul,.row_chars_item,.number,.check_bx_check,.check_bx_check label,.del_check,.checke_lab,#player_item,.wrapp_player_item,.inner_player_item,.rows_cut_block,.table_shell,.table_head,.table_row,.table_cell,.td_photo,.td_color_box,.rows_block_info,.row_info,.rows_radio_block,.radio_input,.dott_cell,.foot_form_cut,.foot_form_cut_row,.block_curr_down,.window_popap,.wrap_window_popap,.lbl_box,.soc_enter,.rows_popup_input,.wns_tubs,.wns_buttons,.wns_content,.wns_row_content,.lnk_bt_wns,.wns_form_block,.wns_row_input,.wns_lbl,.rows_wns_input .two_rows,.pass_wns_box,.wns_orders_tbl,.sertificat_block,.sertificat_wrapp,.sertificat_logo_name,.sertificat_logo,.sertificat_title,.text_sert,.radio_float,.title_string,.pup_details_item,.details_item_content,.details_item_photo,.pup_details_txt,.text_blog,.blog_title,.rows_blog,.row_blog,.img_blog,.mini_search,.arhive_block,.arhive_wrapp,.arhive_list,.gallery_sec,.gallery_sec_wrapp,.block_photo_sec,.title_mini,.soc_share,.soc_share_wrapp,.comment_block,.comment_wrapp,.comment_row,.comment_date,.comment_text,.comment_form,.mini_video,.mini_video_wrapp,.list_mini_video,.row_movie,.object_movie,.rows_videos,.row_video,.wrapp_row_video,.video_box,.red_bor_butt,.video_wrapp_page,.movie_row,.movie,.wrapp_movie,.red_button,.sec_block_item,.product_list,.settings_item,.settings_item li,.share_banner,.count_block,.txt_product
+    .menu_top_line, .list_menu_lev1, .menu_top_line_wrapp, .cat_row_top, .list_top_menu_wrapp, .bt_contacts, .text_head_block, main, .main_content, .item_list_wrapp, .photo_list, .text_preview_wrapp, .text_preview_inner, .with_banner_wrapp, .with_banner_padd, .footer_wrapp, .menu_foot, header, #touch_menu, #foot_menu, .sec_block, #main_content, .sec_menu, .sec_menu ul, .breadcrumb, .sec_filtr, .check_box, .filtr_title, .sec_filtr_wrapp, .check_box, .yet_items, .pagination_list,.wrapp_content,.item_content_block, .wrapp_item_content,.nom_img,.nom_img_med_wrap,.C_navigation,.nom_img_list,.carousel-navigation ul,.wrapp_chars_item_cols,.chars_item_cols,.wrapp_check_photo_chars,.wrapp_check_photo_chars ul,.carousel_chars_check,.check_photo_chars ul,.row_chars_item,.number,.check_bx_check,.check_bx_check label,.del_check,.checke_lab,#player_item,.wrapp_player_item,.inner_player_item,.rows_cut_block,.table_shell,.table_head,.table_row,.table_cell,.td_photo,.td_color_box,.rows_block_info,.row_info,.rows_radio_block,.radio_input,.dott_cell,.foot_form_cut,.foot_form_cut_row,.block_curr_down,.window_popap,.wrap_window_popap,.lbl_box,.soc_enter,.rows_popup_input,.wns_tubs,.wns_buttons,.wns_content,.wns_row_content,.lnk_bt_wns,.wns_form_block,.wns_row_input,.wns_lbl,.rows_wns_input .two_rows,.pass_wns_box,.wns_orders_tbl,.sertificat_block,.sertificat_wrapp,.sertificat_logo_name,.sertificat_logo,.sertificat_title,.text_sert,.radio_float,.title_string,.pup_details_item,.details_item_content,.details_item_photo,.pup_details_txt,.text_blog,.blog_title,.rows_blog,.row_blog,.img_blog,.mini_search,.arhive_block,.arhive_wrapp,.arhive_list,.gallery_sec,.gallery_sec_wrapp,.block_photo_sec,.title_mini,.soc_share,.soc_share_wrapp,.comment_block,.comment_wrapp,.comment_row,.comment_date,.comment_text,.comment_form,.mini_video,.mini_video_wrapp,.list_mini_video,.row_movie,.object_movie,.rows_videos,.row_video,.wrapp_row_video,.video_box,.red_bor_butt,.video_wrapp_page,.movie_row,.movie,.wrapp_movie,.red_button,.sec_block_item,.product_list,.settings_item,.settings_item li,.share_banner,.count_block,.txt_product,.callBackForm,.callBackForm label
           {display:block;position:relative;}
     
     .clr {clear:both;display:block;float:none;padding:0;margin:0;width:100%;height:0;}
     
-    .menu_top_line:after, .list_menu_lev1:after, .menu_top_line_wrapp:after, .cat_row_top:after, .list_top_menu_wrapp:after, .bt_contacts:after, .text_head_block:after, main:after, .main_content:after, .item_list_wrapp:after, .text_preview_wrapp:after, .text_preview_inner:after, .with_banner_wrapp:after, .footer_wrapp:after, .menu_foot:after, header:after, #touch_menu:after, #foot_menu:after, .sec_block:after, #main_content:after, .sec_menu:after , .sec_menu ul :after, .breadcrumb:after, .sec_filtr:after, .check_box:after, .filtr_title:after, .sec_filtr_wrapp:after, .check_box:after, .yet_items:after, .pagination_list:after,.wrapp_content:after,.item_content_block:after, .wrapp_item_content:after,.nom_img:after,.nom_img_med_wrap:after,.C_navigation:after,.nom_img_list:after,.carousel-navigation ul:after,.wrapp_chars_item_cols:after,.chars_item_cols:after,.wrapp_check_photo_chars:after,.wrapp_check_photo_chars ul:after,.carousel_chars_check:after,.check_photo_chars ul:after,.row_chars_item:after,.number:after,.check_bx_check:after,.check_bx_check label:after,.del_check:after,.checke_lab:after,#player_item:after,.wrapp_player_item:after,.inner_player_item:after,.rows_cut_block:after,.table_shell:after,.table_head:after,.table_row:after,.table_cell:after,.td_photo:after,.rows_block_info:after,.row_info:after,.rows_radio_block:after,.radio_input:after,.dott_cell:after,.foot_form_cut:after,.foot_form_cut_row:after,.block_curr_down:after,.window_popap:after,.wrap_window_popap:after,.lbl_box:after,.soc_enter:after,.rows_popup_input:after,.wns_tubs:after,.wns_buttons:after,.wns_content:after,.wns_row_content:after,.lnk_bt_wns:after,.wns_form_block:after,.wns_row_input:after,.wns_lbl:after, .rows_wns_input .two_rows:after,.pass_wns_box:after,.wns_orders_tbl:after,.sertificat_block:after,.sertificat_wrapp:after,.sertificat_logo_name:after,.sertificat_logo:after,.sertificat_title:after,.text_sert:after,.radio_float:after,.title_string:after,.pup_details_item:after,.details_item_content:after,.details_item_photo:after,.pup_details_txt:after,.text_blog:after,.blog_title:after,.rows_blog:after,.row_blog:after,.img_blog:after,.mini_search:after,.arhive_block:after,.arhive_wrapp:after,.arhive_list:after,.gallery_sec:after,.gallery_sec_wrapp:after,.block_photo_sec:after,.title_mini:after,.soc_share:after,.soc_share_wrapp:after,.comment_block:after,.comment_wrapp:after,.comment_row:after,.comment_date:after,.comment_text:after,.comment_form:after,.mini_video:after,.mini_video_wrapp:after,.list_mini_video:after,.row_movie:after,.object_movie:after,.rows_videos:after,.row_video:after,.wrapp_row_video:after,.video_box:after,.red_bor_butt:after,.video_wrapp_page:after,.movie_row:after,.movie:after,.wrapp_movie:after,.red_button:after,.sec_block_item:after,.product_list:after,.settings_item:after,.settings_item li:after,.share_banner:after,.count_block:after,.txt_product:after
+    .menu_top_line:after, .list_menu_lev1:after, .menu_top_line_wrapp:after, .cat_row_top:after, .list_top_menu_wrapp:after, .bt_contacts:after, .text_head_block:after, main:after, .main_content:after, .item_list_wrapp:after, .text_preview_wrapp:after, .text_preview_inner:after, .with_banner_wrapp:after, .footer_wrapp:after, .menu_foot:after, header:after, #touch_menu:after, #foot_menu:after, .sec_block:after, #main_content:after, .sec_menu:after , .sec_menu ul :after, .breadcrumb:after, .sec_filtr:after, .check_box:after, .filtr_title:after, .sec_filtr_wrapp:after, .check_box:after, .yet_items:after, .pagination_list:after,.wrapp_content:after,.item_content_block:after, .wrapp_item_content:after,.nom_img:after,.nom_img_med_wrap:after,.C_navigation:after,.nom_img_list:after,.carousel-navigation ul:after,.wrapp_chars_item_cols:after,.chars_item_cols:after,.wrapp_check_photo_chars:after,.wrapp_check_photo_chars ul:after,.carousel_chars_check:after,.check_photo_chars ul:after,.row_chars_item:after,.number:after,.check_bx_check:after,.check_bx_check label:after,.del_check:after,.checke_lab:after,#player_item:after,.wrapp_player_item:after,.inner_player_item:after,.rows_cut_block:after,.table_shell:after,.table_head:after,.table_row:after,.table_cell:after,.td_photo:after,.rows_block_info:after,.row_info:after,.rows_radio_block:after,.radio_input:after,.dott_cell:after,.foot_form_cut:after,.foot_form_cut_row:after,.block_curr_down:after,.window_popap:after,.wrap_window_popap:after,.lbl_box:after,.soc_enter:after,.rows_popup_input:after,.wns_tubs:after,.wns_buttons:after,.wns_content:after,.wns_row_content:after,.lnk_bt_wns:after,.wns_form_block:after,.wns_row_input:after,.wns_lbl:after, .rows_wns_input .two_rows:after,.pass_wns_box:after,.wns_orders_tbl:after,.sertificat_block:after,.sertificat_wrapp:after,.sertificat_logo_name:after,.sertificat_logo:after,.sertificat_title:after,.text_sert:after,.radio_float:after,.title_string:after,.pup_details_item:after,.details_item_content:after,.details_item_photo:after,.pup_details_txt:after,.text_blog:after,.blog_title:after,.rows_blog:after,.row_blog:after,.img_blog:after,.mini_search:after,.arhive_block:after,.arhive_wrapp:after,.arhive_list:after,.gallery_sec:after,.gallery_sec_wrapp:after,.block_photo_sec:after,.title_mini:after,.soc_share:after,.soc_share_wrapp:after,.comment_block:after,.comment_wrapp:after,.comment_row:after,.comment_date:after,.comment_text:after,.comment_form:after,.mini_video:after,.mini_video_wrapp:after,.list_mini_video:after,.row_movie:after,.object_movie:after,.rows_videos:after,.row_video:after,.wrapp_row_video:after,.video_box:after,.red_bor_butt:after,.video_wrapp_page:after,.movie_row:after,.movie:after,.wrapp_movie:after,.red_button:after,.sec_block_item:after,.product_list:after,.settings_item:after,.settings_item li:after,.share_banner:after,.count_block:after,.txt_product:after,.callBackForm:after,.callBackForm label:after
           {content:'';clear:both;display:block;float:none;padding:0;margin:0;width:100%;height:0;}
 /* <<< relative AND clear */
 
@@ -199,10 +199,11 @@ header,main,nav,footer {display:block;}
 			
 	/* >>> CATALOG */
 		.item_list_wrapp {margin-left:-56px;padding-bottom: 57px;text-align: center;}
-			.product_list {/* float:left; */width: 247px;height: 418px;border:5px solid rgba(0,0,0,.050);overflow: hidden;text-align: center;margin-left:56px;margin-top:5px;margin-bottom:21px;display: inline-block;vertical-align: top;}
+			.product_list {/* float:left; */width: 247px;/*height: 418px;*/border:5px solid rgba(0,0,0,.050);overflow: hidden;text-align: center;margin-left:56px;margin-top:5px;margin-bottom:21px;display: inline-block;vertical-align: top;}
 				.product_list:hover {border-color:rgba(185,55,65,.340);}
 				.photo_list {margin: 31px auto 33px;
 					width: 215px;
+					width: 95%;
 					height: auto;
 					overflow: hidden;
 					border-radius: 50%;
@@ -888,6 +889,24 @@ header,main,nav,footer {display:block;}
 		.item_list_popup .item_list_wrapp {margin-left: -4px;padding-bottom:0;}
 		.item_list_popup .item_list_wrapp .product_list {margin-left: 4px;width: 230px;margin-bottom: 9px;}
 	
+	
+	/* callback_form >>> */
+		.callback_form {top:153px;width:438px !important;max-width:90% !important;margin-left:-219px !important;text-align:left;border-radius: 5px;-webkit-border-radius: 5px;position: fixed !important;}
+			.callback_form:before {display:none;}
+			.callback_form .popap_row_wrapp {padding-top: 30px !important;}
+				.callback_form h2 {font-size:25px;text-transform: uppercase;font-family: 'NeoBold';font-weight: normal;margin-bottom: 6px;margin-top: 0;}
+					.callback_form .call_close {width:28px;height:28px;top: -32px;right: -35px;}
+					
+					.callback_form .red_bor_butt {margin-bottom:0 !important;}
+					.butt_border {font-family: 'NeoBold';border: 2px solid #e1312f;line-height: 15px;padding: 10px 11px 9px 11px;border-radius: 21px;-webkit-border-radius: 21px;text-transform: uppercase;overflow: hidden;position: relative;display:inline-block;color:#e1312f;font-size:14px;}
+						.butt_border:hover {background-color:#e1312f;border-color:#e1312f;color:#fff;}
+
+					.callBackForm {padding-top:40px;}
+						.callBackForm label {width: 100%;font-size:14px;line-height:15px;margin-bottom:23px;}
+						.callBackForm label span {text-transform:uppercase;font-family: 'NeoBold';color:#1f3039;display:inline-block;position:absolute;left:15px;top:12px;z-index:2;}
+						.callBackForm .input_text {background:#fff;border-radius:20px;-webkit-border-radius:20px;z-index:1;padding-left: 28%;width: 67%;}
+		
+	/* callback_form <<< */
 	
 /* popap windows <<< */
 
@@ -2238,6 +2257,13 @@ header,main,nav,footer {display:block;}
 		
 		.movie_play {margin-left: -40px;margin-top: -40px;width: 80px;height: 80px;}
 		
+		.callback_form {top:30px !important;width:90% !important;margin-left:0 !important;left:5% !important;}
+			.callback_form .call_close {right: auto;left:50%;margin-left:-14px;}
+			.callBackForm label span {font-size: 11px;top: 14px;left: 9px;}
+			.callBackForm .input_text {}
+			.callBackForm {padding-top: 10px;}
+			.callback_form h2 {font-size: 19px;}
+			.call_introtext {font-size:12px;}
 	}
 	
 	@media screen and (max-width: 480px) {
@@ -2277,6 +2303,10 @@ header,main,nav,footer {display:block;}
 		
 		.pagination_blog {width: 90%;margin-left: auto;margin-right: auto;}
 		
+		.callback_form {top:30px !important;width:90% !important;margin-left:0 !important;left:5% !important;}
+			.callback_form .call_close {right: auto;left:50%;margin-left:-14px;}
+			.callBackForm label span {font-size: 11px;top: 14px;left: 9px;}
+			.callBackForm .input_text {}
 	}
 	
 	@media screen and (max-width: 410px) {
@@ -2374,6 +2404,8 @@ header,main,nav,footer {display:block;}
 	
 	@media screen and (max-width: 350px) {
 		.mini_search .input_text {width: 62%;}
+		
+		.callBackForm label span {font-size: 10px;}
 	}
 	
 	@media screen and (max-width: 340px) {

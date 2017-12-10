@@ -61,11 +61,11 @@ class ProductAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProductAdminForm, self).__init__(*args, **kwargs)
         categories_choices = [(cat.id, cat.__unicode__()) for cat in Category.objects.all()]
-        self.fields['categories'] = MultiSelectFormField(label='Категории',
-                                                         choices=categories_choices,
-                                                         required=True,
-                                                         min_choices=1)
-        # self.fields['categories'].initial = list(self.instance.categories.values_list('id', flat=True))
+        if not self.instance.id:
+            self.fields['categories'] = MultiSelectFormField(label='Категории',
+                                                             choices=categories_choices,
+                                                             required=True,
+                                                             min_choices=1)
 
 
 class ChangeCategoriesForm(forms.ModelForm):

@@ -531,8 +531,9 @@ class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
 
     def save_model(self, request, obj, form, change):
         """
-        Заполняем атрибуты у товара сразу полсле создания из его категорий
+        Заполняем атрибуты у товара сразу после создания из его категорий
         """
+        set_attributes = False
         if not obj.id:
             set_attributes = True
         s = super(ProductAdmin, self).save_model(request, obj, form, change)
