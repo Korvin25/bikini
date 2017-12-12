@@ -279,15 +279,26 @@ class ProductOptionInline(ProductOptionAdmin):
 class ProductExtraOptionInline(ProductExtraOptionAdmin):
     model = ProductExtraOption
     form = ProductExtraOptionInlineForm
-    fields = ('title', 'extra_product', 'vendor_code', 'price_rub', 'price_eur', 'price_usd', 'in_stock',)
+    fields = ('title', 'vendor_code', 'price_rub', 'price_eur', 'price_usd', 'in_stock',)
+    default_fields = ('title', 'vendor_code', 'price_rub', 'price_eur', 'price_usd', 'in_stock',)
     readonly_fields = ('extra_product',)
     suit_classes = 'suit-tab suit-tab-extra'
+    min_num = 0
+    extra = 0
 
     def has_add_permission(self, request):
         return None
 
     def has_delete_permission(self, request, obj=None):
         return None
+
+    # def get_fields(self, *args, **kwargs):
+    #     fields = super(ProductExtraOptionInline, self).get_fields(*args, **kwargs)
+    #     for field in fields:
+    #         # избавляемся от динамических полей, оставшихся от других моделей
+    #         if field not in self.default_fields:
+    #             fields.pop(fields.index(field))
+    #     return fields
 
 
 class ProductPhotoInline(ProductPhotoAdmin):

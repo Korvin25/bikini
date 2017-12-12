@@ -46,7 +46,7 @@ class AttrsBasedInlineFormMixin(object):
         super(AttrsBasedInlineFormMixin, self).__init__(*args, **kwargs)
 
         for field in self.fields.keys():
-            # избавляемся от динамических полей, оставшихся с других моделей
+            # избавляемся от динамических полей, оставшихся от других моделей
             if field not in self.Meta.default_fields:
                 del self.fields[field]
 
@@ -55,14 +55,13 @@ class AttrsBasedInlineFormMixin(object):
             self.fields[attr['slug']] = MultiSelectFormField(label=attr['title'], choices=attr['choices'],
                                                              required=(self.attrs_min_choices>0),
                                                              min_choices=self.attrs_min_choices)
-            if self.attrs_min_choices == 0:
-                self.fields[attr['slug']].widget.attrs = {'class': 'can-be-collapsed'}
+            self.fields[attr['slug']].widget.attrs = {'class': 'can_be_collapsed'}
             if self.instance:
-                self.fields[attr['slug']].initial = self.instance.attrs.get(attr['slug'])
+                self.fields[attr['slug']].initial = self.instance.attrs.get(attr['slug'], list())
 
     def save(self, commit=True):
         """
-        Сохраняем данные с динамических полей в поле attrs у объекта
+        Сохраняем данные из динамических полей в поле attrs у объекта
         """
         obj = super(AttrsBasedInlineFormMixin, self).save(commit=False)
         obj.attrs = {}
@@ -104,19 +103,33 @@ class ProductExtraOptionInlineForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProductExtraOptionInlineForm, self).__init__(*args, **kwargs)
 
+        # for field in self.fields.keys():
+        #     # избавляемся от динамических полей, оставшихся от других доп.товаров
+        #     if field not in self.Meta.default_fields:
+        #         del self.fields[field]
+
         if self.instance and self.instance.extra_product_id:
             self.attrs_list = self.instance.extra_product.get_attrs_list()
             for attr in self.attrs_list:
                 self.fields[attr['slug']] = MultiSelectFormField(label=attr['title'], choices=attr['choices'],
                                                                  required=(self.attrs_min_choices>0),
                                                                  min_choices=self.attrs_min_choices)
-                self.fields[attr['slug']].initial = self.instance.attrs.get(attr['slug'])
+                self.fields[attr['slug']].initial = self.instance.attrs.get(attr['slug'], list())
+                self.fields[attr['slug']].widget.attrs = {'class': 'can_be_collapsed'}
+                
         else:
             self.attrs_list = []
 
+        attrs_slugs = [attr['slug'] for attr in self.attrs_list]
+
+        for slug, field in self.fields.items():
+            if isinstance(field, MultiSelectFormField):
+                if slug not in attrs_slugs:
+                    field.widget.attrs = {'class': 'hide_me'}
+
     def save(self, commit=True):
         """
-        Сохраняем данные с динамических полей в поле attrs у объекта
+        Сохраняем данные из динамических полей в поле attrs у объекта
         """
         obj = super(ProductExtraOptionInlineForm, self).save(commit=False)
         obj.attrs = {}
