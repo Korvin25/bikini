@@ -392,6 +392,7 @@ class Product(MetatagModel):
     text = HTMLField('Текст', blank=True, null=True)
     in_stock = models.SmallIntegerField('Количество на складе', default=5)
 
+    order = models.PositiveSmallIntegerField(default=0, blank=False, null=False, verbose_name=mark_safe('&nbsp;'))
     show = models.BooleanField('Показывать на сайте', default=True)
     show_at_homepage = models.BooleanField('Показывать на главной', default=False)
     order_at_homepage = models.IntegerField('Порядок на главной', default=10)
@@ -410,7 +411,7 @@ class Product(MetatagModel):
                                        limit_choices_to={'category': 'primary'})
 
     class Meta:
-        ordering = ['-id', ]
+        ordering = ['order', '-id', ]
         verbose_name = 'товар'
         verbose_name_plural = 'товары'
 

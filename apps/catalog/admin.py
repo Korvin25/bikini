@@ -10,6 +10,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.utils.safestring import mark_safe
 
+from adminsortable2.admin import SortableAdminMixin
 # from jet.admin import CompactInline
 from modeltranslation.admin import TabbedTranslationAdmin, TranslationInlineModelAdmin
 from salmonella.admin import SalmonellaMixin
@@ -313,7 +314,7 @@ class ProductVideoInline(TranslationInlineModelAdmin, admin.StackedInline):  # C
 
 
 @admin.register(Product)
-class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
+class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
     # change_category_template = 'admin/catalog/product/change_category.html'
     change_categories_template = 'admin/catalog/product/change_categories.html'
     change_attributes_template = 'admin/catalog/product/change_attributes.html'
@@ -429,7 +430,7 @@ class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
     list_editable = ('order_at_homepage', 'in_stock', 'vendor_code')
     list_filter = ('show', HasAttrsFilter, 'show_at_homepage', 'add_dt', 'categories',)
     suit_list_filter_horizontal = ('show', 'show_at_homepage', 'categories',)
-    list_per_page = 200
+    list_per_page = 400
     suit_form_tabs = (
         ('default', 'Товар'),
         ('also', 'Сопутствующие товары'),
@@ -491,6 +492,11 @@ class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
     inlines = [ProductOptionInline, ProductPhotoInline, ProductVideoInline, ProductExtraOptionInline, ]
     raw_id_fields = ('associated_products', 'also_products',)
     search_fields = ['title', 'vendor_code', 'subtitle', 'text', ]
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super(ProductAdmin, self).get_queryset(*args, **kwargs)
+        qs = qs.prefetch_related('categories')
+        return qs
 
     def get_fieldsets(self, request, obj=None):
         """

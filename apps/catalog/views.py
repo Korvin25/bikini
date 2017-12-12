@@ -144,7 +144,7 @@ class ProductsView(TemplateView):
 
         qs = qs.filter(*self.get_attrs_filter())
         qs = qs.filter(**self.get_filter()).distinct()
-        qs = qs.order_by('-id')
+        qs = qs.order_by('order', '-id')
 
         self.qs = qs
         return qs

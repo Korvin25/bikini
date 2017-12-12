@@ -48,6 +48,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.postgres',
 
+    'adminsortable2',
     'ckeditor',
     'colorfield',
     'crequest',
