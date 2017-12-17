@@ -47,3 +47,9 @@ def get_product_url(product, category_or_sex=None):
 @register.filter
 def get_product_meta_title(product, category=None):
     return product.get_meta_title(category=category)
+
+
+@register.filter
+def had_neighbor(attr, attr_ids):
+    neighbors_ids = attr['attr'].from_neighbor.all().values_list('id', flat=True)
+    return True if (set(neighbors_ids) & set(attr_ids)) else False

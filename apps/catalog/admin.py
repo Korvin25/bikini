@@ -125,23 +125,9 @@ class AttributeAdmin(TabbedTranslationAdmin):
             readonly_fields.append('slug')
             # if obj.category != 'extra':
             #     readonly_fields.append('add_to_price')
+        if not obj or obj.attr_type != 'style':
+            readonly_fields.append('neighbor')
         return readonly_fields
-
-    def save_model(self, request, obj, form, change):
-        """
-        Реализуем аналог symmetrical=True у OneToOneField
-        """
-        old_neighbor = (Attribute.objects.get(id=obj.id).neighbor if obj.id
-                        else None)
-        s = super(AttributeAdmin, self).save_model(request, obj, form, change)
-        neighbor = obj.neighbor
-
-        if neighbor != old_neighbor:
-            if old_neighbor:
-                old_neighbor.set_neighbor(None)
-            if neighbor:
-                neighbor.set_neighbor(obj)
-        return s
 
 
 @admin.register(ExtraProduct)
@@ -183,7 +169,7 @@ class CategoryAdmin(TabbedTranslationAdmin):
             'fields': ('sex', 'title', 'slug', 'order',),
         }),
         ('Атрибуты', {
-            'classes': ('suit-tab suit-tab-default collapse',),
+            'classes': ('suit-tab suit-tab-default',),
             'fields': ('attributes',),
         }),
         ('SEO', {

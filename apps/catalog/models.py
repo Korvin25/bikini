@@ -50,8 +50,9 @@ class Attribute(models.Model):
     slug = models.SlugField('В URL', help_text='''уникальное поле; принимаются английские буквы, цифры и символ "_"
                                                   <br><br>примеры:<br>- color<br>- top_w<br>- bottom_size''', unique=True)
     attr_type = models.CharField('Тип', max_length=7, choices=ATTRIBUTE_TYPES)
-    neighbor = models.OneToOneField('self', verbose_name='Соседний атрибут', null=True, blank=True,
-                                    help_text='выводится рядом на странице товара', related_name='from_neighbor')
+    neighbor = models.ForeignKey('self', verbose_name='Соседний атрибут', null=True, blank=True,
+                                 limit_choices_to={'attr_type': 'size'},
+                                 help_text='выводится рядом на странице товара', related_name='from_neighbor')
     category = models.CharField('Категория', max_length=7, choices=CATEGORY_CHOICES)
     display_type = models.SmallIntegerField('Тип показа', choices=DISPLAY_TYPES, default=3)
     order = models.IntegerField('Порядок', default=10)

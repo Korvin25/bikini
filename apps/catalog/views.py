@@ -194,7 +194,7 @@ class ProductView(TemplateView):
                     'options': attr.options.filter(id__in=options_ids),
                     'options_ids': options_ids,
                 }
-                if with_neighbor and attr.neighbor_id:
+                if with_neighbor and attr.attr_type == 'style' and attr.neighbor_id:
                     _neighbor = _get_attr_dict(attr.neighbor, with_neighbor=False)
                     if _neighbor:
                         _attr['neighbor'] = _neighbor

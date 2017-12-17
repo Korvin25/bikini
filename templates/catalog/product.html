@@ -235,7 +235,7 @@
               {% endfor %}
 
               {% for attr in attrs.size %}
-                {% if not attr.neighbor or attr.neighbor_id not in attrs_ids %}
+                {% if not attr|had_neighbor:attrs_ids %}
                   <div class="row_chars_item">
                     <div class="filtr_title ch_title_item">{{ attr.title }}:</div>
                     <div class="check_box check_size check_mini_item">
