@@ -208,7 +208,7 @@
                           {% if option.id in attr_n.options_ids %}
                             <label for="{{ attr_n.slug }}_{{ option.id }}" data-attr-slug="{{ attr_n.slug }}">
                               <input class="js-not-checkbox js-attr-checkbox js-attr-size" data-attr-slug="{{ attr_n.slug }}" data-option-id="{{ option.id }}" type="checkbox" name="{{ attr_n.slug }}" id="{{ attr_n.slug }}_{{ option.id }}" value="{{ option.id }}" />
-                              <span title="{{ option.title }}">{{ option.title }}</span>
+                              <span{% if attr.slug == 'diametr' %} style="font-size: 12px;"{% endif %} title="{{ option.title }}">{{ option.title }}</span>
                             </label>
                           {% endif %}
                         {% endfor %}
@@ -242,7 +242,7 @@
                       {% for option in attr.options %}
                         <label for="{{ attr.slug }}_{{ option.id }}" data-attr-slug="{{ attr.slug }}">
                           <input class="js-not-checkbox js-attr-checkbox js-attr-size" data-attr-slug="{{ attr.slug }}" data-option-id="{{ option.id }}" type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
-                          <span title="{{ option.title }}">{{ option.title }}</span>
+                          <span{% if attr.slug == 'diametr' %} style="font-size: 12px;"{% endif %} title="{{ option.title }}">{{ option.title }}</span>
                         </label>
                       {% endfor %}
                     </div>
@@ -251,7 +251,9 @@
                 {% endif %}
               {% endfor %}
 
-              {% comment %}
+              {% if product.extra_products.count %}
+                <div style="border-top: 1px solid #f2f2f2; margin: 20px 0 0;"></div>
+
                 {% for extra_p in product.extra_products %}
                   {% for attr in attrs.style %}
                     <div class="row_chars_item">
@@ -335,7 +337,8 @@
                     <div class="clr"></div>
                   {% endfor %}
                 {% endfor %}
-              {% endcomment %}
+                {% comment %}{% endcomment %}
+              {% endif %}
 
               <div class="row_chars_item">
                 
