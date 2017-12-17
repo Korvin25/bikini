@@ -251,94 +251,95 @@
                 {% endif %}
               {% endfor %}
 
-              {% if product.extra_products.count %}
-                <div style="border-top: 1px solid #f2f2f2; margin: 20px 0 0;"></div>
+              {% comment %}
+                {% if product.extra_products.count %}
+                  <div style="border-top: 1px solid #f2f2f2; margin: 20px 0 0;"></div>
 
-                {% for extra_p in product.extra_products %}
-                  {% for attr in attrs.style %}
-                    <div class="row_chars_item">
-                      <script type="text/javascript">
-                        var connector = function(itemNavigation, carouselStage) {
-                          return carouselStage.jcarousel('items').eq(itemNavigation.index()); 
-                        }; 
-                        $(function() {
-                          var carouselNavigation = $('#check_photo_chars{{ attr.id }}').jcarousel();
-                          carouselNavigation.jcarousel('items').each(function() { 
-                            var item = $(this); 
-                            var target = connector(item, carouselNavigation);
-                             
+                  {% for extra_p in product.extra_products %}
+                    {% for attr in attrs.style %}
+                      <div class="row_chars_item">
+                        <script type="text/javascript">
+                          var connector = function(itemNavigation, carouselStage) {
+                            return carouselStage.jcarousel('items').eq(itemNavigation.index()); 
+                          }; 
+                          $(function() {
+                            var carouselNavigation = $('#check_photo_chars{{ attr.id }}').jcarousel();
+                            carouselNavigation.jcarousel('items').each(function() { 
+                              var item = $(this); 
+                              var target = connector(item, carouselNavigation);
+                               
+                            });
+                            
+                            $('#l_arr_nom_img_ch{{ attr.id }}').on('jcarouselcontrol:inactive', function() {
+                                $(this).addClass('inactive'); 
+                              }
+                            ).on('jcarouselcontrol:active', function() {
+                                $(this).removeClass('inactive'); 
+                              }
+                            ).jcarouselControl({ target: '-=1' }); 
+                            
+                            $('#r_arr_nom_img_ch{{ attr.id }}').on('jcarouselcontrol:inactive', function() {
+                                $(this).addClass('inactive');
+                              }
+                            ).on('jcarouselcontrol:active', function() {
+                                $(this).removeClass('inactive');
+                              }
+                            ).jcarouselControl({ target: '+=1' }); 
                           });
-                          
-                          $('#l_arr_nom_img_ch{{ attr.id }}').on('jcarouselcontrol:inactive', function() {
-                              $(this).addClass('inactive'); 
-                            }
-                          ).on('jcarouselcontrol:active', function() {
-                              $(this).removeClass('inactive'); 
-                            }
-                          ).jcarouselControl({ target: '-=1' }); 
-                          
-                          $('#r_arr_nom_img_ch{{ attr.id }}').on('jcarouselcontrol:inactive', function() {
-                              $(this).addClass('inactive');
-                            }
-                          ).on('jcarouselcontrol:active', function() {
-                              $(this).removeClass('inactive');
-                            }
-                          ).jcarouselControl({ target: '+=1' }); 
-                        });
-                      </script>
-                      <div class="filtr_title ch_title_item">{{ extra_p.extra_product.title }}: {{ attr.title }}:</div>
-                      <div class="carousel_chars_check">
-                        <div class="check_box check_mini check_photo check_photo_chars" id="check_photo_chars{{ attr.id }}">
-                          <ul>
-                            {% for option in attr.options.all %}
-                              {% if option|in_product:product %}
-                                <li>
-                                  <span>
-                                    <img src="{{ option|get_photo_url:product }}" />
-                                  </span>
-                                </li>
-                              {% endif %}
-                            {% endfor %}
-                          </ul>
+                        </script>
+                        <div class="filtr_title ch_title_item">{{ extra_p.extra_product.title }}: {{ attr.title }}:</div>
+                        <div class="carousel_chars_check">
+                          <div class="check_box check_mini check_photo check_photo_chars" id="check_photo_chars{{ attr.id }}">
+                            <ul>
+                              {% for option in attr.options.all %}
+                                {% if option|in_product:product %}
+                                  <li>
+                                    <span>
+                                      <img src="{{ option|get_photo_url:product }}" />
+                                    </span>
+                                  </li>
+                                {% endif %}
+                              {% endfor %}
+                            </ul>
+                          </div>
+                          <div class="l_arr" id="l_arr_nom_img_ch{{ attr.id }}"><img src="/static/i/arrow_slide.png" /></div>
+                          <div class="r_arr" id="r_arr_nom_img_ch{{ attr.id }}"><img src="/static/i/arrow_slide.png" /></div>
                         </div>
-                        <div class="l_arr" id="l_arr_nom_img_ch{{ attr.id }}"><img src="/static/i/arrow_slide.png" /></div>
-                        <div class="r_arr" id="r_arr_nom_img_ch{{ attr.id }}"><img src="/static/i/arrow_slide.png" /></div>
                       </div>
-                    </div>
-                    <div class="row_chars_item row_chars_mrg">
-                      {% with attr.neighbor as attr_n %}
-                        {% if attr_n and attr_n.attr_type == 'size' and attr_n.id in attrs_ids %}
-                          <div class="filtr_title ch_title_item">{{ attr_n.title }}:</div>
-                          <div class="check_box check_size check_mini_item">
-                            {% for option in attr_n.options.all %}
-                              {% if option|in_product:product %}
-                                <label for="{{ attr_n.slug }}_{{ option.id }}">
-                                  <input type="checkbox" name="{{ attr_n.slug }}" id="{{ attr_n.slug }}_{{ option.id }}" value="{{ option.id }}" />
-                                  <span title="{{ option.title }}">{{ option.title }}</span>
-                                </label>
-                              {% endif %}
-                            {% endfor %}
-                          </div>
-                        {% endif %}
-                      {% endwith %}
-                      <div class="check_bx_check">
-                        <label for="fason-{{ attr.id }}" class="check_pr_input">
-                          <input type="checkbox" name="fason-{{ attr.id }}" id="fason-{{ attr.id }}" value="1" />
-                          <abbr class="abbr_check">Добавить к комплекту</abbr>
-                          <div class="product_price"><span id="price_ID--{{ attr.id }}">500</span><abbr title="руб">р.</abbr></div>
-                          <div class="del_check">
-                            Убрать из комплекта
-                          </div>
-                        </label>
+                      <div class="row_chars_item row_chars_mrg">
+                        {% with attr.neighbor as attr_n %}
+                          {% if attr_n and attr_n.attr_type == 'size' and attr_n.id in attrs_ids %}
+                            <div class="filtr_title ch_title_item">{{ attr_n.title }}:</div>
+                            <div class="check_box check_size check_mini_item">
+                              {% for option in attr_n.options.all %}
+                                {% if option|in_product:product %}
+                                  <label for="{{ attr_n.slug }}_{{ option.id }}">
+                                    <input type="checkbox" name="{{ attr_n.slug }}" id="{{ attr_n.slug }}_{{ option.id }}" value="{{ option.id }}" />
+                                    <span title="{{ option.title }}">{{ option.title }}</span>
+                                  </label>
+                                {% endif %}
+                              {% endfor %}
+                            </div>
+                          {% endif %}
+                        {% endwith %}
+                        <div class="check_bx_check">
+                          <label for="fason-{{ attr.id }}" class="check_pr_input">
+                            <input type="checkbox" name="fason-{{ attr.id }}" id="fason-{{ attr.id }}" value="1" />
+                            <abbr class="abbr_check">Добавить к комплекту</abbr>
+                            <div class="product_price"><span id="price_ID--{{ attr.id }}">500</span><abbr title="руб">р.</abbr></div>
+                            <div class="del_check">
+                              Убрать из комплекта
+                            </div>
+                          </label>
+                        </div>
+                        
                       </div>
-                      
-                    </div>
 
-                    <div class="clr"></div>
+                      <div class="clr"></div>
+                    {% endfor %}
                   {% endfor %}
-                {% endfor %}
-                {% comment %}{% endcomment %}
-              {% endif %}
+                {% endif %}
+              {% endcomment %}
 
               <div class="row_chars_item">
                 
