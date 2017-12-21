@@ -181,9 +181,9 @@ class ProductView(TemplateView):
     def get_attributes(self):
         _attrs = self.product.attributes.select_related('neighbor').prefetch_related('options').filter(display_type__gte=1)
 
-        def _get_attr_dict(attr, with_neighbor=False):
+        def _get_attr_dict(attr, options_source=self.product.attrs, with_neighbor=False):
             _attr = {}
-            options_ids = self.product.attrs.get(attr.slug, list())
+            options_ids = options_source.get(attr.slug, list())
             if options_ids:
                 _attr = {
                     'attr': attr,
@@ -195,7 +195,7 @@ class ProductView(TemplateView):
                     'options_ids': options_ids,
                 }
                 if with_neighbor and attr.attr_type == 'style' and attr.neighbor_id:
-                    _neighbor = _get_attr_dict(attr.neighbor, with_neighbor=False)
+                    _neighbor = _get_attr_dict(attr.neighbor, options_source=options_source, with_neighbor=False)
                     if _neighbor:
                         _attr['neighbor'] = _neighbor
                         _attr['neighbor_id'] = attr.neighbor_id
@@ -210,10 +210,43 @@ class ProductView(TemplateView):
                 attrs[attr.attr_type].append(_attr)
                 attrs_dict[attr.id] = _attr
                 attrs_ids.append(attr.id)
-
         self.attrs = attrs
         self.attrs_dict = attrs_dict
         self.attrs_ids = attrs_ids
+
+        extra_products = []
+        for extra_p in self.product.extra_products.prefetch_related('extra_product__attributes__neighbor', 'extra_product__attributes__options'):
+            _attrs = extra_p.extra_product.attributes.filter(display_type__gte=1)
+            attrs = {'color': [], 'size': [], 'style': [], 'text': []}
+            attrs_dict = {}
+            attrs_ids = []
+
+            for attr in _attrs:
+                _attr = _get_attr_dict(attr, options_source=extra_p.attrs, with_neighbor=True)
+                if _attr:
+                    attrs[attr.attr_type].append(_attr)
+                    attrs_dict[attr.id] = _attr
+                    attrs_ids.append(attr.id)
+
+            _attr = None
+            if attrs['style']:
+                _attr = attrs['style'][0]
+                if _attr.get('neighbor'):
+                    _attr = _attr['neighbor']
+            elif attrs['size']:
+                _attr = attrs['size'][0]
+            elif attrs['color']:
+                _attr = attrs['color'][0]
+            _attr['price'] = extra_p.price
+
+            extra_product_dict = {
+                'title': extra_p.extra_product.title,
+                'attrs': attrs,
+                'attrs_dict': attrs_dict,
+                'attrs_ids': attrs_ids,
+            }
+            extra_products.append(extra_product_dict)
+        self.extra_products = extra_products
 
     def get_attrs_json(self):
         attrs_data = {
@@ -237,7 +270,7 @@ class ProductView(TemplateView):
             if i == 0:
                 attrs_data['option'] = option_dict
 
-        print attrs_data
+        # print attrs_data
         attrs_json = json.dumps(attrs_data)
         return attrs_json
 
@@ -252,6 +285,7 @@ class ProductView(TemplateView):
             'attrs': self.attrs,
             'attrs_dict': self.attrs_dict,
             'attrs_ids': self.attrs_ids,
+            'extra_products': self.extra_products,
             'photos': product.photos.all(),
             'gift_wrapping_price': GiftWrapping.get_price(),
             'attrs_json': self.get_attrs_json(),

@@ -47,6 +47,20 @@
 
             {% csrf_token %}
 
+            <script>
+                function dismissAddRelatedObjectPopup(win, newId, newRepr) {
+                    /* original file: django/contrib/admin/static/admin/js/admin/RelatedObjectLookups.js */
+                    win.close();
+                    window.location.reload(true);
+                }
+            </script>
+
+            <a class="related-widget-wrapper-link add-related" id="add_id_interval_time" 
+               href="/admin/catalog/attribute/add/?_to_field=id&amp;_popup=1"
+               title="Добавить ещё один объект типа Атрибут">
+               <img src="/static/admin/img/icon-addlink.svg" alt="Добавить">
+           </a>
+
             <fieldset class="module aligned">
                 <div class="form-row field-attributes">
                     <div class="field-box field-attributes">

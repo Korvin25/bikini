@@ -556,11 +556,16 @@ class Product(MetatagModel):
 
     def get_attributes_qs(self, filter='primary'):
         # filter in ['primary', 'photos',]
-        qs = self.attributes
-        qs = (qs.filter(category='primary') if filter == 'primary'
-              # else qs.filter(category='extra') if filter == 'extra'
-              else qs.filter(attr_type__in=['color', 'style']) if filter == 'photos'
-              else qs)
+        qs = Attribute.objects.none()
+        if filter == 'primary':
+            qs = self.attributes
+            qs = qs.filter(category='primary')
+        elif filter == 'photos':
+            attrs_ids = set(self.attributes.values_list('id', flat=True))
+            extra_attrs_ids = set(self.extra_products.values_list('extra_product__attributes', flat=True))
+            qs_ids = attrs_ids | extra_attrs_ids
+            qs = Attribute.objects.filter(id__in=qs_ids)
+            qs = qs.filter(attr_type__in=['color', 'style'])
         return qs
 
     def get_attrs_list(self, filter='primary'):
@@ -607,7 +612,8 @@ class Product(MetatagModel):
     @property
     def extra_products(self):
         extra_products = self.extra_options.prefetch_related('extra_product', 'extra_product__attributes').all()
-        return [extra_p for extra_p in extra_products if extra_p.attrs]
+        # return [extra_p for extra_p in extra_products if extra_p.attrs]
+        return extra_products.filter(attrs__gt={})
 
     @property
     def attrs_json(self):
@@ -634,6 +640,11 @@ class ProductOption(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    @property
+    def price(self):
+        # TODO
+        return self.price_rub
 
 
 class ProductExtraOption(models.Model):
@@ -663,6 +674,11 @@ class ProductExtraOption(models.Model):
         return 'для заполнения атрибутов сначала выберите тип дополнительного товара и сохраните объект'
     attrs_instruction.allow_tags = True
     attrs_instruction.short_description = 'Атрибуты'
+
+    @property
+    def price(self):
+        # TODO
+        return self.price_rub
 
 
 class ProductPhoto(models.Model):
