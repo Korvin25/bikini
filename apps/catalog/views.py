@@ -262,7 +262,7 @@ class ProductView(TemplateView):
                 'option': to_int_plus(self.product.price_rub or 0),
                 'extra': 0,
                 'wrapping': 0,
-                'count': 5,
+                'count': 1,
                 'maximum_in_stock': 0,
                 'extra_maximum_in_stock': 0,
                 'total': 0,
