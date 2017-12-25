@@ -237,27 +237,49 @@ class ProductView(TemplateView):
                 _attr = attrs['size'][0]
             elif attrs['color']:
                 _attr = attrs['color'][0]
-            _attr['price'] = extra_p.price
+            _attr['price'] = to_int_plus(extra_p.price or 0)
 
             extra_product_dict = {
+                'id': extra_p.id,
                 'title': extra_p.extra_product.title,
+                'slug': extra_p.extra_product.slug,
+                'price': to_int_plus(extra_p.price or 0),
                 'attrs': attrs,
                 'attrs_dict': attrs_dict,
                 'attrs_ids': attrs_ids,
+                'attrs_json': extra_p.attrs,
+                'in_stock': extra_p.in_stock,
             }
             extra_products.append(extra_product_dict)
         self.extra_products = extra_products
 
-    def get_attrs_json(self):
-        attrs_data = {
-            'attrs': {},
-            'options': {},
-            'option': {},
+    def get_data_json(self):
+        data = {
+            'attrs': {},  # {slug: {id, slug, type, title, category}}
+            'options': {},  # {id: {id, attrs: <json>, price, in_stock}}
+            'option': {},  # {id, attrs: <json>, price, in_stock}
+            'prices': {
+                'option': to_int_plus(self.product.price_rub or 0),
+                'extra': 0,
+                'wrapping': 0,
+                'count': 5,
+                'maximum_in_stock': 0,
+                'extra_maximum_in_stock': 0,
+                'total': 0,
+            },
+            'extra_products': {},  # {id: {id, slug, title, attrs: <json>, price, in_stock}}
+            'extra_p_selected': {},
         }
 
         for type, attr_list in self.attrs.iteritems():
             for attr in attr_list:
-                attrs_data['attrs'][attr['slug']] = type
+                data['attrs'][attr['slug']] = {
+                    'id': attr['id'],
+                    'slug': attr['slug'],
+                    'type': attr['attr_type'],
+                    'title': attr['title'],
+                    'category': 'primary',
+                }
 
         for i, option in enumerate(self.product.options.all()):
             option_dict = {
@@ -266,18 +288,45 @@ class ProductView(TemplateView):
                 'price': to_int_plus(option.price_rub or self.product.price_rub or 0),
                 'in_stock': option.in_stock,
             }
-            attrs_data['options'][option.id] = option_dict
-            if i == 0:
-                attrs_data['option'] = option_dict
+            data['options'][option.id] = option_dict
+            if i == 0 or (data['prices']['maximum_in_stock'] == 0 and option_dict['in_stock']):
+                data['option'] = option_dict
+                data['prices']['option'] = option_dict['price']
+                data['prices']['maximum_in_stock'] = option_dict['in_stock']
 
-        # print attrs_data
-        attrs_json = json.dumps(attrs_data)
-        return attrs_json
+        for extra_p in self.extra_products:
+            extra_p_dict = {
+                'id': extra_p['id'],
+                'title': extra_p['title'],
+                'slug': extra_p['slug'],
+                'price': extra_p['price'],
+                'attrs': extra_p['attrs_json'],
+                'in_stock': extra_p['in_stock'],
+            }
+            for attr in extra_p['attrs_dict'].values():
+                data['attrs'][attr['slug']] = {
+                    'id': attr['id'],
+                    'slug': attr['slug'],
+                    'type': attr['attr_type'],
+                    'title': attr['title'],
+                    'category': 'extra',
+                }
+            data['extra_products'][extra_p['id']] = extra_p_dict
+
+        p = data['prices']
+        p['total_price'] = (p['option']+p['extra'])*p['count'] + p['wrapping'];
+
+        self.have_option = bool(data['option'])
+        self.price = data['prices']['total_price']
+        self.count = data['prices']['count']
+        self.maximum_in_stock = data['prices']['maximum_in_stock']
+        self.data_json = json.dumps(data)
 
     def get_context_data(self, **kwargs):
         product = self.get_product()
         category = self.category
         self.get_attributes()
+        self.get_data_json()
         context = {
             'product': product,
             'category': category,
@@ -287,8 +336,12 @@ class ProductView(TemplateView):
             'attrs_ids': self.attrs_ids,
             'extra_products': self.extra_products,
             'photos': product.photos.all(),
-            'gift_wrapping_price': GiftWrapping.get_price(),
-            'attrs_json': self.get_attrs_json(),
+            'gift_wrapping_price': to_int_plus(GiftWrapping.get_price() or 0),
+            'have_option': self.have_option,
+            'price': self.price,
+            'count': self.count,
+            'maximum_in_stock': self.maximum_in_stock,
+            'data_json': self.data_json,
         }
         context.update(super(ProductView, self).get_context_data(**kwargs))
         return context

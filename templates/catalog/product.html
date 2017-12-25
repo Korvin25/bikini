@@ -124,16 +124,16 @@
           <form class="wrapp_chars_item_cols">
             <div class="chars_item_cols">
               {% for attr in attrs.color %}
-                {% include 'catalog/include/product_attr.html' with attr=attr attr_type='color' %}
+                {% include 'catalog/include/product_attr.html' with attr=attr attr_type='color' choose_option=True %}
               {% endfor %}
 
               {% for attr in attrs.style %}
-                {% include 'catalog/include/product_attr.html' with attr=attr attr_type='style' %}
+                {% include 'catalog/include/product_attr.html' with attr=attr attr_type='style' choose_option=True %}
               {% endfor %}
 
               {% for attr in attrs.size %}
                 {% if not attr|had_neighbor:attrs_ids %}
-                  {% include 'catalog/include/product_attr.html' with attr=attr attr_type='size' %}
+                  {% include 'catalog/include/product_attr.html' with attr=attr attr_type='size' choose_option=True %}
                 {% endif %}
               {% endfor %}
 
@@ -146,16 +146,16 @@
                     <h2>{{ extra_p.title }}</h2>
 
                     {% for attr in extra_p.attrs.color %}
-                      {% include 'catalog/include/product_attr.html' with attr=attr attr_type='color' %}
+                      {% include 'catalog/include/product_attr.html' with attr=attr attr_type='color' extra_product_id=extra_p.id choose_option=False %}
                     {% endfor %}
 
                     {% for attr in extra_p.attrs.style %}
-                      {% include 'catalog/include/product_attr.html' with attr=attr attr_type='style' attrs_ids=extra_p.attrs_ids %}
+                      {% include 'catalog/include/product_attr.html' with attr=attr attr_type='style' attrs_ids=extra_p.attrs_ids extra_product_id=extra_p.id choose_option=False %}
                     {% endfor %}
 
                     {% for attr in extra_p.attrs.size %}
                       {% if not attr|had_neighbor:extra_p.attrs_ids %}
-                        {% include 'catalog/include/product_attr.html' with attr=attr attr_type='size' %}
+                        {% include 'catalog/include/product_attr.html' with attr=attr attr_type='size' extra_product_id=extra_p.id choose_option=False %}
                       {% endif %}
                     {% endfor %}
                   </div>
@@ -177,7 +177,8 @@
                     });
                     $('.plus').click(function () {
                       var $input = $(this).parent().find('input');
-                      $input.val(parseInt($input.val()) + 1);
+                      var count = parseInt($input.val()) + 1;
+                      $input.val(count);
                       $input.change();
                       return false;
                     });
@@ -189,28 +190,33 @@
                   $(document).ready(function() {
                     $('#cnt_item').change('keyup input', function() {
                       var value = this.value;
-                      if (value > 0) {
-                      $("#price_ID-373").html(value * {{ product.price|to_int_str }});
-                      $("#price-hidd-val").val(value * {{ product.price|to_int_str }});
-                      }
+                      updateCount(value);
+                      // if (value > 0) {
+                      // $("#price_ID-373").html(value * {{ price }});
+                      // $("#price-hidd-val").val(value * {{ price }});
+                      // }
                     });
                   });
                 </script>
                 
-                
-                
                 <div class="filtr_title ch_title_item">Кол-во:</div>
-                <div class="number">
+                <div class="number js-hide-if-not-option"{% if not have_option %} style="display: none;"{% endif %}>
                   <span class="minus">-</span>
-                  <input type="text" name="count_item" value="1" maxlength="3" onkeyup="this.value = this.value.replace (/\D/, '')" id="cnt_item" />
+                  <input type="text" name="count_item" value="{{ count }}" maxlength="3" onkeyup="this.value = this.value.replace (/\D/, '')" id="cnt_item" />
                   <span class="plus" id="plus">+</span>
                 </div>
-                <div class="product_price"><span id="price_ID-373">{{ product.price|to_int_str }}</span><abbr title="руб">р.</abbr></div>
-                <input type="hidden" name="price-item" id="price-hidd-val" value="{{ product.price|to_int_str }}">
-                <button class="to_cart_list" type="submit">В корзину</button>
+                <div class="product_price js-hide-if-not-option"{% if not have_option %} style="display: none;"{% endif %}><span id="price_ID-373" class="js-cart-price">{{ price }}</span><abbr title="руб">р.</abbr></div>
+                <input type="hidden" name="price-item" id="price-hidd-val" value="{{ price }}">
+                {% if not have_option %}
+                  <button class="js-cart-button to_cart_list _disabled" data-type="none" type="submit">Такого товара нет в наличии</button>
+                {% elif count > maximum_in_stock %}
+                  <button class="js-cart-button to_cart_list" data-type="order" type="submit">Под заказ</button>
+                {% else %}
+                  <button class="js-cart-button to_cart_list" data-type="add" type="submit">В корзину</button>
+                {% endif %}
                 
-                <label for="pak" class="check_pr_input checke_lab">
-                  <input type="checkbox" name="gift_wrapping" id="pak" value="1" />
+                <label for="pak" class="check_pr_input checke_lab js-hide-if-not-option"{% if not have_option %} style="display: none;"{% endif %}>
+                  <input type="checkbox" class="js-gift-wrapping-trigger" data-wrapping-price="{{ gift_wrapping_price|to_int_str }}" name="gift_wrapping" id="pak" value="1" />
                   <abbr class="abbr_check">Подарочная<br />упаковка</abbr>
                   
                   <div class="product_price"><span id="price_ID--gift-wrapping">{{ gift_wrapping_price|to_int_str }}</span><abbr title="руб">р.</abbr></div>
@@ -269,7 +275,7 @@
 
 {% block extra_js %}
   <script type="text/javascript">
-    window.data = {{ attrs_json|safe }};
+    window.data = {{ data_json|safe }};
     {% include 'catalog/include/product.js' %}
   </script>
 {% endblock %}
