@@ -5,7 +5,7 @@
   <div class="filtr_title ch_title_item">{{ attr.title }}:</div>
   <div class="check_box check_mini check_mini_item">
     {% for option in attr.options %}
-      <label data-attr-id="{{ attr.id }}" data-attr-slug="{{ attr.slug }}" for="{{ attr.slug }}_{{ option.id }}"{% if forloop.counter > 4 %} style="display: none;"{% endif %} class="color_option">
+      <label data-attr-id="{{ attr.id }}" data-attr-slug="{{ attr.slug }}" data-option-id="{{ option.id }}" for="{{ attr.slug }}_{{ option.id }}"{% if forloop.counter > 4 %} style="display: none;"{% endif %} class="color_option js-can-be-shown">
         <input class="js-not-checkbox js-attr-checkbox js-attr-color" data-attr-slug="{{ attr.slug }}" data-option-id="{{ option.id }}"{% if choose_option %} data-attr-type="{{ attr.attr_type }}"{% endif %} data-color-id="{{ option.id }}" type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
         {% if option.picture %}
           <span style="background: url('{{ option.detail_picture_url }}'); border: 1px solid #ccc;" title="{{ option.title }}">{{ option.title }}</span>

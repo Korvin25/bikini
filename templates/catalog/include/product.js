@@ -9,6 +9,7 @@ function updateShownCheckboxes(options, attr_types) {
   $.each(data['attrs'], function(slug, attr){
     if ((attr['category'] == 'primary') && (attr_types.indexOf(attr['type'])>-1)) {
       var $checkboxes = $('.js-attr-checkbox[data-attr-slug="'+slug+'"]'),
+          $labels = $('label[data-attr-slug="'+slug+'"]'),
           ids = [];
 
       $.each(options, function(i, option){
@@ -20,11 +21,42 @@ function updateShownCheckboxes(options, attr_types) {
             $parent = $checkbox.parents('label');
             option_id = parseInt($checkbox.attr('data-option-id'));
 
-
         if (ids.indexOf(option_id) > -1) { $parent.show(); }
         else { $parent.hide(); }
       });
 
+      // if (attr['type'] == 'color') {
+      //   $.each($labels, function(i, checkbox){
+      //     var $label = $(this);
+
+      //     if ($label.is(':hidden')) { $label.removeClass('js-can-be-shown'); }
+      //     else { $label.addClass('js-can-be-shown'); }
+      //   });
+
+      //   var $shown_checkboxes = $checkboxes.filter(':visible');
+
+      //   if ($shown_checkboxes.length > 4) {
+      //     var checked_id = $shown_checkboxes.filter(':checked').attr('data-option-id'),
+      //         can_hide = false;
+
+      //     console.log(checked_id);
+
+      //     if (!checked_id) { can_hide = true; }
+      //     else {
+      //       $.each($shown_checkboxes, function(i, item) {
+      //         if (i > 4) {
+      //           var $checkbox = $(item);
+      //           if ($checkbox.attr('data-option-id') == checked_id) {
+      //             can_hide = true;
+      //           }
+      //         }
+      //       });
+      //     }
+
+      //     if (can_hide) { console.log('HIDE'); }
+      //     else { console.log('NOT HIDE'); }
+      //   }
+      // }
     };
   })
 }
@@ -247,7 +279,7 @@ $('.js-expand-colors').click(function(e) {
   var $button = $(this),
       attr_id = $button.attr('data-attr-id');
 
-  $('label.color_option[data-attr-id="'+attr_id+'"]').show();
+  $('label.color_option.js-can-be-shown[data-attr-id="'+attr_id+'"]').show();
   $button.hide();
 });
 
