@@ -10,6 +10,7 @@ from django.views.generic import TemplateView
 
 # from solid_i18n.urls import solid_i18n_patterns
 
+from apps.cart.views import CartView
 from apps.catalog.views import ProductsView, ProductView
 from apps.content.views import HomepageView, VideoListView, VideoDetailView, PageView
 
@@ -17,7 +18,8 @@ from apps.content.views import HomepageView, VideoListView, VideoDetailView, Pag
 urlpatterns = [
     url(r'^i18n/', include('django.conf.urls.i18n')),
 
-    # pages without language prefixes
+    # pages
+    url(r'^api/cart/', include('apps.cart.api.urls', namespace='cart_api')),
     # url(r'^forms/', include('apps.feedback.urls', namespace='forms')),
 
     # 3rd party apps
@@ -52,6 +54,8 @@ urlpatterns += i18n_patterns(
 
     url(r'^men-detail/$', TemplateView.as_view(template_name='catalog/men-detail.html'), name='men-detail'),
     url(r'^women-detail/$', TemplateView.as_view(template_name='catalog/women-detail.html'), name='women-detail'),
+
+    url(r'^cart/$', CartView.as_view(), name='cart'),
 
     url(r'^women/$', ProductsView.as_view(with_category=False, sex='female'), name='women'),
     url(r'^men/$', ProductsView.as_view(with_category=False, sex='male'), name='men'),

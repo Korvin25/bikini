@@ -13,7 +13,7 @@
       
       <li class="bt_req_call"><a rel="leanModal1" name="callback" href="#callback"><strong>Заказать звонок</strong></a></li>
       <li class="clr_butt_head"></li>
-      <li class="bt_cart"><a href="#"><img src="/static/i/cart_icon.png" alt="Корзина" /><strong>Корзина</strong> <span title="Кол-во">4</span></a></li>
+      <li class="bt_cart"><a href="{% url 'cart' %}"><img src="/static/i/cart_icon.png" alt="Корзина" /><strong>Корзина</strong> <span title="Кол-во" class="js-cart-count">{{ cart.count }}</span></a></li>
     </ul>
     
     <div class="clr"></div>

@@ -1,4 +1,179 @@
 
+// ----- CSRF -------
+
+var csrftoken = $.cookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
+
+// ----- Офомление заказа -----
+
+function showSuccessPopup() {
+  var success_popup_id = 'success-popup',
+      $a = $('a[href="#'+success_popup_id+'"]'),
+      $popup = $('#'+success_popup_id+'');
+
+  $('a[rel*=leanModal1]').leanModal({ top : 200, closeButton: ".js-call-close" });
+  $a.click();
+};
+
+
+function showErrorPopup(title, text) {
+  var error_popup_id = 'error-popup',
+      title = title || '',
+      text = text || '',
+      $a = $('a[href="#'+error_popup_id+'"]'),
+      $popup = $('#'+error_popup_id+''),
+      $popup_title = $popup.find('.popup_title'),
+      $popup_text = $popup.find('.popup_text');
+
+  $('a[rel*=leanModal1]').leanModal({ top : 200, closeButton: ".js-call-close" });
+
+  $popup_title.text(title);
+  $popup_text.html(text);
+  $a.click();
+};
+
+
+function submitProductForm($form, $button, option_id, _attrs, _extra_products) {
+  var url = $form.attr('action'),
+      product_id = parseInt($form.find('input[name="product_id"]').val()),
+      prices = data.prices,
+      form_data;
+
+  form_data = {
+    'product_id': product_id,
+    'option_id': option_id,
+    'attrs': _attrs,
+    'extra_products': _extra_products,
+    'count': prices.count,
+    'prices': prices,
+  };
+
+  $button.addClass('_disabled');
+
+  $.ajax({
+    url: url,
+    type: 'POST',
+    data: JSON.stringify(form_data),
+    // processData: false,
+    dataType: 'json',
+    contentType: 'application/json',
+
+    success: function(res){
+      $button.removeClass('_disabled');
+
+      var err = res['errors'],
+          result = res['result'],
+          cart_count = res['count'],
+          cart_summary = res['summary'];
+
+      if (result == 'ok') {
+        if (cart_count) { $('.js-cart-count').text(cart_count); }
+        if (cart_summary) { $('.js-cart-summary').text(cart_summary); }
+        showSuccessPopup();
+      }
+      else {
+        if (err) { console.log(err) }
+        else { console.log('error!!!') }
+      };
+    },
+    // error: function(res){
+    //   $button.removeClass('_disabled');
+
+    //   if (res.status == 400) {
+    //     var response = res.responseJSON,
+    //         click_to = response.click_to,
+    //         errors = response.errors,
+    //         alert_message = response.alert_message;
+
+    //     if (errors) { add_errors($form, errors, true) };
+    //     if (click_to) { $(click_to).click(); };
+    //     if (alert_message) { alert(alert_message) };
+    //   } else {
+    //     if (res.status == 0) { alert('Произошла ошибка: 500 Internal Server Error') }
+    //     else { alert('Произошла ошибка: ' + res.status + ' ' + res.statusText); }
+    //   }
+    // }
+    // error: function(res){
+    //   if (res.status == 400) {
+    //     var response = res.responseJSON,
+    //         click_to = response.click_to,
+    //         errors = response.errors,
+    //         alert_message = response.alert_message;
+
+    //     if (errors) { add_errors($form, errors, true) };
+    //     if (click_to) { $(click_to).click(); };
+    //     if (alert_message) { alert(alert_message) };
+    //   } else {
+    //     if (res.status == 0) { alert('Произошла ошибка: 500 Internal Server Error') }
+    //     else { alert('Произошла ошибка: ' + res.status + ' ' + res.statusText); }
+    //   }
+    // }
+  });
+};
+
+
+$('.js-cart-button').click(function(e){
+  e.preventDefault();
+
+  var $button = $(this),
+      $form = $button.parents('form'),
+      option = data.option || {},
+      _attrs = {},
+      _extra_products = {},
+      errors = [];
+
+  if (!Object.keys(option).length) {
+    showErrorPopup('Произошла ошибка:', 'Такого товара нет в наличии.');
+    return;
+  }
+
+  $.each(option.attrs, function(slug){
+    var $checkboxes = $('.js-attr-checkbox[data-attr-slug="'+slug+'"]').filter(':visible'),
+        checked_id = $checkboxes.filter(':checked').attr('data-option-id');
+
+    if ($checkboxes.length == 1) { checked_id = $($checkboxes[0]).attr('data-option-id'); };
+
+    if (checked_id) { _attrs[slug] = parseInt(checked_id); }
+    else { errors.push(data.attrs[slug]['title']) }
+  });
+
+  $.each(data.extra_products, function(id, product){
+    var $product_trigger = $('.js-extra-product-trigger[data-extra-product-id="'+id+'"]'),
+        product_obj = {};
+
+    if ($product_trigger.is(':checked')) {
+      $.each(product.attrs, function(slug){
+        var $checkboxes = $('.js-attr-checkbox[data-attr-slug="'+slug+'"]').filter(':visible'),
+            checked_id = $checkboxes.filter(':checked').attr('data-option-id');
+
+        if ($checkboxes.length == 1) { checked_id = $($checkboxes[0]).attr('data-option-id'); };
+
+        if (checked_id) { product_obj[slug] = parseInt(checked_id); }
+        else { errors.push(product['title'] + ': ' + data.attrs[slug]['title']); }
+      });
+
+      _extra_products[id] = product_obj;
+    }
+  });
+
+  if (errors.length) { showErrorPopup('Пожалуйста, выберите одно из значений:', errors.join('<br/>')); }
+  else { submitProductForm($form, $button, option['id'], _attrs, _extra_products); }
+})
+
+
 // ----- Функции по смене цены -----
 
 function updateShownCheckboxes(options, attr_types) {

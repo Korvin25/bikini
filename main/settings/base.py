@@ -74,6 +74,7 @@ INSTALLED_APPS = (
     'apps.lk',
     'apps.settings',
     'apps.catalog',
+    'apps.cart',
     'apps.content',
     # 'apps.contests',
     # 'apps.blog',
@@ -118,6 +119,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
 
                 # custom:
+                'apps.cart.context_processors.cart',
                 'apps.content.context_processors.content',
                 'apps.settings.context_processors.settings',
             ],
