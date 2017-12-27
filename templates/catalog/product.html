@@ -285,13 +285,6 @@
   </main>
 {% endblock %}
 
-{% block extra_js %}
-  <script type="text/javascript">
-    window.data = {{ data_json|safe }};
-    {% include 'catalog/include/product.js' %}
-  </script>
-{% endblock %}
-
 {% block popups %}
   <div style="display: none">
     <a rel="leanModal1" href="#error-popup"></a>
@@ -342,5 +335,11 @@
           </div>
       </div>
   </div>
+{% endblock %}
 
+{% block extra_js %}
+  <script type="text/javascript">
+    window.data = {{ data_json|safe }};
+    {% include 'catalog/include/product.js' %}
+  </script>
 {% endblock %}

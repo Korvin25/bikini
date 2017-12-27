@@ -478,6 +478,10 @@ class Product(MetatagModel):
         return get_thumbnailer(self.photo_f)['product_cover'].url
 
     @property
+    def cart_cover_thumb(self):
+        return get_thumbnailer(self.photo_f)['cart_product_cover'].url
+
+    @property
     def preview_url(self):
         # return self.photo['product_photo_preview'].url
         return with_watermark(get_thumbnailer(self.photo_f)['product_photo_preview'].url)

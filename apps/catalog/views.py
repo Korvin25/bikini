@@ -240,7 +240,7 @@ class ProductView(TemplateView):
             _attr['price'] = to_int_plus(extra_p.price or 0)
 
             extra_product_dict = {
-                'id': extra_p.id,
+                'id': extra_p.extra_product.id,
                 'title': extra_p.extra_product.title,
                 'slug': extra_p.extra_product.slug,
                 'price': to_int_plus(extra_p.price or 0),

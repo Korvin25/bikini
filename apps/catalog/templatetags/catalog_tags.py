@@ -6,7 +6,7 @@ from itertools import chain
 from django import template
 from django.conf import settings
 
-from apps.catalog.models import Category
+from apps.catalog.models import AttributeOption, ExtraProduct, Category
 
 
 register = template.Library()
@@ -53,3 +53,25 @@ def get_product_meta_title(product, category=None):
 def had_neighbor(attr, attr_ids):
     neighbors_ids = attr['attr'].from_neighbor.all().values_list('id', flat=True)
     return True if (set(neighbors_ids) & set(attr_ids)) else False
+
+
+@register.simple_tag
+def item_extra_products_str(item):
+    pieces = []
+    extra_products_ids = item.extra_products.keys()
+    pieces = ['+ {}'.format(extra_p.title) for extra_p in ExtraProduct.objects.filter(id__in=extra_products_ids)]
+    return '<br/>'.join(pieces)
+
+
+@register.simple_tag
+def item_color(item, color_attribute):
+    option = None
+    color_option_id = item.attrs.get('color')
+
+    if color_option_id:
+        try:
+            option = AttributeOption.objects.get(attribute_id=color_attribute.id, id=color_option_id)
+        except AttributeOption.DoesNotExist:
+            pass
+
+    return option

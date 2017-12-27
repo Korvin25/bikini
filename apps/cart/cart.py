@@ -33,27 +33,44 @@ class Cart:
         request.session[CART_ID] = cart.id
         return cart
 
-    def set(self, product_id, option_id, count, **kwargs):
+    def set(self, product_id, option_id, item_id, count, **kwargs):
         Item = models.CartItem
-        try:
-            item = Item.objects.get(
-                cart=self.cart,
-                product_id=product_id,
-                option_id=option_id,
-            )
-        except Item.DoesNotExist:
-            item = Item(
-                cart=self.cart,
-                product_id=product_id,
-                option_id=option_id,
-            )
+        item = None
+
+        if product_id and option_id:
+            try:
+                item = Item.objects.get(
+                    cart=self.cart,
+                    product_id=product_id,
+                    option_id=option_id,
+                )
+            except Item.DoesNotExist:
+                item = Item(
+                    cart=self.cart,
+                    product_id=product_id,
+                    option_id=option_id,
+                )
+            except ValueError:
+                pass
+
+        elif item_id:
+            try:
+                item = Item.objects.get(
+                    cart=self.cart,
+                    id=item_id,
+                )
+            except (Item.DoesNotExist, ValueError) as e:
+                pass
+
+        if not item:
+            return False
 
         item.count = count
         for k, v in kwargs.items():
             setattr(item, k, v)
         item.save()
         self.cart.save()
-        return True
+        return item
 
     def remove(self, item_id):
         Item = models.CartItem

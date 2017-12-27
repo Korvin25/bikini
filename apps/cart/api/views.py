@@ -37,37 +37,43 @@ class CartAjaxView(View):
 
             if self.action == 'remove':
                 cart.remove(item_id=DATA.get('item_id', 0))
-                data = {'result': 'ok'}
+                count = cart.count()
+                summary = cart.summary()
+
+                data = {'result': 'ok', 'count': count, 'summary': summary}
 
             elif self.action == 'set':
+                kwargs = {}
+
                 try:
                     product_id = DATA.get('product_id', 0)
                     option_id = DATA.get('option_id', 0)
+                    item_id = DATA.get('item_id', 0)
                     count = int(DATA.get('count', 0))
 
-                    attrs = DATA.get('attrs', {})
-                    extra_products = DATA.get('extra_products', {})
-                    prices = DATA.get('prices', {})
+                    for slug in ['attrs', 'extra_products']:
+                        value = DATA.get(slug)
+                        if value is not None:
+                            kwargs[slug] = value
 
-                    option_price = int(prices.get('option', 0))
-                    extra_price = int(prices.get('extra', 0))
-                    wrapping_price = int(prices.get('wrapping', 0))
+                    prices = DATA.get('prices', {})
+                    for slug in ['option', 'extra', 'wrapping']:
+                        value = prices.get(slug)
+                        if value is not None:
+                            kwargs['{}_price'.format(slug)] = int(value)
+
                 except ValueError:
                     data = {'result': 'error', 'error': 'Неправильный формат запроса'}
                     return JsonResponse(data, status=400)
 
-                kwargs = {
-                    'attrs': attrs,
-                    'extra_products': extra_products,
-                    'option_price': option_price,
-                    'extra_price': extra_price,
-                    'wrapping_price': wrapping_price,
-                }
-                cart.set(product_id, option_id, count, **kwargs)
-
+                item = cart.set(product_id, option_id, item_id, count, **kwargs)
                 count = cart.count()
                 summary = cart.summary()
+
                 data = {'result': 'ok', 'count': count, 'summary': summary}
+                if item:
+                    data['item_count'] = item.count
+                    data['item_price'] = item.price_int
 
         return JsonResponse(data)
 

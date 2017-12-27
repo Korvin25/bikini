@@ -350,18 +350,24 @@ ROSETTA_SHOW_AT_ADMIN_PANEL = False
 THUMBNAIL_HIGH_RESOLUTION = True
 THUMBNAIL_ALIASES = {
     '': {
-        'product_cover': {'size': (220, 220), 'crop': True, 'quality': 100},
-        'admin_product_photo': {'size': (140, 140), 'crop': True, 'quality': 100},
         'homepage_cover': {'size': (1939, 937), 'crop': True, 'quality': 100},
         'homepage_girl': {'size': (737, 737), 'crop': False, 'upscale': True, 'quality': 100},
+
         'footer_banner': {'size': (1407, 408), 'crop': True, 'upscale': True, 'quality': 100},
+
         'attribute_option': {'size': (37, 37), 'crop': True, 'quality': 100, 'upscale': True},
         'attribute_option_detail': {'size': (46, 46), 'crop': True, 'quality': 100, 'upscale': True},
         'admin_attribute_option': {'size': (200, 200), 'crop': True, 'quality': 100, 'upscale': True},
+        'product_style': {'size': (134, 134), 'crop': True, 'quality': 100, 'upscale': True},
+
+        'product_cover': {'size': (220, 220), 'crop': True, 'quality': 100},
+        'cart_product_cover': {'size': (86, 86), 'crop': True, 'quality': 100},
+
+        'admin_product_photo': {'size': (140, 140), 'crop': True, 'quality': 100},
         'product_photo_preview': {'size': (387, 396), 'crop': True, 'quality': 100, 'upscale': True},
         'product_photo_thumb': {'size': (70, 70), 'crop': True, 'quality': 100, 'upscale': True},
         'product_photo_big': {'size': (1000, 1000), 'crop': False, 'quality': 100, 'upscale': True},
-        'product_style': {'size': (134, 134), 'crop': True, 'quality': 100, 'upscale': True},
+
         'video_preview': {'size': (352, 183), 'crop': True, 'quality': 100, 'upscale': True},
     },
 }

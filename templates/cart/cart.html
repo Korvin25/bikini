@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n %}
+{% load i18n catalog_tags core_tags %}
 
 {% block meta_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
 {% block meta_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
@@ -26,278 +26,166 @@
           <li><a href="#">Корзина</a></li>
         </ul>
         <h1 class="title_block">Корзина</h1>
-        <form method="GET" action="">
-          <div class="rows_cut_block">
-            <div class="table_shell">
-              <div class="table_head">
-                <div class="table_cell tb_photo"><div class="tb_title">Фото</div></div>
-                <div class="table_cell tb_model"><div class="tb_title">Название модели</div></div>
-                <div class="table_cell tb_color"><div class="tb_title">Цвет</div></div>
-                
-                <div class="table_cell tb_fason"><div class="tb_title">Фасон</div></div>
-                
-                <div class="table_cell tb_price"><div class="tb_title">Цена</div></div>
-                <div class="table_cell tb_cnt"><div class="tb_title">Количество</div></div>
-                <div class="table_cell tb_summ"><div class="tb_title">Стоимость</div></div>
-                
-                <div class="table_cell tb_put"><div class="tb_title">Отложить</div></div>
-                <div class="table_cell tb_del"><div class="tb_title">Удалить</div></div>
-              </div>
-            
-              <div class="item_content_block table_row">
+
+        <div class="rows_cut_block">
+          <div class="table_shell">
+            <div class="table_head">
+              <div class="table_cell tb_photo"><div class="tb_title">Фото</div></div>
+              <div class="table_cell tb_model"><div class="tb_title">Название модели</div></div>
+              {% if with_color %}<div class="table_cell tb_color"><div class="tb_title">Цвет</div></div>{% endif %}
+
+              {# <div class="table_cell tb_fason"><div class="tb_title">Фасон</div></div> #}
+              
+              <div class="table_cell tb_price"><div class="tb_title">Цена</div></div>
+              <div class="table_cell tb_cnt"><div class="tb_title">Количество</div></div>
+              {% if with_gift_wrapping %}<div class="table_cell tb_wrapping"><div class="tb_title">Подарочная упаковка<br/>({{ gift_wrapping_price }}р.)</div></div>{% endif %}
+              <div class="table_cell tb_summ"><div class="tb_title">Стоимость</div></div>
+              
+              <div class="table_cell tb_put"><div class="tb_title">Отложить</div></div>
+              <div class="table_cell tb_del"><div class="tb_title">Удалить</div></div>
+            </div>
+
+            {% for item in cart_items %}
+              <div class="item_content_block table_row js-item-div" data-item-id="{{ item.id }}" data-set-url="{% url 'cart_api:set' %}" data-remove-url="{% url 'cart_api:remove' %}" data-base-price="{{ item.base_price|to_int_str }}" data-row-clear-selector="#js-row-clear-{{ item.id }}">
                 <div class="table_cell cell_image">
-                  <div class="td_photo" style="background-image:url(/static/images/order/photo1.jpg)"></div>
+                  <a href="{{ item.product.get_absolute_url }}"><div class="td_photo" style="background-image:url({{ item.product.cart_cover_thumb }})"></div></a>
                 </div>
                 <div class="table_cell td_title">
-                  <h3 class="title_upper"><a href="#" onclick="return false">Стринги DRIVE Kazantip</a></h3>
-                  <h4 class="title_low">Яркие микро стринги</h4>
+                  <h3 class="title_upper"><a href="{{ item.product.get_absolute_url }}" onclick="return false">{{ item.product.title }}</a></h3>
+                  {% if not item.extra_products %}
+                    {% if item.product.subtitle %}
+                      <h4 class="title_low">{{ item.product.subtitle }}</h4>
+                    {% endif %}
+                  {% else %}
+                    {% item_extra_products_str item as extra_products_str %}
+                    {% if extra_products_str %}
+                      <h4 class="title_low">{{ extra_products_str|safe }}</h4>
+                    {% endif %}
+                  {% endif %}
                 </div>
-                <div class="table_cell td_color">
-                  <div class="td_color_box" style="background-color:palegreen;" title="Бледно-зеленый">Бледно-зеленый</div>
-                </div>
+
+                {% if with_color %}
+                  <div class="table_cell td_color">
+                    {% item_color item color_attribute as option %}
+                    {% if option %}
+                      <div class="td_color_box" style="border: 1px solid #ccc; {% if option.picture %}background: url('{{ option.picture_url }}'){% else %}background-color:{{ option.color }}{% endif %};" title="{{ option.title }}">{{ option.title }}</div>
+                    {% endif %}
+                  </div>
+                {% endif %}
                 
-                <div class="table_cell td_fason">
-                  <span class="td_fason_box"><img src="/static/images/clotnes_acs/bott-2.jpg"></span>
-                </div>
+                {% comment %}
+                  <div class="table_cell td_fason">
+                    <span class="td_fason_box"><img src="/static/images/clotnes_acs/bott-2.jpg"></span>
+                  </div>
+                {% endcomment %}
                 
                 <div class="clr clr_table"></div>
                 <div class="table_cell td_price">
                   <div class="tb_title">Цена</div>
-                  <div class="product_price">1100<abbr title="руб">р.</abbr></div>
+                  <div class="product_price">{{ item.base_price|to_int_str }}<abbr title="руб">р.</abbr></div>
                 </div>
                 <div class="table_cell td_cnt">
-                  <script type="text/javascript" >
-                    // ПЛЮС - МИНУС
-                    $(document).ready(function() {
-                      $('.minus').click(function () {
-                        var $input = $(this).parent().find('input');
-                        var count = parseInt($input.val()) - 1;
-                        count = count < 1 ? 1 : count;
-                        $input.val(count);
-                        $input.change();
-                        return false;
-                      });
-                      $('.plus').click(function () {
-                        var $input = $(this).parent().find('input');
-                        $input.val(parseInt($input.val()) + 1);
-                        $input.change();
-                        return false;
-                      });
-                      
-                      $('#cnt_item-1').change('keyup input', function() {
-                        var value = this.value;
-                        if (value > 0) {
-                        $("#price_ID-1").html(value * 1100);
-                        }
-                      });
-                      
-                    });
-                  </script>
                   <div class="tb_title">Количество</div>
                   <div class="number">
                     <span class="minus" id="">-</span>
-                    <input type="text" name="count_item" value="1" maxlength="3" onkeyup="this.value = this.value.replace(/\D/, '')" id="cnt_item-1" />
+                    <input type="text" name="item-count" value="{{ item.count }}" maxlength="3" onkeyup="this.value = this.value.replace(/\D/, '')" id="cnt_item-{{ forloop.counter }}" />
                     <span class="plus" id="">+</span>
                   </div>
                 </div>
+
+                {% if with_gift_wrapping %}
+                  <div class="table_cell td_wrapping">
+                    <div>
+                      <label for="gift-wrapping-{{ item.id }}" class="check_pr_input checke_lab" style="margin-top: 0;">
+                        <input type="checkbox"{% if item.wrapping_price %} checked="checked"{% endif %} class="js-gift-wrapping-trigger" data-wrapping-price="{{ gift_wrapping_price|to_int_str }}" name="gift_wrapping" id="gift-wrapping-{{ item.id }}" value="1" />
+                      </label>
+                    </div>
+                  </div>
+                {% endif %}
+
                 <div class="table_cell td_summ">
                   <div class="tb_title">Стоимость</div>
-                  <div class="product_price"><span id="price_ID-1">1100</span><abbr title="руб">р.</abbr></div>
+                  <div class="product_price"><span class="item-summary-span" id="price_ID-{{ forloop.counter }}">{{ item.price|to_int_str }}</span><abbr title="руб">р.</abbr></div>
                 </div>
                 
                 <div class="table_cell td_put">
                   <a href="#" class="butt_put">
-                    <label for="put_1" class="td_label_check_win">
-                      <input type="checkbox" name="put[]" id="put_1" value="1" />
+                    <label for="put_{{ forloop.counter }}" class="td_label_check_win">
+                      <input type="checkbox" name="put" id="put_{{ forloop.counter }}" value="1" />
                       <div class="window_title">
-                        <span class="no_check">Переместить товар из корзины в  список желаемых покупок</span>
-                        <span class="y_check">Товар добавлен в список желаемых покупок</span>
+                        <span class="no_check">Добавить товар в список желаемых покупок</span>
+                        <span class="y_check">Товар в списке желаемых покупок</span>
                       </div>
                       <img src="/static/i/heart_icon.png" alt="Отложить" />
                     </label>
                   </a>
                 </div>
                 <div class="table_cell td_del">
-                  <a href="#" class="butt_del"><img src="/static/i/delete.gif" alt="Удалить" /></a>
+                  <a href="#" class="butt_del js-remove-item"><img src="/static/i/delete.gif" alt="Удалить" /></a>
                 </div>
               </div>
-              
-              <!--разделитель между товарами--><div class="item_content_block table_row table_row_clr"><div class="table_cell">&nbsp;</div></div>
-              
-              <div class="item_content_block table_row">
-                <div class="table_cell cell_image">
-                  <div class="td_photo" style="background-image:url(/static/images/order/photo2.jpg)"></div>
-                </div>
-                <div class="table_cell td_title">
-                  <h3 class="title_upper"><a href="#" onclick="return false">Стринги DRIVE Kazantip</a></h3>
-                  <h4 class="title_low">Яркие микро стринги</h4>
-                </div>
-                <div class="table_cell td_color">
-                  <div class="td_color_box" style="background-color:palegreen;" title="Бледно-зеленый">Бледно-зеленый</div>
-                </div>
-                
-                <div class="table_cell td_fason">
-                  <span class="td_fason_box"><img src="/static/images/clotnes_acs/bott-2.jpg"></span>
-                </div>
-                
-                <div class="clr clr_table"></div>
-                <div class="table_cell td_price">
-                  <div class="tb_title">Цена</div>
-                  <div class="product_price">2100<abbr title="руб">р.</abbr></div>
-                </div>
-                <div class="table_cell td_cnt">
-                  <script type="text/javascript" >
-                    // ПЛЮС - МИНУС
-                    $(document).ready(function() {
-                      $('#cnt_item-2').change('keyup input', function() {
-                        var value = this.value;
-                        if (value > 0) {
-                        $("#price_ID-2").html(value * 2100);
-                        }
-                      });
+
+              {% if not forloop.last %}<!--разделитель между товарами--><div class="item_content_block table_row table_row_clr" id="js-row-clear-{{ item.id }}"><div class="table_cell">&nbsp;</div></div>{% endif %}
+
+            {% endfor %}
                       
-                    });
-                  </script>
-                  <div class="tb_title">Количество</div>
-                  <div class="number">
-                    <span class="minus" id="">-</span>
-                    <input type="text" name="count_item" value="1" maxlength="3" onkeyup="this.value = this.value.replace(/\D/, '')" id="cnt_item-2" />
-                    <span class="plus" id="">+</span>
-                  </div>
-                </div>
-                <div class="table_cell td_summ">
-                  <div class="tb_title">Стоимость</div>
-                  <div class="product_price"><span id="price_ID-2">2100</span><abbr title="руб">р.</abbr></div>
-                </div>
-                
-                <div class="table_cell td_put">
-                  <a href="#" class="butt_put">
-                    <label for="put_2" class="td_label_check_win">
-                      <input type="checkbox" name="put[]" id="put_2" value="1" />
-                      <div class="window_title">
-                        <span class="no_check">Переместить товар из корзины в  список желаемых покупок</span>
-                        <span class="y_check">Товар добавлен в список желаемых покупок</span>
-                      </div>
-                      <img src="/static/i/heart_icon.png" alt="Отложить" />
-                    </label>
-                  </a>
-                </div>
-                <div class="table_cell td_del">
-                  <a href="#" class="butt_del"><img src="/static/i/delete.gif" alt="Удалить" /></a>
-                </div>
-              </div>
-            </div>
-            
-            <div class="rows_block_info">
-              <div class="row_info">
-                <h2 class="title_block">Выбор способа доставки</h2>
-                <div class="rows_radio_block">
-                  <label for="radio_id_1" class="radio_input">
-                    <div class="shell_cell_row">
-                      <div class="input_cell"><input type="radio" name="dostavka" value="kurer_mos" id="radio_id_1" class="check_radio" /></div>
-                      <p class="dott_cell"><strong><span>Курьером Москва и МО</span></strong><span class="val_radio_row">Стоимость : 500 руб.</span></p>
-                    </div>
-                  </label>
-                  <label for="radio_id_2" class="radio_input">
-                    <div class="shell_cell_row">
-                      <div class="input_cell"><input type="radio" name="dostavka" value="SDEK" id="radio_id_2" class="check_radio" /></div>
-                      <p class="dott_cell"><strong><span>Службой доставки СДЕК</span></strong><span class="val_radio_row">Стоимость : 200 руб.</span></p>
-                    </div>
-                  </label>
-                  <label for="radio_id_3" class="radio_input">
-                    <div class="shell_cell_row">
-                      <div class="input_cell"><input type="radio" name="dostavka" value="SDEK" id="radio_id_3" class="check_radio" /></div>
-                      <p class="dott_cell"><strong><span>Самовывоз м. Таганская</span></strong><span class="val_radio_row">Стоимость : 0 руб.</span></p>
-                    </div>
-                  </label>
-                  
-                  <label for="radio_id_4" class="radio_input">
-                    <div class="shell_cell_row">
-                      <div class="input_cell"><input type="radio" name="dostavka" value="kurer_rus" id="radio_id_4" class="check_radio" /></div>
-                      <p class="dott_cell"><strong><span>Курьером по России</span></strong><span class="val_radio_row">Стоимость : 1000 руб.</span></p>
-                    </div>
-                  </label>
-                  
-                </div>
-              </div>
-              
-              <div class="row_info">
-                <h2 class="title_block">Выбор способа оплаты</h2>
-                <div class="rows_radio_block">
-                  <label for="radio_id_5" class="radio_input">
-                    <div class="shell_cell_row">
-                      <div class="input_cell"><input type="radio" name="money" value="nal" id="radio_id_5" class="check_radio" /></div>
-                      <p><strong class="no_dash"><span>Наличными при получении</span></strong></p>
-                    </div>
-                  </label>
-                  <label for="radio_id_6" class="radio_input">
-                    <div class="shell_cell_row">
-                      <div class="input_cell"><input type="radio" name="money" value="InterKassa" id="radio_id_6" class="check_radio" /></div>
-                      <p><strong class="no_dash"><span>Оплатить через InterKassa.com</span></strong></p>
-                    </div>
-                  </label>
-                </div>
-              </div>
-            </div>
-            
-            <h2 class="title_block">Дополнительная информация</h2>
-            
-            <textarea name="text" rows="9" id="text" class="t_area"></textarea>
-            
-            <div class="foot_form_cut">
-              <div class="foot_form_cut_row">
-                <h2 class="title_block">Итого товаров: <span class="price_table_summ">2 на сумму <div class="product_price">2 800<abbr title="руб">р.</abbr></div></span></h2>
-                
-                <div class="block_curr_down">
-                  <span class="title_down_block">Цена в: </span>
-                  <script>
-                    (function( $ ) {
-                      $.fn.selectbox = function() {
-                      //var selectDefaultHeight = $('.selectboxss').height();
-                      var selectDefaultHeight = 40;
-                        $('.selectboxss .selectboxssvalue').click(function() {
-                          var currentHeight = $(this).closest(".selectboxss").height();
-                          if (currentHeight < 100 || currentHeight == selectDefaultHeight) {
-                            $(this).closest(".selectboxss").height("auto");
-                            $(this).find('.arrowselect').attr("style", "border-radius: 1000px;transition: 0.2s;transform: rotate(180deg);");
-                          }
-                          if (currentHeight >= 101) {
-                            $(this).closest(".selectboxss").height(selectDefaultHeight);
-                            $(this).find('.arrowselect').attr("style", "rotate(0deg);");
-                          }
-                        });
-                        $('li.selectoption').click(function() {
-                          $(this).closest(".selectboxss").height(selectDefaultHeight);
-                          $(this).closest(".selectboxss").find('.arrowselect').attr("style", "rotate(0deg);");
-                          
-                          var t = $(this).closest("li.selectoption").text();
-                          $(this).closest(".selectboxss").find('.selectboxssvalue img.input_mage').attr('src', t);
-                        });
-                      };
-                    })( jQuery );
-                  </script>
-                  <script> $(document).ready(function(){ $('.selectboxss').selectbox(); }); </script>
-                  <div class="select_img">
-                    <div class="selectboxss">
-                      <div class="selectboxssvalue">
-                        <img src="/static/i/rub_img.png" class="input_mage" />
-                        <img src="/static/i/arrow_down_list.png" class="arrowselect" />
-                      </div>
-                      <ul class="selectboxssmenu">
-                        <li class="selectoption" style="background-image:url(/static/i/rub_img.png);"><span>/static/i/rub_img.png</span></li>
-                        <li class="selectoption" style="background-image:url(/static/i/dol_img.png);"><span>/static/i/dol_img.png</span></li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                
-              </div>
-              <button class="bt_red">Оформить заказ</button>
-            </div>
-            
           </div>
-        
-        </form>
+
+          <h2 class="title_block">Дополнительная информация</h2>
+          <textarea name="text" rows="9" id="text" class="t_area"></textarea>
+          
+          <div class="foot_form_cut">
+            <div class="foot_form_cut_row">
+              <h2 class="title_block">Итого товаров: <span class="price_table_summ"><span class="js-cart-count">{{ cart.count }}</span> на сумму <div class="product_price"><span class="js-cart-summary">{{ cart.summary }}</span><abbr title="руб">р.</abbr></div></span></h2>
+              
+              <div class="block_curr_down">
+                <span class="title_down_block">Цена в: </span>
+                <script>
+                  (function( $ ) {
+                    $.fn.selectbox = function() {
+                    //var selectDefaultHeight = $('.selectboxss').height();
+                    var selectDefaultHeight = 40;
+                      $('.selectboxss .selectboxssvalue').click(function() {
+                        var currentHeight = $(this).closest(".selectboxss").height();
+                        if (currentHeight < 100 || currentHeight == selectDefaultHeight) {
+                          $(this).closest(".selectboxss").height("auto");
+                          $(this).find('.arrowselect').attr("style", "border-radius: 1000px;transition: 0.2s;transform: rotate(180deg);");
+                        }
+                        if (currentHeight >= 101) {
+                          $(this).closest(".selectboxss").height(selectDefaultHeight);
+                          $(this).find('.arrowselect').attr("style", "rotate(0deg);");
+                        }
+                      });
+                      $('li.selectoption').click(function() {
+                        $(this).closest(".selectboxss").height(selectDefaultHeight);
+                        $(this).closest(".selectboxss").find('.arrowselect').attr("style", "rotate(0deg);");
+                        
+                        var t = $(this).closest("li.selectoption").text();
+                        $(this).closest(".selectboxss").find('.selectboxssvalue img.input_mage').attr('src', t);
+                      });
+                    };
+                  })( jQuery );
+                </script>
+                <script> $(document).ready(function(){ $('.selectboxss').selectbox(); }); </script>
+                <div class="select_img">
+                  <div class="selectboxss">
+                    <div class="selectboxssvalue">
+                      <img src="/static/i/rub_img.png" class="input_mage" />
+                      <img src="/static/i/arrow_down_list.png" class="arrowselect" />
+                    </div>
+                    <ul class="selectboxssmenu">
+                      <li class="selectoption" style="background-image:url(/static/i/rub_img.png);"><span>/static/i/rub_img.png</span></li>
+                      <li class="selectoption" style="background-image:url(/static/i/dol_img.png);"><span>/static/i/dol_img.png</span></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+            <button class="bt_red">Оформить заказ</button>
+          </div>
+          
+        </div>
         
         <!--div class="text_preview_page text_item">
           <div class="text_preview_inner">
@@ -309,4 +197,11 @@
       
     </div>
   </main>
+{% endblock %}
+
+{% block extra_js %}
+  <script type="text/javascript">
+    // window.data = {{ data_json|safe }};
+    {% include 'cart/include/cart.js' %}
+  </script>
 {% endblock %}

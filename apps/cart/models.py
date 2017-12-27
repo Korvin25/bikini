@@ -114,9 +114,20 @@ class CartItem(models.Model):
     def __unicode__(self):
         return '{} units of {}'.format(self.count, self.product.title)
 
+    @property
+    def base_price(self):
+        return self.option_price+self.extra_price
+
     def count_price(self):
-        return (self.option_price+self.extra_price)*self.count + self.wrapping_price
+        return self.base_price*self.count + self.wrapping_price
 
     def save(self, *args, **kwargs):
         self.price = self.count_price()
         return super(CartItem, self).save(*args, **kwargs)
+
+    @property
+    def price_int(self):
+        price = self.price
+        int_value = int(price)
+        return (int_value if int_value == price
+                else int_value + 1)
