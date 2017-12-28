@@ -28,7 +28,8 @@
         <h1 class="title_block">Корзина</h1>
 
         <div class="rows_cut_block">
-          <div class="table_shell">
+
+          <div class="table_shell js-hide-if-not-cart"{% if not cart.count %} style="display: none;"{% endif %}>
             <div class="table_head">
               <div class="table_cell tb_photo"><div class="tb_title">Фото</div></div>
               <div class="table_cell tb_model"><div class="tb_title">Название модели</div></div>
@@ -131,8 +132,10 @@
                       
           </div>
 
-          <h2 class="title_block">Дополнительная информация</h2>
-          <textarea name="text" rows="9" id="text" class="t_area"></textarea>
+          <h3 class="js-show-if-not-cart"{% if cart.count %} style="display: none;"{% endif %}>Товаров в корзине нет. <a href="{% url 'women' %}">Вернуться в каталог</a></h3>
+
+          <h2 class="title_block js-hide-if-not-cart"{% if not cart.count %} style="display: none;"{% endif %}>Дополнительная информация</h2>
+          <textarea name="text" rows="9" id="text" class="t_area js-disabled-if-not-cart{% if not cart.count %} _disabled{% endif %}"></textarea>
           
           <div class="foot_form_cut">
             <div class="foot_form_cut_row">
@@ -182,7 +185,7 @@
               </div>
               
             </div>
-            <button class="bt_red">Оформить заказ</button>
+            <button class="bt_red js-disabled-if-not-cart{% if not cart.count %} _disabled{% endif %}">Оформить заказ</button>
           </div>
           
         </div>

@@ -119,7 +119,8 @@ class CartItem(models.Model):
         return self.option_price+self.extra_price
 
     def count_price(self):
-        return self.base_price*self.count + self.wrapping_price
+        return (self.base_price*self.count + self.wrapping_price if self.count
+                else 0)
 
     def save(self, *args, **kwargs):
         self.price = self.count_price()

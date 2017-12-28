@@ -1,6 +1,24 @@
 
 // ----- Отправка форм на бекенд -----
 
+
+function showOrHide(cart_count) {
+  console.log(cart_count);
+
+  if (cart_count) {
+    console.log('show');
+    $('.js-disabled-if-not-cart').removeClass('_disabled');
+    $('.js-show-if-not-cart').hide();
+    $('.js-hide-if-not-cart').show();
+  } else {
+    console.log('hide');
+    $('.js-disabled-if-not-cart').addClass('_disabled');
+    $('.js-show-if-not-cart').show();
+    $('.js-hide-if-not-cart').hide();
+  }
+};
+
+
 function setItem($item_div, count, gift_wrapping_price) {
   var url = $item_div.attr('data-set-url'),
       item_id = parseInt($item_div.attr('data-item-id')),
@@ -31,10 +49,13 @@ function setItem($item_div, count, gift_wrapping_price) {
           item_price = res['item_price'];
 
       if (result == 'ok') {
-        if (cart_count) { $('.js-cart-count').text(cart_count); }
-        if (cart_summary) { $('.js-cart-summary').text(cart_summary); }
-        if (item_count) { $item_div.find('input[name="item-count"]').val(item_count); }
-        if (item_price) { $item_div.find('.item-summary-span').html(item_price); }
+        if (cart_count != undefined) {
+          showOrHide(cart_count);
+          $('.js-cart-count').text(cart_count); 
+        }
+        if (cart_summary != undefined) { $('.js-cart-summary').text(cart_summary); }
+        if (item_count != undefined) { $item_div.find('input[name="item-count"]').val(item_count); }
+        if (item_price != undefined) { $item_div.find('.item-summary-span').html(item_price); }
       }
       else {
         if (err) { console.log(err) }
@@ -71,8 +92,11 @@ function removeItem($item_div) {
       $row_clear_div.slideUp(function() { $row_clear_div.remove(); });
 
       if (result == 'ok') {
-        if (cart_count) { $('.js-cart-count').text(cart_count); }
-        if (cart_summary) { $('.js-cart-summary').text(cart_summary); }
+        if (cart_count != undefined) {
+          showOrHide(cart_count);
+          $('.js-cart-count').text(cart_count); 
+        }
+        if (cart_summary != undefined) { $('.js-cart-summary').text(cart_summary); }
       }
       else {
         if (err) { console.log(err) }
