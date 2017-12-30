@@ -67,42 +67,36 @@ function submitProductForm($form, $button, option_id, _attrs, _extra_products) {
         showSuccessPopup();
       }
       else {
-        if (err) { console.log(err) }
-        else { console.log('error!!!') }
+        if (error) { showErrorPopup('При отправке формы произошла ошибка:', error); }
+        if (errors) { showErrorPopup('При отправке формы произошла ошибка:', errors); }
+        else { showErrorPopup('При отправке формы произошла ошибка:', res.status + ' ' + res.statusText); }
       };
     },
-    // error: function(res){
-    //   $button.removeClass('_disabled');
+    error: function(res){
+      $button.removeClass('_disabled');
 
-    //   if (res.status == 400) {
-    //     var response = res.responseJSON,
-    //         click_to = response.click_to,
-    //         errors = response.errors,
-    //         alert_message = response.alert_message;
+      if (res.status == 400) {
+        var response;
+        if (res.responseJSON == undefined) { response = JSON.parse(res.responseText); }
 
-    //     if (errors) { add_errors($form, errors, true) };
-    //     if (click_to) { $(click_to).click(); };
-    //     if (alert_message) { alert(alert_message) };
-    //   } else {
-    //     if (res.status == 0) { alert('Произошла ошибка: 500 Internal Server Error') }
-    //     else { alert('Произошла ошибка: ' + res.status + ' ' + res.statusText); }
-    //   }
-    // }
-    // error: function(res){
-    //   if (res.status == 400) {
-    //     var response = res.responseJSON,
-    //         click_to = response.click_to,
-    //         errors = response.errors,
-    //         alert_message = response.alert_message;
+        if (response != undefined) {
+          var click_to = response['click_to'],
+              error = response['error'],
+              errors = response['errors'],
+              alert_message = response['alert_message'];
 
-    //     if (errors) { add_errors($form, errors, true) };
-    //     if (click_to) { $(click_to).click(); };
-    //     if (alert_message) { alert(alert_message) };
-    //   } else {
-    //     if (res.status == 0) { alert('Произошла ошибка: 500 Internal Server Error') }
-    //     else { alert('Произошла ошибка: ' + res.status + ' ' + res.statusText); }
-    //   }
-    // }
+          if (error) { showErrorPopup('При отправке формы произошла ошибка:', error); };
+          if (errors) { add_errors($form, errors, true); };
+          if (click_to) { $(click_to).click(); };
+          if (alert_message) { alert(alert_message); };
+        } else {
+          showErrorPopup('При отправке формы произошла ошибка:', res.status + ' ' + res.statusText);
+        };
+      } else {
+        if (res.status == 0) { alert('Произошла ошибка: 500 Internal Server Error') }
+        else { alert('Произошла ошибка: ' + res.status + ' ' + res.statusText); }
+      }
+    }
   });
 };
 

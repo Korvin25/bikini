@@ -33,6 +33,13 @@ class Cart:
         request.session[CART_ID] = cart.id
         return cart
 
+    def update(self, *args, **kwargs):
+        cart = self.cart
+        for k, v in kwargs.items():
+            setattr(cart, k, v)
+        cart.save()
+        return cart
+
     def set(self, product_id, option_id, item_id, count, **kwargs):
         Item = models.CartItem
         item = None
@@ -91,6 +98,10 @@ class Cart:
 
     def summary(self):
         return self.cart.show_summary()
+
+    @property
+    def number(self):
+        return self.cart.number
 
     def clear(self):
         for item in self.cart.cartitem_set.all():

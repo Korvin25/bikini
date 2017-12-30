@@ -7,6 +7,7 @@ from django.conf import settings
 from django.db import models
 
 from ..catalog.models import Product, ProductOption
+from ..geo.models import Country
 
 
 class Cart(models.Model):
@@ -35,18 +36,20 @@ class Cart(models.Model):
     checkout_date = models.DateTimeField('Дата оформления', null=True, blank=True)
 
     # postal_code = models.CharField('Почтовый код', max_length=255, null=True, blank=True)
-    country = models.CharField('Страна', max_length=225, null=True, blank=True)
+    country = models.ForeignKey(Country, verbose_name='Страна', null=True, blank=True)
     city = models.CharField('Город', max_length=225, null=True, blank=True)
     address = models.TextField('Адрес', null=True, blank=True)
     phone = models.CharField('Телефон', max_length=30, null=True, blank=True)
-    fio = models.CharField('Имя, Фамилия, Отчество', max_length=512, null=True, blank=True)
+    name = models.CharField('Полное имя', max_length=511, null=True, blank=True)
+
+    additional_info = models.TextField('Дополнительная информация', blank=True)
 
     # tracking_number = models.CharField('Номер отслеживания', max_length=255, null=True, blank=True)
     # delivery_type = models.CharField('Тип доставки', max_length=15, choices=DELIVERY_CHOICES, null=True, blank=True)
     # payment_type = models.CharField('Тип оплаты', max_length=15, choices=PAYMENT_CHOICES, null=True, blank=True)
 
     status = models.PositiveSmallIntegerField('Статус', choices=STATUS_CHOICES, default=0)
-    summary = models.DecimalField(max_digits=9, decimal_places=2, default=0)
+    summary = models.DecimalField('Сумма, руб.', max_digits=9, decimal_places=2, default=0)
 
     class Meta:
         verbose_name = 'заказ'
@@ -90,6 +93,24 @@ class Cart(models.Model):
 
     def get_order_id(self):
         return '{0:06}'.format(self.id)
+
+    @property
+    def title(self):
+        return '№ {}'.format(self.number)
+
+    @property
+    def number(self):
+        # TODO: покрасивше
+        if not self.id:
+            return '0'
+        if self.id > 1000:
+            return '{:,}'.format(self.id).rjust(7, '0').replace(',', ' ')
+        else:
+            _number = '{:03}'.format(self.id)
+            return '000 {}'.format(_number)
+
+    def show_items(self):
+        return 'not implemented yet'
 
 
 class CartItem(models.Model):

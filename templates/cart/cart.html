@@ -27,7 +27,7 @@
         </ul>
         <h1 class="title_block">Корзина</h1>
 
-        <div class="rows_cut_block">
+        <div class="rows_cut_block js-cart-parent" data-step0-url="{% url 'cart_api:step0' %}" data-step2-url="{% url 'cart_api:step2' %}" data-step3-url="{% url 'cart_api:step3' %}">
 
           <div class="table_shell js-hide-if-not-cart"{% if not cart.count %} style="display: none;"{% endif %}>
             <div class="table_head">
@@ -39,7 +39,7 @@
               
               <div class="table_cell tb_price"><div class="tb_title">Цена</div></div>
               <div class="table_cell tb_cnt"><div class="tb_title">Количество</div></div>
-              {% if with_gift_wrapping %}<div class="table_cell tb_wrapping"><div class="tb_title">Подарочная упаковка<br/>({{ gift_wrapping_price }}р.)</div></div>{% endif %}
+              {% if with_gift_wrapping %}<div class="table_cell tb_summ"><div class="tb_title">Подарочная упаковка<br/>({{ gift_wrapping_price }}р.)</div></div>{% endif %}
               <div class="table_cell tb_summ"><div class="tb_title">Стоимость</div></div>
               
               <div class="table_cell tb_put"><div class="tb_title">Отложить</div></div>
@@ -95,7 +95,8 @@
                 </div>
 
                 {% if with_gift_wrapping %}
-                  <div class="table_cell td_wrapping">
+                  <div class="table_cell td_summ">
+                    <div class="tb_title">Подарочная упаковка</div>
                     <div>
                       <label for="gift-wrapping-{{ item.id }}" class="check_pr_input checke_lab" style="margin-top: 0;">
                         <input type="checkbox"{% if item.wrapping_price %} checked="checked"{% endif %} class="js-gift-wrapping-trigger" data-wrapping-price="{{ gift_wrapping_price|to_int_str }}" name="gift_wrapping" id="gift-wrapping-{{ item.id }}" value="1" />
@@ -132,10 +133,10 @@
                       
           </div>
 
-          <h3 class="js-show-if-not-cart"{% if cart.count %} style="display: none;"{% endif %}>Товаров в корзине нет. <a href="{% url 'women' %}">Вернуться в каталог</a></h3>
+          <h3 class="js-show-if-not-cart" style="margin-bottom: 250px;{% if cart.count %} display: none;{% endif %}">Товаров в корзине нет. <a href="{% url 'women' %}">Вернуться в каталог</a></h3>
 
           <h2 class="title_block js-hide-if-not-cart"{% if not cart.count %} style="display: none;"{% endif %}>Дополнительная информация</h2>
-          <textarea name="text" rows="9" id="text" class="t_area js-disabled-if-not-cart{% if not cart.count %} _disabled{% endif %}"></textarea>
+          <textarea name="additional_info" rows="9" id="text" class="t_area js-hide-if-not-cart"{% if not cart.count %} style="display: none;"{% endif %}>{% if basket.additional_info %}{{ basket.additional_info }}{% endif %}</textarea>
           
           <div class="foot_form_cut">
             <div class="foot_form_cut_row">
@@ -185,7 +186,7 @@
               </div>
               
             </div>
-            <button class="bt_red js-disabled-if-not-cart{% if not cart.count %} _disabled{% endif %}">Оформить заказ</button>
+            <button class="bt_red js-step0-button js-disabled-if-not-cart{% if not cart.count %} _disabled{% endif %}">Оформить заказ</button>
           </div>
           
         </div>
@@ -207,4 +208,276 @@
     // window.data = {{ data_json|safe }};
     {% include 'cart/include/cart.js' %}
   </script>
+{% endblock %}
+
+{% block popups %}
+  <div style="display: none">
+    <a rel="leanModal1" href="#error-popup"></a>
+    <a rel="leanModal1" href="#step1"></a>
+    <a rel="leanModal1" href="#step2"></a>
+    <a rel="leanModal1" href="#step3"></a>
+    <a rel="leanModal1" href="#step4"></a>
+  </div>
+
+  <div class="window_popap no_float mini_window_popup callback_form" id="error-popup" style="display:none;">
+      <div class="close_popap call_close js-call-close"><img src="/static/i/close_white_45.png" alt="Закрыть"></div>
+      <div class="wrap_window_popap bg_wrapp_window">
+          <div class="popap_row">
+              <div class="popap_row_wrapp">
+                  <h3 class="popup_title" style="margin-bottom: 10px;">При отправке формы произошла ошибка:</h3>
+                  <p class="call_introtext popup_text"></p>
+                  {% comment %}
+                  <div class="red_bor_butt">
+                      <span class="js-call-close usual_link">Закрыть</span>
+                  </div>
+                  {% endcomment %}
+                  <div class="bt_req_call red_bor_butt js-call-close">
+                    <button class="butt_border">Закрыть</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="window_popap" id="step1" style="display: none;">
+    <div class="close_popap js-call-close"><img src="/static/i/close_icon.png" alt="Закрыть"></div>
+    <div class="wrap_window_popap bg_wrapp_window">
+      <div class="popap_row">
+        <div class="popap_row_wrapp">
+          <h2 class="title_popap">Я уже являюсь <br>клиентом BIKINIMINI</h2>
+
+          <form class="js-step1-form js-step1-login-form" action="{% url 'auth:login' %}" method="post">
+            <div class="error-messages"></div>
+
+            <div class="row_form_popup">
+              <label class="lbl_box">
+                <p>Ваш e-mail</p>
+                <input type="email" required="required" value="" name="email" class="input_text">
+              </label>
+            </div>
+            
+            <div class="row_form_popup">
+              <label class="lbl_box">
+                <p>Ваш пароль</p>
+                <input type="password" required="required" value="" name="password" class="input_text">
+              </label>
+            </div>
+            
+            <div class="row_form_popup">
+              <label class="lbl_box check_popap_row">
+                <input class="check_form" type="checkbox" name="remember_me">
+                <p>Запомнить меня на сайте</p>
+              </label>
+            </div>
+            
+            <div class="row_form_popup row_pop_butt">
+              <button class="bt_red">Войти</button>
+              {# <a href="#">Забыли пароль?</a> #}
+            </div>
+            
+            <div class="row_form_popup">
+              <p>Войти при помощи соц. сетей:</p>
+              <div class="soc_enter">
+                <a href="#"><img src="/static/i/soc_face.png" alt="Facebook"></a>
+                <a href="#"><img src="/static/i/soc_vk.png" alt="ВКонтакте"></a>
+                <a href="#"><img src="/static/i/soc_gplus.png" alt="Google Plus"></a>
+                <a href="#"><img src="/static/i/soc_ins.png" alt="Instagram"></a>
+              </div>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+      
+      <div class="or_block">или</div>
+      
+      <div class="popap_row bg_popap">
+        <div class="popap_row_wrapp">
+          <h2 class="title_popap">Я новый <br>клиент BIKINIMINI</h2>
+
+          <form class="js-step1-form js-step1-registration-form" action="{% url 'auth:registration' %}" method="post">
+            <div class="error-messages"></div>
+
+            <div class="row_form_popup">
+              <label class="lbl_box">
+                <p>Ваш e-mail</p>
+                <input type="email" required="required" value="" name="email" class="input_text">
+              </label>
+            </div>
+            
+            <div class="row_form_popup">
+              <label class="lbl_box">
+                <p>Ваш пароль</p>
+                <input type="password" required="required" value="" name="password" class="input_text">
+              </label>
+            </div>
+            
+            <div class="row_form_popup">
+              <label class="lbl_box">
+                <p>Ваш пароль ещё раз</p>
+                <input type="password" required="required" value="" name="password_repeat" class="input_text">
+              </label>
+            </div>
+            
+            <div class="row_form_popup">
+              <label class="lbl_box">
+                <p>ФИО</p>
+                <input type="text" required="required" value="" name="name" class="input_text">
+              </label>
+            </div>
+
+            <div class="row_form_popup row_pop_butt">
+              <button class="bt_red">Далее</button>
+            </div>
+          </form>
+          
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  {% comment %}
+  <div class="window_popap no_float mini_window_popup callback_form" id="step2" style="display:none;">
+      <div class="close_popap call_close js-call-close"><img src="/static/i/close_white_45.png" alt="Закрыть"></div>
+      <div class="wrap_window_popap bg_wrapp_window">
+          <div class="popap_row">
+              <div class="popap_row_wrapp">
+                  <h3 class="popup_title" style="margin-bottom: 10px;">Шаг 2!</h3>
+                  <p class="call_introtext popup_text"></p>
+                  <div class="bt_req_call red_bor_butt js-call-close">
+                    <button class="butt_border">Закрыть</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  {% endcomment %}
+
+  <div class="window_popap no_float" id="step3" style="display:none;">
+    <div class="close_popap js-call-close"><img src="/static/i/close_icon.png" alt="Закрыть" /></div>
+    <div class="wrap_window_popap bg_wrapp_window">
+      <div class="popap_row">
+        <div class="popap_row_wrapp">
+          <h2 class="title_popap">Данные для доставки</h2>
+          <form class="js-step3-form" action="{% url 'cart_api:step3' %}" method="post">
+            <div class="error-messages"></div>
+
+            <div class="rows_popup_input">
+              <div class="row_form_popup">
+                <label class="lbl_box">
+                  <p>Страна:<span class="orange_text">*</span></p>
+                  <select required name="country" value="{{ shipping_data.country }}" class="country_select">
+                    {% for country in countries %}
+                      <option value="{{ country.id }}"{% if country.id == shipping_data.country %} selected="selected"{% endif %}>{{ country.title }}</option>
+                    {% endfor %}
+                  </select>
+                </label>
+              </div>
+              
+              <div class="row_form_popup">
+                <label class="lbl_box">
+                  <p>Город:<span class="orange_text">*</span></p>
+                  <input required type="text" value="{{ shipping_data.city }}" name="city" class="input_text" />
+                </label>
+              </div>
+            </div>
+
+            <div class="rows_popup_input">
+              <label class="lbl_box">
+                  <p style="color: rgb(61, 105, 122); font-size: 12px;">Адрес:<span class="orange_text">*</span></p>
+                  <textarea required name="address" class="input_text no_hover_border" style="padding: 12px 2.25% 0; width: 95.45%; height: 135px;">{{ shipping_data.address }}</textarea>
+                </label>
+            </div>            
+            
+            <div class="rows_popup_input">
+              <div class="row_form_popup">
+                <label class="lbl_box">
+                  <p>Контактный телефон:<span class="orange_text">*</span></p>
+                  <input required type="text" value="{{ shipping_data.phone }}" name="phone" class="input_text" />
+                </label>
+              </div>
+              
+              <div class="row_form_popup">
+                <label class="lbl_box">
+                  <p>Имя, Фамилия, Отчество:<span class="orange_text">*</span></p>
+                  <input required type="text" value="{{ shipping_data.name }}" name="name" class="input_text" />
+                </label>
+              </div>
+            </div>
+            
+            <div class="row_form_popup row_pop_butt">
+              <button class="bt_red">Оформить заказ</button>
+            </div>
+            
+          </form>
+        </div>
+      </div>
+      
+      
+    </div>
+  </div>
+
+  <div class="window_popap after_popap" id="step4" style="display:none;">
+    <div class="close_popap js-call-close"><img src="/static/i/close_icon.png" alt="Закрыть" /></div>
+    <div class="wrap_window_popap bg_wrapp_window">
+      <div class="popap_row">
+        <div class="popap_row_wrapp">
+          <h2 class="title_string">Ваш заказ принят!</h2>
+          <div>№ заказа: </strong><span class="js-order-number">111 111</span><br/></div>
+          <div class="content_pup">
+            <div class="p_pup">Итоговая стоимость заказа:</div> 
+            <div class="product_price upper_price price_strong"><span class="js-cart-summary">10 000</span><abbr title="руб">руб.</abbr></div>
+
+            <p>В ближайшее время с вами всяжутся 
+            менеджеры отдела доставки для уточнения 
+            деталей заказа</p>
+
+            <p>Если у вас возникли какие либо вопросы,
+            вы можете связаться с нами по телефону  
+            <strong class="pup_strong">+7 (916) 445 -65 -55</strong></p>
+
+            <p>С уважннием, администация bikinimini.ru</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="popap_row bg_popap">
+        <div class="popap_row_wrapp">
+          <h2 class="title_string">Специальное предложение <br />Только для Вас!</h2>
+          <h3 class="h3_pup">Добавьте еще одну модель </h3>
+          
+          <div class="pup_details_item">
+            <div class="details_item_photo">
+              <div class="photo_list">
+                <a href=""><img src="/static/images/details/photo_detail_1.jpg" alt=""></a>
+              </div>
+              <abbr class="sale_details">-50%</abbr>
+            </div>
+            
+            <div class="details_item_content">
+              <h3><a href=""> Микро Стринги DRIVE</a></h3>
+              <h4>Яркие микро стринги</h4>
+              <div class="txt_price_to">Цена для вас:</div>
+              
+              <div class="product_price sale_price"><s>3800</s><abbr title="руб">р.</abbr></div>
+              <div class="product_price">3300<abbr title="руб">р.</abbr></div>
+              
+              <div class="clr"></div>
+              <a href="#" class="to_cart_list">В корзину</a>
+            </div>
+            
+          </div>
+          
+          <div class="pup_details_txt">
+            <strong>Примечание:</strong> Скидкой можете воспользоватся только вы, 
+            перейдя по ссылке с данной страницы, если вы покинете данную старницу, скидка более не распространяется.
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
 {% endblock %}

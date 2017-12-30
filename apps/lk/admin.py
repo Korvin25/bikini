@@ -20,7 +20,6 @@ class ProfileAdmin(UserAdmin):
     list_display_links = ('email',)
     list_filter = ('is_active', 'is_staff', 'is_superuser',)
     list_per_page = 200
-
     fieldsets = (
         # Настройки юзера
         ('Данные', {
@@ -29,8 +28,7 @@ class ProfileAdmin(UserAdmin):
         }),
         ('Данные для доставки', {
             'classes': ('suit-tab', 'suit-tab-default',),
-            'fields': ('country', 'city', 'index', 'street', 'house',
-                       'building', 'housing', 'flat', 'phone',)
+            'fields': ('country', 'city', 'address', 'phone',)
         }),
         ('Управление доступами', {
             'classes': ('suit-tab', 'suit-tab-default',),

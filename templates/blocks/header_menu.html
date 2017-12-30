@@ -43,7 +43,7 @@
       <li><a href="{% url 'videos' %}">Видео</a></li>
       <li><a href="#" >Список желаемых покупок&nbsp;&nbsp;<img src="/static/i/desir.png" alt="" />&nbsp;&nbsp;<span class="disc_number">3</span></a></li>
     </ul>
-    <ul class="list_menu_lev1 list_menu_lev2">
+    <ul class="list_menu_lev1 list_menu_lev2 js-header-menu">
       <li class="lang_head">
         <a href="#" onclick="return false;" class="lang_head_tit">{% trans 'Язык' %}: {{ LANGUAGES_DICT|get_value:CURRENT_LANGUAGE|slice:':3'|upper }}<img src="/static/i/blank.gif" onClick="nodeExpand(198600,0)"  id="img_198600"></a>
         
@@ -58,7 +58,7 @@
           {% endfor %}
         </ul>
       </li>
-      
+
       <script type="text/javascript">
         function nodeExpand(nodeId, level) {
           var d = document;
@@ -76,11 +76,11 @@
           }
         }
       </script>
-      
-      <li><a href="#">Мой профиль</a></li>
-      <li><a href="#">Моё избранное</a></li>
-      <li><a href="#">История покупок</a></li>
-      <li><a href="#">Выход</a></li>
+      <li class="js-auth-switch"{% if not request.user.is_anonymous %} style="display: none;"{% endif %}><a rel="leanModal1" href="#auth" href="#">Вход / регистрация</a></li>
+      <li class="js-auth-switch"{% if request.user.is_anonymous %} style="display: none;"{% endif %}><a href="#">Мой профиль</a></li>
+      <li class="js-auth-switch"{% if request.user.is_anonymous %} style="display: none;"{% endif %}><a href="#">Моё избранное</a></li>
+      <li class="js-auth-switch"{% if request.user.is_anonymous %} style="display: none;"{% endif %}><a href="#">История покупок</a></li>
+      <li class="js-auth-switch"{% if request.user.is_anonymous %} style="display: none;"{% endif %}><a href="{% url 'auth:logout' %}">Выход</a></li>
     </ul>
   </div>
 </div>

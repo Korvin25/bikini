@@ -68,6 +68,108 @@
     </div>
 </div>
 
+
+<!-- логин/регистрация -->
+
+<div class="window_popap" id="auth" style="display: none;">
+  <div class="close_popap js-call-close"><img src="/static/i/close_icon.png" alt="Закрыть"></div>
+  <div class="wrap_window_popap bg_wrapp_window">
+    <div class="popap_row">
+      <div class="popap_row_wrapp">
+        <h2 class="title_popap">Я уже являюсь <br>клиентом BIKINIMINI</h2>
+
+        <form class="js-auth-form js-auth-login-form" action="{% url 'auth:login' %}" method="post">
+          <div class="error-messages"></div>
+
+          <div class="row_form_popup">
+            <label class="lbl_box">
+              <p>Ваш e-mail</p>
+              <input type="email" required="required" value="" name="email" class="input_text">
+            </label>
+          </div>
+          
+          <div class="row_form_popup">
+            <label class="lbl_box">
+              <p>Ваш пароль</p>
+              <input type="password" required="required" value="" name="password" class="input_text">
+            </label>
+          </div>
+          
+          <div class="row_form_popup">
+            <label class="lbl_box check_popap_row">
+              <input class="check_form" type="checkbox" name="remember_me">
+              <p>Запомнить меня на сайте</p>
+            </label>
+          </div>
+          
+          <div class="row_form_popup row_pop_butt">
+            <button class="bt_red">Войти</button>
+            {# <a href="#">Забыли пароль?</a> #}
+          </div>
+          
+          <div class="row_form_popup">
+            <p>Войти при помощи соц. сетей:</p>
+            <div class="soc_enter">
+              <a href="#"><img src="/static/i/soc_face.png" alt="Facebook"></a>
+              <a href="#"><img src="/static/i/soc_vk.png" alt="ВКонтакте"></a>
+              <a href="#"><img src="/static/i/soc_gplus.png" alt="Google Plus"></a>
+              <a href="#"><img src="/static/i/soc_ins.png" alt="Instagram"></a>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+    
+    <div class="or_block">или</div>
+    
+    <div class="popap_row bg_popap">
+      <div class="popap_row_wrapp">
+        <h2 class="title_popap">Я новый <br>клиент BIKINIMINI</h2>
+
+        <form class="js-auth-form js-auth-registration-form" action="{% url 'auth:registration' %}" method="post">
+          <div class="error-messages"></div>
+
+          <div class="row_form_popup">
+            <label class="lbl_box">
+              <p>Ваш e-mail</p>
+              <input type="email" required="required" value="" name="email" class="input_text">
+            </label>
+          </div>
+          
+          <div class="row_form_popup">
+            <label class="lbl_box">
+              <p>Ваш пароль</p>
+              <input type="password" required="required" value="" name="password" class="input_text">
+            </label>
+          </div>
+          
+          <div class="row_form_popup">
+            <label class="lbl_box">
+              <p>Ваш пароль ещё раз</p>
+              <input type="password" required="required" value="" name="password_repeat" class="input_text">
+            </label>
+          </div>
+          
+          <div class="row_form_popup">
+            <label class="lbl_box">
+              <p>ФИО</p>
+              <input type="text" required="required" value="" name="name" class="input_text">
+            </label>
+          </div>
+
+          <div class="row_form_popup row_pop_butt">
+            <button class="bt_red">Далее</button>
+          </div>
+        </form>
+        
+      </div>
+    </div>
+    
+  </div>
+</div>
+
 {% block popups %}{% endblock %}
 
 <script type="text/javascript" src="/static/js/modal.js"></script>

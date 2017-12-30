@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
                 ('city', models.CharField(blank=True, max_length=225, null=True, verbose_name='\u0413\u043e\u0440\u043e\u0434')),
                 ('address', models.TextField(blank=True, null=True, verbose_name='\u0410\u0434\u0440\u0435\u0441')),
                 ('phone', models.CharField(blank=True, max_length=30, null=True, verbose_name='\u0422\u0435\u043b\u0435\u0444\u043e\u043d')),
-                ('fio', models.CharField(blank=True, max_length=512, null=True, verbose_name='\u0418\u043c\u044f, \u0424\u0430\u043c\u0438\u043b\u0438\u044f, \u041e\u0442\u0447\u0435\u0441\u0442\u0432\u043e')),
+                ('fio', models.CharField(blank=True, max_length=511, null=True, verbose_name='\u0418\u043c\u044f, \u0424\u0430\u043c\u0438\u043b\u0438\u044f, \u041e\u0442\u0447\u0435\u0441\u0442\u0432\u043e')),
                 ('status', models.PositiveSmallIntegerField(choices=[(0, '\u043d\u043e\u0432\u044b\u0439'), (1, '\u043f\u0440\u0438\u043d\u044f\u0442'), (2, '\u043e\u0442\u043f\u0440\u0430\u0432\u043b\u0435\u043d'), (3, '\u0438\u0441\u043f\u043e\u043b\u043d\u0435\u043d'), (4, '\u043e\u0442\u043c\u0435\u043d\u0435\u043d')], default=0, verbose_name='\u0421\u0442\u0430\u0442\u0443\u0441')),
                 ('summary', models.DecimalField(decimal_places=2, default=0, max_digits=9)),
                 ('profile', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='\u041f\u0440\u043e\u0444\u0438\u043b\u044c')),

@@ -1,1 +1,30 @@
 ._disabled { pointer-events: none; -webkit-pointer-events: none; opacity: 0.5; }
+/*
+textarea.error { background: rgb(251, 227, 228); border: 1px solid #fbc2c4; color: #8a1f11; }
+input.error { background: rgb(251, 227, 228); border: 1px solid #fbc2c4; color: #8a1f11; }
+*/
+textarea.error { background: rgb(251, 227, 228); border: 1px solid #dc4335; color: #8a1f11; }
+input.error { background: rgb(251, 227, 228); border: 1px solid #dc4335; color: #8a1f11; }
+.err-message { color: #cc0000; text-align: left; margin-bottom: 5px; }
+textarea.input_text.no_hover_border:focus, textarea.input_text.no_hover_border:hover { border: 1px solid #dee8ed; }
+select.country_select {
+    padding: 0 3%;
+    width: 100% !important;
+    margin: 0;
+    display: inline-block;
+    width: 72px;
+    height: 42px;
+    position: relative;
+    z-index: 100;
+    display: inline-block;
+    width: 70px;
+    position: relative;
+    height: 40px;
+    border-radius: 3px;
+    border: solid 1px #dee8ed;
+    background-color: #ebf1f4;
+    color: #272727;
+    cursor: pointer;
+    overflow: hidden;
+    text-align: left;
+}

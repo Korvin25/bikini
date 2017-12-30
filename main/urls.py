@@ -20,6 +20,7 @@ urlpatterns = [
 
     # pages
     url(r'^api/cart/', include('apps.cart.api.urls', namespace='cart_api')),
+    url(r'^api/auth/', include('apps.lk.auth.urls', namespace='auth')),
     # url(r'^forms/', include('apps.feedback.urls', namespace='forms')),
 
     # 3rd party apps
