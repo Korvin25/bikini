@@ -93,3 +93,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
         }
         data = {k: v for k, v in data.iteritems() if v}
         return data
+
+    @property
+    def complete_orders(self):
+        return self.cart_set.filter(checked_out=True)

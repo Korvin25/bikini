@@ -5,6 +5,8 @@ from django.contrib.postgres.fields import JSONField
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.db import models
+from django.template.loader import get_template
+from django.utils.safestring import mark_safe
 
 from ..catalog.models import Product, ProductOption
 from ..geo.models import Country
@@ -110,7 +112,11 @@ class Cart(models.Model):
             return '000 {}'.format(_number)
 
     def show_items(self):
-        return 'not implemented yet'
+        template = get_template('cart/include/cart_items.html')
+        data = template.render({'cart': self})
+        return mark_safe(data)
+    show_items.allow_tags = True
+    show_items.short_description = 'Список позиций'
 
 
 class CartItem(models.Model):

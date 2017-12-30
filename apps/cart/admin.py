@@ -19,7 +19,7 @@ class CartAdmin(admin.ModelAdmin):
         ('Данные из формы', {
             'fields': ('country', 'city', 'address', 'phone', 'name', 'additional_info',)
         }),
-        ('Список товаров', {
+        ('Список позиций', {
             'fields': ('show_items',)
         }),
     )

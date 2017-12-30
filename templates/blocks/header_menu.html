@@ -77,9 +77,9 @@
         }
       </script>
       <li class="js-auth-switch"{% if not request.user.is_anonymous %} style="display: none;"{% endif %}><a rel="leanModal1" href="#auth" href="#">Вход / регистрация</a></li>
-      <li class="js-auth-switch"{% if request.user.is_anonymous %} style="display: none;"{% endif %}><a href="#">Мой профиль</a></li>
+      <li class="js-auth-switch"{% if request.user.is_anonymous %} style="display: none;"{% endif %}><a href="{% url 'profile' %}">Мой профиль</a></li>
       <li class="js-auth-switch"{% if request.user.is_anonymous %} style="display: none;"{% endif %}><a href="#">Моё избранное</a></li>
-      <li class="js-auth-switch"{% if request.user.is_anonymous %} style="display: none;"{% endif %}><a href="#">История покупок</a></li>
+      <li class="js-auth-switch"{% if request.user.is_anonymous %} style="display: none;"{% endif %}><a href="{% url 'profile' %}?tab=orders">История покупок</a></li>
       <li class="js-auth-switch"{% if request.user.is_anonymous %} style="display: none;"{% endif %}><a href="{% url 'auth:logout' %}">Выход</a></li>
     </ul>
   </div>

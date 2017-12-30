@@ -87,7 +87,7 @@ class RegistrationView(JSONFormMixin, CreateView):
         # send_registration_email(profile)
         # admin_send_registration_email(profile)
 
-        data = {'result': 'ok', 'popup': '#step3'}
+        data = {'result': 'ok', 'popup': '#step3', 'profile_shipping_data': profile.shipping_data}
         return JsonResponse(data)
 
 

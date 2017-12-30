@@ -13,6 +13,7 @@ from django.views.generic import TemplateView
 from apps.cart.views import CartView
 from apps.catalog.views import ProductsView, ProductView
 from apps.content.views import HomepageView, VideoListView, VideoDetailView, PageView
+from apps.lk.views import ProfileHomeView
 
 
 urlpatterns = [
@@ -57,6 +58,7 @@ urlpatterns += i18n_patterns(
     url(r'^women-detail/$', TemplateView.as_view(template_name='catalog/women-detail.html'), name='women-detail'),
 
     url(r'^cart/$', CartView.as_view(), name='cart'),
+    url(r'^profile/$', ProfileHomeView.as_view(), name='profile'),
 
     url(r'^women/$', ProductsView.as_view(with_category=False, sex='female'), name='women'),
     url(r'^men/$', ProductsView.as_view(with_category=False, sex='male'), name='men'),

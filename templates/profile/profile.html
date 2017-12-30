@@ -224,9 +224,6 @@
                     </div>
                   </div>
                   
-                  
-                  
-                  
                   <div class="row_form_popup row_pop_butt">
                     <button class="bt_red">Сохранить</button>
                   </div>
@@ -239,117 +236,60 @@
               <div class="wns_orders_tbl">
                 
                 <div class="table_shell tb_shell">
-                  <div class="table_head tb_head">
-                    <div class="table_cell"><div class="tb_title">Дата заказа</div></div>
-                    <div class="table_cell"><div class="tb_title">Номер заказа</div></div>
-                    <div class="table_cell"><div class="tb_title">Способ доставки</div></div>
-                    <div class="table_cell"><div class="tb_title">Способ оплаты</div></div>
-                    <div class="table_cell"><div class="tb_title">Статус</div></div>
-                    <div class="table_cell"><div class="tb_title">Итого к оплате</div></div>
-                  </div>
-                  
-                  <div class="table_row  tb_row">
-                    <div class="table_cell">
-                      <div class="tb_title">Дата заказа</div>
-                      <div class="txt_cell_td">12 августа</div>
+
+                  {% if request.user.complete_orders.count %}
+                    <div class="table_head tb_head">
+                      <div class="table_cell"><div class="tb_title">Дата заказа</div></div>
+                      <div class="table_cell"><div class="tb_title">Номер заказа</div></div>
+                      {# <div class="table_cell"><div class="tb_title">Способ доставки</div></div> #}
+                      {# <div class="table_cell"><div class="tb_title">Способ оплаты</div></div> #}
+                      <div class="table_cell"><div class="tb_title">Статус</div></div>
+                      <div class="table_cell"><div class="tb_title">Итого к оплате</div></div>
                     </div>
-                    
-                    <div class="table_cell">
-                      <div class="tb_title">Номер заказа</div>
-                      <div class="txt_cell_td">201612356890</div>
-                    </div>
-                    
-                    <div class="table_cell">
-                      <div class="tb_title">Способ доставки</div>
-                      <div class="txt_cell_td">самовывоз</div>
-                    </div>
-                    
-                    <div class="table_cell">
-                      <div class="tb_title">Способ оплаты</div>
-                      <div class="txt_cell_td">paypal</div>
-                    </div>
-                    
-                    <div class="table_cell">
-                      <div class="tb_title">Статус</div>
-                      <div class="txt_cell_td">исполнен</div>
-                    </div>
-                    
-                    <div class="table_cell">
-                      <div class="tb_title">Итого к оплате</div>
-                      <div class="txt_cell_td"><div class="product_price">3 250<abbr title="руб">р</abbr></div></div>
-                    </div>
-                    
-                  </div>
-                  
-                  <div class="table_row  tb_row">
-                    <div class="table_cell">
-                      <div class="tb_title">Дата заказа</div>
-                      <div class="txt_cell_td">12 августа</div>
-                    </div>
-                    
-                    <div class="table_cell">
-                      <div class="tb_title">Номер заказа</div>
-                      <div class="txt_cell_td">201612356890</div>
-                    </div>
-                    
-                    <div class="table_cell">
-                      <div class="tb_title">Способ доставки</div>
-                      <div class="txt_cell_td">самовывоз</div>
-                    </div>
-                    
-                    <div class="table_cell">
-                      <div class="tb_title">Способ оплаты</div>
-                      <div class="txt_cell_td">paypal</div>
-                    </div>
-                    
-                    <div class="table_cell">
-                      <div class="tb_title">Статус</div>
-                      <div class="txt_cell_td">исполнен</div>
-                    </div>
-                    
-                    <div class="table_cell">
-                      <div class="tb_title">Итого к оплате</div>
-                      <div class="txt_cell_td"><div class="product_price">3 250<abbr title="руб">р</abbr></div></div>
-                    </div>
-                    
-                  </div>
-                  
-                  <div class="table_row  tb_row">
-                    <div class="table_cell">
-                      <div class="tb_title">Дата заказа</div>
-                      <div class="txt_cell_td">12 августа</div>
-                    </div>
-                    
-                    <div class="table_cell">
-                      <div class="tb_title">Номер заказа</div>
-                      <div class="txt_cell_td">201612356890</div>
-                    </div>
-                    
-                    <div class="table_cell">
-                      <div class="tb_title">Способ доставки</div>
-                      <div class="txt_cell_td">самовывоз</div>
-                    </div>
-                    
-                    <div class="table_cell">
-                      <div class="tb_title">Способ оплаты</div>
-                      <div class="txt_cell_td">paypal</div>
-                    </div>
-                    
-                    <div class="table_cell">
-                      <div class="tb_title">Статус</div>
-                      <div class="txt_cell_td">исполнен</div>
-                    </div>
-                    
-                    <div class="table_cell">
-                      <div class="tb_title">Итого к оплате</div>
-                      <div class="txt_cell_td"><div class="product_price">3 250<abbr title="руб">р</abbr></div></div>
-                    </div>
-                    
-                  </div>
-                  
+
+                    {% for order in request.user.complete_orders %}
+                      <div class="table_row  tb_row">
+                        <div class="table_cell">
+                          <div class="tb_title">Дата заказа</div>
+                          {# <div class="txt_cell_td">12 августа</div> #}
+                          <div class="txt_cell_td">{{ order.checkout_date|date:"d.m.Y" }}</div>
+                        </div>
+                        
+                        <div class="table_cell">
+                          <div class="tb_title">Номер заказа</div>
+                          {# <div class="txt_cell_td">201612356890</div> #}
+                          <div class="txt_cell_td">{{ order.number }}</div>
+                        </div>
+
+                        {% comment %}
+                          <div class="table_cell">
+                            <div class="tb_title">Способ доставки</div>
+                            <div class="txt_cell_td">самовывоз</div>
+                          </div>
+                          
+                          <div class="table_cell">
+                            <div class="tb_title">Способ оплаты</div>
+                            <div class="txt_cell_td">paypal</div>
+                          </div>
+                        {% endcomment %}
+                        
+                        <div class="table_cell">
+                          <div class="tb_title">Статус</div>
+                          <div class="txt_cell_td">{{ order.get_status_display }}</div>
+                        </div>
+                        
+                        <div class="table_cell">
+                          <div class="tb_title">Итого к оплате</div>
+                          <div class="txt_cell_td"><div class="product_price">{{ order.show_summary }}<abbr title="руб">р</abbr></div></div>
+                        </div>
+                      
+                      </div>
+                    {% endfor %}
+                  {% else %}
+                    <br/>
+                    <h4>У вас пока нет заказов. <a href="{% url 'women' %}">Идти к каталогу</a></h4>
+                  {% endif %}
                 </div>
-                
-                
               </div>
             </div>
           </div>
@@ -379,6 +319,9 @@
             })(jQuery);
             $(document).ready(function(){
               $(".wns_tubs").lightTabs();
+              {% if request.GET.tab == 'orders' %}
+                showPage(1);
+              {% endif %}
             });
           </script>
         </div>

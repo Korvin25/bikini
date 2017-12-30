@@ -1,0 +1,65 @@
+{% load cart_tags core_tags %}
+
+<ol>
+    {% for item in cart.cartitem_set.all %}
+        {% if forloop.first %}<hr/>{% endif %}
+        <br/>
+        <li>
+            <p>
+                <strong>{{ item.product }}</strong>
+                <ul>
+                    {% for slug, option_id in item.attrs.items %}
+                        {% get_attribute slug as attr %}
+                        {% if attr %}
+                            {% get_option attr option_id as option %}
+                            {% if option %}
+                                <li>{{ attr.title }}: {{ option.title }}</li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </p>
+            <p>Цена: {{ item.option_price|to_int_plus|with_delimeter }} р.</p>
+
+            {% if item.extra_products %}
+                <br/>
+                <p>Дополнительные товары:</p>
+                <ul>
+                    {% for extra_product_id, attrs in item.extra_products.items %}
+                        {% get_extra_product extra_product_id as extra_p %}
+                        {% if extra_p %}
+                            <li>
+                                <p>
+                                    <strong>{{ extra_p.title }}</strong>
+                                    <ul>
+                                        {% for slug, option_id in attrs.items %}
+                                            {% get_attribute slug as attr %}
+                                            {% if attr %}
+                                                {% get_option attr option_id as option %}
+                                                {% if option %}
+                                                    <li>{{ attr.title }}: {{ option.title }}</li>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </p>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+                <p>Цена доп.товаров: {{ item.extra_price|to_int_plus|with_delimeter }} р.</p>
+            {% endif %}
+
+            <br/>
+            <p>Кол-во: <strong>{{ item.count }}</strong></p>
+            {% if item.wrapping_price %}<p>+ Подарочная упаковка: {{ item.wrapping_price|to_int_plus|with_delimeter }} р.</p>{% endif %}
+            <p>Стоимость: <strong>{{ item.price|to_int_plus|with_delimeter }} р.</strong></p>
+            <hr/>
+        </li>
+    {% endfor %}
+</ol>
+
+<p>
+    <br/>
+    Общая стоимость заказа: <strong>{{ cart.show_summary }}</strong> р.
+</p>
