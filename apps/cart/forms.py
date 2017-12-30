@@ -22,6 +22,3 @@ class CartCheckoutForm(forms.ModelForm):
         self.fields['address'].required = True
         self.fields['phone'].required = True
         self.fields['name'].required = True
-
-    def clean_country(self):
-        country = self.cleaned_data.get('country')

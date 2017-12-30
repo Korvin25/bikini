@@ -128,7 +128,7 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
                 del self.request.session['CART_ID']
 
             for k in self.mapping.keys():
-                key = {'country': 'country_id'}.get(k)
+                key = {'country': 'country_id'}.get(k, k)
                 if not getattr(profile, key):
                     setattr(profile, key, getattr(cart, key))
             profile.save()

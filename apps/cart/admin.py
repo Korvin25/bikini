@@ -8,7 +8,7 @@ from .models import Cart
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
-    list_display = ('id', 'profile', 'checked_out', 'checkout_date', 'summary', 'status',)
+    list_display = ('id', 'profile', 'checked_out', 'checkout_date', 'summary', 'country', 'status',)
     list_display_links = ('id', 'profile',)
     list_filter = ('status',)
     list_per_page = 200
@@ -30,3 +30,8 @@ class CartAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         return None
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super(CartAdmin, self).get_queryset(*args, **kwargs)
+        qs = qs.filter(checked_out=True)
+        return qs
