@@ -58,6 +58,7 @@ class RegistrationView(JSONFormMixin, CreateView):
     """
     profile_type = ''
     form_class = RegistrationForm
+    model = Profile
     mapping = {
         'email': 'email',
         'password': 'password',
@@ -66,6 +67,10 @@ class RegistrationView(JSONFormMixin, CreateView):
 
     def get_success_url(self):
         return reverse('home')
+
+    def get_form(self, *args, **kwargs):
+        form = self.form_class(self.POST)
+        return form
 
     def form_valid(self, form):
         super(RegistrationView, self).form_valid(form)
