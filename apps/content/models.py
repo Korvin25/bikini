@@ -5,8 +5,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-# from ckeditor_uploader.fields import RichTextUploadingField
-# from ckeditor.fields import RichTextField
+from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
 from easy_thumbnails.fields import ThumbnailerImageField
 from embed_video.fields import EmbedVideoField
@@ -22,8 +21,9 @@ class Video(MetatagModel):
     slug = models.SlugField('В URL', max_length=127)
     video = EmbedVideoField('Ссылка на видео')
     cover = ThumbnailerImageField('Обложка', upload_to='videos/covers/', null=True, blank=True)
+    text = RichTextUploadingField('Текст', blank=True, null=True)
     # text = RichTextField('Текст', blank=True, null=True)
-    text = HTMLField('Текст', blank=True, null=True)
+    # text = HTMLField('Текст', blank=True, null=True)
     product = models.ForeignKey(Product, verbose_name='Товар', related_name='videos', null=True, blank=True)
     add_dt = models.DateTimeField('Дата добавления', auto_now_add=True)
     show_at_list = models.BooleanField('Показывать в списке на странице "видео"', default=True)
@@ -61,9 +61,9 @@ class Page(MetatagModel):
     image_attributes = models.CharField('Атрибуты alt и title у картинки',
                                         max_length=255, blank=True,
                                         help_text='По умолчанию берутся из поля "Заголовок"')
+    text = RichTextUploadingField('Текст')
     # text = RichTextField('Текст')
     # text = HTMLField('Текст')
-    text = RichTextUploadingField('Текст')
     order = models.IntegerField('Порядок', default=10)
 
     class Meta:
