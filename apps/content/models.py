@@ -6,7 +6,8 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 # from ckeditor_uploader.fields import RichTextUploadingField
-from ckeditor.fields import RichTextField
+# from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 from easy_thumbnails.fields import ThumbnailerImageField
 from embed_video.fields import EmbedVideoField
 from embed_video.backends import detect_backend
@@ -61,7 +62,8 @@ class Page(MetatagModel):
                                         max_length=255, blank=True,
                                         help_text='По умолчанию берутся из поля "Заголовок"')
     # text = RichTextField('Текст')
-    text = HTMLField('Текст')
+    # text = HTMLField('Текст')
+    text = RichTextUploadingField('Текст')
     order = models.IntegerField('Порядок', default=10)
 
     class Meta:

@@ -195,6 +195,7 @@ CKEDITOR_CONFIGS = {
         'forcePasteAsPlainText': True,
         'language': 'ru',
         'width': '100%',
+        # 'width': '140%',
         'toolbar': [
             {'name': 'document', 'items': ['Source']},
             {'name': 'clipboard', 'items': ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']},
@@ -210,11 +211,11 @@ CKEDITOR_CONFIGS = {
             {'name': 'tools', 'items': ['Maximize', 'ShowBlocks']},
             {'name': 'others', 'items': ['-']},
             {'name': 'about', 'items': ['About']},
-       ],
+        ],
         'format_tags': 'p;h2;h3',
         'removeDialogTabs': 'image:advanced;link:advanced',
         'image_previewText': '&nbsp',
-   },
+    },
     'simple': {
         'forcePasteAsPlainText': True,
         'language': 'ru',
@@ -226,10 +227,10 @@ CKEDITOR_CONFIGS = {
              'items': ['NumberedList', 'BulletedList', '-', 'Blockquote']},
             {'name': 'basicstyles', 'items': ['Bold', 'Italic']},
             {'name': 'links', 'items': ['Link']},
-       ],
+        ],
         'removeDialogTabs': 'image:advanced;link:advanced',
         'image_previewText': '&nbsp',
-   },
+    },
 }
 
 
