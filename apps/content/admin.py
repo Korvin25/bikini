@@ -28,9 +28,9 @@ admin.site.register(Folder, FolderAdmin)
 
 @admin.register(Video)
 class VideoAdmin(AdminVideoMixin, TabbedTranslationAdmin):
-    list_display = ('title', 'slug', 'video', 'order', 'cover', 'product', 'add_dt',)
+    list_display = ('title', 'slug', 'video', 'order', 'cover', 'product', 'post', 'add_dt',)
     list_editable = ('order',)
-    list_filter = ('show_at_list',)
+    list_filter = ('show_at_list', 'add_dt',)
     # form = VideoAdminForm
     suit_form_tabs = (
         ('default', 'Видео'),
@@ -39,7 +39,7 @@ class VideoAdmin(AdminVideoMixin, TabbedTranslationAdmin):
     fieldsets = (
         ('Видео', {
             'classes': ('suit-tab suit-tab-default',),
-            'fields': ('title', 'slug', 'video', 'cover', 'text', 'product', 'show_at_list', 'order', 'add_dt',),
+            'fields': ('title', 'slug', 'video', 'cover', 'text', 'product', 'post', 'show_at_list', 'order', 'add_dt',),
         }),
         ('SEO', {
             'classes': ('suit-tab suit-tab-seo',),
@@ -48,7 +48,7 @@ class VideoAdmin(AdminVideoMixin, TabbedTranslationAdmin):
     )
     prepopulated_fields = {'slug': ('title',)}
     readonly_fields = ('add_dt',)
-    raw_id_fields = ('product',)
+    raw_id_fields = ('product', 'post',)
     search_fields = ['title', 'text', 'video', ]
 
 

@@ -24,11 +24,6 @@ class ProductsView(TemplateView):
     }
 
     def get_template_names(self):
-        if self.request.is_ajax():
-            return self.TEMPLATES['ajax'] if self.map is False else self.TEMPLATES['map_ajax']
-        return self.TEMPLATES['default']
-
-    def get_template_names(self):
         TEMPLATES = self.TEMPLATES
         is_ajax = self.request.is_ajax()
         with_category = self.with_category

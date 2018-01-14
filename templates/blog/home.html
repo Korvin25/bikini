@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block meta_title %}{{ seo_settings.blog.get_meta_title }}{% endblock %}
+{% block meta_desc %}{{ seo_settings.blog.get_meta_desc }}{% endblock %}
+{% block meta_keyw %}{{ seo_settings.blog.get_meta_keyw }}{% endblock %}
+
+{% block og_title %}{{ seo_settings.blog.get_meta_title }}{% endblock %}
+{% block og_desc %}{{ seo_settings.blog.get_meta_desc }}{% endblock %}
+
+{% block twitter_title %}{{ seo_settings.blog.get_meta_title }}{% endblock %}
+{% block twitter_desc %}{{ seo_settings.blog.get_meta_desc }}{% endblock %}
+
+{% block content %}
+  <main>
+    <div class="main_content main_content_blog">
+
+      <!--ul id="touch_breadcrumb" class="breadcrumb">
+        <li><a href="#">Главная</a></li>
+        <li><a href="#">Блог</a></li>
+      </ul-->
+      {% block breadcrumbs %}
+        <div class="blog_title">
+          <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Главная</a></li>
+            <li>Блог</li>
+          </ul>
+          <h1 class="title_block">Блог</h1>
+        </div>
+      {% endblock %}
+      
+      <div class="sec_block sec_content_blog">
+        <div class="row_arhive_wth">
+          <form method="get" action="{{ request.path }}" class="mini_search">
+            <input type="text" value="{% if f.q %}{{ f.q }}{% endif %}" name="q" class="input_text " placeholder="Поиск:">
+            <div class="row_form_popup row_pop_butt">
+              <button class="bt_red">Найти</button>
+            </div>
+          </form>
+          
+          {% if has_months %}
+            <div class="arhive_block">
+              <div class="arhive_wrapp">
+                <h2>Архив</h2>
+                {% for column in months_columns %}
+                  <ul class="arhive_list">
+                    {% for month in column %}
+                      <li><a href="{{ request.path }}?year={{ month.year }}&month={{ month.month }}">{{ month|date:'F Y' }}</a></li>
+                    {% endfor %}
+                  </ul>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+
+        {% if gallery.count %}
+          <div class="gallery_sec">
+            <div class="gallery_sec_wrapp">
+              <h2>Галерея</h2>
+              <div class="block_photo_sec">
+                {% for photo in gallery %}
+                  <a href="{{ photo.post.get_absolute_url }}"><img src="{{ photo.thumb_url }}" alt="{{ photo.post.title }}" title="{{ photo.post.title }}"/></a>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    
+      <div id="main_content" class="content_blog">
+        <div id="posts" style="min-height: 200px;">
+          {% if posts.count %}
+            {% include 'blog/include/posts.html' with posts=posts %}
+          {% else %}
+            {% trans 'Ничего не найдено' %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </main>
+{% endblock %}

@@ -10,6 +10,7 @@ from django.views.generic import TemplateView
 
 # from solid_i18n.urls import solid_i18n_patterns
 
+from apps.blog.views import PostListView, PostDetailView
 from apps.cart.views import CartView
 from apps.catalog.views import ProductsView, ProductView
 from apps.content.views import HomepageView, VideoListView, VideoDetailView, PageView
@@ -70,7 +71,9 @@ urlpatterns += i18n_patterns(
     url(r'^video/$', VideoListView.as_view(), name='videos'),
     url(r'^video/(?P<slug>[^/]+)-(?P<pk>\d+)/$', VideoDetailView.as_view(), name='video'),
 
-    url(r'^blog/$', TemplateView.as_view(template_name='blog.html'), name='blog'),
+    url(r'^blog/', include('apps.blog.urls', namespace='blog')),
+
+    url(r'^blog-old/$', TemplateView.as_view(template_name='blog.html'), name='blog-old'),
     url(r'^blog-page/$', TemplateView.as_view(template_name='blog-page.html'), name='blog-page'),
 
     url(r'^(?P<slug>[^/]+)/$', PageView.as_view(), name='page'),

@@ -11,6 +11,7 @@ from apps.catalog.models import Product
 from apps.cart.cart import Cart
 from apps.cart.forms import CartCheckoutForm
 from apps.core.mixins import JSONFormMixin
+from apps.lk.email import admin_send_order_email, send_order_email
 
 
 class EmptyCartError(Exception):
@@ -121,8 +122,10 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
 
             profile = cart.profile
 
-            # send_customer_order_email(order.profile, order=cart)
             # send_admin_order_email(order=cart)
+            # send_customer_order_email(order.profile, order=cart)
+            admin_send_order_email(order=cart)
+            send_order_email(order.profile, order=cart)
 
             if self.request.session.get('CART_ID'):
                 del self.request.session['CART_ID']

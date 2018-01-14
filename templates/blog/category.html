@@ -1,0 +1,23 @@
+{% extends 'blog/home.html' %}
+{% load i18n %}
+
+{% block meta_title %}{{ category.get_meta_title }}{% endblock %}
+{% block meta_desc %}{{ category.get_meta_desc }}{% endblock %}
+{% block meta_keyw %}{{ category.get_meta_keyw }}{% endblock %}
+
+{% block og_title %}{{ category.get_meta_title }}{% endblock %}
+{% block og_desc %}{{ category.get_meta_desc }}{% endblock %}
+
+{% block twitter_title %}{{ category.get_meta_title }}{% endblock %}
+{% block twitter_desc %}{{ category.get_meta_desc }}{% endblock %}
+
+{% block breadcrumbs %}
+  <div class="blog_title">
+    <ul class="breadcrumb">
+      <li><a href="{% url 'home' %}">Главная</a></li>
+      <li><a href="{% url 'blog:home' %}">Блог</a></li>
+      <li>{{ category.title }}</li>
+    </ul>
+    <h1 class="title_block">{{ category.title }}</h1>
+  </div>
+{% endblock %}

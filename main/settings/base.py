@@ -73,11 +73,11 @@ INSTALLED_APPS = (
     'apps.geo',
     'apps.lk',
     'apps.settings',
+    'apps.blog',
     'apps.catalog',
     'apps.cart',
     'apps.content',
     # 'apps.contests',
-    # 'apps.blog',
     'apps.banners',
     # 'apps.payments',
     # 'apps.mailings',
@@ -370,6 +370,10 @@ THUMBNAIL_ALIASES = {
         'product_photo_big': {'size': (1000, 1000), 'crop': False, 'quality': 100, 'upscale': True},
 
         'video_preview': {'size': (352, 183), 'crop': True, 'quality': 100, 'upscale': True},
+
+        'blog_cover_list': {'size': (792, 387), 'crop': True, 'quality': 100, 'upscale': True},
+        'blog_cover_detail': {'size': (1000, 500), 'crop': False, 'quality': 100, 'upscale': False},
+        'blog_gallery_thumb': {'size': (95, 95), 'crop': True, 'quality': 100, 'upscale': True},
     },
 }
 

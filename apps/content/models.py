@@ -12,6 +12,7 @@ from embed_video.fields import EmbedVideoField
 from embed_video.backends import detect_backend
 from tinymce.models import HTMLField
 
+from ..blog.models import Post
 from ..catalog.models import Product
 from ..settings.models import MetatagModel
 
@@ -25,6 +26,7 @@ class Video(MetatagModel):
     # text = RichTextField('Текст', blank=True, null=True)
     # text = HTMLField('Текст', blank=True, null=True)
     product = models.ForeignKey(Product, verbose_name='Товар', related_name='videos', null=True, blank=True)
+    post = models.ForeignKey(Post, verbose_name='Пост в блоге', related_name='videos', null=True, blank=True)
     add_dt = models.DateTimeField('Дата добавления', auto_now_add=True)
     show_at_list = models.BooleanField('Показывать в списке на странице "видео"', default=True)
     order = models.IntegerField('Порядок', default=10)
@@ -57,7 +59,7 @@ class Video(MetatagModel):
 class Page(MetatagModel):
     title = models.CharField('Заголовок', max_length=255)
     slug = models.SlugField('Адрес в url', max_length=255, unique=True)
-    image = models.ImageField('Картинка', null=True, blank=True)
+    image = ThumbnailerImageField('Картинка', null=True, blank=True)
     image_attributes = models.CharField('Атрибуты alt и title у картинки',
                                         max_length=255, blank=True,
                                         help_text='По умолчанию берутся из поля "Заголовок"')

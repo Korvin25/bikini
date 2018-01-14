@@ -56,6 +56,13 @@ def admin_send_registration_email(obj):
     email_admin(subject, email_key, obj, admin_slug=admin_slug)
 
 
+def admin_send_order_email(obj, *args):
+    """
+    TODO
+    """
+    pass
+
+
 def email_user(subject, email_key, profile, obj=None, **kwargs):
     request = CrequestMiddleware.get_request()
 
@@ -100,3 +107,10 @@ def send_reset_password_email(profile, passwd):
     email_key = 'reset_password'
     profile_kwargs = {'passwd': passwd}
     email_user(subject, email_key, profile, **profile_kwargs)
+
+
+def send_order_email(obj, *args):
+    """
+    TODO
+    """
+    pass

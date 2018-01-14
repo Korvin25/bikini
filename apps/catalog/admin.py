@@ -305,6 +305,7 @@ class ProductPhotoInline(ProductPhotoAdmin):
 class ProductVideoInline(TranslationInlineModelAdmin, admin.StackedInline):  # CompactInline
     model = Video
     fields = ('title', 'slug', 'video', 'cover', 'text', 'show_at_list')
+    prepopulated_fields = {'slug': ('title',)}
     suit_classes = 'suit-tab suit-tab-video'
     min_num = 0
     extra = 1

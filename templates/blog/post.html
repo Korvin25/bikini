@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block meta_title %}{{ post.get_meta_title }}{% endblock %}
+{% block meta_desc %}{{ post.get_meta_desc }}{% endblock %}
+{% block meta_keyw %}{{ post.get_meta_keyw }}{% endblock %}
+
+{% block og_title %}{{ post.get_meta_title }}{% endblock %}
+{% block og_desc %}{{ post.get_meta_desc }}{% endblock %}
+
+{% block twitter_title %}{{ post.get_meta_title }}{% endblock %}
+{% block twitter_desc %}{{ post.get_meta_desc }}{% endblock %}
+
+{% block content %}
+  <main>
+    <style>
+      /*.bt_red._without_hover { cursor: default; }*/
+      .bt_red._without_hover { cursor: auto; }
+      .bt_red._without_hover:hover { background-color: #8c2c34; }
+      .text_blog .img { display: block; width: 100%; }
+    </style>
+
+    <div class="main_content main_content_blog">
+
+      <div class="blog_title">
+        <ul class="breadcrumb">
+          <li><a href="{% url 'home' %}">Главная</a></li>
+          <li><a href="{% url 'blog:home' %}">Блог</a></li>
+          <li><a href="{{ post.category.get_absolute_url }}">{{ post.category.title }}</a></li>
+          <li>{{ post.title }}</li>
+        </ul>
+        <h1 class="title_block">{{ post.title }}</h1>
+      </div>
+
+      <div class="sec_block sec_content_blog sec_mini_movie">
+
+        {% if post.videos.count %}
+          <div class="arhive_block mini_video">
+            <div class="arhive_wrapp mini_video_wrapp">
+              <h2>Видео</h2>
+              
+              <div class="list_mini_video">
+                {% for video in post.videos.all %}
+                  <div class="row_movie">
+                    <div class="object_movie">
+                      <img src="{{ video.get_cover_url }}" />
+                      <div class="play_movie"></div>
+                    </div>
+                    <div class="object_movie">
+                      <img src="{{ video.get_cover_url }}" />
+                      <div class="play_movie"></div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+
+        {% if post.gallery.count %}
+          {% comment %}
+            <script language="javascript" src="/static/js/highslide/jquery.jcarousel.min.js"></script>
+            <script type="text/javascript">
+              {% include 'catalog/include/init_product_photos.js' %}
+            </script>
+          {% endcomment %}
+          <!-- УВЕЛИЧЕНИЕ КАРТИНКИ -->
+          <script type="text/javascript" src="/static/js/highslide/highslide-with-gallery.js"></script>
+          <link rel="stylesheet" type="text/css" href="/static/js/highslide/highslide.css" />
+          <script type="text/javascript">
+            hs.graphicsDir = '/static/js/highslide/graphics/'; 
+            hs.align = 'center';
+            hs.transitions = ['expand', 'crossfade']; 
+            hs.outlineType = 'rounded-white';
+            hs.fadeInOut = true; 
+            hs.dimmingOpacity = 0.5; 
+            hs.addSlideshow({
+              interval: 5000, 
+              repeat: false, 
+              useControls: true, 
+              fixedControls: 'fit', 
+              overlayOptions: { 
+                opacity: 0.75, 
+                position: 'bottom center', 
+                hideOnMouseOut: true
+              }
+            });
+          </script>
+          <!-- УВЕЛИЧЕНИЕ КАРТИНКИ <<< -->
+
+          <div class="gallery_sec photogallery_bl_page">
+            <div class="gallery_sec_wrapp">
+              <h2>Галерея</h2>
+              <div class="block_photo_sec highslide-gallery">
+                {% for photo in post.gallery.all %}
+                  <a href="{{ photo.big_url }}" target="_blank"
+                     class="highslide" onclick="return hs.expand(this)"
+                     title="#{{ forloop.counter }}">
+                       <img src="{{ photo.thumb_url }}" alt="#{{ forloop.counter }}"/>
+                   </a>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    
+      <div id="main_content" class="content_blog">
+        <div class="rows_blog rows_bl_page">
+          
+          <div class="row_blog row_blog_page">
+            <div class="img_blog">
+              <img src="{{ post.cover_list_url }}" alt="{{ post.cover_alt }}" />
+              
+              <a href="{{ post.category.get_absolute_url }}" class="bt_red">{{ post.category.title }}</a>
+              <span class="bt_red _without_hover">{{ post.datetime|date:'d.m.Y' }}</span>
+            </div>
+            <div class="text_blog">
+              {{ post.text|safe }}
+            </div>
+          </div>
+          
+          <div class="soc_share">
+            <div class="soc_share_wrapp">
+              <div class="title_mini">Поделиться в соц. сетях:</div>
+              <a href="#"><img src="/static/images/social/face.png" alt="FaceBook" /></a>
+              <a href="#"><img src="/static/images/social/vk.png" alt="Vk" /></a>
+              <a href="#"><img src="/static/images/social/tw.png" alt="Twitter" /></a>
+              <a href="#"><img src="/static/images/social/ok.png" alt="Ok" /></a>
+              <a href="#"><img src="/static/images/social/you.png" alt="YouTube" /></a>
+              <a href="#"><img src="/static/images/social/gplus.png" alt="GooglePlus" /></a>
+            </div>
+          </div>
+          
+          <div class="comment_block" id="comments">
+            <div class="comment_wrapp">
+              <h3 class="title_block">Комментарии</h3>
+
+              {% for comment in post.comments.all %}
+                <div class="comment_row" id="comment{{ comment.id }}">
+                  <h4>{{ comment.name }}</h4>
+                  <div class="comment_date">{{ comment.datetime|date:'d N Y'|lower }}</div>
+                  <div class="comment_text">
+                    {{ comment.comment|linebreaksbr }}
+                  </div>
+                </div>
+              {% empty %}
+                <p style="margin-bottom: 40px;">Комментариев еще нет, оставьте первым</p>
+              {% endfor %}
+              
+              <form action="{{ request.post }}" method="post" class="comment_form">
+                {% csrf_token %}
+                <div class="input_shell">
+                  <input name="name" id="name" required placeholder="Имя" class="t_area input_text bg_area"/>
+                  <textarea name="comment" rows="4" id="comment" required class="t_area input_text bg_area" placeholder="Комментарий"></textarea>
+                  <span class="err_r">Заполните поле</span>
+                </div>
+                <div class="row_form_popup row_pop_butt">
+                  <button class="bt_red">Отправить</button>
+                </div>
+              </form>
+              
+            </div>
+          </div>
+          
+        </div>
+        
+      </div>
+      
+    </div>
+  </main>
+{% endblock %}
