@@ -7,8 +7,9 @@ from django.views.generic import TemplateView, ListView, DetailView
 
 from el_pagination.views import AjaxListView
 
-from ..catalog.models import Product
 from ..banners.models import PromoBanner
+from ..catalog.models import Product
+from ..core.http_utils import get_object_from_slug_and_kwargs
 from .models import Video, Page
 
 
@@ -46,23 +47,9 @@ class VideoDetailView(DetailView):
     context_object_name = 'video'
 
     def get_object(self, *args, **kwargs):
-        video = _get_video_from_kwargs(request=self.request, slug=self.kwargs.get('slug'), pk=self.kwargs.get('pk'))
+        kw = {'pk': self.kwargs.get('pk')}
+        video = get_object_from_slug_and_kwargs(self.request, model=Video, slug=self.kwargs.get('slug'), **kw)
         return video
-
-
-def _get_video_from_kwargs(request, slug, pk):
-    video = None
-    try:
-        video = get_object_or_404(Video, slug=slug, pk=pk)
-    except Http404 as exc:
-        if request.LANGUAGE_CODE != 'ru':
-            try:
-                video = get_object_or_404(Video, slug_en=slug, pk=pk)
-            except Http404:
-                video = get_object_or_404(Video, slug_ru=slug, pk=pk)
-        else:
-            raise exc
-    return video
 
 
 class PageView(DetailView):

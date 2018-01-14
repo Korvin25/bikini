@@ -31,7 +31,10 @@ def get_current_path(context):
 @register.simple_tag(takes_context=True)
 def get_translated_path(context, lang=None):
     path = context['request'].path
-    obj = context.get('product') or context.get('category')
+    obj = (context.get('product')
+           or context.get('category')
+           or context.get('video')
+           or context.get('post'))
     if obj and lang:
         current_language = translation.get_language()
         translation.activate(lang)

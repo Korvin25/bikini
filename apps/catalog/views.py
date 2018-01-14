@@ -8,8 +8,9 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 
-from .models import Attribute, Category, GiftWrapping, Product, ProductOption
 from ..core.templatetags.core_tags import to_int_plus
+from ..core.http_utils import get_object_from_slug_and_kwargs
+from .models import Attribute, Category, GiftWrapping, Product, ProductOption
 
 
 class ProductsView(TemplateView):
@@ -39,8 +40,9 @@ class ProductsView(TemplateView):
         }.get(True)
 
     def get_category(self):
+        kw = {'sex': self.sex}
         self.category = (None if self.with_category is False
-                         else _get_category_from_kwargs(request=self.request, sex=self.sex, slug=self.kwargs.get('slug')))
+                         else get_object_from_slug_and_kwargs(self.request, model=Category, slug=self.kwargs.get('slug'), **kw))
         return self.category
 
     def get_attributes(self):
@@ -173,9 +175,11 @@ class ProductView(TemplateView):
     sex = 'female'
 
     def get_product(self):
-        self.category = _get_category_from_kwargs(request=self.request, sex=self.sex, slug=self.kwargs.get('category_slug'))
-        self.product = _get_product_from_kwargs(request=self.request, category=self.category,
-                                                slug=self.kwargs.get('slug'), pk=self.kwargs.get('pk'))
+        kw = {'sex': self.sex}
+        self.category = get_object_from_slug_and_kwargs(self.request, model=Category, slug=self.kwargs.get('category_slug'), **kw)
+
+        kw = {'pk': self.kwargs.get('pk'), 'categories': self.category, 'show': True}
+        self.product = get_object_from_slug_and_kwargs(self.request, model=Product, slug=self.kwargs.get('slug'), **kw)
         return self.product
 
     def get_attributes(self):
@@ -345,33 +349,3 @@ class ProductView(TemplateView):
         }
         context.update(super(ProductView, self).get_context_data(**kwargs))
         return context
-
-
-def _get_category_from_kwargs(request, sex, slug):
-    category = None
-    try:
-        category = get_object_or_404(Category, sex=sex, slug=slug)
-    except Http404 as exc:
-        if request.LANGUAGE_CODE != 'ru':
-            try:
-                category = get_object_or_404(Category, sex=sex, slug_en=slug)
-            except Http404:
-                category = get_object_or_404(Category, sex=sex, slug_ru=slug)
-        else:
-            raise exc
-    return category
-
-
-def _get_product_from_kwargs(request, category, slug, pk):
-    product = None
-    try:
-        product = get_object_or_404(Product, categories=category, slug=slug, pk=pk, show=True)
-    except Http404 as exc:
-        if request.LANGUAGE_CODE != 'ru':
-            try:
-                product = get_object_or_404(Product, categories=category, slug_en=slug, pk=pk, show=True)
-            except Http404:
-                product = get_object_or_404(Product, categories=category, slug_ru=slug, pk=pk, show=True)
-        else:
-            raise exc
-    return product
