@@ -110,7 +110,7 @@
           
           <div class="row_blog row_blog_page">
             <div class="img_blog">
-              <img src="{{ post.cover_list_url }}" alt="{{ post.cover_alt }}" />
+              <img src="{{ post.cover_detail_url }}" alt="{{ post.cover_alt }}" />
               
               <a href="{{ post.category.get_absolute_url }}" class="bt_red">{{ post.category.title }}</a>
               <span class="bt_red _without_hover">{{ post.datetime|date:'d.m.Y' }}</span>
@@ -123,12 +123,17 @@
           <div class="soc_share">
             <div class="soc_share_wrapp">
               <div class="title_mini">Поделиться в соц. сетях:</div>
-              <a href="#"><img src="/static/images/social/face.png" alt="FaceBook" /></a>
-              <a href="#"><img src="/static/images/social/vk.png" alt="Vk" /></a>
-              <a href="#"><img src="/static/images/social/tw.png" alt="Twitter" /></a>
-              <a href="#"><img src="/static/images/social/ok.png" alt="Ok" /></a>
-              <a href="#"><img src="/static/images/social/you.png" alt="YouTube" /></a>
-              <a href="#"><img src="/static/images/social/gplus.png" alt="GooglePlus" /></a>
+              <script src="//yastatic.net/es5-shims/0.0.2/es5-shims.min.js"></script>
+              <script src="//yastatic.net/share2/share.js"></script>
+              <div class="ya-share2" data-services="facebook,vkontakte,twitter,odnoklassniki,gplus" data-description="{{ post.description }}" data-hashtags="Bikinimini.ru" data-image="{{ post.cover_detail_url }}" data-lang="{{ request.LANGUAGE_CODE }}"></div>
+              {% comment %}
+                <a href="#"><img src="/static/images/social/face.png" alt="FaceBook" /></a>
+                <a href="#"><img src="/static/images/social/vk.png" alt="Vk" /></a>
+                <a href="#"><img src="/static/images/social/tw.png" alt="Twitter" /></a>
+                <a href="#"><img src="/static/images/social/ok.png" alt="Ok" /></a>
+                <a href="#"><img src="/static/images/social/you.png" alt="YouTube" /></a>
+                <a href="#"><img src="/static/images/social/gplus.png" alt="GooglePlus" /></a>
+              {% endcomment %}
             </div>
           </div>
           
