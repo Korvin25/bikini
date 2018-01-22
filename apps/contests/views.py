@@ -136,7 +136,8 @@ class AddLikeView(View):
                     liked_participants.append(participant_id)
                     request.session['liked_participants'] = liked_participants
 
-                return JsonResponse({'result': 'ok', 'count': participant.likes_count})
+                button_text = 'Ваш лайк засчитан'
+                return JsonResponse({'result': 'ok', 'count': participant.likes_count, 'button_text': button_text})
 
             except (ValueError, KeyError, Participant.DoesNotExist) as e:
                 err_message = '{}: {}'.format(type(e).__name__, e.message)
@@ -162,7 +163,8 @@ class RemoveLikeView(View):
                     liked_participants.pop(liked_participants.index(participant_id))
                     request.session['liked_participants'] = liked_participants
 
-                return JsonResponse({'result': 'ok', 'count': participant.likes_count})
+                button_text = 'Оценить участницу +'
+                return JsonResponse({'result': 'ok', 'count': participant.likes_count, 'button_text': button_text})
 
             except (ValueError, KeyError, Participant.DoesNotExist) as e:
                 err_message = '{}: {}'.format(type(e).__name__, e.message)

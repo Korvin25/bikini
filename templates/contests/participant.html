@@ -43,11 +43,16 @@
             <span class="disc_number js-likes-count-span">{{ participant.likes_count }}</span>
           </div>                
 
-          {% comment %}
           <div class="bt_req_call red_bor_butt">
-            <a href="#" onclick="return false">Оценить участницу</a>
+            <a href="#" class="js-rate-participant">{% if participant.id|to_str in liked_participants %}Ваш лайк засчитан{% else %}Оценить участницу{% endif %}</a>
           </div>
-          {% endcomment %}
+
+          <div class="share_banner" style="color: #000; text-align: left; margin-top: 20px;">
+            <p>Поделиться:</p>
+            <script src="//yastatic.net/es5-shims/0.0.2/es5-shims.min.js"></script>
+            <script src="//yastatic.net/share2/share.js"></script>
+            <div class="ya-share2" data-services="facebook,vkontakte,twitter,odnoklassniki,gplus" data-description="{{ participant.description }}" data-hashtags="Bikinimini.ru" data-image="{{ participant.photo_big_url }}" data-lang="{{ request.LANGUAGE_CODE }}"></div>
+          </div>
         </div>
         <!-- SLIDER ITEM >>> -->
           <div class="nom_img">
@@ -150,15 +155,6 @@
           </div>
           <div class="highslide-dimming"></div>
         <!-- SLIDER ITEM <<< -->
-
-          {% comment %}
-          <div class="share_banner">
-            <p>Поделиться:</p>
-            <script src="//yastatic.net/es5-shims/0.0.2/es5-shims.min.js"></script>
-            <script src="//yastatic.net/share2/share.js"></script>
-            <div class="ya-share2" data-services="facebook,vkontakte,twitter,odnoklassniki,gplus" data-description="{{ participant.description }}" data-hashtags="Bikinimini.ru" data-image="{{ participant.photo_big_url }}" data-lang="{{ request.LANGUAGE_CODE }}"></div>
-          </div>
-          {% endcomment %}
         </div>
 
         {% if participant.products.count %}

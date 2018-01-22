@@ -136,10 +136,16 @@ $('.js-apply-form').on('submit', function(e) {
 
 // ----- Лайк/дизлайк -----
 
+$('.js-rate-participant').click(function(e){
+  e.preventDefault();
+  $('.js-like-participant').click();
+})
+
 $('.js-like-participant').on('change', function(){ 
   var $button = $(this), 
       $parent = $button.parents('.js-like-parent'),
       $likes_count_span = $parent.find('.js-likes-count-span'),
+      $button_text = $('.js-rate-participant'),
 
       is_checked = $button.is(':checked'),
 
@@ -157,6 +163,8 @@ $('.js-like-participant').on('change', function(){
   if (is_checked) { url = like_url; }
   else { url = dislike_url; };
 
+  $button_text.addClass('_disabled');
+
   $.ajax({
     url: url,
     type: 'POST',
@@ -166,11 +174,17 @@ $('.js-like-participant').on('change', function(){
     contentType: 'application/json',
 
     success: function(res){
+      $button_text.removeClass('_disabled');
+
       var err = res['errors'],
           result = res['result'],
-          likes_count = res['count'];
+          likes_count = res['count'],
+          button_text = res['button_text'];
 
-      if (result == 'ok') { $likes_count_span.text(likes_count); }
+      if (result == 'ok') {
+        $likes_count_span.text(likes_count);
+        if (button_text) { $button_text.text(button_text); };
+      }
       else {
         // if (error) { showErrorPopup('При отправке формы произошла ошибка:', error); }
         // if (errors) { showErrorPopup('При отправке формы произошла ошибка:', errors); }
@@ -182,6 +196,7 @@ $('.js-like-participant').on('change', function(){
     },
     error: function(res){
       $button.removeClass('_disabled');
+      $button_text.removeClass('_disabled');
 
       if (res.status == 400) {
         var response;
