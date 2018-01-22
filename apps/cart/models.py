@@ -170,6 +170,11 @@ class CartItem(models.Model):
         return (self.base_price*self.count + self.wrapping_price if self.count
                 else 0)
 
+    @property
+    def total_price_without_discount(self):
+        return to_int_plus(self.base_price_without_discount*self.count + self.wrapping_price if self.count
+                           else 0)
+
     def save(self, *args, **kwargs):
         self.price = self.count_price()
         return super(CartItem, self).save(*args, **kwargs)

@@ -50,12 +50,14 @@ class Cart:
                     cart=self.cart,
                     product_id=product_id,
                     option_id=option_id,
+                    discount=kwargs.get('discount', 0),
                 )
             except Item.DoesNotExist:
                 item = Item(
                     cart=self.cart,
                     product_id=product_id,
                     option_id=option_id,
+                    discount=kwargs.get('discount', 0),
                 )
             except ValueError:
                 pass

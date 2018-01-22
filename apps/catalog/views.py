@@ -168,6 +168,7 @@ class ProductsView(TemplateView):
 class ProductView(TemplateView):
     template_name = 'catalog/product.html'
     sex = 'female'
+    discount = 0
 
     def get_product(self):
         kw = {'sex': self.sex}
@@ -259,6 +260,7 @@ class ProductView(TemplateView):
             'option': {},  # {id, attrs: <json>, price, in_stock}
             'prices': {
                 'option': to_int_plus(self.product.price_rub or 0),
+                'discount': 0,
                 'extra': 0,
                 'wrapping': 0,
                 'count': 1,
@@ -319,6 +321,8 @@ class ProductView(TemplateView):
         self.price = data['prices']['total_price']
         self.count = data['prices']['count']
         self.maximum_in_stock = data['prices']['maximum_in_stock']
+
+        data['prices']['discount'] = self.discount
         self.data_json = json.dumps(data)
 
     def get_context_data(self, **kwargs):
@@ -341,6 +345,7 @@ class ProductView(TemplateView):
             'count': self.count,
             'maximum_in_stock': self.maximum_in_stock,
             'data_json': self.data_json,
+            'discount': self.discount,
         }
         context.update(super(ProductView, self).get_context_data(**kwargs))
         return context
@@ -358,6 +363,7 @@ class ProductWithDiscountView(ProductView):
             or kwargs.get('code') != profile.discount_code):
             return HttpResponseRedirect(product.get_absolute_url())
 
+        self.discount = special_offer.discount
         return super(ProductWithDiscountView, self).get(request, *args, **kwargs)
 
     # def get_context_data(self, **kwargs):

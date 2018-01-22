@@ -107,7 +107,13 @@
 
                 <div class="table_cell td_summ">
                   <div class="tb_title">Стоимость</div>
-                  <div class="product_price"><span class="item-summary-span" id="price_ID-{{ forloop.counter }}">{{ item.price|to_int_str }}</span><abbr title="руб">р.</abbr></div>
+                  {% if item.discount %}
+                    <div class="txt_price_to">Цена для вас:</div>
+                    <div class="product_price sale_price"><s class="item-base-summary-span" style="font-family: NeoRegular;">{{ item.total_price_without_discount }}</s><abbr title="руб">р.</abbr></div>
+                    <div class="product_price" style="color: #8c2c34;"><span class="js-cart-price item-summary-span">{{ item.price|to_int_plus }}</span><abbr title="руб">р.</abbr></div>
+                  {% else %}
+                    <div class="product_price"><span class="item-summary-span" id="price_ID-{{ forloop.counter }}">{{ item.price|to_int_str }}</span><abbr title="руб">р.</abbr></div>
+                  {% endif %}
                 </div>
                 
                 <div class="table_cell td_put">

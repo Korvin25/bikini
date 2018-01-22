@@ -175,7 +175,7 @@
                 {% endfor %}
               {% endif %}
 
-              <div class="row_chars_item">
+              <div class="row_chars_item" style="width: 150%;">
                 <script type="text/javascript" >
                   // ПЛЮС - МИНУС
                   $(document).ready(function() {
@@ -217,22 +217,34 @@
                   <input type="text" name="count_item" value="{{ count }}" maxlength="3" onkeyup="this.value = this.value.replace (/\D/, '')" id="cnt_item" />
                   <span class="plus" id="plus">+</span>
                 </div>
-                <div class="product_price js-hide-if-not-option"{% if not have_option %} style="display: none;"{% endif %}><span id="price_ID-373" class="js-cart-price">{{ price }}</span><abbr title="руб">р.</abbr></div>
-                <input type="hidden" name="price-item" id="price-hidd-val" value="{{ price }}">
-                {% if not have_option %}
-                  <button class="js-cart-button to_cart_list _disabled" data-type="none" type="submit">Такого товара нет в наличии</button>
-                {% elif count > maximum_in_stock %}
-                  <button class="js-cart-button to_cart_list" data-type="order" type="submit">Под заказ</button>
+
+                {% if discount %}
+                  <div class="js-hide-if-not-option"{% if not have_option %} style="display: none;"{% endif %}>
+                    <div class="txt_price_to">Цена для вас:</div>
+                    <div class="product_price sale_price"><s class="js-base-price" style="font-family: NeoRegular;">{{ price|to_int_plus }}</s><abbr title="руб">р.</abbr></div>
+                    <div class="product_price" style="color: #8c2c34;"><span class="js-cart-price">{{ price|with_discount:discount }}</span><abbr title="руб">р.</abbr></div>
+                  </div>
                 {% else %}
-                  <button class="js-cart-button to_cart_list" data-type="add" type="submit">В корзину</button>
+                  <div class="product_price js-hide-if-not-option"><span id="price_ID-373" class="js-cart-price">{{ price }}</span><abbr title="руб">р.</abbr></div>
                 {% endif %}
-                
-                <label for="pak" class="check_pr_input checke_lab js-hide-if-not-option"{% if not have_option %} style="display: none;"{% endif %}>
-                  <input type="checkbox" class="js-gift-wrapping-trigger" data-wrapping-price="{{ gift_wrapping_price|to_int_str }}" name="gift_wrapping" id="pak" value="1" />
-                  <abbr class="abbr_check">Подарочная<br />упаковка</abbr>
+
+                <input type="hidden" name="price-item" id="price-hidd-val" value="{{ price }}">
+                <div class="button-div"{% if discount %} style="clear: both;"{% endif %}>
+                  {% if not have_option %}
+                    <button class="js-cart-button to_cart_list _disabled" data-type="none" type="submit">Такого товара нет в наличии</button>
+                  {% elif count > maximum_in_stock %}
+                    <button class="js-cart-button to_cart_list" data-type="order" type="submit">Под заказ</button>
+                  {% else %}
+                    <button class="js-cart-button to_cart_list" data-type="add" type="submit">В корзину</button>
+                  {% endif %}
                   
-                  <div class="product_price"><span id="price_ID--gift-wrapping">{{ gift_wrapping_price|to_int_str }}</span><abbr title="руб">р.</abbr></div>
-                </label>
+                  <label for="pak" class="check_pr_input checke_lab js-hide-if-not-option"{% if not have_option %} style="display: none;"{% endif %}>
+                    <input type="checkbox" class="js-gift-wrapping-trigger" data-wrapping-price="{{ gift_wrapping_price|to_int_str }}" name="gift_wrapping" id="pak" value="1" />
+                    <abbr class="abbr_check">Подарочная<br />упаковка</abbr>
+                    
+                    <div class="product_price"><span id="price_ID--gift-wrapping">{{ gift_wrapping_price|to_int_str }}</span><abbr title="руб">р.</abbr></div>
+                  </label>
+                </div>
               </div>
               
             </div>

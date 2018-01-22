@@ -19,7 +19,13 @@
                     {% endfor %}
                 </ul>
             </p>
-            <p>Цена: {{ item.option_price|to_int_plus|with_delimeter }} р.</p>
+            <p>
+                Цена: {{ item.option_price|to_int_plus|with_delimeter }} р.
+                {% if item.discount %}
+                    <br/>Скидка: {{ item.discount }} %
+                    <br/>Цена за один товар: {{ item.option_price|with_discount:item.discount }} р.
+                {% endif %}
+            </p>
 
             {% if item.extra_products %}
                 <br/>

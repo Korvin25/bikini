@@ -308,6 +308,7 @@ function updateTotalPrice(update_cart_button) {
   // update_cart_button (true/false) - обновлять ли еще при этом надпись на кнопке
 
   var $price_label = $('.js-cart-price'),
+      $base_price_label = $('.js-base-price'),
       update_button = update_button || true,
       p = data['prices'],
       total_price;
@@ -316,9 +317,15 @@ function updateTotalPrice(update_cart_button) {
     chooseOption(false);  // на случай, что кол-во увеличилось - выбираем вариант с нужным кол-вом
   }
 
-  total_price = (p['option']+p['extra'])*p['count'] + p['wrapping'];
-  data['prices']['total'] = total_price;
+  base_price = (p['option']+p['extra'])*p['count'] + p['wrapping'];
+  data['prices']['base'] = total_price;
 
+  discount_price = (p['option']*p['count'])*p['discount'] / 100
+  total_price = (p['option']+p['extra'])*p['count'] + p['wrapping'] - discount_price
+  data['prices']['total'] = total_price;
+  data['prices']['discount_price'] = discount_price;
+
+  $base_price_label.text(base_price);
   $price_label.text(total_price);
   if (update_cart_button) {
     updateCartButton(); 

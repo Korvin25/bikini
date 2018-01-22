@@ -141,7 +141,7 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
             summary = cart.show_summary()
             order_number = cart.number
 
-            popup = '#step5' if profile.can_get_discount else 'step4'
+            popup = '#step5' if profile.can_get_discount else '#step4'
             data = {'result': 'ok', 'popup': popup, 'count': count, 'summary': summary, 'order_number': order_number}
             return JsonResponse(data)
 
@@ -220,6 +220,8 @@ class CartAjaxView(View):
                         value = prices.get(slug)
                         if value is not None:
                             kwargs['{}_price'.format(slug)] = int(value)
+                    if prices.get('discount') is not None:
+                        kwargs['discount'] = prices['discount']
 
                 except ValueError:
                     data = {'result': 'error', 'error': 'Неправильный формат запроса'}
@@ -233,5 +235,6 @@ class CartAjaxView(View):
                 if item:
                     data['item_count'] = item.count
                     data['item_price'] = item.price_int
+                    data['item_price_without_discount'] = item.total_price_without_discount
 
         return JsonResponse(data)

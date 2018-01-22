@@ -104,6 +104,7 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
           order_number = res['order_number'],
           item_count = res['item_count'],
           item_price = res['item_price'],
+          item_base_price = res['item_price_without_discount'],
           popup = res['popup'],
           shipping_data = res['profile_shipping_data'];
 
@@ -123,6 +124,7 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
         if ($item_div && send_type == 'set') {
           if (item_count != undefined) { $item_div.find('input[name="item-count"]').val(item_count); }
           if (item_price != undefined) { $item_div.find('.item-summary-span').html(item_price); }
+          if (item_base_price != undefined) { $item_div.find('.item-base-summary-span').html(item_base_price); }
         };
         if (send_type == 'step1') {
           $('.js-auth-switch').toggle();
@@ -139,6 +141,7 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
           $('.js-cart-count').text(0);
           $('.js-cart-summary').text(0);
           $('#step4 .js-cart-summary').text(cart_summary);
+          $('#step5 .js-cart-summary').text(cart_summary);
         }
         if (popup) {
           showPopup(popup);
@@ -311,8 +314,8 @@ $('input[name="item-count"]').change('keyup input', function() {
 
   if (count >= 0) {
     if ($gift_wrapping.is(':checked')) { gift_wrapping_price = parseInt($gift_wrapping.attr('data-wrapping-price')); };
-    summary = count * base_price + gift_wrapping_price;
-    $summary_span.html(summary);
+    // summary = count * base_price + gift_wrapping_price;
+    // $summary_span.html(summary);
     setItem($item_div, count, gift_wrapping_price);
   }
 });
