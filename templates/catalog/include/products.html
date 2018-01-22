@@ -10,7 +10,7 @@
           <h3><a href="{{ product_url }}">{{ product.title }}</a></h3>
           <h4>{{ product.subtitle }}</h4>
           <div class="product_price">{{ product.get_price_rub }}<abbr title="руб">р.</abbr></div>
-          <a href="#" class="to_cart_list">В корзину</a>
+          <a href="{{ product_url }}" class="to_cart_list">В корзину</a>
         {% endwith %}
       </div>
     {% endfor %}

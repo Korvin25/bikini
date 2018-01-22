@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django import forms
 from multiselectfield.forms.fields import MultiSelectFormField
 
-from .models import Attribute, AttributeOption, ExtraProduct, Category, Product
+from .models import Attribute, AttributeOption, ExtraProduct, Category, Product, SpecialOffer
 
 
 class AttributeOptionInlineFormset(forms.BaseInlineFormSet):
@@ -126,3 +126,16 @@ class ChangeAttributesForm(forms.ModelForm):
         if commit:
             obj.save()
         return obj
+
+
+class SpecialOfferAdminForm(forms.ModelForm):
+
+    class Meta:
+        model = SpecialOffer
+        fields = '__all__'
+
+    def clean_discount(self):
+        discount = self.cleaned_data.get('discount')
+        if not (0 <= discount <= 100):
+            raise forms.ValidationError('Скидка должна быть числом от 0 до 100.')
+        return discount

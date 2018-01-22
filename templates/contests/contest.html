@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+{% load i18n core_tags staticfiles %}
+
+{% block meta_title %}{{ contest.get_meta_title }}{% endblock %}
+{% block meta_desc %}{{ contest.get_meta_desc }}{% endblock %}
+{% block meta_keyw %}{{ contest.get_meta_keyw }}{% endblock %}
+
+{% block og_title %}{{ contest.get_meta_title }}{% endblock %}
+{% block og_desc %}{{ contest.get_meta_desc }}{% endblock %}
+
+{% block twitter_title %}{{ contest.get_meta_title }}{% endblock %}
+{% block twitter_desc %}{{ contest.get_meta_desc }}{% endblock %}
+
+{% block content %}
+  <div class="with_banner_page banner_konkurs{% if contest.winner %} banner_konkurs_itog{% endif %}" style="background-image:url({{ contest.cover_url }});">
+    <div class="with_banner_padd_page">
+      {% if contest.winner %}
+        <div class="with_mini_text with_makro_text">Победитель конкурса</div>
+        <div class="with_mini_text with_middle_text">{{ contest.title }}</div>
+        <div class="with_big_text">{{ contest.winner.name }}</div>
+        <div class="photo_list"><a href="{{ contest.winner.get_absolute_url }}"><img src="{{ contest.winner.cover_winner_url }}" alt="{{ contest.winner.name }}"></a></div>
+
+      {% else %}
+        {% if contest.title_lines.count %}
+          {% for line in contest.title_lines.all %}
+            <div class="{% if line.big %}with_big_text{% else %}with_mini_text{% endif %}">{{ line.line }}</div>
+          {% endfor %}
+        {% else %}
+          <div class="with_big_text">{{ contest.title }}</div>
+        {% endif %}
+
+        {% if contest.accepting_enabled %}        
+          <a href="#apply"
+             data-popup-id="{% if request.user.is_anonymous %}#auth{% elif request.user.id in contest.participants_profiles %}#already-participating{% else %}#contest-apply{% endif %}"
+             class="butt_with js-apply-button">Принять участие</a>
+        {% endif %}
+      {% endif %}
+      
+      <div class="share_banner">
+        <p>Поделиться:</p>
+        <script src="//yastatic.net/es5-shims/0.0.2/es5-shims.min.js"></script>
+        <script src="//yastatic.net/share2/share.js"></script>
+        <div class="ya-share2" data-services="facebook,vkontakte,twitter,odnoklassniki,gplus" data-description="{{ contest.meta_desc }}" data-hashtags="Bikinimini.ru" data-image="{{ contest.cover_url }}" data-lang="{{ request.LANGUAGE_CODE }}"></div>
+        {% comment %}
+          <a href="#" class="soc_banner"><img src="/static/i/soc_face.png" alt="Поделиться в Facebook" /></a>
+          <a href="#" class="soc_banner"><img src="/static/i/soc_vk.png" alt="Поделиться в ВКонтакте" /></a>
+          <a href="#" class="soc_banner"><img src="/static/i/tw_icon.png" alt="Поделиться в Twitter" /></a>
+          <a href="#" class="soc_banner"><img src="/static/i/soc_ok.png" alt="Поделиться в Одноклассниках" /></a>
+          <a href="#" class="soc_banner"><img src="/static/i/you_icon.png" alt="Поделиться в Youtube" /></a>
+          <a href="#" class="soc_banner"><img src="/static/i/soc_gplus.png" alt="Поделиться в Google Plus" /></a>
+        {% endcomment %}
+      </div>
+    </div>
+  </div>
+  
+  <main>
+    <div class="main_content main_content_video">
+      {% if contest.show_terms %}
+        <div class="blog_title"><h1 class="title_block">Условия конкурса</h1></div>
+      {% endif %}
+    
+      <div id="main_content" class="content_video list_push cnt_left">
+
+        {% if contest.show_terms %}
+          <div class="text_preview_left txt_black">
+            {{ contest.terms|safe }}
+          </div>
+        {% endif %}
+
+        {% if contest.participants.count %}
+          <h2 class="title_block">Участники конкурса</h2>
+          <div class="item_list_wrapp item_list_wrapp_all list_face" itemscope="" itemtype="http://schema.org/ItemList">
+
+            {% for participant in contest.participants.all %}
+              <div class="product_list product_face">
+                <div class="photo_list"><a href="{{ participant.get_absolute_url }}"><img src="{{ participant.cover_url }}" alt="{{ participant.name }}"></a></div>
+                <h3>
+                  <a href="{{ participant.get_absolute_url }}">{{ participant.name }}</a>
+                  <div class="count_block js-like-parent">
+                    <a href="#" class="butt_put">
+                      <label for="id_like_{{ participant.id }}" class="td_label_check_win">
+                        <input type="checkbox" class="js-like-participant" name="like_participant" id="id_like_{{ participant.id }}" value="1"{% if participant.id|to_str in liked_participants %} checked="checked"{% endif %} data-participant-id="{{ participant.id }}" data-like-url="{% url 'contests:like' %}" data-dislike-url="{% url 'contests:dislike' %}">
+                        <img src="/static/i/heart_icon.png" alt="Оценить участницу">
+                      </label>
+                    </a>
+                    <span class="disc_number js-likes-count-span">{{ participant.likes_count }}</span>
+                  </div>                
+                </h3>
+              </div>
+            {% endfor %}
+            
+          </div>
+        {% endif %}
+
+        {% if another_contests.count %}
+          <h2 class="title_block">Архив конкурсов</h2>
+          
+          <div class="item_list_wrapp item_list_wrapp_all list_face arhive_list_jpg">
+            {% for a_contest in another_contests %}
+              <a href="{{ a_contest.get_absolute_url }}" class="product_list product_face" style="background-image:url({{ a_contest.list_cover_url }});">
+                <div class="txt_product">
+                  <p><strong>Конкурс</strong></p>
+                  <h2>{{ a_contest.title }}</h2>
+                  <p>{{ a_contest.published_dt|date:'d.m.Y' }}</p>
+                </div>
+              </a>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+      </div>
+
+    </div>
+  </main>
+{% endblock %}
+
+{% block popups %}
+  <div style="display: none">
+    <a rel="leanModal1" href="#error-popup"></a>
+    <a rel="leanModal1" href="#already-participating"></a>
+    <a rel="leanModal1" href="#contest-apply"></a>
+  </div>
+
+  <div class="window_popap no_float mini_window_popup callback_form" id="error-popup" style="display:none;">
+      <div class="close_popap call_close js-call-close"><img src="/static/i/close_white_45.png" alt="Закрыть"></div>
+      <div class="wrap_window_popap bg_wrapp_window">
+          <div class="popap_row">
+              <div class="popap_row_wrapp">
+                  <h3 class="popup_title" style="margin-bottom: 10px;">При отправке формы произошла ошибка:</h3>
+                  <p class="call_introtext popup_text"></p>
+                  {% comment %}
+                  <div class="red_bor_butt">
+                      <span class="js-call-close usual_link">Закрыть</span>
+                  </div>
+                  {% endcomment %}
+                  <div class="bt_req_call red_bor_butt js-call-close">
+                    <button class="butt_border">Закрыть</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="window_popap no_float mini_window_popup callback_form" id="already-participating" style="display:none;">
+      <div class="close_popap call_close js-call-close"><img src="/static/i/close_white_45.png" alt="Закрыть"></div>
+      <div class="wrap_window_popap bg_wrapp_window">
+          <div class="popap_row">
+              <div class="popap_row_wrapp">
+                  <h3 class="popup_title" style="margin-bottom: 10px;">Ошибка:</h3>
+                  <p class="call_introtext popup_text">Вы уже принимаете участие в конкурсе.</p>
+                  <div class="bt_req_call red_bor_butt js-call-close">
+                    <button class="butt_border">Закрыть</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  {% if contest.accepting_enabled %}
+    <div class="window_popap no_float" id="contest-apply" style="display:none;">
+      <div class="close_popap js-call-close"><img src="/static/i/close_icon.png" alt="Закрыть" /></div>
+      <div class="wrap_window_popap bg_wrapp_window">
+        <div class="popap_row">
+          <div class="popap_row_wrapp">
+            <h2 class="title_popap">Принять участие в конкурсе "{{ contest.title }}"</h2>
+            <form class="js-apply-form dropzone" id="loadingFiles" action="{% url 'contests:apply' %}" method="post" enctype="multipart/form-data">
+              <input type="hidden" name="contest" value="{{ contest.id }}">
+              <div class="error-messages"></div>
+
+              <div class="rows_popup_input">
+                <label class="lbl_box">
+                  <p>Имя:<span class="orange_text">*</span></p>
+                  <input required type="text" style="padding-left: 15px;" value="{% if request.user.is_authenticated and request.user.name %}{{ request.user.name }}{% endif %}" name="name" class="input_text" />
+                </label>
+              </div>
+
+              <br/>
+              <div class="rows_popup_input">
+                <label class="lbl_box">
+                  <p>Описание:</p>
+                  <textarea name="description" class="input_text no_hover_border" style="padding: 12px 2.25% 0; width: 95.45%; height: 135px;">{{ shipping_data.address }}</textarea>
+                </label>
+              </div>            
+
+              <div class="rows_popup_input dz-clickable dropzone-div" style="margin: 20px 0 30px;">
+                <label class="lbl_box">
+                  <p>Фото:<span class="orange_text">*</span></p>
+                  <div class="download">
+                    <div class="download_ttl"><b>Перетащите сюда файлы или <a class="open-file dz-message" href="javascript:void(0);">выберите на компьютере</a></b></div>
+                    <div class="download_text">Максимальный размер фото - 10МБ. Не более 5 фотографий.</div>
+                    <div class="dropzone-previews"></div>
+                    <input type="hidden" name="photos">
+                  </div>
+                </label>
+              </div>
+
+              <div class="row_form_popup row_pop_butt">
+                <button class="bt_red" type="submit">Принять участие</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        
+        
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block extra_css %}
+  <link href="/static/dropzone-custom.css" type="text/css"  rel="stylesheet" />
+  {# <link href="/static/dropzone-demo.css" type="text/css"  rel="stylesheet" /> #}
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/dropzone-custom.js' %}"></script>
+  {# <script src="{% static 'js/dropzone.js' %}"></script> #}
+  <script>
+    {% include 'contests/include/dropzone.js' %}
+  </script>
+  <script type="text/javascript">
+    {% include 'contests/include/contests.js' %}
+  </script>
+{% endblock %}

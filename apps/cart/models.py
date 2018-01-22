@@ -12,6 +12,11 @@ from ..catalog.models import Product, ProductOption
 from ..geo.models import Country
 
 
+def to_int_plus(value):
+    int_value = int(value)
+    return int_value if int_value == value else int_value + 1
+
+
 class Cart(models.Model):
     STATUS_CHOICES = (
         (0, 'новый'),
@@ -129,6 +134,7 @@ class CartItem(models.Model):
     extra_products = JSONField(default=dict)
 
     option_price = models.DecimalField(max_digits=9, decimal_places=2, default=0)
+    discount = models.PositiveSmallIntegerField(default=0)
     extra_price = models.DecimalField(max_digits=9, decimal_places=2, default=0)
     wrapping_price = models.DecimalField(max_digits=9, decimal_places=2, default=0)
     price = models.DecimalField(max_digits=9, decimal_places=2, default=0)
@@ -141,9 +147,24 @@ class CartItem(models.Model):
     def __unicode__(self):
         return '{} units of {}'.format(self.count, self.product.title)
 
+    @classmethod
+    def had_discounts(cls, cart_ids):
+        return bool(cls.objects.filter(cart_id__in=cart_ids, discount__gt=0).count())
+
+    def get_base_price(self, with_discount=True):
+        option_price = self.option_price
+        if with_discount and self.discount:
+            discount_price = option_price*self.discount // 100
+            option_price = to_int_plus(option_price - discount_price)
+        return option_price+self.extra_price
+
     @property
     def base_price(self):
-        return self.option_price+self.extra_price
+        return self.get_base_price()
+
+    @property
+    def base_price_without_discount(self):
+        return self.get_base_price(with_discount=False)
 
     def count_price(self):
         return (self.base_price*self.count + self.wrapping_price if self.count
@@ -156,6 +177,4 @@ class CartItem(models.Model):
     @property
     def price_int(self):
         price = self.price
-        int_value = int(price)
-        return (int_value if int_value == price
-                else int_value + 1)
+        return to_int_plus(price)

@@ -9,13 +9,11 @@ from django.db import models
 from django.utils.safestring import mark_safe
 
 from ckeditor_uploader.fields import RichTextUploadingField
-from ckeditor.fields import RichTextField
 from colorfield.fields import ColorField
 from easy_thumbnails.fields import ThumbnailerImageField
 from easy_thumbnails.files import get_thumbnailer
 from filer.fields.image import FilerImageField
 from sortedm2m.fields import SortedManyToManyField
-from tinymce.models import HTMLField
 
 from ..core.utils import with_watermark
 from ..settings.models import MetatagModel
@@ -376,7 +374,7 @@ class GiftWrapping(models.Model):
         return obj.price_rub if obj else 200.0
 
 
-# === Товары ===
+# === Товары + спец.предложения ===
 
 class Product(MetatagModel):
     categories = models.ManyToManyField(Category, verbose_name='Категории', related_name='products')
@@ -390,8 +388,6 @@ class Product(MetatagModel):
     price_eur = models.DecimalField('Цена, eur.', max_digits=9, decimal_places=2, default=0)
     price_usd = models.DecimalField('Цена, usd.', max_digits=9, decimal_places=2, default=0)
     text = RichTextUploadingField('Текст', blank=True, null=True)
-    # text = RichTextField('Текст', blank=True, null=True)
-    # text = HTMLField('Текст', blank=True, null=True)
     in_stock = models.SmallIntegerField('Количество на складе', default=5)
 
     order = models.PositiveSmallIntegerField(default=0, blank=False, null=False, verbose_name=mark_safe('&nbsp;&nbsp;&nbsp;&nbsp;'))
@@ -477,6 +473,10 @@ class Product(MetatagModel):
     def cover_thumb(self):
         # return self.photo['product_cover'].url
         return get_thumbnailer(self.photo_f)['product_cover'].url
+
+    @property
+    def special_offer_cover(self):
+        return get_thumbnailer(self.photo_f)['special_offer_cover'].url
 
     @property
     def cart_cover_thumb(self):
@@ -735,3 +735,27 @@ class ProductPhoto(models.Model):
     #             if self.photo else '-')
     # admin_show_photo.allow_tags = True
     # admin_show_photo.short_description = 'Превью'
+
+
+class SpecialOffer(models.Model):
+    product = models.ForeignKey(Product, verbose_name='Товар', related_name='special_offers')
+    discount = models.PositiveSmallIntegerField('Скидка, %', default=50)
+    is_active = models.BooleanField('Скидка активна?', default=True)
+
+    class Meta:
+        verbose_name = 'спец.предложение'
+        verbose_name_plural = 'спец.предложения'
+
+    def __unicode__(self):
+        return self.product.__unicode__()
+
+    @classmethod
+    def get_offer(cls):
+        return cls.objects.filter(discount__gt=0, is_active=True).first()
+
+    def get_discount_url(self):
+        return reverse('cart_get_discount')
+
+    def get_offer_url(self, discount_code):
+        product_url = self.product.get_absolute_url()
+        return '{}discount/{}/'.format(product_url, discount_code)

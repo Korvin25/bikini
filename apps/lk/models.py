@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import uuid
+
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.db import models
@@ -64,6 +66,9 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     phone = models.CharField('Телефон', max_length=30, null=True, blank=True)
     name = models.CharField('Полное имя', max_length=511, null=True, blank=True)
 
+    discount_code = models.CharField(max_length=127, null=True, blank=True)
+    discount_used = models.BooleanField(default=False)
+
     desired_products = models.ManyToManyField('catalog.Product', verbose_name='Желаемые товары', blank=True)
 
     objects = UserManager()
@@ -97,3 +102,18 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     @property
     def complete_orders(self):
         return self.cart_set.filter(checked_out=True)
+
+    @property
+    def can_get_discount(self):
+        from ..cart.models import CartItem
+        complete_orders = self.complete_orders.values_list('id', flat=True)
+        return (True if complete_orders.count() and not CartItem.had_discounts(cart_ids=complete_orders)
+                                                and not self.discount_used
+                else False)
+
+    def get_discount_code(self):
+        discount_code = self.discount_code
+        if not discount_code:
+            discount_code = self.discount_code = str(uuid.uuid4()).replace('-', '')
+            self.save()
+        return discount_code

@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% load i18n core_tags %}
+
+{% block meta_title %}{{ participant.get_meta_title }}{% endblock %}
+{% block meta_desc %}{{ participant.get_meta_desc }}{% endblock %}
+{% block meta_keyw %}{{ participant.get_meta_keyw }}{% endblock %}
+
+{% block og_title %}{{ participant.get_meta_title }}{% endblock %}
+{% block og_desc %}{{ participant.get_meta_desc }}{% endblock %}
+
+{% block twitter_title %}{{ participant.get_meta_title }}{% endblock %}
+{% block twitter_desc %}{{ participant.get_meta_desc }}{% endblock %}
+
+{% block content %}
+  <main>
+    <div class="main_content">
+    
+      <div id="main_content" class="wrapp_content content_konkurs">
+
+        <div class="item_content_block">
+        <div class="text_preview_page text_item">
+          <ul class="breadcrumb">
+            <li><a href="{% url 'home' %}">Главная</a></li>
+            <li><a href="{{ contest.get_absolute_url }}">{{ contest.title }}</a></li>
+            <li><span>{{ participant.name }}</span></li>
+          </ul>
+          <h1 class="title_block">{{ participant.name }}</h1>
+
+          {% if participant.description %}
+            <div class="text_preview_inner">
+              <p>{{ participant.description|linebreaksbr }}</p>
+            </div>
+          {% endif %}
+
+          <div class="count_block js-like-parent">
+            <a href="#" class="butt_put">
+              <label for="id_like_{{ participant.id }}" class="td_label_check_win">
+                <input type="checkbox" class="js-like-participant" name="like_participant" id="id_like_{{ participant.id }}" value="1"{% if participant.id|to_str in liked_participants %} checked="checked"{% endif %} data-participant-id="{{ participant.id }}" data-like-url="{% url 'contests:like' %}" data-dislike-url="{% url 'contests:dislike' %}">
+                <img src="/static/i/heart_icon.png" alt="Оценить участницу">
+              </label>
+            </a>
+            <span class="disc_number js-likes-count-span">{{ participant.likes_count }}</span>
+          </div>                
+
+          {% comment %}
+          <div class="bt_req_call red_bor_butt">
+            <a href="#" onclick="return false">Оценить участницу</a>
+          </div>
+          {% endcomment %}
+        </div>
+        <!-- SLIDER ITEM >>> -->
+          <div class="nom_img">
+            <script language="javascript" src="/static/js/highslide/jquery.jcarousel.min.js"></script>
+            <script type="text/javascript">
+            var connector = function(itemNavigation, carouselStage) {
+              return carouselStage.jcarousel('items').eq(itemNavigation.index()); 
+            }; 
+            $(function() {
+              var carouselStage    = $('.nom_img_med_wrap').jcarousel({wrap: 'circular'}); 
+              var carouselNavigation = $('.carousel-navigation').jcarousel();
+              carouselNavigation.jcarousel('items').each(function() { 
+                var item = $(this); 
+                var target = connector(item, carouselStage); 
+                item .on(
+                  'jcarouselcontrol:active', function() {
+                    carouselNavigation.jcarousel('scrollIntoView', this); 
+                    item.addClass('active'); 
+                  }).on('jcarouselcontrol:inactive', function() { 
+                    item.removeClass('active'); 
+                  }).jcarouselControl({ target: target, carousel: carouselStage }); 
+              });
+              
+              $('#l_arr_nom_img').on('jcarouselcontrol:inactive', function() {
+                  $(this).addClass('inactive'); 
+                }
+              ).on('jcarouselcontrol:active', function() {
+                  $(this).removeClass('inactive'); 
+                }
+              ).jcarouselControl({ target: '-=1' }); 
+              
+              $('#r_arr_nom_img').on('jcarouselcontrol:inactive', function() {
+                  $(this).addClass('inactive');
+                }
+              ).on('jcarouselcontrol:active', function() {
+                  $(this).removeClass('inactive');
+                }
+              ).jcarouselControl({ target: '+=1' }); 
+            });
+          </script>
+            <!-- УВЕЛИЧЕНИЕ КАРТИНКИ -->
+            <script type="text/javascript" src="/static/js/highslide/highslide-with-gallery.js"></script>
+            <link rel="stylesheet" type="text/css" href="/static/js/highslide/highslide.css" />
+            <script type="text/javascript">
+            hs.graphicsDir = '/static/js/highslide/graphics/'; 
+            hs.align = 'center';
+            hs.transitions = ['expand', 'crossfade']; 
+            hs.outlineType = 'rounded-white';
+            hs.fadeInOut = true; 
+            hs.dimmingOpacity = 0.5; 
+            hs.addSlideshow({
+              interval: 5000, 
+              repeat: false, 
+              useControls: true, 
+              fixedControls: 'fit', 
+              overlayOptions: { 
+                opacity: 0.75, 
+                position: 'bottom center', 
+                hideOnMouseOut: true
+              }
+
+            });
+          </script>
+            <!-- УВЕЛИЧЕНИЕ КАРТИНКИ <<< -->
+          
+            
+            <div class="nom_img_med_wrap highslide-gallery">
+              <ul class="nom_img_list">
+                {% if participant.photos.count %}
+                  {% for photo in participant.photos.all %}
+                    <li>
+                      <a href="{{ photo.photo_big_url }}" target="_blank" class="highslide" onclick="return hs.expand(this)" title="">
+                      <img src="{{ photo.photo_preview_url }}" /></a>
+                    </li>
+                  {% endfor %}
+                {% else %}
+                  {% with participant.photo as photo %}
+                    <li>
+                      <a href="{{ photo.photo_big_url }}" target="_blank" class="highslide" onclick="return hs.expand(this)" title="">
+                      <img src="{{ photo.photo_preview_url }}" /></a>
+                    </li>
+                  {% endwith %}
+                {% endif %}
+              </ul>
+            </div>
+            <div class="C_navigation">
+              <div class="l_arr" id="l_arr_nom_img"><img src="/static/i/arrow_slide.png" /></div>
+              <div class="r_arr" id="r_arr_nom_img"><img src="/static/i/arrow_slide.png" /></div>
+              <div class="carousel-navigation">
+                <ul class="jcarousel">
+                  {% if participant.photos.count %}
+                    {% for photo in participant.photos.all %}
+                      <li class=""><img src="{{ photo.photo_thumb_url }}" /></li>
+                    {% endfor %}
+                  {% else %}
+                    {% with participant.photo as photo %}
+                      <li class=""><img src="{{ photo.photo_thumb_url }}" /></li>
+                    {% endwith %}
+                  {% endif %}
+                </ul>
+              </div>
+            </div>
+            
+          </div>
+          <div class="highslide-dimming"></div>
+        <!-- SLIDER ITEM <<< -->
+        </div>
+
+        {% if participant.products.count %}
+          <h2 class="title_block">Участница демонстрирует:</h2>
+          <div class="item_list_wrapp" itemscope="" itemtype="http://schema.org/ItemList">
+            {% for product in participant.products.all %}
+              <div class="product_list">
+                <div class="photo_list"><a href="{{ product.get_absolute_url }}"><img src="{{ product.cover_thumb }}" alt="{{ product.title }}" /></a></div>
+                <h3><a href="{{ product.get_absolute_url }}">{{ product.title }}</a></h3>
+                <h4>{{ product.subtitle }}</h4>
+                <div class="product_price">{{ product.get_price_rub }}<abbr title="руб">р.</abbr></div>
+                <a href="{{ product.get_absolute_url }}" class="to_cart_list">В корзину</a>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+      </div>
+      
+    </div>
+  </main>
+{% endblock %}
+
+{% block extra_js %}
+  <script type="text/javascript">
+    {% include 'contests/include/contests.js' %}
+  </script>
+{% endblock %}

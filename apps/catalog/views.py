@@ -4,13 +4,13 @@ from __future__ import unicode_literals
 import json
 
 from django.db.models import Q, Max, Min
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 
 from ..core.templatetags.core_tags import to_int_plus
 from ..core.http_utils import get_object_from_slug_and_kwargs
-from .models import Attribute, Category, GiftWrapping, Product, ProductOption
+from .models import Attribute, Category, GiftWrapping, Product, ProductOption, SpecialOffer
 
 
 class ProductsView(TemplateView):
@@ -344,3 +344,45 @@ class ProductView(TemplateView):
         }
         context.update(super(ProductView, self).get_context_data(**kwargs))
         return context
+
+
+class ProductWithDiscountView(ProductView):
+
+    def get(self, request, *args, **kwargs):
+        product = self.get_product()
+        profile = request.user
+        special_offer = SpecialOffer.get_offer()
+
+        if (profile.is_anonymous() or not profile.can_get_discount
+            or not special_offer or special_offer.product_id != product.id
+            or kwargs.get('code') != profile.discount_code):
+            return HttpResponseRedirect(product.get_absolute_url())
+
+        return super(ProductWithDiscountView, self).get(request, *args, **kwargs)
+
+    # def get_context_data(self, **kwargs):
+    #     context = super(ProductWithDiscountView, self).get_context_data(**kwargs)
+    #     data = 
+
+    #     product = self.get_product()
+    #     category = self.category
+    #     self.get_attributes()
+    #     self.get_data_json()
+    #     context = {
+    #         'product': product,
+    #         'category': category,
+    #         'sex': self.sex,
+    #         'attrs': self.attrs,
+    #         'attrs_dict': self.attrs_dict,
+    #         'attrs_ids': self.attrs_ids,
+    #         'extra_products': self.extra_products,
+    #         'photos': product.photos.all(),
+    #         'gift_wrapping_price': to_int_plus(GiftWrapping.get_price() or 0),
+    #         'have_option': self.have_option,
+    #         'price': self.price,
+    #         'count': self.count,
+    #         'maximum_in_stock': self.maximum_in_stock,
+    #         'data_json': self.data_json,
+    #     }
+    #     context.update(super(ProductView, self).get_context_data(**kwargs))
+    #     return context

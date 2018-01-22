@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 import json
 
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.http.request import QueryDict
 
 
@@ -54,3 +54,14 @@ class JSONFormMixin(object):
             else:
                 errors.append({'name': k, 'label': form[k].label, 'error_message': form.errors[k][0]})
         return JsonResponse({'errors': errors}, status=400)
+
+
+class GetNotAllowedMixin(object):
+    """
+    Для предотвращения ошибок вида
+    "ImproperlyConfigured: TemplateResponseMixin requires either a definition of 'template_name'"
+    во вьюхах с формами (CreateView, etc)
+    """
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponse(status=405)

@@ -21,10 +21,12 @@ from .admin_dynamic import (ProductOptionInlineFormset, ProductPhotoInlineFormse
                             ProductOptionInlineForm, ProductPhotoInlineForm, ProductExtraOptionInlineForm,
                             ProductOptionAdmin, ProductPhotoAdmin, ProductExtraOptionAdmin,)
 from .admin_forms import (AttributeOptionInlineFormset, AttributeOptionAdminForm,
-                          ProductAdminForm, ChangeCategoriesForm, ChangeAttributesForm,)
+                          ProductAdminForm, ChangeCategoriesForm, ChangeAttributesForm,
+                          SpecialOfferAdminForm,)
 from .models import (Attribute, AttributeOption, ExtraProduct, Category,
                      AdditionalProduct, Certificate, GiftWrapping,
-                     Product, ProductOption, ProductExtraOption, ProductPhoto,)
+                     Product, ProductOption, ProductExtraOption, ProductPhoto,
+                     SpecialOffer,)
 from .translation import *
 
 
@@ -234,7 +236,7 @@ class GiftWrappingAdmin(admin.ModelAdmin):
         return None
 
 
-# === Товары ===
+# === Товары + спец.предложения ===
 
 class HasAttrsFilter(SimpleListFilter):
     title = 'Есть атрибуты?'
@@ -296,7 +298,7 @@ class ProductPhotoInline(ProductPhotoAdmin):
     # fields = ('title', 'photo',)
     suit_classes = 'suit-tab suit-tab-photos'
 
-    def get_extra(self, request, obj=None):
+    def get_extra(self, request, obj=None, **kwargs):
         extra = (0 if obj and obj.photos.count()
                  else 1)
         return extra
@@ -489,7 +491,7 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
     filter_vertical = ['categories', ]
     inlines = [ProductOptionInline, ProductPhotoInline, ProductVideoInline, ProductExtraOptionInline, ]
     raw_id_fields = ('associated_products', 'also_products',)
-    search_fields = ['title', 'vendor_code', 'subtitle', 'text', ]
+    search_fields = ['title', 'vendor_code', 'subtitle', ]
 
     def get_queryset(self, *args, **kwargs):
         qs = super(ProductAdmin, self).get_queryset(*args, **kwargs)
@@ -554,3 +556,16 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
         if formset.model == ProductOption:
             formset.instance.set_attrs()
         return s
+
+
+@admin.register(SpecialOffer)
+class SpecialOfferAdmin(admin.ModelAdmin):
+    list_display = ('product', 'discount', 'is_active',)
+    list_editable = ('discount', 'is_active',)
+    form = SpecialOfferAdminForm
+    raw_id_fields = ('product',)
+
+    def has_add_permission(self, request):
+        if SpecialOffer.objects.count():
+            return None
+        return super(SpecialOfferAdmin, self).has_add_permission(request)

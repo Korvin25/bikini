@@ -36,7 +36,6 @@ SITE_ID = 1
 # Application definition
 
 INSTALLED_APPS = (
-    # 'suit',
     'apps.content.suit_apps.SuitConfig',
 
     'django.contrib.admin',
@@ -65,7 +64,6 @@ INSTALLED_APPS = (
     'rosetta',
     'salmonella',
     'sortedm2m',
-    # 'tabbed_admin',
     'tinymce',
     'watermarker',
 
@@ -77,7 +75,7 @@ INSTALLED_APPS = (
     'apps.catalog',
     'apps.cart',
     'apps.content',
-    # 'apps.contests',
+    'apps.contests',
     'apps.banners',
     # 'apps.payments',
     # 'apps.mailings',
@@ -285,15 +283,9 @@ LOGGING = {
     },
     'loggers': {
         'emailz': {
-            # 'handlers': ['email_log_file', 'mail_admins'],
             'handlers': ['email_log_file'],
             'level': 'INFO',
         },
-        # 'django.request': {
-        #     'handlers': ['requests_file', 'mail_admins'],
-        #     'level': 'DEBUG',
-        #     'propagate': True,
-        # },
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
@@ -301,47 +293,6 @@ LOGGING = {
         },
     }
 }
-
-
-TINYMCE_DEFAULT_CONFIG = {
-    'plugins': "table,spellchecker,paste,searchreplace",
-    'theme': "advanced",
-    'width': 900,
-    'height': 300,
-    # 'cleanup_on_startup': True,
-    # 'custom_undo_redo_levels': 10,
-}
-
-
-# SUIT_CONFIG = {
-#     'ADMIN_NAME': 'Bikinimini.ru',
-
-#     'HEADER_DATE_FORMAT': 'l, d.m.Y',
-#     'HEADER_TIME_FORMAT': 'H:i',
-
-#     'CONFIRM_UNSAVED_CHANGES': False,
-
-#     'MENU_EXCLUDE': ('auth', 'sites', 'djcelery', 'watermarker',),
-#     'MENU_OPEN_FIRST_CHILD': True,
-#     # 'MENU_ICONS': {
-#     #     'settings': 'icon-cog',
-#     #     'treenav': 'icon-list',
-#     #     'geo': 'icon-map-marker',
-#     #     'content': 'icon-pencil',
-#     #     'lk': 'icon-user',
-#     #     'ads': 'icon-warning-sign',
-#     #     'vacancies': 'icon-briefcase',
-#     #     'contests': 'icon-star',
-#     #     'jobroom_production': 'icon-home',
-#     #     'support': 'icon-info-sign',
-#     #     'feedback': 'icon-comment',
-#     #     'payments': 'icon-shopping-cart',
-#     #     'user_messages': 'icon-envelope',
-#     #     'search': 'icon-search',
-#     # }
-# }
-
-# TABBED_ADMIN_USE_JQUERY_UI = True
 
 
 ROSETTA_MESSAGES_PER_PAGE = 50
@@ -362,6 +313,7 @@ THUMBNAIL_ALIASES = {
         'product_style': {'size': (134, 134), 'crop': True, 'quality': 100, 'upscale': True},
 
         'product_cover': {'size': (220, 220), 'crop': True, 'quality': 100},
+        'special_offer_cover': {'size': (200, 200), 'crop': True, 'quality': 100},
         'cart_product_cover': {'size': (86, 86), 'crop': True, 'quality': 100},
 
         'admin_product_photo': {'size': (140, 140), 'crop': True, 'quality': 100},
@@ -374,6 +326,16 @@ THUMBNAIL_ALIASES = {
         'blog_cover_list': {'size': (792, 387), 'crop': True, 'quality': 100, 'upscale': True},
         'blog_cover_detail': {'size': (1000, 500), 'crop': False, 'quality': 100, 'upscale': False},
         'blog_gallery_thumb': {'size': (95, 95), 'crop': True, 'quality': 100, 'upscale': True},
+
+        'contest_cover': {'size': (1854, 673), 'crop': True, 'quality': 100, 'upscale': True},
+        'contest_list_cover': {'size': (257, 369), 'crop': True, 'quality': 100, 'upscale': True},
+        'participant_cover': {'size': (199, 199), 'crop': True, 'quality': 100, 'upscale': True},
+        'participant_cover_winner': {'size': (280, 280), 'crop': True, 'quality': 100, 'upscale': True},
+
+        # 'participant_photo_preview': {'size': (403, 626), 'crop': True, 'quality': 100, 'upscale': True},
+        'participant_photo_preview': {'size': (403, 0), 'crop': False, 'quality': 100, 'upscale': True},
+        'participant_photo_thumb': {'size': (154, 147), 'crop': True, 'quality': 100, 'upscale': True},
+        'participant_photo_big': {'size': (1000, 1000), 'crop': False, 'quality': 100, 'upscale': True},
     },
 }
 

@@ -274,12 +274,12 @@
                 <h3><a href="{{ also_p.get_absolute_url }}">{{ also_p.title }}</a></h3>
                 <h4>{{ also_p.subtitle }}</h4>
                 <div class="product_price">{{ also_p.get_price_rub }}<abbr title="руб">р.</abbr></div>
-                <a href="#" class="to_cart_list">В корзину</a>
+                <a href="{{ also_p.get_absolute_url }}" class="to_cart_list">В корзину</a>
               </div>
             {% endfor %}
           </div>
         {% endif %}
-        
+
       </div>
     </div>
   </main>

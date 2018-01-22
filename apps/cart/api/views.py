@@ -124,8 +124,9 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
 
             # send_admin_order_email(order=cart)
             # send_customer_order_email(order.profile, order=cart)
-            admin_send_order_email(order=cart)
-            send_order_email(order.profile, order=cart)
+
+            # admin_send_order_email(order=cart)
+            # send_order_email(order.profile, order=cart)
 
             if self.request.session.get('CART_ID'):
                 del self.request.session['CART_ID']
@@ -140,19 +141,13 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
             summary = cart.show_summary()
             order_number = cart.number
 
-            data = {'result': 'ok', 'popup': '#step4', 'count': count, 'summary': summary, 'order_number': order_number}
+            popup = '#step5' if profile.can_get_discount else 'step4'
+            data = {'result': 'ok', 'popup': popup, 'count': count, 'summary': summary, 'order_number': order_number}
             return JsonResponse(data)
 
         else:
             data = {'result': 'error', 'error_message': 'Корзина пуста'}
             return JsonResponse(data, status=400)
-
-
-class Step4View(CartStepBaseView):
-
-    def post(self, request, *args, **kwargs):
-        data = {'result': 'ok'}
-        return JsonResponse(data)
 
 
 class UpdateCartView(View):

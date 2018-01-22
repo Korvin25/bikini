@@ -11,14 +11,16 @@ from django.views.generic import TemplateView
 # from solid_i18n.urls import solid_i18n_patterns
 
 from apps.blog.views import PostListView, PostDetailView
-from apps.cart.views import CartView
-from apps.catalog.views import ProductsView, ProductView
+from apps.cart.views import CartView, CartGetDiscountView
+from apps.catalog.views import ProductsView, ProductView, ProductWithDiscountView
 from apps.content.views import HomepageView, VideoListView, VideoDetailView, PageView
 from apps.lk.views import ProfileHomeView
+from apps.views import PhotoUploadView
 
 
 urlpatterns = [
     url(r'^i18n/', include('django.conf.urls.i18n')),
+    url(r'^ajax/upload/$', PhotoUploadView.as_view(), name='photo_upload'),
 
     # pages
     url(r'^api/cart/', include('apps.cart.api.urls', namespace='cart_api')),
@@ -59,6 +61,7 @@ urlpatterns += i18n_patterns(
     url(r'^women-detail/$', TemplateView.as_view(template_name='catalog/women-detail.html'), name='women-detail'),
 
     url(r'^cart/$', CartView.as_view(), name='cart'),
+    url(r'^cart/get_discount/$', CartGetDiscountView.as_view(), name='cart_get_discount'),
     url(r'^profile/$', ProfileHomeView.as_view(), name='profile'),
 
     url(r'^women/$', ProductsView.as_view(with_category=False, sex='female'), name='women'),
@@ -67,11 +70,16 @@ urlpatterns += i18n_patterns(
     url(r'^men/(?P<slug>[^/]+)/$', ProductsView.as_view(with_category=True, sex='male'), name='men_category'),
     url(r'^women/(?P<category_slug>[^/]+)/(?P<slug>[^/]+)-(?P<pk>\d+)/$', ProductView.as_view(sex='female'), name='women_product'),
     url(r'^men/(?P<category_slug>[^/]+)/(?P<slug>[^/]+)-(?P<pk>\d+)/$', ProductView.as_view(sex='male'), name='men_product'),
+    url(r'^women/(?P<category_slug>[^/]+)/(?P<slug>[^/]+)-(?P<pk>\d+)/discount/(?P<code>[^/]+)/$',
+        ProductWithDiscountView.as_view(sex='female'), name='women_product_with_discount'),
+    url(r'^men/(?P<category_slug>[^/]+)/(?P<slug>[^/]+)-(?P<pk>\d+)/discount/(?P<code>[^/]+)/$',
+        ProductWithDiscountView.as_view(sex='male'), name='men_product_with_discount'),
 
     url(r'^video/$', VideoListView.as_view(), name='videos'),
     url(r'^video/(?P<slug>[^/]+)-(?P<pk>\d+)/$', VideoDetailView.as_view(), name='video'),
 
     url(r'^blog/', include('apps.blog.urls', namespace='blog')),
+    url(r'^contests/', include('apps.contests.urls', namespace='contests')),
 
     url(r'^blog-old/$', TemplateView.as_view(template_name='blog.html'), name='blog-old'),
     url(r'^blog-page/$', TemplateView.as_view(template_name='blog-page.html'), name='blog-page'),

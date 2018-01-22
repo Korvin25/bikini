@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.views.generic import TemplateView
+import uuid
 
-from ..catalog.models import Attribute, GiftWrapping
+from django.core.urlresolvers import reverse
+from django.views.generic import TemplateView, View
+from django.http import HttpResponseRedirect
+
+from ..catalog.models import Attribute, GiftWrapping, SpecialOffer
 from ..core.templatetags.core_tags import to_int_plus
 from ..geo.models import Country
 from .cart import Cart
@@ -36,6 +40,8 @@ class CartView(TemplateView):
             'gift_wrapping_price': to_int_plus(GiftWrapping.get_price() or 0),
             'countries': Country.objects.values('id', 'title'),
             'shipping_data': shipping_data,
+            'special': SpecialOffer.get_offer(),
+            'random_str': str(uuid.uuid4()).replace('-', ''),
         }
         context.update(super(CartView, self).get_context_data(**kwargs))
         return context
@@ -68,3 +74,18 @@ class CartView(TemplateView):
 
         self.with_color = with_color
         self.color_attribute = color_attribute
+
+
+class CartGetDiscountView(View):
+
+    def get(self, request, *args, **kwargs):
+        profile = request.user
+        redirect_url = reverse('cart')
+
+        if not profile.is_anonymous() and profile.can_get_discount:
+            special_offer = SpecialOffer.get_offer()
+            if special_offer:
+                discount_code = profile.get_discount_code()
+                redirect_url = special_offer.get_offer_url(discount_code=discount_code)
+
+        return HttpResponseRedirect(redirect_url)

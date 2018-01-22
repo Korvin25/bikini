@@ -13,6 +13,7 @@ def content(request):
     footer_banner = Banner.active_objects.filter(location='bottom').order_by('?').first()
     LANGUAGES = settings.LANGUAGES
     LANGUAGES_DICT = settings.LANGUAGES_DICT
+    liked_participants = request.session.get('liked_participants', [])
 
     content = {
         'menu': menu,
@@ -20,5 +21,6 @@ def content(request):
         'footer_banner': footer_banner,
         'LANGUAGES': LANGUAGES,
         'LANGUAGES_DICT': LANGUAGES_DICT,
+        'liked_participants': liked_participants,
     }
     return content

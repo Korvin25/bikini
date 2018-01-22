@@ -34,7 +34,9 @@ def get_translated_path(context, lang=None):
     obj = (context.get('product')
            or context.get('category')
            or context.get('video')
-           or context.get('post'))
+           or context.get('post')
+           or context.get('participant')
+           or context.get('contest'))
     if obj and lang:
         current_language = translation.get_language()
         translation.activate(lang)
@@ -87,7 +89,7 @@ def is_divisible(number1, number2):
     return not (number1 % number2)
 
 
-@register.simple_tag()
+@register.filter
 def to_str(something):
     """
     Переводим что-либо в строку
@@ -128,3 +130,9 @@ def to_int_plus(value):
     int_value = int(value)
     return (int_value if int_value == value
             else int_value + 1)
+
+
+@register.filter
+def with_discount(price, discount):
+    discount_price = price*discount // 100
+    return to_int_plus(price - discount_price)
