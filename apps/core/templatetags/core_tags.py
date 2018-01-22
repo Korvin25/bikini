@@ -8,8 +8,21 @@ from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils import translation
 
+from crequest.middleware import CrequestMiddleware
+
 
 register = template.Library()
+
+
+@register.filter
+def full_url(url):
+    """
+    Получаем полный URL текущей страницы, включая домен и языковые префиксы
+    (используется для расшаривания в соц.сетях)
+    """
+    request = CrequestMiddleware.get_request()
+    current_site = get_current_site(request)
+    return 'http://{}{}'.format(current_site.domain, url)
 
 
 @register.simple_tag(takes_context=True)

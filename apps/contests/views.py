@@ -15,24 +15,33 @@ from .forms import ContestApplyForm
 from .models import Contest, Participant, ParticipantPhoto
 
 
-class ContestDetailView(DetailView):
+class ContestsHomeView(TemplateView):
+    template_name = 'contests/contests.html'
+
+    def get_object(self, *args, **kwargs):
+        contest = Contest.objects.filter(show=True, published_dt__lte=timezone.now(), status='active').first()
+        return contest
+
+    def get_context_data(self, **kwargs):
+        c = self.get_object()
+        another_contests = Contest.objects.filter(show=True, status='archived', published_dt__lte=timezone.now())
+        if c:
+            another_contests = another_contests.exclude(id=c.id)
+        context = {
+            'contest': c,
+            'another_contests': another_contests,
+        }
+        context.update(super(ContestsHomeView, self).get_context_data(**kwargs))
+        return context
+
+
+class ContestDetailView(ContestsHomeView):
     template_name = 'contests/contest.html'
-    model = Contest
-    context_object_name = 'contest'
 
     def get_object(self, *args, **kwargs):
         kw = {'show': True, 'published_dt__lte': timezone.now()}
         contest = get_object_from_slug_and_kwargs(self.request, model=Contest, slug=self.kwargs.get('slug'), **kw)
         return contest
-
-    def get_context_data(self, **kwargs):
-        c = self.object
-        another_contests = Contest.objects.filter(show=True, published_dt__lte=timezone.now()).exclude(id=c.id)
-        context = {
-            'another_contests': another_contests,
-        }
-        context.update(super(ContestDetailView, self).get_context_data(**kwargs))
-        return context
 
 
 class ParticipantDetailView(DetailView):

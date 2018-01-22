@@ -21,6 +21,7 @@
         <div class="text_preview_page text_item">
           <ul class="breadcrumb">
             <li><a href="{% url 'home' %}">Главная</a></li>
+            <li><a href="{% url 'contests:home' %}">Конкурсы</a></li>
             <li><a href="{{ contest.get_absolute_url }}">{{ contest.title }}</a></li>
             <li><span>{{ participant.name }}</span></li>
           </ul>
@@ -123,12 +124,10 @@
                     </li>
                   {% endfor %}
                 {% else %}
-                  {% with participant.photo as photo %}
-                    <li>
-                      <a href="{{ photo.photo_big_url }}" target="_blank" class="highslide" onclick="return hs.expand(this)" title="">
-                      <img src="{{ photo.photo_preview_url }}" /></a>
-                    </li>
-                  {% endwith %}
+                  <li>
+                    <a href="{{ participant.photo_big_url }}" target="_blank" class="highslide" onclick="return hs.expand(this)" title="">
+                    <img src="{{ participant.photo_preview_url }}" /></a>
+                  </li>
                 {% endif %}
               </ul>
             </div>
@@ -142,9 +141,7 @@
                       <li class=""><img src="{{ photo.photo_thumb_url }}" /></li>
                     {% endfor %}
                   {% else %}
-                    {% with participant.photo as photo %}
-                      <li class=""><img src="{{ photo.photo_thumb_url }}" /></li>
-                    {% endwith %}
+                    <li class=""><img src="{{ participant.photo_thumb_url }}" /></li>
                   {% endif %}
                 </ul>
               </div>
@@ -153,6 +150,15 @@
           </div>
           <div class="highslide-dimming"></div>
         <!-- SLIDER ITEM <<< -->
+
+          {% comment %}
+          <div class="share_banner">
+            <p>Поделиться:</p>
+            <script src="//yastatic.net/es5-shims/0.0.2/es5-shims.min.js"></script>
+            <script src="//yastatic.net/share2/share.js"></script>
+            <div class="ya-share2" data-services="facebook,vkontakte,twitter,odnoklassniki,gplus" data-description="{{ participant.description }}" data-hashtags="Bikinimini.ru" data-image="{{ participant.photo_big_url }}" data-lang="{{ request.LANGUAGE_CODE }}"></div>
+          </div>
+          {% endcomment %}
         </div>
 
         {% if participant.products.count %}

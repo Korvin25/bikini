@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n %}
+{% load i18n core_tags %}
 
 {% block meta_title %}{{ post.get_meta_title }}{% endblock %}
 {% block meta_desc %}{{ post.get_meta_desc }}{% endblock %}
@@ -125,7 +125,7 @@
               <div class="title_mini">Поделиться в соц. сетях:</div>
               <script src="//yastatic.net/es5-shims/0.0.2/es5-shims.min.js"></script>
               <script src="//yastatic.net/share2/share.js"></script>
-              <div class="ya-share2" data-services="facebook,vkontakte,twitter,odnoklassniki,gplus" data-description="{{ post.description }}" data-hashtags="Bikinimini.ru" data-image="{{ post.cover_detail_url }}" data-lang="{{ request.LANGUAGE_CODE }}"></div>
+              <div class="ya-share2" data-services="facebook,vkontakte,twitter,odnoklassniki,gplus" data-description="{{ post.description }}" data-hashtags="Bikinimini.ru" data-image="{{ post.cover_detail_url|full_url }}" data-lang="{{ request.LANGUAGE_CODE }}"></div>
               {% comment %}
                 <a href="#"><img src="/static/images/social/face.png" alt="FaceBook" /></a>
                 <a href="#"><img src="/static/images/social/vk.png" alt="Vk" /></a>

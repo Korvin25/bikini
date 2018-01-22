@@ -12,62 +12,64 @@
 {% block twitter_desc %}{{ contest.get_meta_desc }}{% endblock %}
 
 {% block content %}
-  <div class="with_banner_page banner_konkurs{% if contest.winner %} banner_konkurs_itog{% endif %}" style="background-image:url({{ contest.cover_url }});">
-    <div class="with_banner_padd_page">
-      {% if contest.winner %}
-        <div class="with_mini_text with_makro_text">Победитель конкурса</div>
-        <div class="with_mini_text with_middle_text">{{ contest.title }}</div>
-        <div class="with_big_text">{{ contest.winner.name }}</div>
-        <div class="photo_list"><a href="{{ contest.winner.get_absolute_url }}"><img src="{{ contest.winner.cover_winner_url }}" alt="{{ contest.winner.name }}"></a></div>
+  {% if contest %}
+    <div class="with_banner_page banner_konkurs{% if contest.winner %} banner_konkurs_itog{% endif %}" style="background-image:url({{ contest.cover_url }});">
+      <div class="with_banner_padd_page">
+        {% if contest.winner %}
+          <div class="with_mini_text with_makro_text">Победитель конкурса</div>
+          <div class="with_mini_text with_middle_text">{{ contest.title }}</div>
+          <div class="with_big_text">{{ contest.winner.name }}</div>
+          <div class="photo_list"><a href="{{ contest.winner.get_absolute_url }}"><img src="{{ contest.winner.cover_winner_url }}" alt="{{ contest.winner.name }}"></a></div>
 
-      {% else %}
-        {% if contest.title_lines.count %}
-          {% for line in contest.title_lines.all %}
-            <div class="{% if line.big %}with_big_text{% else %}with_mini_text{% endif %}">{{ line.line }}</div>
-          {% endfor %}
         {% else %}
-          <div class="with_big_text">{{ contest.title }}</div>
-        {% endif %}
+          {% if contest.title_lines.count %}
+            {% for line in contest.title_lines.all %}
+              <div class="{% if line.big %}with_big_text{% else %}with_mini_text{% endif %}">{{ line.line }}</div>
+            {% endfor %}
+          {% else %}
+            <div class="with_big_text">{{ contest.title }}</div>
+          {% endif %}
 
-        {% if contest.accepting_enabled %}        
-          <a href="#apply"
-             data-popup-id="{% if request.user.is_anonymous %}#auth{% elif request.user.id in contest.participants_profiles %}#already-participating{% else %}#contest-apply{% endif %}"
-             class="butt_with js-apply-button">Принять участие</a>
+          {% if contest.accepting_enabled %}        
+            <a href="#apply"
+               data-popup-id="{% if request.user.is_anonymous %}#auth{% elif request.user.id in contest.participants_profiles %}#already-participating{% else %}#contest-apply{% endif %}"
+               class="butt_with js-apply-button">Принять участие</a>
+          {% endif %}
         {% endif %}
-      {% endif %}
-      
-      <div class="share_banner">
-        <p>Поделиться:</p>
-        <script src="//yastatic.net/es5-shims/0.0.2/es5-shims.min.js"></script>
-        <script src="//yastatic.net/share2/share.js"></script>
-        <div class="ya-share2" data-services="facebook,vkontakte,twitter,odnoklassniki,gplus" data-description="{{ contest.meta_desc }}" data-hashtags="Bikinimini.ru" data-image="{{ contest.cover_url }}" data-lang="{{ request.LANGUAGE_CODE }}"></div>
-        {% comment %}
-          <a href="#" class="soc_banner"><img src="/static/i/soc_face.png" alt="Поделиться в Facebook" /></a>
-          <a href="#" class="soc_banner"><img src="/static/i/soc_vk.png" alt="Поделиться в ВКонтакте" /></a>
-          <a href="#" class="soc_banner"><img src="/static/i/tw_icon.png" alt="Поделиться в Twitter" /></a>
-          <a href="#" class="soc_banner"><img src="/static/i/soc_ok.png" alt="Поделиться в Одноклассниках" /></a>
-          <a href="#" class="soc_banner"><img src="/static/i/you_icon.png" alt="Поделиться в Youtube" /></a>
-          <a href="#" class="soc_banner"><img src="/static/i/soc_gplus.png" alt="Поделиться в Google Plus" /></a>
-        {% endcomment %}
+        
+        <div class="share_banner">
+          <p>Поделиться:</p>
+          <script src="//yastatic.net/es5-shims/0.0.2/es5-shims.min.js"></script>
+          <script src="//yastatic.net/share2/share.js"></script>
+          <div class="ya-share2" data-services="facebook,vkontakte,twitter,odnoklassniki,gplus" data-description="{{ contest.meta_desc }}" data-hashtags="Bikinimini.ru" data-image="{{ contest.cover_url|full_url }}" data-lang="{{ request.LANGUAGE_CODE }}"></div>
+          {% comment %}
+            <a href="#" class="soc_banner"><img src="/static/i/soc_face.png" alt="Поделиться в Facebook" /></a>
+            <a href="#" class="soc_banner"><img src="/static/i/soc_vk.png" alt="Поделиться в ВКонтакте" /></a>
+            <a href="#" class="soc_banner"><img src="/static/i/tw_icon.png" alt="Поделиться в Twitter" /></a>
+            <a href="#" class="soc_banner"><img src="/static/i/soc_ok.png" alt="Поделиться в Одноклассниках" /></a>
+            <a href="#" class="soc_banner"><img src="/static/i/you_icon.png" alt="Поделиться в Youtube" /></a>
+            <a href="#" class="soc_banner"><img src="/static/i/soc_gplus.png" alt="Поделиться в Google Plus" /></a>
+          {% endcomment %}
+        </div>
       </div>
     </div>
-  </div>
-  
+  {% endif %}
+
   <main>
     <div class="main_content main_content_video">
-      {% if contest.show_terms %}
+      {% if contest and contest.show_terms %}
         <div class="blog_title"><h1 class="title_block">Условия конкурса</h1></div>
       {% endif %}
     
       <div id="main_content" class="content_video list_push cnt_left">
 
-        {% if contest.show_terms %}
+        {% if contest and contest.show_terms %}
           <div class="text_preview_left txt_black">
             {{ contest.terms|safe }}
           </div>
         {% endif %}
 
-        {% if contest.participants.count %}
+        {% if contest and contest.participants.count %}
           <h2 class="title_block">Участники конкурса</h2>
           <div class="item_list_wrapp item_list_wrapp_all list_face" itemscope="" itemtype="http://schema.org/ItemList">
 

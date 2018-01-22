@@ -12,6 +12,14 @@ class ContestAdminForm(forms.ModelForm):
         super(ContestAdminForm, self).__init__(*args, **kwargs)
         self.fields['winner'].queryset = self.instance.participants.all()
 
+    def clean_status(self):
+        status = self.cleaned_data.get('status')
+        if status == 'active':
+            active_contest = Contest.objects.filter(status='active').first()
+            if active_contest and (not self.instance.id or self.instance.id != active_contest.id):
+                raise forms.ValidationError('Активный конкурс уже существует: {}.'.format(active_contest.title))
+        return status
+
 
 class ContestApplyForm(forms.ModelForm):
 
