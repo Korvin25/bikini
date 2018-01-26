@@ -57,15 +57,28 @@ class Step0View(CartStepBaseView):
     """
 
     def post(self, request, *args, **kwargs):
+        status = 200
+
         if 'additional_info' in self.DATA:
             kwargs = {'additional_info': self.DATA['additional_info']}
             self.cart.update(**kwargs)
 
-        if request.user.is_anonymous():
-            data = {'result': 'ok', 'popup': '#step1'}
+        basket = self.cart.cart
+        if not (basket.delivery_method or basket.payment_method):
+            data = {'result': 'error', 'error': 'Выберите способы оставки и оплаты'}
+            status = 400
+        elif not basket.delivery_method:
+            data = {'result': 'error', 'error': 'Выберите способ доставки'}
+            status = 400
+        elif not basket.payment_method:
+            data = {'result': 'error', 'error': 'Выберите способ оплаты'}
+            status = 400
         else:
-            data = {'result': 'ok', 'popup': '#step3'}
-        return JsonResponse(data)
+            if request.user.is_anonymous():
+                data = {'result': 'ok', 'popup': '#step1'}
+            else:
+                data = {'result': 'ok', 'popup': '#step3'}
+        return JsonResponse(data, status=status)
 
 
 class Step2View(CartStepBaseView):
@@ -133,7 +146,7 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
 
             for k in self.mapping.keys():
                 key = {'country': 'country_id'}.get(k, k)
-                if not getattr(profile, key):
+                if not getattr(profile, key, None):
                     setattr(profile, key, getattr(cart, key))
             profile.save()
 
@@ -164,7 +177,10 @@ class UpdateCartView(View):
             return JsonResponse(data, status=400)
 
         cart.update(**DATA)
-        data = {'result': 'ok'}
+        count = cart.count()
+        summary = cart.summary()
+
+        data = {'result': 'ok', 'count': count, 'summary': summary}
         return JsonResponse(data)
 
 

@@ -218,6 +218,21 @@ function removeItem($item_div) {
 };
 
 
+$('.js-choose-cart-method').change(function() {
+  var $input = $(this),
+      input_name = $input.attr('name'),
+      input_val = $input.val(),
+
+      $parent = $input.parents('js-method-inputs-parent'),
+      $cart_parent = $('.js-cart-parent'),
+      url = $cart_parent.attr('data-update-url'),
+      form_data = {};
+
+  form_data[input_name] = input_val;
+  sendSomeForm(url, form_data, 'choose_method', $parent);
+});
+
+
 $('.js-step0-button').click(function() {
   var $button = $(this),
       $cart_parent = $('.js-cart-parent'),

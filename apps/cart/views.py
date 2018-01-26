@@ -11,7 +11,7 @@ from ..catalog.models import Attribute, GiftWrapping, SpecialOffer
 from ..core.templatetags.core_tags import to_int_plus
 from ..geo.models import Country
 from .cart import Cart
-from .models import CartItem
+from .models import DeliveryMethod, PaymentMethod, CartItem
 
 
 class CartView(TemplateView):
@@ -42,6 +42,8 @@ class CartView(TemplateView):
             'shipping_data': shipping_data,
             'special': SpecialOffer.get_offer(),
             'random_str': str(uuid.uuid4()).replace('-', ''),
+            'delivery_methods': DeliveryMethod.objects.all(),
+            'payment_methods': PaymentMethod.objects.all(),
         }
         context.update(super(CartView, self).get_context_data(**kwargs))
         return context

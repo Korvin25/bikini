@@ -1,0 +1,98 @@
+[
+{
+    "model": "cart.deliverymethod",
+    "pk": 1,
+    "fields": {
+        "title": "\u041a\u0443\u0440\u044c\u0435\u0440\u043e\u043c \u041c\u043e\u0441\u043a\u0432\u0430 \u0438 \u041c\u041e",
+        "title_ru": "\u041a\u0443\u0440\u044c\u0435\u0440\u043e\u043c \u041c\u043e\u0441\u043a\u0432\u0430 \u0438 \u041c\u041e",
+        "title_en": null,
+        "title_de": null,
+        "title_fr": null,
+        "title_it": null,
+        "title_es": null,
+        "price_rub": "500.00",
+        "price_eur": "5.00",
+        "price_usd": "5.00",
+        "order": 1
+    }
+},
+{
+    "model": "cart.deliverymethod",
+    "pk": 2,
+    "fields": {
+        "title": "\u041f\u043e\u0447\u0442\u043e\u0439 \u0420\u043e\u0441\u0441\u0438\u0438",
+        "title_ru": "\u041f\u043e\u0447\u0442\u043e\u0439 \u0420\u043e\u0441\u0441\u0438\u0438",
+        "title_en": null,
+        "title_de": null,
+        "title_fr": null,
+        "title_it": null,
+        "title_es": null,
+        "price_rub": "200.00",
+        "price_eur": "5.00",
+        "price_usd": "5.00",
+        "order": 2
+    }
+},
+{
+    "model": "cart.deliverymethod",
+    "pk": 3,
+    "fields": {
+        "title": "\u0421\u043b\u0443\u0436\u0431\u043e\u0439 \u0434\u043e\u0441\u0442\u0430\u0432\u043a\u0438 EMS",
+        "title_ru": "\u0421\u043b\u0443\u0436\u0431\u043e\u0439 \u0434\u043e\u0441\u0442\u0430\u0432\u043a\u0438 EMS",
+        "title_en": null,
+        "title_de": null,
+        "title_fr": null,
+        "title_it": null,
+        "title_es": null,
+        "price_rub": "1000.00",
+        "price_eur": "5.00",
+        "price_usd": "5.00",
+        "order": 3
+    }
+},
+{
+    "model": "cart.deliverymethod",
+    "pk": 4,
+    "fields": {
+        "title": "\u041a\u0443\u0440\u044c\u0435\u0440\u043e\u043c \u043f\u043e \u0420\u043e\u0441\u0441\u0438\u0438",
+        "title_ru": "\u041a\u0443\u0440\u044c\u0435\u0440\u043e\u043c \u043f\u043e \u0420\u043e\u0441\u0441\u0438\u0438",
+        "title_en": null,
+        "title_de": null,
+        "title_fr": null,
+        "title_it": null,
+        "title_es": null,
+        "price_rub": "1000.00",
+        "price_eur": "5.00",
+        "price_usd": "5.00",
+        "order": 4
+    }
+},
+{
+    "model": "cart.paymentmethod",
+    "pk": 1,
+    "fields": {
+        "title": "\u041d\u0430\u043b\u0438\u0447\u043d\u044b\u043c\u0438 \u043f\u0440\u0438 \u043f\u043e\u043b\u0443\u0447\u0435\u043d\u0438\u0438",
+        "title_ru": "\u041d\u0430\u043b\u0438\u0447\u043d\u044b\u043c\u0438 \u043f\u0440\u0438 \u043f\u043e\u043b\u0443\u0447\u0435\u043d\u0438\u0438",
+        "title_en": null,
+        "title_de": null,
+        "title_fr": null,
+        "title_it": null,
+        "title_es": null,
+        "order": 1
+    }
+},
+{
+    "model": "cart.paymentmethod",
+    "pk": 2,
+    "fields": {
+        "title": "\u041e\u043f\u043b\u0430\u0442\u0438\u0442\u044c \u0447\u0435\u0440\u0435\u0437 PayPal.com",
+        "title_ru": "\u041e\u043f\u043b\u0430\u0442\u0438\u0442\u044c \u0447\u0435\u0440\u0435\u0437 PayPal.com",
+        "title_en": null,
+        "title_de": null,
+        "title_fr": null,
+        "title_it": null,
+        "title_es": null,
+        "order": 2
+    }
+}
+]

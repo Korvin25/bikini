@@ -27,7 +27,7 @@
         </ul>
         <h1 class="title_block">Корзина</h1>
 
-        <div class="rows_cut_block js-cart-parent" data-step0-url="{% url 'cart_api:step0' %}" data-step2-url="{% url 'cart_api:step2' %}" data-step3-url="{% url 'cart_api:step3' %}">
+        <div class="rows_cut_block js-cart-parent" data-update-url="{% url 'cart_api:update' %}" data-step0-url="{% url 'cart_api:step0' %}" data-step2-url="{% url 'cart_api:step2' %}" data-step3-url="{% url 'cart_api:step3' %}">
 
           <div class="table_shell js-hide-if-not-cart"{% if not cart.count %} style="display: none;"{% endif %}>
             <div class="table_head">
@@ -140,6 +140,41 @@
           </div>
 
           <h3 class="js-show-if-not-cart" style="margin-bottom: 250px;{% if cart.count %} display: none;{% endif %}">Товаров в корзине нет. <a href="{% url 'women' %}">Вернуться в каталог</a></h3>
+
+          <div class="rows_block_info js-hide-if-not-cart"{% if not cart.count %} style="display: none;"{% endif %}>
+            {% if delivery_methods.count %}
+              <div class="row_info">
+                <h2 class="title_block">Выбор способа доставки</h2>
+                <div class="rows_radio_block js-method-inputs-parent">
+                  {% for method in delivery_methods %}
+                    <label for="delivery_method_{{ method.id }}" class="radio_input">
+                      <div class="shell_cell_row">
+                        <div class="input_cell"><input type="radio" name="delivery_method_id" value="{{ method.id }}" id="delivery_method_{{ method.id }}" class="check_radio js-choose-cart-method"{% if basket.delivery_method_id == method.id %} checked="checked"{% endif %}/></div>
+                        <p class="dott_cell"><strong><span>{{ method.title }}</span></strong><span class="val_radio_row">Стоимость : {{ method.price|to_int_plus }} руб.</span></p>
+                      </div>
+                    </label>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+            
+            {% if payment_methods.count %}
+              <div class="row_info">
+                <h2 class="title_block">Выбор способа оплаты</h2>
+                <div class="rows_radio_block js-method-inputs-parent">
+                  {% for method in payment_methods %}
+                    <label for="payment_method_{{ method.id }}" class="radio_input">
+                      <div class="shell_cell_row">
+                        <div class="input_cell"><input type="radio" name="payment_method_id" value="{{ method.id }}" id="payment_method_{{ method.id }}" class="check_radio js-choose-cart-method"{% if basket.payment_method_id == method.id %} checked="checked"{% endif %}/></div>
+                        <p><strong class="no_dash"><span>{{ method.title }}</span></strong></p>
+                      </div>
+                    </label>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+
+          </div>
 
           <h2 class="title_block js-hide-if-not-cart"{% if not cart.count %} style="display: none;"{% endif %}>Дополнительная информация</h2>
           <textarea name="additional_info" rows="9" id="text" class="t_area js-hide-if-not-cart"{% if not cart.count %} style="display: none;"{% endif %}>{% if basket.additional_info %}{{ basket.additional_info }}{% endif %}</textarea>

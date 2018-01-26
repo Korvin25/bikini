@@ -17,6 +17,40 @@ def to_int_plus(value):
     return int_value if int_value == value else int_value + 1
 
 
+class DeliveryMethod(models.Model):
+    title = models.CharField('Название', max_length=511)
+    price_rub = models.DecimalField('Стоимость, руб.', max_digits=9, decimal_places=2, default=0)
+    price_eur = models.DecimalField('Стоимость, eur.', max_digits=9, decimal_places=2, default=0)
+    price_usd = models.DecimalField('Стоимость, usd.', max_digits=9, decimal_places=2, default=0)
+    order = models.PositiveSmallIntegerField(default=0, blank=False, null=False, verbose_name=mark_safe('&nbsp;&nbsp;&nbsp;&nbsp;'))
+
+    class Meta:
+        ordering = ['order', 'id', ]
+        verbose_name = 'способ доставки'
+        verbose_name_plural = 'способы доставки'
+
+    def __unicode__(self):
+        return self.title
+
+    @property
+    def price(self):
+        # TODO
+        return self.price_rub
+
+
+class PaymentMethod(models.Model):
+    title = models.CharField('Название', max_length=511)
+    order = models.PositiveSmallIntegerField(default=0, blank=False, null=False, verbose_name=mark_safe('&nbsp;&nbsp;&nbsp;&nbsp;'))
+
+    class Meta:
+        ordering = ['order', 'id', ]
+        verbose_name = 'способ оплаты'
+        verbose_name_plural = 'способы оплаты'
+
+    def __unicode__(self):
+        return self.title
+
+
 class Cart(models.Model):
     STATUS_CHOICES = (
         (0, 'новый'),
@@ -49,6 +83,8 @@ class Cart(models.Model):
     phone = models.CharField('Телефон', max_length=30, null=True, blank=True)
     name = models.CharField('Полное имя', max_length=511, null=True, blank=True)
 
+    delivery_method = models.ForeignKey(DeliveryMethod, verbose_name='Способ доставки', null=True, blank=True)
+    payment_method = models.ForeignKey(PaymentMethod, verbose_name='Способ оплаты', null=True, blank=True)
     additional_info = models.TextField('Дополнительная информация', blank=True)
 
     # tracking_number = models.CharField('Номер отслеживания', max_length=255, null=True, blank=True)
@@ -81,7 +117,18 @@ class Cart(models.Model):
     def get_summary(self):
         price_list = self.cartitem_set.all().values_list('price', flat=True)
         result = sum(price_list)
+        delivery_method = self.delivery_method
+        if delivery_method:
+            result = result + delivery_method.price
         return result
+
+    def is_order_with_discount(self):
+        discounts = self.cartitem_set.all().values_list('discount', flat=True)
+        with_discount = bool(sum(discounts))
+        return ('<img src="/static/admin/img/icon-yes.svg" alt="Да">' if with_discount
+                else '<img src="/static/admin/img/icon-no.svg" alt="Нет">')
+    is_order_with_discount.allow_tags = True
+    is_order_with_discount.short_description = 'Товары со скидкой'
 
     # # def get_order_url(self):
     # #     return reverse('profile:order', kwargs={'pk': self.id})
@@ -90,6 +137,18 @@ class Cart(models.Model):
         return self.profile or ''
     show_profile.allow_tags = True
     show_profile.short_description = 'Клиент'
+
+    def show_delivery_method(self):
+        method = self.delivery_method
+        return method.title if method else '-'
+    show_delivery_method.allow_tags = True
+    show_delivery_method.short_description = 'Тип доставки'
+
+    def show_payment_method(self):
+        method = self.payment_method
+        return method.title if method else '-'
+    show_payment_method.allow_tags = True
+    show_payment_method.short_description = 'Тип оплаты'
 
     def _show_value(self, value):
         value = int(value) if int(value) == value else value
