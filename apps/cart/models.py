@@ -19,6 +19,7 @@ def to_int_plus(value):
 
 class DeliveryMethod(models.Model):
     title = models.CharField('Название', max_length=511)
+    short_title = models.CharField('Краткое название', max_length=63, blank=True, help_text='для вывода в личном кабинете')
     price_rub = models.DecimalField('Стоимость, руб.', max_digits=9, decimal_places=2, default=0)
     price_eur = models.DecimalField('Стоимость, eur.', max_digits=9, decimal_places=2, default=0)
     price_usd = models.DecimalField('Стоимость, usd.', max_digits=9, decimal_places=2, default=0)
@@ -32,6 +33,9 @@ class DeliveryMethod(models.Model):
     def __unicode__(self):
         return self.title
 
+    def get_short_title(self):
+        return self.short_title or self.title
+
     @property
     def price(self):
         # TODO
@@ -40,6 +44,7 @@ class DeliveryMethod(models.Model):
 
 class PaymentMethod(models.Model):
     title = models.CharField('Название', max_length=511)
+    short_title = models.CharField('Краткое название', max_length=63, blank=True, help_text='для вывода в личном кабинете')
     order = models.PositiveSmallIntegerField(default=0, blank=False, null=False, verbose_name=mark_safe('&nbsp;&nbsp;&nbsp;&nbsp;'))
 
     class Meta:
@@ -49,6 +54,9 @@ class PaymentMethod(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    def get_short_title(self):
+        return self.short_title or self.title
 
 
 class Cart(models.Model):
@@ -140,15 +148,15 @@ class Cart(models.Model):
 
     def show_delivery_method(self):
         method = self.delivery_method
-        return method.title if method else '-'
+        return method.get_short_title() if method else '-'
     show_delivery_method.allow_tags = True
-    show_delivery_method.short_description = 'Тип доставки'
+    show_delivery_method.short_description = 'Способ доставки'
 
     def show_payment_method(self):
         method = self.payment_method
-        return method.title if method else '-'
+        return method.get_short_title() if method else '-'
     show_payment_method.allow_tags = True
-    show_payment_method.short_description = 'Тип оплаты'
+    show_payment_method.short_description = 'Способ оплаты'
 
     def _show_value(self, value):
         value = int(value) if int(value) == value else value

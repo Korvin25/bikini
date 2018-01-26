@@ -241,8 +241,8 @@
                     <div class="table_head tb_head">
                       <div class="table_cell"><div class="tb_title">Дата заказа</div></div>
                       <div class="table_cell"><div class="tb_title">Номер заказа</div></div>
-                      {# <div class="table_cell"><div class="tb_title">Способ доставки</div></div> #}
-                      {# <div class="table_cell"><div class="tb_title">Способ оплаты</div></div> #}
+                      <div class="table_cell"><div class="tb_title">Способ доставки</div></div>
+                      <div class="table_cell"><div class="tb_title">Способ оплаты</div></div>
                       <div class="table_cell"><div class="tb_title">Статус</div></div>
                       <div class="table_cell"><div class="tb_title">Итого к оплате</div></div>
                     </div>
@@ -261,17 +261,15 @@
                           <div class="txt_cell_td">{{ order.number }}</div>
                         </div>
 
-                        {% comment %}
-                          <div class="table_cell">
-                            <div class="tb_title">Способ доставки</div>
-                            <div class="txt_cell_td">самовывоз</div>
-                          </div>
-                          
-                          <div class="table_cell">
-                            <div class="tb_title">Способ оплаты</div>
-                            <div class="txt_cell_td">paypal</div>
-                          </div>
-                        {% endcomment %}
+                        <div class="table_cell">
+                          <div class="tb_title">Способ доставки</div>
+                          <div class="txt_cell_td">{{ order.show_delivery_method }}</div>
+                        </div>
+                        
+                        <div class="table_cell">
+                          <div class="tb_title">Способ оплаты</div>
+                          <div class="txt_cell_td">{{ order.show_payment_method }}</div>
+                        </div>
                         
                         <div class="table_cell">
                           <div class="tb_title">Статус</div>
