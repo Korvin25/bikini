@@ -1730,6 +1730,8 @@ header,main,nav,footer {display:block;}
 		
 		.select_shel {width:101%;}
 		.wns_row_content .rows_wns_input .input_text {padding-left: 5%;width: 89%;}
+		
+		.text_light_page table td {padding:3px;}
 	}
 	
 	@media screen and (max-width: 420px) {
