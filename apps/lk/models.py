@@ -5,6 +5,7 @@ import uuid
 
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils import timezone
 
@@ -69,8 +70,6 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     discount_code = models.CharField(max_length=127, null=True, blank=True)
     discount_used = models.BooleanField(default=False)
 
-    desired_products = models.ManyToManyField('catalog.Product', verbose_name='Желаемые товары', blank=True)
-
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
@@ -80,8 +79,14 @@ class Profile(AbstractBaseUser, PermissionsMixin):
         verbose_name = 'профиль'
         verbose_name_plural = 'профили'
 
+    def __unicode__(self):
+        return '{} ({})'.format(self.name, self.email) if self.name else self.email
+
     def get_short_name(self):
-        return self.email
+        return self.name or self.email
+
+    def get_full_name(self):
+        return self.__unicode__()
 
     @property
     def username(self):
@@ -117,3 +122,21 @@ class Profile(AbstractBaseUser, PermissionsMixin):
             discount_code = self.discount_code = str(uuid.uuid4()).replace('-', '')
             self.save()
         return discount_code
+
+    @property
+    def wishlist(self):
+        return list(self.wishlist_items.all().values('product_id', 'price', 'attrs'))
+
+
+class WishListItem(models.Model):
+    profile = models.ForeignKey(Profile, verbose_name='Профиль', related_name='wishlist_items')
+    product = models.ForeignKey('catalog.Product', verbose_name='Товар', related_name='wishlist_items')
+    price = models.DecimalField('Цена, руб.', max_digits=9, decimal_places=2, default=0, null=True, blank=True)
+    attrs = JSONField(default=dict)
+
+    class Meta:
+        unique_together = ('profile', 'product')
+        ordering = ['id', ]
+
+    def __unicode__(self):
+        return self.id

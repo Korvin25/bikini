@@ -10,6 +10,7 @@ from django.views.generic import TemplateView
 
 from ..core.templatetags.core_tags import to_int_plus
 from ..core.http_utils import get_object_from_slug_and_kwargs
+from ..lk.wishlist.utils import get_wishlist_from_request
 from .models import Attribute, Category, GiftWrapping, Product, ProductOption, SpecialOffer
 
 
@@ -323,13 +324,42 @@ class ProductView(TemplateView):
         self.maximum_in_stock = data['prices']['maximum_in_stock']
 
         data['prices']['discount'] = self.discount
+        self.data = data
         self.data_json = json.dumps(data)
+
+    def get_chosen_options(self):
+        chosen_options = {k[1:]: v for k, v in self.request.GET.items() if k.startswith('_')}
+        self.chosen_options = chosen_options
+
+    def get_from_wishlist(self):
+        wishlist = get_wishlist_from_request(self.request)
+        wishlist_data = {
+            'product_id': self.product.id,
+            'price': self.data['prices']['option'],
+            'attrs': {},
+        }
+        wishlist_item = None
+        for item in wishlist:
+            if self.product.id == item['product_id']:
+                wishlist_item = item
+                break
+        in_wishlist = bool(wishlist_item)
+
+        if wishlist_item:
+            wishlist_data['price'] = wishlist_item['price']
+            wishlist_data['attrs'] = wishlist_item['attrs']
+
+        wishlist_data['attrs_json'] = json.dumps(wishlist_data['attrs'])
+        self.in_wishlist = in_wishlist
+        self.wishlist_data = wishlist_data
 
     def get_context_data(self, **kwargs):
         product = self.get_product()
         category = self.category
         self.get_attributes()
         self.get_data_json()
+        self.get_chosen_options()
+        self.get_from_wishlist()
         context = {
             'product': product,
             'category': category,
@@ -346,6 +376,9 @@ class ProductView(TemplateView):
             'maximum_in_stock': self.maximum_in_stock,
             'data_json': self.data_json,
             'discount': self.discount,
+            'chosen_options': self.chosen_options,
+            'in_wishlist': self.in_wishlist,
+            'wishlist_data': self.wishlist_data,
         }
         context.update(super(ProductView, self).get_context_data(**kwargs))
         return context

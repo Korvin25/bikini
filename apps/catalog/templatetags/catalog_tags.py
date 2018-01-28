@@ -75,3 +75,10 @@ def item_color(item, color_attribute):
             pass
 
     return option
+
+
+@register.simple_tag(takes_context=True)
+def get_is_chosen(context, attr_slug, option_id):
+    chosen_options = context.get('chosen_options', {})
+    chosen_id = chosen_options.get(attr_slug, '')
+    return unicode(option_id) == unicode(chosen_id)

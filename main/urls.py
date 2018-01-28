@@ -80,6 +80,7 @@ urlpatterns += i18n_patterns(
 
     url(r'^blog/', include('apps.blog.urls', namespace='blog')),
     url(r'^contests/', include('apps.contests.urls', namespace='contests')),
+    url(r'^wishlist/', include('apps.lk.wishlist.urls', namespace='wishlist')),
 
     url(r'^blog-old/$', TemplateView.as_view(template_name='blog.html'), name='blog-old'),
     url(r'^blog-page/$', TemplateView.as_view(template_name='blog-page.html'), name='blog-page'),

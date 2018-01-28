@@ -5,8 +5,9 @@
   <div class="filtr_title ch_title_item">{{ attr.title }}:</div>
   <div class="check_box check_mini check_mini_item">
     {% for option in attr.options %}
-      <label data-attr-id="{{ attr.id }}" data-attr-slug="{{ attr.slug }}" data-option-id="{{ option.id }}" for="{{ attr.slug }}_{{ option.id }}"{% if forloop.counter > 4 %} style="display: none;"{% endif %} class="color_option js-can-be-shown">
-        <input class="js-not-checkbox js-attr-checkbox js-attr-color" data-attr-slug="{{ attr.slug }}" data-option-id="{{ option.id }}"{% if choose_option %} data-attr-type="{{ attr.attr_type }}"{% endif %} data-color-id="{{ option.id }}" type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
+      {% get_is_chosen attr.slug option.id as is_chosen %}
+      <label data-attr-id="{{ attr.id }}" data-attr-slug="{{ attr.slug }}" data-option-id="{{ option.id }}" for="{{ attr.slug }}_{{ option.id }}"{% if forloop.counter > 4 and not is_chosen %} style="display: none;"{% endif %} class="color_option js-can-be-shown">
+        <input class="js-not-checkbox js-attr-checkbox js-attr-color" data-attr-slug="{{ attr.slug }}" data-option-id="{{ option.id }}"{% if choose_option %} data-attr-type="{{ attr.attr_type }}"{% endif %} data-color-id="{{ option.id }}" type="checkbox"{% if is_chosen %} checked="checked"{% endif %} name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}"/>
         {% if option.picture %}
           <span style="background: url('{{ option.detail_picture_url }}'); border: 1px solid #ccc;" title="{{ option.title }}">{{ option.title }}</span>
         {% else %}
@@ -60,6 +61,7 @@
     <div class="check_box check_mini check_photo check_photo_chars" id="check_photo_chars{{ attr.id }}">
       <ul>
       {% for option in attr.options %}
+        {% get_is_chosen attr.slug option.id as is_chosen %}
         <li>
         {% comment %}
           <span>
@@ -67,7 +69,7 @@
           </span>
         {% endcomment %}
         <label data-attr-slug="{{ attr.slug }}" for="{{ attr.slug }}_{{ option.id }}" title="{{ option.title }}">
-          <input class="js-not-checkbox js-attr-checkbox js-attr-style" data-attr-slug="{{ attr.slug }}" data-option-id="{{ option.id }}"{% if choose_option %} data-attr-type="{{ attr.attr_type }}"{% endif %} type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
+          <input class="js-not-checkbox js-attr-checkbox js-attr-style" data-attr-slug="{{ attr.slug }}" data-option-id="{{ option.id }}"{% if choose_option %} data-attr-type="{{ attr.attr_type }}"{% endif %} type="checkbox"{% if is_chosen %} checked="checked"{% endif %} name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
           <span>
           <img src="{{ option|get_photo_url:product }}" />
           </span>
@@ -96,8 +98,9 @@
     <div class="filtr_title ch_title_item">{{ attr.title }}:</div>
     <div class="check_box check_size check_mini_item">
       {% for option in attr.options %}
+        {% get_is_chosen attr.slug option.id as is_chosen %}
         <label for="{{ attr.slug }}_{{ option.id }}" data-attr-slug="{{ attr.slug }}">
-          <input class="js-not-checkbox js-attr-checkbox js-attr-size" data-attr-slug="{{ attr.slug }}" data-option-id="{{ option.id }}"{% if choose_option %} data-attr-type="{{ attr.attr_type }}"{% endif %} type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
+          <input class="js-not-checkbox js-attr-checkbox js-attr-size" data-attr-slug="{{ attr.slug }}" data-option-id="{{ option.id }}"{% if choose_option %} data-attr-type="{{ attr.attr_type }}"{% endif %} type="checkbox"{% if is_chosen %} checked="checked"{% endif %} name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
           <span{% if attr.slug == 'diametr' %} style="font-size: 12px;"{% endif %} title="{{ option.title }}">{{ option.title }}</span>
         </label>
       {% endfor %}
@@ -113,9 +116,10 @@
     <div class="filtr_title ch_title_item">{{ attr.title }}:</div>
     <div class="check_box check_size check_mini_item">
       {% for option in attr.options.all %}
+        {% get_is_chosen attr.slug option.id as is_chosen %}
         {% if option.id in attr.options_ids %}
           <label for="{{ attr.slug }}_{{ option.id }}" data-attr-slug="{{ attr.slug }}">
-            <input class="js-not-checkbox js-attr-checkbox js-attr-size" data-attr-slug="{{ attr.slug }}" data-option-id="{{ option.id }}"{% if choose_option %} data-attr-type="{{ attr.attr_type }}"{% endif %} type="checkbox" name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
+            <input class="js-not-checkbox js-attr-checkbox js-attr-size" data-attr-slug="{{ attr.slug }}" data-option-id="{{ option.id }}"{% if choose_option %} data-attr-type="{{ attr.attr_type }}"{% endif %} type="checkbox"{% if is_chosen %} checked="checked"{% endif %} name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
             <span{% if attr.slug == 'diametr' %} style="font-size: 12px;"{% endif %} title="{{ option.title }}">{{ option.title }}</span>
           </label>
         {% endif %}

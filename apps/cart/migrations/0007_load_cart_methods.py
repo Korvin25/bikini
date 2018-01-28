@@ -7,7 +7,7 @@ from django.db import migrations
 
 def load_fixture(apps, schema_editor):
     from django.core.management import call_command
-    call_command('loaddata', '20180126_cart_methods.json')
+    # call_command('loaddata', '20180126_cart_methods.json')
 
 
 class Migration(migrations.Migration):

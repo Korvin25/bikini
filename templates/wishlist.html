@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load i18n core_tags wishlist_tags %}
+
+{% block meta_title %}{{ seo_settings.wishlist.get_meta_title }}{% endblock %}
+{% block meta_desc %}{{ seo_settings.wishlist.get_meta_desc }}{% endblock %}
+{% block meta_keyw %}{{ seo_settings.wishlist.get_meta_keyw }}{% endblock %}
+
+{% block og_title %}{{ seo_settings.wishlist.get_meta_title }}{% endblock %}
+{% block og_desc %}{{ seo_settings.wishlist.get_meta_desc }}{% endblock %}
+
+{% block twitter_title %}{{ seo_settings.wishlist.get_meta_title }}{% endblock %}
+{% block twitter_desc %}{{ seo_settings.wishlist.get_meta_desc }}{% endblock %}
+
+{% block content %}
+  <main>
+    <div class="main_content main_content_video">
+      
+      <div class="blog_title">
+        <ul class="breadcrumb">
+          <li><a href="{% url 'home' %}">Главная</a></li>
+          <li><span>Список желаемых покупок</span></li>
+        </ul>
+        <h1 class="title_block">Список желаемых покупок</h1>
+      </div>
+      
+      <div id="main_content" class="content_video list_push">
+        {% if wishlist|length %}
+          <div class="item_list_wrapp item_list_wrapp_all" itemscope="" itemtype="http://schema.org/ItemList">
+            {% for item in wishlist %}
+              {% get_product item.product_id as product %}
+              {% get_product_url product item.attrs as product_url %}
+
+              <div class="product_list product_list_all" style="height: auto; overflow: visible;">
+                <div class="photo_list"><a href="{{ product_url }}"><img src="{{ product.cover_thumb }}" alt="{{ product.title }}"></a></div>
+                <h3>
+                  <a href="{{ product_url }}">{{ product.title }}</a>
+                  <div class="sec_block_item">
+                    <a href="#" class="butt_put">
+                      <label for="put_item" class="td_label_check_win">
+                        <input type="checkbox" name="put_item[]" id="put_item" value="1" checked>
+                        <img src="/static/i/heart_icon.png" alt="Отложить">
+                      </label>
+                    </a>
+                    
+                    <a href="#" class="sett_butt">
+                      <img src="/static/i/sett_icon.png" alt="Изменить комплектацию">
+                    </a>
+                  </div>                  
+                </h3>
+                
+                <h4>{% if product.subtitle %}{{ product.subtitle }}{% endif %}</h4>
+                
+                <ul class="settings_item">
+                  {% for slug, option_id in item.attrs.items|slice:':3' %}
+                    {% get_option slug option_id as option %}
+                    {% if option %}
+                      {% with option.attribute.attr_type as attr_type %}
+                        {% if attr_type == 'color' %}
+                          {% if option.picture %}
+                            <li class="last_color"><span>{{ option.attribute.title }}:</span><div class="td_color_box" style="background: url('{{ option.picture_url }}')" title="{{ option.title }}">{{ option.title }}</div></li>
+                          {% else %}
+                            <li class="last_color"><span>{{ option.attribute.title }}:</span><div class="td_color_box" style="background-color:{{ option.color }};" title="{{ option.title }}">{{ option.title }}</div></li>
+                          {% endif %}
+                        {% elif attr_type == 'style' %}
+                          <li class="last_color" style="line-height: 44px;"><span>{{ option.attribute.title }}:</span><div class="td_color_box" title="{{ option.title }}" style="text-indent: 0; height: 44px; width: 44px;"><img src="{{ option.style_photo_url }}" /></div></li>
+                        {% else %}
+                          <li><span>{{ option.attribute.title }}:</span><strong>{{ option.title }}</strong></li>
+                        {% endif %}
+                      {% endwith %}
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+                {% if item.price is not None %}
+                  <div class="product_price">{{ item.price|to_int_plus }}<abbr title="руб">р.</abbr></div>
+                {% endif %}
+                <a href="{{ product_url }}" class="to_cart_list">В корзину</a>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <h3 style="margin-bottom: 250px;">Товаров в списке желаемых покупок нет. <a href="{% url 'women' %}">Вернуться в каталог</a></h3>
+        {% endif %}
+      </div>
+      
+    </div>
+  </main>
+{% endblock %}

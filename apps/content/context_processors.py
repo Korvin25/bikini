@@ -14,6 +14,8 @@ def content(request):
     LANGUAGES = settings.LANGUAGES
     LANGUAGES_DICT = settings.LANGUAGES_DICT
     liked_participants = request.session.get('liked_participants', [])
+    profile = request.user
+    wishlist = request.session.get('wishlist', []) if profile.is_anonymous() else profile.wishlist
 
     content = {
         'menu': menu,
@@ -22,5 +24,7 @@ def content(request):
         'LANGUAGES': LANGUAGES,
         'LANGUAGES_DICT': LANGUAGES_DICT,
         'liked_participants': liked_participants,
+        'profile': profile,
+        'wishlist': wishlist,
     }
     return content

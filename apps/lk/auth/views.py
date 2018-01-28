@@ -10,9 +10,10 @@ from django.views.generic import View, FormView, CreateView, RedirectView
 from apps.cart.cart import Cart
 from apps.core.mixins import JSONFormMixin
 from apps.lk.email import admin_send_registration_email, send_registration_email
-from apps.lk.models import Profile
+from apps.lk.models import Profile, WishListItem
 from apps.lk.utils import get_error_message
 from .forms import LoginForm, RegistrationForm
+from .utils import update_wishlist
 
 
 class LogoutView(View):
@@ -48,6 +49,7 @@ class LoginView(JSONFormMixin, FormView):
         cart.profile = user
         cart.save()
 
+        update_wishlist(self.request, user)
         data = {'result': 'ok', 'popup': '#step3', 'profile_shipping_data': user.shipping_data}
         return JsonResponse(data)
 
@@ -87,6 +89,7 @@ class RegistrationView(JSONFormMixin, CreateView):
         # send_registration_email(profile)
         # admin_send_registration_email(profile)
 
+        update_wishlist(self.request, user)
         data = {'result': 'ok', 'popup': '#step3', 'profile_shipping_data': profile.shipping_data}
         return JsonResponse(data)
 

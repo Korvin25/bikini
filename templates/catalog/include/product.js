@@ -525,3 +525,30 @@ function movePhotos($container, $arr, set_active) {
     // else { $item.addClass('active'); }
   });
 }
+
+
+// ----- Добавляем в вишлист / удаляем из него -----
+
+$('.js-wishlist-button').click(function(e) {
+  e.preventDefault();
+
+  var $button = $(this),
+      add_url = $button.attr('data-add-url'),
+      remove_url = $button.attr('data-add-url'),
+      product_id = $button.attr('data-product_id'),
+      price,
+      attrs,
+      url,
+      form_data;
+
+  // TODO
+  if ($button.hasClass('_in_wishlist')) {
+    // send remove request
+    $button.removeClass('_in_wishlist');
+    $button.text('Добавить в список желаемых покупок');
+  } else {
+    // send add request
+    $button.addClass('_in_wishlist');
+    $button.text('Удалить из списка желаемых покупок');
+  }
+});
