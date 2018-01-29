@@ -134,7 +134,7 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
               $input.val(value);
             });
           }
-          {% include 'include/csrf.js' %}
+          {% include 'js/csrf.js' %}
         }
         if (send_type == 'step3') {
           showOrHide(0);

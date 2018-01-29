@@ -101,6 +101,55 @@ function submitProductForm($form, $button, option_id, _attrs, _extra_products) {
 };
 
 
+function collectAttrs(option) {
+  // собираем чекнутые атрибуты в виде словариков (для передачи на бекенд)
+  option = option || data['option'];
+
+  var _attrs = {},
+      _extra_products = {},
+      errors = [],
+      _data;
+
+  if (option.attrs) {
+    $.each(option.attrs, function(slug){
+      var $checkboxes = $('.js-attr-checkbox[data-attr-slug="'+slug+'"]').filter(':visible'),
+          checked_id = $checkboxes.filter(':checked').attr('data-option-id');
+
+      if ($checkboxes.length == 1) { checked_id = $($checkboxes[0]).attr('data-option-id'); };
+
+      if (checked_id) { _attrs[slug] = parseInt(checked_id); }
+      else { errors.push(data.attrs[slug]['title']) }
+    });
+
+    $.each(data.extra_products, function(id, product){
+      var $product_trigger = $('.js-extra-product-trigger[data-extra-product-id="'+id+'"]'),
+          product_obj = {};
+
+      if ($product_trigger.is(':checked')) {
+        $.each(product.attrs, function(slug){
+          var $checkboxes = $('.js-attr-checkbox[data-attr-slug="'+slug+'"]').filter(':visible'),
+              checked_id = $checkboxes.filter(':checked').attr('data-option-id');
+
+          if ($checkboxes.length == 1) { checked_id = $($checkboxes[0]).attr('data-option-id'); };
+
+          if (checked_id) { product_obj[slug] = parseInt(checked_id); }
+          else { errors.push(product['title'] + ': ' + data.attrs[slug]['title']); }
+        });
+
+        _extra_products[id] = product_obj;
+      }
+    });
+  }
+
+  _data = {
+    '_attrs': _attrs,
+    '_extra_products': _extra_products,
+    'errors': errors,
+  };
+  return _data;
+}
+
+
 $('.js-cart-button').click(function(e){
   e.preventDefault();
 
@@ -116,34 +165,11 @@ $('.js-cart-button').click(function(e){
     return;
   }
 
-  $.each(option.attrs, function(slug){
-    var $checkboxes = $('.js-attr-checkbox[data-attr-slug="'+slug+'"]').filter(':visible'),
-        checked_id = $checkboxes.filter(':checked').attr('data-option-id');
+  collected_data = collectAttrs(option);
 
-    if ($checkboxes.length == 1) { checked_id = $($checkboxes[0]).attr('data-option-id'); };
-
-    if (checked_id) { _attrs[slug] = parseInt(checked_id); }
-    else { errors.push(data.attrs[slug]['title']) }
-  });
-
-  $.each(data.extra_products, function(id, product){
-    var $product_trigger = $('.js-extra-product-trigger[data-extra-product-id="'+id+'"]'),
-        product_obj = {};
-
-    if ($product_trigger.is(':checked')) {
-      $.each(product.attrs, function(slug){
-        var $checkboxes = $('.js-attr-checkbox[data-attr-slug="'+slug+'"]').filter(':visible'),
-            checked_id = $checkboxes.filter(':checked').attr('data-option-id');
-
-        if ($checkboxes.length == 1) { checked_id = $($checkboxes[0]).attr('data-option-id'); };
-
-        if (checked_id) { product_obj[slug] = parseInt(checked_id); }
-        else { errors.push(product['title'] + ': ' + data.attrs[slug]['title']); }
-      });
-
-      _extra_products[id] = product_obj;
-    }
-  });
+  _attrs = collected_data['_attrs'];
+  _extra_products = collected_data['_extra_products'];
+  errors = collected_data['errors'];
 
   if (errors.length) { showErrorPopup('Пожалуйста, выберите одно из значений:', errors.join('<br/>')); }
   else { submitProductForm($form, $button, option['id'], _attrs, _extra_products); }
@@ -246,13 +272,14 @@ function filterOptions(attr_types) {
 }
 
 
-function chooseOption(update_total_price) {
+function chooseOption(update_total_price, dont_update_wishlist_input) {
   // получаем выбранный вариант и прописываем его везде
   // update_total_price (true|false) - обновляем ли общую стоимость
 
   var options = filterOptions(),
       option = {},
       update_total_price = update_total_price || false;
+      dont_update_wishlist_input = dont_update_wishlist_input || false;
       count = data['prices']['count'],
       maximum_in_stock = 0;
 
@@ -272,6 +299,12 @@ function chooseOption(update_total_price) {
   data['option'] = option;
 
   if (update_total_price) { updateTotalPrice(true) };
+
+  if (!dont_update_wishlist_input) {
+    collected_data = collectAttrs(option);
+    _attrs = collected_data['_attrs'];
+    if (_attrs) { changeWishlistInputData(data['prices']['option'], _attrs); };
+  };
 }
 
 
@@ -482,7 +515,7 @@ function rebuildCarousel(attr_slug, color_id) {
 
     // сбрасываем карусель
     $carousel.jcarousel('destroy');
-    {% include 'catalog/include/init_product_photos.js' %}
+    {% include 'js/init_product_photos.js' %}
   };
 }
 
@@ -525,30 +558,3 @@ function movePhotos($container, $arr, set_active) {
     // else { $item.addClass('active'); }
   });
 }
-
-
-// ----- Добавляем в вишлист / удаляем из него -----
-
-$('.js-wishlist-button').click(function(e) {
-  e.preventDefault();
-
-  var $button = $(this),
-      add_url = $button.attr('data-add-url'),
-      remove_url = $button.attr('data-add-url'),
-      product_id = $button.attr('data-product_id'),
-      price,
-      attrs,
-      url,
-      form_data;
-
-  // TODO
-  if ($button.hasClass('_in_wishlist')) {
-    // send remove request
-    $button.removeClass('_in_wishlist');
-    $button.text('Добавить в список желаемых покупок');
-  } else {
-    // send add request
-    $button.addClass('_in_wishlist');
-    $button.text('Удалить из списка желаемых покупок');
-  }
-});

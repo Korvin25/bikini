@@ -41,7 +41,7 @@
       <li><a href="#">Подарочный сертификат</a></li>
       <li><a href="{% url 'blog:home' %}"><img src="/static/i/logo_mini.png" alt="desinger" />desinger</a></li>
       <li><a href="{% url 'videos' %}">Видео</a></li>
-      <li><a href="{% url 'wishlist:home' %}" >Список желаемых покупок&nbsp;&nbsp;<img src="/static/i/desir.png" alt="" />&nbsp;&nbsp;<span class="disc_number">{{ wishlist|length }}</span></a></li>
+      <li><a href="{% url 'wishlist:home' %}" >Список желаемых покупок&nbsp;&nbsp;<img src="/static/i/desir.png" alt="" />&nbsp;&nbsp;<span class="disc_number js-wishlist-count">{{ wishlist|length }}</span></a></li>
     </ul>
     <ul class="list_menu_lev1 list_menu_lev2 js-header-menu">
       <li class="lang_head">

@@ -3,11 +3,14 @@ from __future__ import unicode_literals
 
 import json
 
+from django.db.utils import IntegrityError
 from django.http import Http404, JsonResponse
 from django.views.generic import View, TemplateView
 from django.utils import timezone
 
 from apps.catalog.models import AttributeOption, Product
+from apps.core.mixins import JSONViewMixin
+from apps.lk.models import WishListItem
 from .utils import get_wishlist_from_request
 
 
@@ -59,9 +62,91 @@ class WishListView(TemplateView):
         return wishlist
 
 
-class WishListAddView(View):
-    pass
+class WishListAddView(JSONViewMixin, View):
+
+    def post(self, request, *args, **kwargs):
+        DATA = self.DATA
+        profile = request.user
+
+        try:
+            product_id = int(DATA['product_id'])
+            price = float(DATA.get('price', 0.0))
+            attrs = DATA.get('attrs', {})
+        except ValueError:
+            data = {'result': 'error', 'error': 'Неправильный формат запроса'}
+            return JsonResponse(data, status=400)
+
+        wishlist = get_wishlist_from_request(self.request)
+        product_ids = [item['product_id'] for item in wishlist]
+
+        if profile.is_anonymous():
+            the_item = None
+
+            for item in wishlist:
+                if item['product_id'] == product_id:
+                    the_item = item
+
+            if the_item is None:
+                the_item = {}
+                wishlist.append(the_item)
+
+            the_item.update({
+                'product_id': product_id,
+                'price': price,
+                'attrs': attrs
+            })
+            request.session['wishlist'] = wishlist
+
+        else:
+            try:
+                the_item, _created = WishListItem.objects.get_or_create(profile_id=profile.id, product_id=product_id)
+                the_item.price = price
+                the_item.attrs = attrs
+                the_item.save()
+            except IntegrityError:
+                data = {'result': 'error', 'error': 'Неправильный id товара'}
+                return JsonResponse(data, status=400)
+
+        wishlist = get_wishlist_from_request(self.request)
+        print wishlist
+        data = {'result': 'ok', 'wishlist_count': len(wishlist)}
+        return JsonResponse(data)
 
 
-class WishListRemoveView(View):
-    pass
+class WishListRemoveView(JSONViewMixin, View):
+
+    def post(self, request, *args, **kwargs):
+        DATA = self.DATA
+        profile = request.user
+
+        try:
+            product_id = int(DATA['product_id'])
+        except ValueError:
+            data = {'result': 'error', 'error': 'Неправильный формат запроса'}
+            return JsonResponse(data, status=400)
+
+        wishlist = get_wishlist_from_request(self.request)
+        product_ids = [item['product_id'] for item in wishlist]
+
+        if product_id in product_ids:
+            if profile.is_anonymous():
+                for i, item in enumerate(wishlist):
+                    if item['product_id'] == product_id:
+                        wishlist.pop(i)
+                        break
+                request.session['wishlist'] = wishlist
+
+            else:
+                try:
+                    the_item = WishListItem.objects.get(profile_id=profile.id, product_id=product_id)
+                    the_item.delete()
+                except WishListView.DoesNotExist:
+                    pass
+                except IntegrityError:
+                    data = {'result': 'error', 'error': 'Неправильный id товара'}
+                    return JsonResponse(data, status=400)
+
+        wishlist = get_wishlist_from_request(self.request)
+        print wishlist
+        data = {'result': 'ok', 'wishlist_count': len(wishlist)}
+        return JsonResponse(data)

@@ -36,8 +36,12 @@
                   <a href="{{ product_url }}">{{ product.title }}</a>
                   <div class="sec_block_item">
                     <a href="#" class="butt_put">
-                      <label for="put_item" class="td_label_check_win">
-                        <input type="checkbox" name="put_item[]" id="put_item" value="1" checked>
+                      <label for="put_item{{ forloop.counter }}" class="td_label_check_win">
+                        <input type="checkbox" name="put_item" id="put_item{{ forloop.counter }}" value="1" checked="checked"
+                               class="js-wishlist-input"
+                               data-add-url="{% url 'wishlist:add' %}" data-remove-url="{% url 'wishlist:remove' %}"
+                               data-product-id="{{ item.product_id }}" data-price="{{ item.price }}"
+                               data-attrs='{{ item.attrs|to_json|safe }}' />
                         <img src="/static/i/heart_icon.png" alt="Отложить">
                       </label>
                     </a>
@@ -57,9 +61,9 @@
                       {% with option.attribute.attr_type as attr_type %}
                         {% if attr_type == 'color' %}
                           {% if option.picture %}
-                            <li class="last_color"><span>{{ option.attribute.title }}:</span><div class="td_color_box" style="background: url('{{ option.picture_url }}')" title="{{ option.title }}">{{ option.title }}</div></li>
+                            <li class="last_color"><span>{{ option.attribute.title }}:</span><div class="td_color_box" style="background: url('{{ option.picture_url }}'); border: 1px solid #ccc;" title="{{ option.title }}">{{ option.title }}</div></li>
                           {% else %}
-                            <li class="last_color"><span>{{ option.attribute.title }}:</span><div class="td_color_box" style="background-color:{{ option.color }};" title="{{ option.title }}">{{ option.title }}</div></li>
+                            <li class="last_color"><span>{{ option.attribute.title }}:</span><div class="td_color_box" style="background-color:{{ option.color }}; border: 1px solid #ccc;" title="{{ option.title }}">{{ option.title }}</div></li>
                           {% endif %}
                         {% elif attr_type == 'style' %}
                           <li class="last_color" style="line-height: 44px;"><span>{{ option.attribute.title }}:</span><div class="td_color_box" title="{{ option.title }}" style="text-indent: 0; height: 44px; width: 44px;"><img src="{{ option.style_photo_url }}" /></div></li>
@@ -84,4 +88,10 @@
       
     </div>
   </main>
+{% endblock %}
+
+{% block extra_js %}
+  <script type="text/javascript">
+    {% include 'js/wishlist.js' %}
+  </script>
 {% endblock %}

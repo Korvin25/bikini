@@ -7,6 +7,22 @@ from django.http import JsonResponse, HttpResponse
 from django.http.request import QueryDict
 
 
+class JSONViewMixin(object):
+
+    def dispatch(self, request, *args, **kwargs):
+        self.DATA = {}
+
+        if self.request.method == 'POST':
+            try:
+                self.DATA = json.loads(request.body.decode('utf-8'))
+            except Exception as e:
+                err_message = get_error_message(e)
+                data = {'result': 'error', 'error': 'Неправильный формат запроса'}
+                return JsonResponse(data, status=400)
+
+        return super(JSONViewMixin, self).dispatch(request, *args, **kwargs)
+
+
 class JSONFormMixin(object):
     mapping = {}
 

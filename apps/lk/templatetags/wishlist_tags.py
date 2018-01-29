@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from itertools import chain
+import json
 
 from django import template
-from django.conf import settings
-
-from apps.catalog.models import Attribute, AttributeOption, ExtraProduct
 
 
 register = template.Library()
@@ -34,3 +31,8 @@ def get_option(context, slug, option_id):
     if option and option.attribute.slug != slug:
         option = None
     return option
+
+
+@register.filter
+def to_json(obj):
+    return json.dumps(obj)
