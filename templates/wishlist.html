@@ -55,7 +55,8 @@
                 <h4>{% if product.subtitle %}{{ product.subtitle }}{% endif %}</h4>
                 
                 <ul class="settings_item">
-                  {% for slug, option_id in item.attrs.items|slice:':3' %}
+                  {# for slug, option_id in item.attrs.items|slice:':3' #}
+                  {% for slug, option_id in item.attrs.items %}
                     {% get_option slug option_id as option %}
                     {% if option %}
                       {% with option.attribute.attr_type as attr_type %}
