@@ -40,6 +40,7 @@ class PostListView(TemplateView):
 
     def get_months(self, qs):
         months = qs.values_list('month', flat=True)
+        months = sorted(set(months), reverse=True)
         months_columns = []
         has_months = bool(months)
         if has_months:
