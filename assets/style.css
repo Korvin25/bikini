@@ -586,8 +586,8 @@ header,main,nav,footer {display:block;}
 				.move_butt_item:before {content:'';display:block;width:20px;height:15px;background:url(i/heart_icon.png) no-repeat 50% 50%;position:absolute;left:0;top:50%;margin-top:-7.5px;}
 				.row_chars_item .move_butt_item {position: absolute;left: -495px;bottom: 6px;    background-color: #fff;padding-right: 5px;padding-top: 3px;padding-bottom: 3px;}
 		
-	.check_photo_chars {width:134px;height:134px;overflow:hidden;padding: 0 !important;margin-left:0;}
-		.carousel_chars_check {position:relative;width:134px !important;margin-left:22px}
+	.check_photo_chars {/*width:134px;*/width:268px;height:134px;overflow:hidden;padding: 0 !important;margin-left:0;}
+		.carousel_chars_check {position:relative;/*width:134px !important;*/width:268px !important;margin-left:22px}
 		.check_photo_chars ul {width:20000em !important;height:134px !important;}
 		.check_photo_chars ul li {float:left;width:134px;height:134px;border-radius:50%;-webkit-border-radius:50%;overflow:hidden;margin:0 !important;padding:0 !important;}
 		.check_photo_chars label, .check_photo_chars * {width:inherit;height:inherit;border-radius:50%;-webkit-border-radius:50%;}
