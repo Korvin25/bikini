@@ -89,7 +89,7 @@ class RegistrationView(JSONFormMixin, CreateView):
         # send_registration_email(profile)
         # admin_send_registration_email(profile)
 
-        update_wishlist(self.request, user)
+        update_wishlist(self.request, profile)
         data = {'result': 'ok', 'popup': '#step3', 'profile_shipping_data': profile.shipping_data}
         return JsonResponse(data)
 

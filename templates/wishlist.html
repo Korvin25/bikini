@@ -42,12 +42,12 @@
                                data-add-url="{% url 'wishlist:add' %}" data-remove-url="{% url 'wishlist:remove' %}"
                                data-product-id="{{ item.product_id }}" data-price="{{ item.price }}"
                                data-attrs='{{ item.attrs|to_json|safe }}' />
-                        <img src="/static/i/heart_icon.png" alt="Отложить">
+                        <img src="/static/i/heart_icon.png" style="cursor: pointer !important;" alt="Отложить">
                       </label>
                     </a>
                     
-                    <a href="#" class="sett_butt">
-                      <img src="/static/i/sett_icon.png" alt="Изменить комплектацию">
+                    <a href="{{ product_url }}" class="sett_butt">
+                      <img src="/static/i/sett_icon.png" alt="Изменить комплектацию" title="Изменить комплектацию">
                     </a>
                   </div>                  
                 </h3>

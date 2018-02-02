@@ -340,18 +340,54 @@ THUMBNAIL_ALIASES = {
 }
 
 
-# https://django-request.readthedocs.io/en/latest/settings.html
+# rauth
+
+FACEBOOK_CONSUMER_KEY = ''
+FACEBOOK_CONSUMER_SECRET = ''
+FACEBOOK_BASE_URL = 'https://graph.facebook.com/'
+FACEBOOK_ACCESS_TOKEN_URL = 'https://graph.facebook.com/oauth/access_token'
+FACEBOOK_AUTHORIZE_URL = 'https://www.facebook.com/dialog/oauth'
+
+VKONTAKTE_CONSUMER_KEY = ''
+VKONTAKTE_CONSUMER_SECRET = ''
+VKONTAKTE_SERVICE_ACCESS_KEY = ''
+VKONTAKTE_BASE_URL = 'https://oauth.vk.com/'
+VKONTAKTE_ACCESS_TOKEN_URL = 'https://oauth.vk.com/access_token'
+VKONTAKTE_AUTHORIZE_URL = 'https://oauth.vk.com/authorize'
+VKONTAKTE_API_URL = 'https://api.vk.com/method'
+
+GOOGLE_PLUS_CONSUMER_KEY = ''
+GOOGLE_PLUS_CONSUMER_SECRET = ''
+GOOGLE_PLUS_BASE_URL = 'https://www.googleapis.com/oauth2/'
+GOOGLE_PLUS_AUTHORIZE_URL = 'https://accounts.google.com/o/oauth2/auth'
+GOOGLE_PLUS_ACCESS_TOKEN_URL = 'https://accounts.google.com/o/oauth2/token'
+GOOGLE_PLUS_API_URL = 'https://www.googleapis.com/plus/v1'
+
+INSTAGRAM_CONSUMER_KEY = ''
+INSTAGRAM_CONSUMER_SECRET = ''
+INSTAGRAM_BASE_URL = 'https://api.instagram.com/'
+INSTAGRAM_ACCESS_TOKEN_URL = 'https://api.instagram.com/oauth/access_token'
+INSTAGRAM_AUTHORIZE_URL = 'https://api.instagram.com/oauth/authorize'
+
+
+# django-request
+
 REQUEST_IGNORE_AJAX = True
 REQUEST_IGNORE_PATHS = (
     r'^admin/',
 )
 
 
+# django-el-pagination
+
 EL_PAGINATION_PER_PAGE = 15
 
+
+# django-watermarker
 
 WATERMARK_QUALITY = 100
 
 
-# для редактирования стран
+# для редактирования стран на странице со списком в админке
+
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 1500

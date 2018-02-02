@@ -10,7 +10,6 @@ from modeltranslation.admin import TranslationInlineModelAdmin, TabbedTranslatio
 from filer.admin import FolderAdmin as _FolderAdmin
 from filer.models import Folder
 
-from .admin_forms import VideoAdminForm
 from .models import Video, Page, Menu, MenuItem
 from .translation import *
 
@@ -31,7 +30,6 @@ class VideoAdmin(AdminVideoMixin, TabbedTranslationAdmin):
     list_display = ('title', 'slug', 'video', 'order', 'cover', 'product', 'post', 'add_dt',)
     list_editable = ('order',)
     list_filter = ('show_at_list', 'add_dt',)
-    # form = VideoAdminForm
     suit_form_tabs = (
         ('default', 'Видео'),
         ('seo', 'SEO'),

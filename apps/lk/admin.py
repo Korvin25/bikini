@@ -20,6 +20,10 @@ class ProfileAdmin(UserAdmin):
     list_display_links = ('email',)
     list_filter = ('is_active', 'is_staff', 'is_superuser',)
     list_per_page = 200
+    suit_form_tabs = (
+        ('default', 'Профиль'),
+        ('socials', 'Социальные сети'),
+    )
     fieldsets = (
         # Настройки юзера
         ('Данные', {
@@ -37,6 +41,22 @@ class ProfileAdmin(UserAdmin):
         ('Пароль', {
             'classes': ('wide', 'suit-tab', 'suit-tab-default',),
             'fields': ('new_password', 'new_password_repeat'),
+        }),
+        ('Facebook', {
+            'classes': ('suit-tab', 'suit-tab-socials',),
+            'fields': ('fb_id', 'fb_name', 'fb_link',)
+        }),
+        ('VK', {
+            'classes': ('suit-tab', 'suit-tab-socials',),
+            'fields': ('vk_id', 'vk_name', 'vk_link',)
+        }),
+        ('Google+', {
+            'classes': ('suit-tab', 'suit-tab-socials',),
+            'fields': ('gp_id', 'gp_name', 'gp_link',)
+        }),
+        ('Instagram', {
+            'classes': ('suit-tab', 'suit-tab-socials',),
+            'fields': ('ig_id', 'ig_name', 'ig_link',)
         }),
     )
     add_fieldsets = (

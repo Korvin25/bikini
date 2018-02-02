@@ -48,7 +48,7 @@
                     <label class="wns_lbl">
                       <p class="wns_title_row_frm">Как к вам обращаться:</p>
                       <div class="input_shell">
-                        <input type="text" value="" name="fio" class="input_text errr" placeholder="Фамилия, Имя, Отчество *" />
+                        <input type="text" value="{{ profile.name|default_if_none:'' }}" name="fio" class="input_text errr" placeholder="Фамилия, Имя, Отчество *" />
                         <span class="err_r">Заполните поле</span>
                       </div>
                     </label>
@@ -198,7 +198,7 @@
                     <label class="wns_lbl">
                       <p class="wns_title_row_frm">Ваш e-mail:</p>
                       <div class="input_shell">
-                        <input type="text" value="" name="mail" class="input_text" placeholder="E-mail *" />
+                        <input type="text" value="{{ profile.email|default_if_none:'' }}" name="mail" class="input_text" placeholder="E-mail *" />
                         <span class="err_r">Заполните поле</span>
                       </div>
                     </label>

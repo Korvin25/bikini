@@ -110,10 +110,10 @@
           <div class="row_form_popup">
             <p>Войти при помощи соц. сетей:</p>
             <div class="soc_enter">
-              <a href="#"><img src="/static/i/soc_face.png" alt="Facebook"></a>
-              <a href="#"><img src="/static/i/soc_vk.png" alt="ВКонтакте"></a>
-              <a href="#"><img src="/static/i/soc_gplus.png" alt="Google Plus"></a>
-              <a href="#"><img src="/static/i/soc_ins.png" alt="Instagram"></a>
+              <a href="{% url 'auth:social:fb' %}"><img src="/static/i/soc_face.png" alt="Facebook"></a>
+              <a href="{% url 'auth:social:vk' %}"><img src="/static/i/soc_vk.png" alt="ВКонтакте"></a>
+              <a href="{% url 'auth:social:gp' %}"><img src="/static/i/soc_gplus.png" alt="Google Plus"></a>
+              <a href="{% url 'auth:social:ig' %}"><img src="/static/i/soc_ins.png" alt="Instagram"></a>
             </div>
           </div>
 

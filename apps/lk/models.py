@@ -61,14 +61,32 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField('Активен?', default=True)
     is_staff = models.BooleanField('Имеет доступ к админ-панели', default=False)
 
+    # --- данные для доставки ---
     country = models.ForeignKey(Country, verbose_name='Страна', null=True, blank=True)
     city = models.CharField('Город', max_length=225, null=True, blank=True)
     address = models.TextField('Адрес', null=True, blank=True)
     phone = models.CharField('Телефон', max_length=30, null=True, blank=True)
     name = models.CharField('Полное имя', max_length=511, null=True, blank=True)
 
-    discount_code = models.CharField(max_length=127, null=True, blank=True)
-    discount_used = models.BooleanField(default=False)
+    # --- соц.сети ---
+    fb_id = models.CharField('Facebook ID', max_length=255, null=True, blank=True)
+    fb_name = models.CharField('Facebook name', max_length=255, null=True, blank=True)
+    fb_link = models.CharField('Facebook link', max_length=255, null=True, blank=True)
+    vk_id = models.CharField('VK ID', max_length=255, null=True, blank=True)
+    vk_name = models.CharField('VK name', max_length=255, null=True, blank=True)
+    vk_link = models.CharField('VK link', max_length=255, null=True, blank=True)
+    gp_id = models.CharField('Google+ ID', max_length=255, null=True, blank=True)
+    gp_name = models.CharField('Google+ name', max_length=255, null=True, blank=True)
+    gp_link = models.CharField('Google+ link', max_length=255, null=True, blank=True)
+    ig_id = models.CharField('Instagram ID', max_length=255, null=True, blank=True)
+    ig_name = models.CharField('Instagram name', max_length=255, null=True, blank=True)
+    ig_link = models.CharField('Instagram link', max_length=255, null=True, blank=True)
+
+    # --- покупки со скидкой ---
+    discount_code = models.CharField('Код скидки', max_length=127, null=True, blank=True)
+    discount_used = models.BooleanField('Скидка использована?', default=False)
+
+    has_email = models.BooleanField(default=True)
 
     objects = UserManager()
 

@@ -148,9 +148,8 @@ class ProductsView(TemplateView):
             qs = list(qs)
         else:
             qs = qs.order_by('categories', 'order', '-id')
+            # убираем дубликаты (ибо distinct после сортировки по m2m-полю почему-то не срабатывает)
             qs = list(OrderedDict((el, None) for el in qs))
-        # import ipdb; ipdb.set_trace()
-        # qs = set(qs)
         self.qs = qs
         return qs
 
