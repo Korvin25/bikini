@@ -57,9 +57,10 @@ $('.js-form-reset').click(function(e){
 
     $form.find(':input','option:selected')
      .not(':button, :submit, :reset, :hidden')
-     .val('')
      .removeAttr('checked')
      .removeAttr('selected');    
+
+    $form.find('input[type="text"]').val('');
 
     $form.submit();
 })
