@@ -37,7 +37,13 @@
         <style>
           .ch_title_item._custom:after { content: none; }
 
-          .usual_link { color: black !important; font-size: 14px; font-weight: bold; cursor: pointer; }
+          .usual_link {
+            color: black !important;
+            font-family: 'NeoRegular' !important;
+            font-size: 14px;
+            font-weight: bold !important;
+            cursor: pointer;
+          }
           .usual_link:hover {
             text-decoration: underline !important;
             color: black !important;
@@ -341,7 +347,8 @@
                     <div class="bt_req_call">
                       <a href="/cart/" class="butt_border">Перейти к корзине</a>
                     </div>
-                    <span class="js-call-close usual_link">Закрыть</span>
+                    {# <span class="js-call-close usual_link">Продолжить покупки</span> #}
+                    <a href="{% url 'women' %}" class="usual_link">Продолжить покупки</a>
                   </div>
               </div>
           </div>
