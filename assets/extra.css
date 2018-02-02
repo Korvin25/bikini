@@ -28,3 +28,4 @@ select.country_select {
     overflow: hidden;
     text-align: left;
 }
+select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }

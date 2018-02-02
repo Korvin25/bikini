@@ -45,6 +45,7 @@ class DeliveryMethod(models.Model):
 class PaymentMethod(models.Model):
     title = models.CharField('Название', max_length=511)
     short_title = models.CharField('Краткое название', max_length=63, blank=True, help_text='для вывода в личном кабинете')
+    is_paypal = models.BooleanField('Оплата через PayPal', default=False)
     order = models.PositiveSmallIntegerField(default=0, blank=False, null=False, verbose_name=mark_safe('&nbsp;&nbsp;&nbsp;&nbsp;'))
 
     class Meta:

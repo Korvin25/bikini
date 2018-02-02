@@ -14,17 +14,19 @@ from apps.blog.views import PostListView, PostDetailView
 from apps.cart.views import CartView, CartGetDiscountView
 from apps.catalog.views import ProductsView, ProductView, ProductWithDiscountView
 from apps.content.views import HomepageView, VideoListView, VideoDetailView, PageView
-from apps.lk.views import ProfileHomeView
+from apps.lk.views import ProfileHomeView, ProfileFormView
 from apps.views import PhotoUploadView
 
 
 urlpatterns = [
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^ajax/upload/$', PhotoUploadView.as_view(), name='photo_upload'),
+    url(r'^paypal/', include('paypal.standard.ipn.urls')),
 
     # pages
     url(r'^api/cart/', include('apps.cart.api.urls', namespace='cart_api')),
     url(r'^api/auth/', include('apps.lk.auth.urls', namespace='auth')),
+    url(r'^api/profile/edit/', ProfileFormView.as_view(), name='profile-edit'),
     # url(r'^forms/', include('apps.feedback.urls', namespace='forms')),
 
     # 3rd party apps

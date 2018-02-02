@@ -18,7 +18,7 @@ class DeliveryMethodAdmin(SortableAdminMixin, TabbedTranslationAdmin):
 
 @admin.register(PaymentMethod)
 class PaymentMethodAdmin(SortableAdminMixin, TabbedTranslationAdmin):
-    list_display = ('title', 'short_title',)
+    list_display = ('title', 'short_title', 'is_paypal',)
     list_editable = ('short_title',)
 
 

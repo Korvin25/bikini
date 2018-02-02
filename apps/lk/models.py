@@ -114,10 +114,11 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     def shipping_data(self):
         data = {
             'country': self.country_id,
-            'city': self.city,
-            'address': self.address,
-            'phone': self.phone,
-            'name': self.name,
+            'city': self.city or '',
+            'address': self.address or '',
+            'phone': self.phone or '',
+            'name': self.name or '',
+            'email': self.email if self.has_email else '',
         }
         data = {k: v for k, v in data.iteritems() if v}
         return data

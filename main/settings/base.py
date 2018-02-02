@@ -60,6 +60,7 @@ INSTALLED_APPS = (
     'filer',
     'modeltranslation',
     'mptt',
+    'paypal.standard.ipn',
     'request',
     'rosetta',
     'salmonella',
@@ -391,3 +392,8 @@ WATERMARK_QUALITY = 100
 # для редактирования стран на странице со списком в админке
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 1500
+
+
+# paypal
+PAYPAL_EMAIL = ''
+PAYPAL_TEST = False
