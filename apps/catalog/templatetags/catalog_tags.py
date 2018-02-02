@@ -12,6 +12,16 @@ from apps.catalog.models import AttributeOption, ExtraProduct, Category
 register = template.Library()
 
 
+@register.filter
+def get_product_url(product, category_or_sex=None):
+    category = sex = None
+    if isinstance(category_or_sex, Category):
+        category = category_or_sex
+    else:
+        sex = category_or_sex
+    return product.get_absolute_url(category=category, sex=sex)
+
+
 # @register.filter
 # def attr_in_product(option, product):
 #     in_product = bool(product.attrs.get(option.attribute.slug, list()))
@@ -32,16 +42,6 @@ def get_photo_url(option, product):
     # import ipdb; ipdb.set_trace()
     return (photo.style_photo_url if photo
             else option.style_photo_url)
-
-
-@register.filter
-def get_product_url(product, category_or_sex=None):
-    category = sex = None
-    if isinstance(category_or_sex, Category):
-        category = category_or_sex
-    else:
-        sex = category_or_sex
-    return product.get_absolute_url(category=category, sex=sex)
 
 
 @register.filter

@@ -1,6 +1,6 @@
 {% load catalog_tags %}
 
-{% if products.count %}
+{% if products|length %}
 
   <div class="item_list_wrapp" itemscope="" itemtype="http://schema.org/ItemList">
     {% for product in products %}

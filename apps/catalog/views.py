@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from collections import OrderedDict
 import json
 
 from django.db.models import Q, Max, Min
@@ -142,8 +143,14 @@ class ProductsView(TemplateView):
 
         qs = qs.filter(*self.get_attrs_filter())
         qs = qs.filter(**self.get_filter()).distinct()
-        qs = qs.order_by('order', '-id')
-
+        if self.category:
+            qs = qs.order_by('order', '-id')
+            qs = list(qs)
+        else:
+            qs = qs.order_by('categories', 'order', '-id')
+            qs = list(OrderedDict((el, None) for el in qs))
+        # import ipdb; ipdb.set_trace()
+        # qs = set(qs)
         self.qs = qs
         return qs
 
