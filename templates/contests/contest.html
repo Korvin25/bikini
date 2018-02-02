@@ -32,7 +32,7 @@
 
           {% if contest.accepting_enabled %}        
             <a href="#apply"
-               data-popup-id="{% if request.user.is_anonymous %}#auth{% elif request.user.id in contest.participants_profiles %}#already-participating{% else %}#contest-apply{% endif %}"
+               data-popup-id="{% if profile.is_anonymous %}#auth{% elif profile.id in contest.participants_profiles %}#already-participating{% else %}#contest-apply{% endif %}"
                class="butt_with js-apply-button">Принять участие</a>
           {% endif %}
         {% endif %}
@@ -172,7 +172,7 @@
               <div class="rows_popup_input">
                 <label class="lbl_box">
                   <p>Имя:<span class="orange_text">*</span></p>
-                  <input required type="text" style="padding-left: 15px;" value="{% if request.user.is_authenticated and request.user.name %}{{ request.user.name }}{% endif %}" name="name" class="input_text" />
+                  <input required type="text" style="padding-left: 15px;" value="{% if profile.is_authenticated and profile.name %}{{ profile.name }}{% endif %}" name="name" class="input_text" />
                 </label>
               </div>
 

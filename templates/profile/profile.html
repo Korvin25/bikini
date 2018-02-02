@@ -237,7 +237,7 @@
                 
                 <div class="table_shell tb_shell">
 
-                  {% if request.user.complete_orders.count %}
+                  {% if profile.complete_orders.count %}
                     <div class="table_head tb_head">
                       <div class="table_cell"><div class="tb_title">Дата заказа</div></div>
                       <div class="table_cell"><div class="tb_title">Номер заказа</div></div>
@@ -247,7 +247,7 @@
                       <div class="table_cell"><div class="tb_title">Итого к оплате</div></div>
                     </div>
 
-                    {% for order in request.user.complete_orders %}
+                    {% for order in profile.complete_orders %}
                       <div class="table_row  tb_row">
                         <div class="table_cell">
                           <div class="tb_title">Дата заказа</div>
