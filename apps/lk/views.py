@@ -65,5 +65,5 @@ class ProfileFormView(ProfileMixin, JSONFormMixin, GetNotAllowedMixin, UpdateVie
         super(ProfileFormView, self).form_valid(form)
         profile = form.instance
         update_session_auth_hash(self.request, profile)
-        data = {'result': 'ok'}
+        data = {'result': 'ok', 'has_password': profile.has_password}
         return JsonResponse(data)

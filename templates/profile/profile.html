@@ -12,6 +12,10 @@
 {% block twitter_desc %}{{ seo_settings.profile.get_meta_desc }}{% endblock %}
 
 {% block content %}
+  <style>
+    .password_button { font-family: NeoRegular; font-size: 12px; padding: 12px 20px; }
+  </style>
+
   <main>
     <div class="main_content main_cut">
       
@@ -49,7 +53,7 @@
                     <label class="wns_lbl">
                       <p class="wns_title_row_frm">Как к вам обращаться:</p>
                       <div class="input_shell">
-                        <input type="text" value="{{ shipping_data.name }}" name="name" class="input_text{% if not shipping_data.name %} errr{% endif %}" placeholder="Фамилия, Имя, Отчество *" />
+                        <input type="text" value="{{ shipping_data.name }}" name="name" class="input_text" placeholder="Фамилия, Имя, Отчество" />
                         <span class="err_r">Заполните поле</span>
                       </div>
                     </label>
@@ -57,162 +61,162 @@
                   <hr class="hr_" />
                   
                   <div class="wns_row_input wns_row_input1900">
-                      <div class="wns_lbl">
-                        <p class="wns_title_row_frm">Данные для доставки:</p>
-                        {% comment %}
-                          <script>
-                            (function( $ ) {
-                              $.fn.selectbox2 = function() {
-                              var selectDefaultHeight = 40;
-                                $('#selectboxss2 .selectboxssvalue').click(function() {
-                                  var currentHeight = $(this).closest("#selectboxss2").height();
-                                  if (currentHeight < 100 || currentHeight == selectDefaultHeight) {
-                                    $(this).closest("#selectboxss2").height("auto");
-                                    $(this).find('#arrowselect2').attr("style", "border-radius: 1000px;transition: 0.2s;transform: rotate(180deg);");
-                                  }
-                                  if (currentHeight >= 101) {
-                                    $(this).closest("#selectboxss2").height(selectDefaultHeight);
-                                    $(this).find('#arrowselect2').attr("style", "rotate(0deg);");
-                                  }
-                                });
-                                $('li.selectoption').click(function() {
+                    <div class="wns_lbl">
+                      <p class="wns_title_row_frm">Данные для доставки:</p>
+                      {% comment %}
+                        <script>
+                          (function( $ ) {
+                            $.fn.selectbox2 = function() {
+                            var selectDefaultHeight = 40;
+                              $('#selectboxss2 .selectboxssvalue').click(function() {
+                                var currentHeight = $(this).closest("#selectboxss2").height();
+                                if (currentHeight < 100 || currentHeight == selectDefaultHeight) {
+                                  $(this).closest("#selectboxss2").height("auto");
+                                  $(this).find('#arrowselect2').attr("style", "border-radius: 1000px;transition: 0.2s;transform: rotate(180deg);");
+                                }
+                                if (currentHeight >= 101) {
                                   $(this).closest("#selectboxss2").height(selectDefaultHeight);
-                                  $(this).closest("#selectboxss2").find('#arrowselect2').attr("style", "rotate(0deg);");
-                                  
-                                  var t = $(this).closest("li.selectoption").text();
-                                  $(this).closest("#selectboxss2").find('.selectboxssvalue span.input_text_view').text(t);
-                                });
-                              };
-                            })( jQuery );
-                          </script>
-                          <script> $(document).ready(function(){ $('#selectboxss2').selectbox2(); }); </script>
-                          <div class="input_shell select_shel">
-                            <div class="select_img">
-                              <div class="selectboxss drop_list_text" id="selectboxss2">
-                                <div class="selectboxssvalue">
-                                  <span class="input_text_view">Страна <span class="orange_text">*</span></span>
-                                  <img src="/static/i/arrow_down_list.png" class="arrowselect" id="arrowselect2" />
-                                </div>
-                                <ul class="selectboxssmenu">
-                                  <li class="selectoption">Россия</li>
-                                  <li class="selectoption">Украина</li>
-                                </ul>
+                                  $(this).find('#arrowselect2').attr("style", "rotate(0deg);");
+                                }
+                              });
+                              $('li.selectoption').click(function() {
+                                $(this).closest("#selectboxss2").height(selectDefaultHeight);
+                                $(this).closest("#selectboxss2").find('#arrowselect2').attr("style", "rotate(0deg);");
+                                
+                                var t = $(this).closest("li.selectoption").text();
+                                $(this).closest("#selectboxss2").find('.selectboxssvalue span.input_text_view').text(t);
+                              });
+                            };
+                          })( jQuery );
+                        </script>
+                        <script> $(document).ready(function(){ $('#selectboxss2').selectbox2(); }); </script>
+                        <div class="input_shell select_shel">
+                          <div class="select_img">
+                            <div class="selectboxss drop_list_text" id="selectboxss2">
+                              <div class="selectboxssvalue">
+                                <span class="input_text_view">Страна <span class="orange_text">*</span></span>
+                                <img src="/static/i/arrow_down_list.png" class="arrowselect" id="arrowselect2" />
                               </div>
+                              <ul class="selectboxssmenu">
+                                <li class="selectoption">Россия</li>
+                                <li class="selectoption">Украина</li>
+                              </ul>
                             </div>
-                            <span class="err_r">Заполните поле</span>
                           </div>
-                          <script>
-                            (function( $ ) {
-                              $.fn.selectbox3 = function() {
-                              var selectDefaultHeight = 40;
-                                $('#selectboxss3 .selectboxssvalue').click(function() {
-                                  var currentHeight = $(this).closest("#selectboxss3").height();
-                                  if (currentHeight < 100 || currentHeight == selectDefaultHeight) {
-                                    $(this).closest("#selectboxss3").height("auto");
-                                    $(this).find('#arrowselect3').attr("style", "border-radius: 1000px;transition: 0.2s;transform: rotate(180deg);");
-                                  }
-                                  if (currentHeight >= 101) {
-                                    $(this).closest("#selectboxss3").height(selectDefaultHeight);
-                                    $(this).find('#arrowselect3').attr("style", "rotate(0deg);");
-                                  }
-                                });
-                                $('li.selectoption').click(function() {
+                          <span class="err_r">Заполните поле</span>
+                        </div>
+                        <script>
+                          (function( $ ) {
+                            $.fn.selectbox3 = function() {
+                            var selectDefaultHeight = 40;
+                              $('#selectboxss3 .selectboxssvalue').click(function() {
+                                var currentHeight = $(this).closest("#selectboxss3").height();
+                                if (currentHeight < 100 || currentHeight == selectDefaultHeight) {
+                                  $(this).closest("#selectboxss3").height("auto");
+                                  $(this).find('#arrowselect3').attr("style", "border-radius: 1000px;transition: 0.2s;transform: rotate(180deg);");
+                                }
+                                if (currentHeight >= 101) {
                                   $(this).closest("#selectboxss3").height(selectDefaultHeight);
-                                  $(this).closest("#selectboxss3").find('#arrowselect3').attr("style", "rotate(0deg);");
-                                  
-                                  var t = $(this).closest("li.selectoption").text();
-                                  $(this).closest("#selectboxss3").find('.selectboxssvalue span.input_text_view').text(t);
-                                });
-                              };
-                            })( jQuery );
-                          </script>
-                          <script> $(document).ready(function(){ $('#selectboxss3').selectbox3(); }); </script>
-                          <div class="input_shell select_shel">
-                            <div class="select_img errr">
-                              <div class="selectboxss drop_list_text" id="selectboxss3">
-                                <div class="selectboxssvalue">
-                                  <span class="input_text_view">Город <span class="orange_text">*</span></span>
-                                  <img src="/static/i/arrow_down_list.png" class="arrowselect" id="arrowselect3" />
-                                </div>
-                                <ul class="selectboxssmenu">
-                                  <li class="selectoption">Москва</li>
-                                  <li class="selectoption">Санкт-Петербург</li>
-                                  <li class="selectoption">Екатеринбург</li>
-                                  <li class="selectoption">Севастополь</li>
-                                  <li class="selectoption">Воронеж</li>
-                                  <li class="selectoption">Ростов</li>
-                                  <li class="selectoption">Пекин</li>
-                                  <li class="selectoption">Киев</li>
-                                </ul>
+                                  $(this).find('#arrowselect3').attr("style", "rotate(0deg);");
+                                }
+                              });
+                              $('li.selectoption').click(function() {
+                                $(this).closest("#selectboxss3").height(selectDefaultHeight);
+                                $(this).closest("#selectboxss3").find('#arrowselect3').attr("style", "rotate(0deg);");
+                                
+                                var t = $(this).closest("li.selectoption").text();
+                                $(this).closest("#selectboxss3").find('.selectboxssvalue span.input_text_view').text(t);
+                              });
+                            };
+                          })( jQuery );
+                        </script>
+                        <script> $(document).ready(function(){ $('#selectboxss3').selectbox3(); }); </script>
+                        <div class="input_shell select_shel">
+                          <div class="select_img errr">
+                            <div class="selectboxss drop_list_text" id="selectboxss3">
+                              <div class="selectboxssvalue">
+                                <span class="input_text_view">Город <span class="orange_text">*</span></span>
+                                <img src="/static/i/arrow_down_list.png" class="arrowselect" id="arrowselect3" />
                               </div>
+                              <ul class="selectboxssmenu">
+                                <li class="selectoption">Москва</li>
+                                <li class="selectoption">Санкт-Петербург</li>
+                                <li class="selectoption">Екатеринбург</li>
+                                <li class="selectoption">Севастополь</li>
+                                <li class="selectoption">Воронеж</li>
+                                <li class="selectoption">Ростов</li>
+                                <li class="selectoption">Пекин</li>
+                                <li class="selectoption">Киев</li>
+                              </ul>
                             </div>
-                            <span class="err_r">Заполните поле</span>
                           </div>
-                          
-                          <div class="input_shell">
-                            <input type="text" value="" name="index" class="input_text" placeholder="Индекс *" />
-                            <span class="err_r">Заполните поле</span>
-                          </div>
-                          
-                          <div class="input_shell">
-                            <input type="text" value="" name="street" class="input_text" placeholder="Улица *" />
-                            <span class="err_r">Заполните поле</span>
-                          </div>
-                          
-                          <div class="rows_popup_input rows_wns_input">
-                            <div class="row_form_popup two_rows">
-                              <label class="input_shell">
-                                <input type="text" value="" name="street" class="input_text" placeholder="Дом *" />
-                                <span class="err_r">Заполните поле</span>
-                              </label>
-                              
-                              <label class="input_shell">
-                                <input type="text" value="" name="street" class="input_text" placeholder="Строение" />
-                                <span class="err_r">Заполните поле</span>
-                              </label>
-                            </div>
+                          <span class="err_r">Заполните поле</span>
+                        </div>
+                        
+                        <div class="input_shell">
+                          <input type="text" value="" name="index" class="input_text" placeholder="Индекс *" />
+                          <span class="err_r">Заполните поле</span>
+                        </div>
+                        
+                        <div class="input_shell">
+                          <input type="text" value="" name="street" class="input_text" placeholder="Улица *" />
+                          <span class="err_r">Заполните поле</span>
+                        </div>
+                        
+                        <div class="rows_popup_input rows_wns_input">
+                          <div class="row_form_popup two_rows">
+                            <label class="input_shell">
+                              <input type="text" value="" name="street" class="input_text" placeholder="Дом *" />
+                              <span class="err_r">Заполните поле</span>
+                            </label>
                             
-                            <div class="row_form_popup two_rows">
-                              <label class="input_shell">
-                                <input type="text" value="" name="street" class="input_text" placeholder="Корпус" />
-                                <span class="err_r">Заполните поле</span>
-                              </label>
-                              
-                              <label class="input_shell">
-                                <input type="text" value="" name="street" class="input_text errr" placeholder="Квартира *" />
-                                <span class="err_r">Заполните поле</span>
-                              </label>
-                            </div>
+                            <label class="input_shell">
+                              <input type="text" value="" name="street" class="input_text" placeholder="Строение" />
+                              <span class="err_r">Заполните поле</span>
+                            </label>
                           </div>
-                        {% endcomment %}
+                          
+                          <div class="row_form_popup two_rows">
+                            <label class="input_shell">
+                              <input type="text" value="" name="street" class="input_text" placeholder="Корпус" />
+                              <span class="err_r">Заполните поле</span>
+                            </label>
+                            
+                            <label class="input_shell">
+                              <input type="text" value="" name="street" class="input_text errr" placeholder="Квартира *" />
+                              <span class="err_r">Заполните поле</span>
+                            </label>
+                          </div>
+                        </div>
+                      {% endcomment %}
 
 
-                        <div class="input_shell">
-                          <select required name="country" value="{{ shipping_data.country }}" class="country_select input_text" style="width: 99.45% !important">
-                            {% for country in countries %}
-                              <option value="{{ country.id }}"{% if country.id == shipping_data.country %} selected="selected"{% endif %}>{{ country.title }}</option>
-                            {% endfor %}
-                          </select>
-                          <span class="err_r">Заполните поле</span>
-                        </div>
-
-                        <div class="input_shell">
-                          <input type="text" value="{{ shipping_data.city }}" name="city" class="input_text" placeholder="Город *" />
-                          <span class="err_r">Заполните поле</span>
-                        </div>
-
-                        <div class="input_shell">
-                          <textarea name="address" class="input_text no_hover_border" style="padding: 12px 2.25% 0; width: 94.5%; height: 135px;" placeholder="Адрес *">{{ shipping_data.address }}</textarea>
-                          <span class="err_r">Заполните поле</span>
-                        </div>
-                        
-                        <div class="input_shell">
-                          <input type="text" value="{{ shipping_data.phone }}" name="phone" class="input_text" placeholder="Контактный телефон *" />
-                          <span class="err_r">Заполните поле</span>
-                        </div>
-                        
+                      <div class="input_shell">
+                        <select name="country" value="{{ shipping_data.country }}" class="country_select input_text" style="width: 99.45% !important">
+                          {% for country in countries %}
+                            <option value="{{ country.id }}"{% if country.id == shipping_data.country %} selected="selected"{% endif %}>{{ country.title }}</option>
+                          {% endfor %}
+                        </select>
+                        <span class="err_r">Заполните поле</span>
                       </div>
+
+                      <div class="input_shell">
+                        <input type="text" value="{{ shipping_data.city }}" name="city" class="input_text" placeholder="Город" />
+                        <span class="err_r">Заполните поле</span>
+                      </div>
+
+                      <div class="input_shell">
+                        <textarea name="address" class="input_text no_hover_border" style="padding: 12px 2.25% 0; width: 94.5%; height: 135px;" placeholder="Адрес">{{ shipping_data.address }}</textarea>
+                        <span class="err_r">Заполните поле</span>
+                      </div>
+                      
+                      <div class="input_shell">
+                        <input type="text" value="{{ shipping_data.phone }}" name="phone" class="input_text" placeholder="Контактный телефон" />
+                        <span class="err_r">Заполните поле</span>
+                      </div>
+                      
                     </div>
+                  </div>
                   
                   <hr class="hr_" />
                   
@@ -220,7 +224,7 @@
                     <label class="wns_lbl">
                       <p class="wns_title_row_frm">Ваш e-mail:</p>
                       <div class="input_shell">
-                        <input type="text" value="{{ shipping_data.email }}" name="email" class="input_text{% if not shipping_data.email %} errr{% endif %}" placeholder="E-mail *" />
+                        <input required type="text" value="{{ shipping_data.email }}" name="email" class="input_text{% if not shipping_data.email %} errr{% endif %}" placeholder="E-mail *" />
                         <span class="err_r">Заполните поле</span>
                       </div>
                     </label>
@@ -229,11 +233,9 @@
                   
                   <div class="wns_row_input wns_row_w100">
                     <div class="wns_lbl wns_lblW">
-                      <div class="pass_wns_box">
+                      <div class="pass_wns_box js-password-button-container">
                         <abbr>Пароль:</abbr>
-                        <div class="edit_pass_wns">
-                          <div class="edit_text_wns">Изменить</div>
-                        </div>
+                        <div class="bt_red js-password-button password_button">Изменить</div>
                       </div>
                       
                       <div class="row_form_popup">
@@ -245,7 +247,24 @@
                       
                     </div>
                   </div>
-                  
+
+                  <div class="js-password-container wns_row_input wns_row_input1900" style="margin-top: 10px; display: none;">
+                    <div class="wns_lbl">
+                      <p class="wns_title_row_frm">Пароль:</p>
+
+                      <div class="input_shell">
+                        <input type="password"{% if profile.has_password is False %} style="display: none;"{% endif %} value="" name="old_password" class="input_text" placeholder="Старый пароль" />
+                        <span class="err_r">Заполните поле</span>
+                      </div>
+                      
+                      <div class="input_shell">
+                        <input type="password" value="" name="new_password" class="input_text" placeholder="Новый пароль" />
+                        <span class="err_r">Заполните поле</span>
+                      </div>
+                      
+                    </div>
+                  </div>
+
                   <div class="row_form_popup row_pop_butt">
                     <button class="bt_red">Сохранить</button>
                   </div>

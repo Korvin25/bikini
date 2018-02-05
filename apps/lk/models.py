@@ -87,6 +87,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     discount_used = models.BooleanField('Скидка использована?', default=False)
 
     has_email = models.BooleanField(default=True)
+    has_password = models.BooleanField(default=True)
 
     objects = UserManager()
 

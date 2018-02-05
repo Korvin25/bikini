@@ -101,13 +101,15 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
 
     success: function(res){
       var errors = res['errors'],
-          result = res['result'];
+          result = res['result'],
+          has_password = res['has_password'];
 
       if ($to_disable) { $to_disable.removeClass('_disabled'); };
 
       if (result == 'ok') {
         if (send_type == 'profile-edit') {
           $('html, body').animate({scrollTop: $form.offset().top}, 400);
+          if (has_password) { $('input[name="old_password"').show(); };
         }
         if (popup) {
           showPopup(popup);
@@ -167,4 +169,12 @@ $('.js-profile-edit-form').on('submit', function(e) {
   form_data = getFormData($form);
   removeErrors($form);
   sendSomeForm(url, form_data, 'profile-edit', $form, $form);
+});
+
+
+// ---- Кнопка "изменить пароль" ----
+
+$('.js-password-button').click(function() {
+  $('.js-password-button-container').hide();
+  $('.js-password-container').show();
 });

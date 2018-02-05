@@ -12,6 +12,10 @@
 {% block twitter_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
 
 {% block content %}
+  <style>
+     .popup_form_label { color: #3d697a !important; font-size: 12px;  }
+  </style>
+
   <main>
     <div class="main_content main_cut">
       
@@ -427,7 +431,7 @@
 
             <div class="rows_popup_input">
               <label class="lbl_box">
-                  <p style="color: rgb(61, 105, 122); font-size: 12px;">Адрес:<span class="orange_text">*</span></p>
+                  <p class="popup_form_label">Адрес:<span class="orange_text">*</span></p>
                   <textarea required name="address" class="input_text no_hover_border" style="padding: 12px 2.25% 0; width: 95.45%; height: 135px;">{{ shipping_data.address }}</textarea>
                 </label>
             </div>            
@@ -446,6 +450,13 @@
                   <input required type="text" value="{{ shipping_data.name }}" name="name" class="input_text" />
                 </label>
               </div>
+            </div>
+
+            <div class="rows_popup_input" style="margin-bottom: 15px;{% if shipping_data.email %} display: none;"{% endif %}>
+              <label class="lbl_box">
+                <p class="popup_form_label">Ваш e-mail:</p>
+                <input type="email" style="margin-top: 5px;" value="{{ shipping_data.email }}" name="email" class="input_text" />
+              </label>
             </div>
             
             <div class="row_form_popup row_pop_butt">

@@ -103,6 +103,7 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
         'address': 'address',
         'phone': 'phone',
         'name': 'name',
+        'email': 'email',
     }
 
     def dispatch(self, request, *args, **kwargs):
@@ -148,6 +149,9 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
                 key = {'country': 'country_id'}.get(k, k)
                 if not getattr(profile, key, None):
                     setattr(profile, key, getattr(cart, key))
+                if not profile.has_email and form.cleaned_data.get('email'):
+                    profile.email = form.cleaned_data['email']
+                    profile.has_email = True
             profile.save()
 
             count = cart.count()

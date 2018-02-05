@@ -27,6 +27,7 @@ class CartView(TemplateView):
             'address': '',
             'phone': '',
             'name': '',
+            'email': '',
         }
         profile = self.request.user
         if profile.is_authenticated():

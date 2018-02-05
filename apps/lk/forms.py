@@ -17,11 +17,11 @@ class ProfileForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
-        self.fields['name'].required = True
-        self.fields['country'].required = True
-        self.fields['city'].required = True
-        self.fields['address'].required = True
-        self.fields['phone'].required = True
+        # self.fields['name'].required = True
+        # self.fields['country'].required = True
+        # self.fields['city'].required = True
+        # self.fields['address'].required = True
+        # self.fields['phone'].required = True
         self.fields['email'].required = True
 
     def clean_email(self):
@@ -42,9 +42,9 @@ class ProfileForm(forms.ModelForm):
         new_password = self.cleaned_data.get('new_password', '').strip()
         if new_password:
             old_password = self.cleaned_data.get('old_password')
-            if not old_password and self.instance.has_email:
+            if not old_password and self.instance.has_password:
                 if self.data.get('old_password'):
-                    # значит, пароль неправильный
+                    # значит, старый пароль был неправильный и не попал в self.data
                     return None
                 else:
                     raise forms.ValidationError('Введите старый пароль.')
@@ -56,6 +56,7 @@ class ProfileForm(forms.ModelForm):
             user.has_email = True
         if self.cleaned_data.get('new_password'):
             user.set_password(self.cleaned_data['new_password'])
+            user.has_password = True
         if commit:
             user.save()
         return user

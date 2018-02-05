@@ -76,7 +76,7 @@ class SocialLoginView(BaseSocialView):
                     has_email = False
 
                 # создаем чела
-                profile = Profile.objects.create(email=email, has_email=has_email)
+                profile = Profile.objects.create(email=email, has_email=has_email, has_password=False)
                 profile.backend = 'django.contrib.auth.backends.ModelBackend'
                 login(request, profile)
 
