@@ -15,7 +15,7 @@ class VisualSettingTranslationOptions(TranslationOptions):
 
 
 class SEOSettingTranslationOptions(TranslationOptions):
-    fields = ('description', 'title', 'meta_desc', 'meta_keyw', 'seo_text',)
+    fields = ('description', 'title', 'meta_desc', 'meta_keyw', 'h1', 'seo_text',)
 
 
 translator.register(Setting, SettingTranslationOptions)

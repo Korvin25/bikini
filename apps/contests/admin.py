@@ -58,7 +58,7 @@ class ContestAdmin(ImageThumbAdminMixin, TabbedTranslationAdmin):
         }),
         ('SEO', {
             'classes': ('suit-tab suit-tab-seo',),
-            'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'seo_text',),
+            'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'h1', 'seo_text',),
         }),
     )
     prepopulated_fields = {'slug': ('title',)}
@@ -95,7 +95,7 @@ class ParticipantAdmin(ImageThumbAdminMixin, TabbedTranslationAdmin):
         }),
         ('SEO', {
             'classes': ('suit-tab suit-tab-seo',),
-            'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'seo_text',),
+            'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'h1', 'seo_text',),
         }),
     )
     raw_id_fields = ('profile', 'products',)

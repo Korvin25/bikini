@@ -35,13 +35,15 @@
 
 body.suit_layout_horizontal #footer, body.login #footer {
     position: relative !important;
-    margin-top: 0 !important;
+    /*margin-top: 0 !important;*/
+    margin-top: 50px !important;
 }
 
 @media (min-width: 576px)
 body.suit_layout_horizontal #footer, body.login #footer {
     position: relative !important;
-    margin-top: 0 !important;
+    /*margin-top: 0 !important;*/
+    margin-top: 50px !important;
 }
 
 .form-row.errors { display: block !important; }

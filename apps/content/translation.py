@@ -10,13 +10,13 @@ from .models import Video, Page, MenuItem
 @register(Video)
 class VideoTranslationOptions(TranslationOptions):
     fields = ('title', 'slug', 'text',
-              'meta_title', 'meta_desc', 'meta_keyw', 'seo_text',)
+              'meta_title', 'meta_desc', 'meta_keyw', 'h1', 'seo_text',)
 
 
 @register(Page)
 class PageTranslationOptions(TranslationOptions):
     fields = ('title', 'text',
-              'meta_title', 'meta_desc', 'meta_keyw', 'seo_text',)
+              'meta_title', 'meta_desc', 'meta_keyw', 'h1', 'seo_text',)
 
 
 @register(MenuItem)

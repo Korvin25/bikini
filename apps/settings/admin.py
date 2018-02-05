@@ -15,10 +15,10 @@ def MetatagModelAdmin(cls=None):
         cls.fieldsets += (
             ('SEO', {
                 'classes': ('collapse',),
-                'fields': ('meta_title', 'meta_desc', 'meta_keyw',)
+                'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'h1',)
             }),
         )
-        cls.search_fields += ['meta_title', 'meta_desc', 'meta_keyw', ]
+        cls.search_fields += ['meta_title', 'meta_desc', 'meta_keyw', 'h1', ]
         return cls
 
     if cls is None:
@@ -67,12 +67,13 @@ class VisualSettingAdmin(TabbedTranslationAdmin):
 
 @admin.register(SEOSetting)
 class SEOSettingAdmin(TabbedTranslationAdmin):
-    list_display = ('key', 'description', 'show_meta_title', 'show_meta_desc', 'show_meta_keyw', 'has_seo_text',)
+    list_display = ('key', 'description', 'show_meta_title', 'show_meta_desc', 'show_meta_keyw',
+                    'show_h1', 'has_seo_text',)
     list_display_links = ('key', 'description',)
     list_per_page = 50
     fieldsets = (
         (None, {
-            'fields': ('key', 'description', 'title', 'meta_desc', 'meta_keyw', 'seo_text',)
+            'fields': ('key', 'description', 'title', 'meta_desc', 'meta_keyw', 'h1', 'seo_text',)
         }),
     )
 

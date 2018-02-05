@@ -52,6 +52,11 @@ class SEOSetting(models.Model):
         max_length=255, null=True, blank=True,
         help_text='Оставьте пустым, чтобы использовать название страницы (выше)',
     )
+    h1 = models.CharField(
+        'H1 (на страницах, где он предусмотрен)',
+        max_length=255, null=True, blank=True,
+        help_text='Оставьте пустым, чтобы использовать название страницы (выше)',
+    )
     seo_text = RichTextUploadingField('SEO-текст', blank=True)
 
     class Meta:
@@ -71,6 +76,9 @@ class SEOSetting(models.Model):
     def get_meta_keyw(self):
         return self.meta_keyw if self.meta_keyw else SEOSetting.objects.get(key='global').meta_keyw
 
+    def get_h1(self):
+        return self.h1 if self.h1 else self.description
+
     def show_meta_title(self):
         return self.title if self.title else ''
     show_meta_title.allow_tags = True
@@ -85,6 +93,11 @@ class SEOSetting(models.Model):
         return self.meta_keyw if self.meta_keyw else ''
     show_meta_keyw.allow_tags = True
     show_meta_keyw.short_description = 'Meta keywords'
+
+    def show_h1(self):
+        return self.h1 if self.h1 else ''
+    show_h1.allow_tags = True
+    show_h1.short_description = 'H1'
 
     def has_seo_text(self):
         return ('<img src="/static/admin/img/icon-yes.svg" alt="True">' if self.seo_text 
@@ -109,6 +122,11 @@ class MetatagModel(models.Model):
         max_length=255, blank=True,
         help_text='Оставьте пустым, чтобы использовать поле "Заголовок"',
     )
+    h1 = models.CharField(
+        'H1 (на страницах, где он предусмотрен)',
+        max_length=255, blank=True,
+        help_text='Оставьте пустым, чтобы использовать поле "Заголовок"',
+    )
     seo_text = RichTextUploadingField('SEO-текст', blank=True)
 
     class Meta:
@@ -116,6 +134,9 @@ class MetatagModel(models.Model):
 
     def get_title(self):
         return self.title
+
+    def get_h1_title(self):
+        return self.get_title()
 
     def get_meta_title(self):
         return self.meta_title if self.meta_title else '{} — Bikinimini.ru'.format(self.get_title())
@@ -125,6 +146,9 @@ class MetatagModel(models.Model):
 
     def get_meta_keyw(self):
         return self.meta_keyw if self.meta_keyw else SEOSetting.objects.get(key='global').meta_keyw
+
+    def get_h1(self):
+        return self.h1 if self.h1 else self.get_h1_title()
 
     def has_seo_text(self):
         return ('<img src="/static/admin/img/icon-yes.svg" alt="True">' if self.seo_text 

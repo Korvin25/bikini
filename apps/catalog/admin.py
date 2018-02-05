@@ -176,7 +176,7 @@ class CategoryAdmin(TabbedTranslationAdmin):
         }),
         ('SEO', {
             'classes': ('suit-tab suit-tab-seo',),
-            'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'seo_text',),
+            'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'h1', 'seo_text',),
         }),
     )
     prepopulated_fields = {'slug': ('title',)}
@@ -470,7 +470,7 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
         }),
         ('SEO', {
             'classes': ('suit-tab suit-tab-seo',),
-            'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'seo_text',),
+            'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'h1', 'seo_text',),
         }),
         ('Варианты товара', {
             'classes': ('suit-tab suit-tab-options',),

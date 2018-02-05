@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load embed_video_tags %}
+{% load embed_video_tags catalog_tags %}
 
 {% block meta_title %}{{ video.get_meta_title }}{% endblock %}
 {% block meta_desc %}{{ video.get_meta_desc }}{% endblock %}
@@ -21,7 +21,7 @@
           <li><a href="{% url 'videos' %}">Видео</a></li>
           <li><span>{{ video.title }}</span></li>
         </ul>
-        <!--h1 class="title_block">Видео</h1-->
+        <!--h1 class="title_block">{{ video.get_h1 }}</h1-->
       </div>
       
       <div id="main_content" class="content_video">
@@ -34,10 +34,11 @@
                 {% video video.video '100%x453' %}
               </div>
             </div>
-            <h2 class="title_block">{{ video.title }}</h2>
-            {% if video.text %}
+            <h2 class="title_block">{{ video.get_h1 }}</h2>
+            {% get_product_text video as video_text %}
+            {% if video_text %}
               <div class="text_blog">
-                {{ video.text|safe }}
+                {{ video_text|safe }}
               </div>
             {% endif %}
             {% with video.product as product %}

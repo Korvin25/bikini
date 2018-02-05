@@ -82,3 +82,9 @@ def get_is_chosen(context, attr_slug, option_id):
     chosen_options = context.get('chosen_options', {})
     chosen_id = chosen_options.get(attr_slug, '')
     return unicode(option_id) == unicode(chosen_id)
+
+
+@register.simple_tag()
+def get_product_text(product):
+    # return product.seo_text or product.text
+    return product.get_text()

@@ -268,6 +268,9 @@ class Category(MetatagModel):
         }
         return '{} — {}'.format(self.title, SEX_TITLES.get(self.sex))
 
+    def get_h1_title(self):
+        return self.title
+
     def show_sex(self):
         return {
             'female': 'Ж',
@@ -623,6 +626,9 @@ class Product(MetatagModel):
     @property
     def attrs_json(self):
         return json.dumps(self.attrs)
+
+    def get_text(self):
+        return self.seo_text or self.text
 
 
 class ProductOption(models.Model):

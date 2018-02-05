@@ -53,7 +53,7 @@
           }
         </style>
 
-        <h1 class="title_block">{{ product.title }}</h1>
+        <h1 class="title_block">{{ product.get_h1 }}</h1>
         {% if product.vendor_code %}
           <div style="margin: -20px 0 20px;"><span class="ch_title_item _custom">Артикул: </span>{{ product.vendor_code }}</div> 
         {% endif %}
@@ -263,11 +263,13 @@
           
         </div>
 
-        {% if product.text or product.videos.count %}
+        {% get_product_text product as product_text %}
+
+        {% if product_text or product.videos.count %}
           <div class="text_preview_page text_item">
             <div class="text_preview_inner">
-              {% if product.text %}
-                {{ product.text|safe }}
+              {% if product_text %}
+                {{ product_text|safe }}
               {% endif %}
               
               <div id="player_item">

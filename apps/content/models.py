@@ -55,6 +55,9 @@ class Video(MetatagModel):
     def get_title(self):
         return '{} — Видео'.format(self.title)
 
+    def get_text(self):
+        return self.seo_text or self.text
+
 
 class Page(MetatagModel):
     title = models.CharField('Заголовок', max_length=255)

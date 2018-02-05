@@ -41,7 +41,7 @@ class VideoAdmin(AdminVideoMixin, TabbedTranslationAdmin):
         }),
         ('SEO', {
             'classes': ('suit-tab suit-tab-seo',),
-            'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'seo_text',),
+            'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'h1', 'seo_text',),
         }),
     )
     prepopulated_fields = {'slug': ('title',)}
@@ -67,7 +67,7 @@ class PageAdmin(TabbedTranslationAdmin):
         }),
         ('SEO', {
             'classes': ('suit-tab suit-tab-seo',),
-            'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'seo_text',),
+            'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'h1', 'seo_text',),
         }),
     )
     search_fields = ['title', 'slug', 'text', ]

@@ -25,7 +25,7 @@
             <li><a href="{{ contest.get_absolute_url }}">{{ contest.title }}</a></li>
             <li><span>{{ participant.name }}</span></li>
           </ul>
-          <h1 class="title_block">{{ participant.name }}</h1>
+          <h1 class="title_block">{{ participant.get_h1 }}</h1>
 
           {% if participant.description %}
             <div class="text_preview_inner">
