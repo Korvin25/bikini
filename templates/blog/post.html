@@ -29,7 +29,7 @@
           <li><a href="{{ post.category.get_absolute_url }}">{{ post.category.title }}</a></li>
           <li>{{ post.title }}</li>
         </ul>
-        <h1 class="title_block">{{ post.title }}</h1>
+        <h1 class="title_block">{{ post.get_h1 }}</h1>
       </div>
 
       <div class="sec_block sec_content_blog sec_mini_movie">
