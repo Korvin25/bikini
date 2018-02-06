@@ -235,7 +235,7 @@
                   {% endif %}
                   
                   <label for="pak" class="check_pr_input checke_lab js-hide-if-not-option"{% if not have_option %} style="display: none;"{% endif %}>
-                    <input type="checkbox" class="js-gift-wrapping-trigger" data-wrapping-price="{{ gift_wrapping_price|to_int_str }}" name="gift_wrapping" id="pak" value="1" />
+                    <input type="checkbox" class="js-gift-wrapping-trigger"{% if with_wrapping %} checked="checked"{% endif %} data-wrapping-price="{{ gift_wrapping_price|to_int_str }}" name="gift_wrapping" id="pak" value="1" />
                     <abbr class="abbr_check">Подарочная<br />упаковка</abbr>
                     
                     <div class="product_price"><span id="price_ID--gift-wrapping">{{ gift_wrapping_price|to_int_str }}</span><abbr title="руб">р.</abbr></div>

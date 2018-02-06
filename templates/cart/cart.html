@@ -51,12 +51,14 @@
             </div>
 
             {% for item in cart_items %}
+              {% get_product_attrs_url item.product item.attrs item.extra_products item.wrapping_price as product_url %}
+
               <div class="item_content_block table_row js-item-div" data-item-id="{{ item.id }}" data-set-url="{% url 'cart_api:set' %}" data-remove-url="{% url 'cart_api:remove' %}" data-base-price="{{ item.base_price|to_int_str }}" data-row-clear-selector="#js-row-clear-{{ item.id }}">
                 <div class="table_cell cell_image">
-                  <a href="{{ item.product.get_absolute_url }}"><div class="td_photo" style="background-image:url({{ item.product.cart_cover_thumb }})"></div></a>
+                  <a href="{{ product_url }}"><div class="td_photo" style="background-image:url({{ item.product.cart_cover_thumb }})"></div></a>
                 </div>
                 <div class="table_cell td_title">
-                  <h3 class="title_upper"><a href="{{ item.product.get_absolute_url }}" onclick="return false">{{ item.product.title }}</a></h3>
+                  <h3 class="title_upper"><a href="{{ product_url }}">{{ item.product.title }}</a></h3>
                   {% if not item.extra_products %}
                     {% if item.product.subtitle %}
                       <h4 class="title_low">{{ item.product.subtitle }}</h4>
@@ -103,7 +105,7 @@
                     <div class="tb_title">Подарочная упаковка</div>
                     <div>
                       <label for="gift-wrapping-{{ item.id }}" class="check_pr_input checke_lab" style="margin-top: 0;">
-                        <input type="checkbox"{% if item.wrapping_price %} checked="checked"{% endif %} class="js-gift-wrapping-trigger" data-wrapping-price="{{ gift_wrapping_price|to_int_str }}" name="gift_wrapping" id="gift-wrapping-{{ item.id }}" value="1" />
+                        <input type="checkbox"{% if item.wrapping_price %} checked="checked"{% endif %} class="" data-wrapping-price="{{ gift_wrapping_price|to_int_str }}" name="gift_wrapping" id="gift-wrapping-{{ item.id }}" value="1" />
                       </label>
                     </div>
                   </div>

@@ -88,3 +88,24 @@ def get_is_chosen(context, attr_slug, option_id):
 def get_product_text(product):
     # return product.seo_text or product.text
     return product.get_text()
+
+
+@register.simple_tag()
+def get_product_attrs_url(product, attrs, extra_products=None, wrapping_price=None):
+    extra_products = extra_products or {}
+    with_wrapping = bool(wrapping_price)
+    url = product.get_absolute_url()
+
+    attrs_strings = []
+    for k, v in attrs.iteritems():
+        attrs_strings.append('_{}={}'.format(k, v))
+    for k, d in extra_products.iteritems():
+        for slug, id in d.iteritems():
+            attrs_strings.append('_{}_{}={}'.format(k, slug, id))
+    if with_wrapping:
+        attrs_strings.append('_with_wrapping=1')
+
+    if len(attrs_strings):
+        attrs_str = '&'.join(attrs_strings)
+        url = '{}?{}'.format(url, attrs_str)
+    return url

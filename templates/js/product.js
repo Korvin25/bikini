@@ -1,31 +1,31 @@
 
 // ----- Офомление заказа -----
 
-function showSuccessPopup() {
-  var success_popup_id = 'success-popup',
-      $a = $('a[href="#'+success_popup_id+'"]'),
-      $popup = $('#'+success_popup_id+'');
+// function showSuccessPopup() {
+//   var success_popup_id = 'success-popup',
+//       $a = $('a[href="#'+success_popup_id+'"]'),
+//       $popup = $('#'+success_popup_id+'');
 
-  $('a[rel*=leanModal1]').leanModal({ top : 200, closeButton: ".js-call-close" });
-  $a.click();
-};
+//   $('a[rel*=leanModal1]').leanModal({ top : 200, closeButton: ".js-call-close" });
+//   $a.click();
+// };
 
 
-function showErrorPopup(title, text) {
-  var error_popup_id = 'error-popup',
-      title = title || '',
-      text = text || '',
-      $a = $('a[href="#'+error_popup_id+'"]'),
-      $popup = $('#'+error_popup_id+''),
-      $popup_title = $popup.find('.popup_title'),
-      $popup_text = $popup.find('.popup_text');
+// function showErrorPopup(title, text) {
+//   var error_popup_id = 'error-popup',
+//       title = title || '',
+//       text = text || '',
+//       $a = $('a[href="#'+error_popup_id+'"]'),
+//       $popup = $('#'+error_popup_id+''),
+//       $popup_title = $popup.find('.popup_title'),
+//       $popup_text = $popup.find('.popup_text');
 
-  $('a[rel*=leanModal1]').leanModal({ top : 200, closeButton: ".js-call-close" });
+//   $('a[rel*=leanModal1]').leanModal({ top : 200, closeButton: ".js-call-close" });
 
-  $popup_title.text(title);
-  $popup_text.html(text);
-  $a.click();
-};
+//   $popup_title.text(title);
+//   $popup_text.html(text);
+//   $a.click();
+// };
 
 
 function submitProductForm($form, $button, option_id, _attrs, _extra_products, data, count, prices) {
@@ -66,7 +66,10 @@ function submitProductForm($form, $button, option_id, _attrs, _extra_products, d
       if (result == 'ok') {
         if (cart_count) { $('.js-cart-count').text(cart_count); }
         if (cart_summary) { $('.js-cart-summary').text(cart_summary); }
-        showSuccessPopup();
+        $('.js-call-close').filter(':visible').click();
+        setTimeout( function() {
+          showPopup('#success-popup');
+        }, 500);
       }
       else {
         if (error) { showErrorPopup('При отправке формы произошла ошибка:', error); }

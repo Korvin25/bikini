@@ -23,6 +23,7 @@ function showPopup(popup_id) {
   var $a = $('a[href="'+popup_id+'"]'),
       $popup = $(popup_id);
 
+  // $('.js-call-close').filter(':visible').click();
   $('a[rel*=leanModal1]').leanModal({ top : 200, closeButton: ".js-call-close" });
   $a.click();
   $('html, body').animate({scrollTop: $popup.offset().top-75}, 400);

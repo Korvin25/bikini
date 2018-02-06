@@ -21,15 +21,6 @@ def get_product_option(context, option_id):
     return product_options.get(option_id)
 
 
-@register.simple_tag()
-def get_product_url(product, attrs):
-    url = product.get_absolute_url()
-    if attrs:
-        attrs_str = '&'.join(['_{}={}'.format(k, v) for k, v in attrs.items()])
-        url = '{}?{}'.format(url, attrs_str)
-    return url
-
-
 @register.simple_tag(takes_context=True)
 def get_option(context, slug, option_id):
     options = context['options']

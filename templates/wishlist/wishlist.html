@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n core_tags wishlist_tags %}
+{% load i18n core_tags catalog_tags wishlist_tags %}
 
 {% block meta_title %}{{ seo_settings.wishlist.get_meta_title }}{% endblock %}
 {% block meta_desc %}{{ seo_settings.wishlist.get_meta_desc }}{% endblock %}
@@ -28,8 +28,8 @@
           <div class="item_list_wrapp item_list_wrapp_all" itemscope="" itemtype="http://schema.org/ItemList">
             {% for item in wishlist %}
               {% get_product item.product_id as product %}
-              {% get_product_url product item.attrs as product_url %}
               {% get_product_option item.option_id as product_option %}
+              {% get_product_attrs_url product item.attrs as product_url %}
 
               {% if product and product_option %}
                 <form class="js-product-form" method="post" action="{% url 'cart_api:set' %}" style="display: inline-block;">

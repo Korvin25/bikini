@@ -260,6 +260,14 @@ class ProductView(TemplateView):
             extra_products.append(extra_product_dict)
         self.extra_products = extra_products
 
+    def get_chosen_options(self):
+        chosen_options = {k[1:]: v for k, v in self.request.GET.items() if k.startswith('_') and v}
+        self.chosen_options = chosen_options
+
+    def get_wrapping_price(self):
+        wrapping_price = to_int_plus(GiftWrapping.get_price() or 0)
+        self.wrapping_price = wrapping_price
+
     def get_data_json(self):
         data = {
             'attrs': {},  # {slug: {id, slug, type, title, category}}
@@ -278,6 +286,11 @@ class ProductView(TemplateView):
             'extra_products': {},  # {id: {id, slug, title, attrs: <json>, price, in_stock}}
             'extra_p_selected': {},
         }
+
+        self.with_wrapping = False
+        if self.chosen_options.get('with_wrapping'):
+            data['prices']['wrapping'] = self.wrapping_price
+            self.with_wrapping = True
 
         for type, attr_list in self.attrs.iteritems():
             for attr in attr_list:
@@ -333,10 +346,6 @@ class ProductView(TemplateView):
         self.data = data
         self.data_json = json.dumps(data)
 
-    def get_chosen_options(self):
-        chosen_options = {k[1:]: v for k, v in self.request.GET.items() if k.startswith('_')}
-        self.chosen_options = chosen_options
-
     def get_from_wishlist(self):
         wishlist = get_wishlist_from_request(self.request)
         wishlist_data = {
@@ -364,8 +373,9 @@ class ProductView(TemplateView):
         product = self.get_product()
         category = self.category
         self.get_attributes()
-        self.get_data_json()
         self.get_chosen_options()
+        self.get_wrapping_price()
+        self.get_data_json()
         self.get_from_wishlist()
         context = {
             'product': product,
@@ -376,7 +386,7 @@ class ProductView(TemplateView):
             'attrs_ids': self.attrs_ids,
             'extra_products': self.extra_products,
             'photos': product.photos.all(),
-            'gift_wrapping_price': to_int_plus(GiftWrapping.get_price() or 0),
+            'gift_wrapping_price': self.wrapping_price,
             'have_option': self.have_option,
             'price': self.price,
             'count': self.count,
@@ -386,6 +396,7 @@ class ProductView(TemplateView):
             'chosen_options': self.chosen_options,
             'in_wishlist': self.in_wishlist,
             'wishlist_data': self.wishlist_data,
+            'with_wrapping': self.with_wrapping,
         }
         context.update(super(ProductView, self).get_context_data(**kwargs))
         return context
