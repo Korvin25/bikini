@@ -19,6 +19,13 @@ class Setting(models.Model):
     def __unicode__(self):
         return self.description
 
+    @classmethod
+    def get_seo_title_suffix(cls):
+        DEFAULT_PREFIX = 'Bikinimini.ru'
+        setting = cls.objects.filter(key='title_suffix').first()
+        title_suffix = setting.value if setting else DEFAULT_PREFIX
+        return title_suffix or DEFAULT_PREFIX
+
 
 class VisualSetting(models.Model):
     key = models.SlugField('Код', max_length=255, unique=True)
@@ -68,7 +75,8 @@ class SEOSetting(models.Model):
         return self.key
 
     def get_meta_title(self):
-        return self.title if self.title else '{} — Bikinimini.ru'.format(self.description)
+        title_suffix = Setting.get_seo_title_suffix()
+        return self.title if self.title else '{} — {}'.format(self.description, title_suffix)
 
     def get_meta_desc(self):
         return self.meta_desc if self.meta_desc else self.description
@@ -139,7 +147,8 @@ class MetatagModel(models.Model):
         return self.get_title()
 
     def get_meta_title(self):
-        return self.meta_title if self.meta_title else '{} — Bikinimini.ru'.format(self.get_title())
+        title_suffix = Setting.get_seo_title_suffix()
+        return self.meta_title if self.meta_title else '{} — {}'.format(self.get_title(), title_suffix)
 
     def get_meta_desc(self):
         return self.meta_desc if self.meta_desc else self.get_title()

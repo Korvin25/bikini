@@ -16,7 +16,7 @@ from filer.fields.image import FilerImageField
 from sortedm2m.fields import SortedManyToManyField
 
 from ..core.utils import with_watermark
-from ..settings.models import MetatagModel
+from ..settings.models import Setting, MetatagModel
 
 
 # === Атрибуты (справочники) ===
@@ -441,8 +441,10 @@ class Product(MetatagModel):
             title = self.meta_title
         else:
             category = category or self.categories.first()
-            title = '{} — {} — Bikinimini.ru'.format(self.title, category.get_title())
+            title_suffix = Setting.get_seo_title_suffix()
+            title = '{} — {} — {}'.format(self.title, category.get_title(), title_suffix)
         return title
+
 
     # def set_attributes_from_category(self, category):
     #     self.attributes = category.attributes.all()

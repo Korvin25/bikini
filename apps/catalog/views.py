@@ -292,6 +292,12 @@ class ProductView(TemplateView):
             data['prices']['wrapping'] = self.wrapping_price
             self.with_wrapping = True
 
+        if self.chosen_options.get('count'):
+            try:
+                data['prices']['count'] = int(self.chosen_options['count'])
+            except ValueError:
+                pass
+
         for type, attr_list in self.attrs.iteritems():
             for attr in attr_list:
                 data['attrs'][attr['slug']] = {

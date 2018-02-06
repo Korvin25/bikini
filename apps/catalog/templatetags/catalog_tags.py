@@ -91,7 +91,7 @@ def get_product_text(product):
 
 
 @register.simple_tag()
-def get_product_attrs_url(product, attrs, extra_products=None, wrapping_price=None):
+def get_product_attrs_url(product, attrs, extra_products=None, wrapping_price=None, count=None):
     extra_products = extra_products or {}
     with_wrapping = bool(wrapping_price)
     url = product.get_absolute_url()
@@ -104,6 +104,8 @@ def get_product_attrs_url(product, attrs, extra_products=None, wrapping_price=No
             attrs_strings.append('_{}_{}={}'.format(k, slug, id))
     if with_wrapping:
         attrs_strings.append('_with_wrapping=1')
+    if count:
+        attrs_strings.append('_count={}'.format(count))
 
     if len(attrs_strings):
         attrs_str = '&'.join(attrs_strings)

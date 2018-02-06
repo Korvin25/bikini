@@ -13,7 +13,7 @@ from easy_thumbnails.files import get_thumbnailer
 from filer.fields.image import FilerImageField
 
 from ..lk.models import Profile
-from ..settings.models import MetatagModel
+from ..settings.models import Setting, MetatagModel
 
 
 class Category(MetatagModel):
@@ -32,8 +32,11 @@ class Category(MetatagModel):
         return reverse('blog:category', kwargs={'slug': self.slug})
 
     def get_meta_title(self):
+        if self.meta_title:
+            return self.meta_title
         blog_label = _('Блог')
-        return self.meta_title if self.meta_title else '{} — {} — Bikinimini.ru'.format(self.title, blog_label)
+        title_suffix = Setting.get_seo_title_suffix()
+        return '{} — {} — {}'.format(self.title, blog_label, title_suffix)
 
 
 class Post(MetatagModel):

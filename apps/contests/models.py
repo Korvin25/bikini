@@ -10,7 +10,7 @@ from easy_thumbnails.fields import ThumbnailerImageField
 
 from ..catalog.models import Product
 from ..lk.models import Profile
-from ..settings.models import MetatagModel
+from ..settings.models import Setting, MetatagModel
 
 
 class Contest(MetatagModel):
@@ -47,8 +47,11 @@ class Contest(MetatagModel):
         return reverse('contests:contest', kwargs={'slug': self.slug})
 
     def get_meta_title(self):
-        return (self.meta_title if self.meta_title
-                else '{} — {} — Bikinimini.ru'.format(self.title, 'Конкурсы'))
+        if self.meta_title:
+            return self.meta_title
+        contests_label = _('Конкурсы')
+        title_suffix = Setting.get_seo_title_suffix()
+        return '{} — {} — {}'.format(self.title, contests_label, title_suffix)
 
     @property
     def is_published(self):
