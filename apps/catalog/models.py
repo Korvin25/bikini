@@ -7,6 +7,7 @@ from django.contrib.postgres.fields import JSONField
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _
 
 from ckeditor_uploader.fields import RichTextUploadingField
 from colorfield.fields import ColorField
