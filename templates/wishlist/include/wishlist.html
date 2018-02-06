@@ -1,0 +1,39 @@
+{% load i18n core_tags wishlist_tags %}
+
+<div class="row_info">
+  {% if wishlist|length %}
+    <div class="item_list_wrapp">
+      {% for item in wishlist %}
+        {% get_product item.product_id as product %}
+        {% get_product_url product item.attrs as product_url %}
+        {% get_product_option item.option_id as product_option %}
+
+        {% if product and product_option %}
+          <form class="js-product-form" method="post" action="{% url 'cart_api:set' %}" style="display: inline-block;">
+            {% csrf_token %}
+            <input type="hidden" name="product_id" value="{{ product.id }}">
+            <div class="product_list">
+              <div class="photo_list"><a href="{{ product_url }}"><img src="{{ product.cover_thumb }}" alt="{{ product.title }}"></a></div>
+              <h3><a href="{{ product_url }}">{{ product.title }}</a></h3>
+              <h4>{% if product.subtitle %}{{ product.subtitle }}{% endif %}</h4>
+              {% if item.price is not None %}
+                <div class="product_price">{{ item.price|to_int_plus }}<abbr title="руб">р.</abbr></div>
+              {% endif %}
+              {% if product_option.in_stock %}
+                <button class="js-wishlist-cart-button to_cart_list" data-type="add" type="submit">В корзину</button>
+              {% else %}
+                <button class="js-wishlist-cart-button to_cart_list" data-type="order" type="submit">Под заказ</button>
+              {% endif %}
+            </div>
+          </form>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <h3 style="margin-bottom: 250px;">Товаров в списке желаемых покупок нет. <a href="{% url 'women' %}">Вернуться в каталог</a></h3>
+  {% endif %}
+</div>
+{% if wishlist|length %}
+  <br />
+  <div style="text-align:center;"><a class="bt_red bt_list_products" href="{% url 'wishlist:home' %}">Перейти на страницу желаемых покупок</a></div>
+{% endif %}

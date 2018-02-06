@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.conf import settings
 
 from ..banners.models import Banner
+from ..lk.wishlist.utils import get_wishlist_from_request
 from .models import Menu
 
 
@@ -15,7 +16,7 @@ def content(request):
     LANGUAGES_DICT = settings.LANGUAGES_DICT
     liked_participants = request.session.get('liked_participants', [])
     profile = request.user
-    wishlist = request.session.get('wishlist', []) if profile.is_anonymous() else profile.wishlist
+    wishlist = get_wishlist_from_request(request)
 
     content = {
         'menu': menu,

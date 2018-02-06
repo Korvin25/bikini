@@ -41,8 +41,9 @@
       <li><a href="#">Подарочный сертификат</a></li>
       <li><a href="{% url 'blog:home' %}"><img src="/static/i/logo_mini.png" alt="desinger" />desinger</a></li>
       <li><a href="{% url 'videos' %}">Видео</a></li>
-      <li><a href="{% url 'wishlist:home' %}" >Список желаемых покупок&nbsp;&nbsp;<img src="/static/i/desir.png" alt="" />&nbsp;&nbsp;<span class="disc_number js-wishlist-count">{{ wishlist|length }}</span></a></li>
+      <li><a href="{% url 'wishlist:home' %}" class="js-show-wishlist-button">Список желаемых покупок&nbsp;&nbsp;<img src="/static/i/desir.png" alt="" />&nbsp;&nbsp;<span class="disc_number js-wishlist-count">{{ wishlist|length }}</span></a></li>
     </ul>
+    <div style="display: none"><a rel="leanModal1" href="#wishlist"></a></div>
     <ul class="list_menu_lev1 list_menu_lev2 js-header-menu">
       <li class="lang_head">
         <a href="#" onclick="return false;" class="lang_head_tit">{% trans 'Язык' %}: {{ LANGUAGES_DICT|get_value:CURRENT_LANGUAGE|slice:':3'|upper }}<img src="/static/i/blank.gif" onClick="nodeExpand(198600,0)"  id="img_198600"></a>

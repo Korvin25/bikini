@@ -2,34 +2,43 @@
 // ----- Добавляем в вишлист / удаляем из него -----
 
 
-function changeWishlistInputData(price, attrs) {
+function changeWishlistInputData(option_id, price, attrs) {
   var $input = $('.js-wishlist-input');
 
   if ($input.length) {
+    option_id = (option_id || 0).toString();
     price = (price || 0).toString();
     attrs = JSON.stringify(attrs || {});
 
-    $input.attr('data-price', price);
-    $input.attr('data-attrs', attrs);
+    if (option_id) {
+      $input.attr('data-option-id', option_id);
+      $input.attr('data-price', price);
+      $input.attr('data-attrs', attrs);
+    };
   }
 }
 
 
-$('.js-wishlist-input').on('change', function(e) {
-  var $input = $(this),
-      add_url = $input.attr('data-add-url'),
+function sendWishlistItemData($input, dontShowPopup) {
+  dontShowPopup = dontShowPopup || false;
+
+  var add_url = $input.attr('data-add-url'),
       remove_url = $input.attr('data-remove-url'),
       product_id = parseInt($input.attr('data-product-id')),
+      option_id = parseInt($input.attr('data-option-id')),
       price = parseFloat($input.attr('data-price') || 0.0),
       attrs = JSON.parse($input.attr('data-attrs') || {}),
+      fromProductPage = $input.hasClass('js-from-product-page'),
+      adding = false,
       url,
       form_data;
 
-  if ($input.is(':checked')) { url = add_url; }
+  if ($input.is(':checked')) { url = add_url; adding = true; }
   else { url = remove_url; }
 
   form_data = {
     'product_id': product_id,
+    'option_id': option_id,
     'price': price,
     'attrs': attrs,
   };
@@ -48,6 +57,7 @@ $('.js-wishlist-input').on('change', function(e) {
 
       if (result == 'ok') {
         if (wishlist_count != undefined) { $('.js-wishlist-count').text(wishlist_count); }
+        if (fromProductPage && adding && !dontShowPopup) { showWishlistPopup(); }
       }
       else {
         if (error) { alert('При отправке формы произошла ошибка: ', error); }
@@ -76,21 +86,74 @@ $('.js-wishlist-input').on('change', function(e) {
       }
     }
   });
+}
 
+
+$('.js-wishlist-input').on('change', function(e) {
+  var $input = $(this);
+  sendWishlistItemData($input);
 });
+
+
+function checkWishlistAndClick(show_errors, just_change) {
+  show_errors = show_errors || false;
+  just_change = just_change || false;
+
+  var $button = $('.js-wishlist-button'),
+      $input = $button.siblings('.js-wishlist-input');
+
+  if ($input.length) {
+    if ($input.is(':checked') && !just_change) {
+      $input.click();
+      $button.text('Добавить в список желаемых покупок');
+    }
+    else {
+      var option = data['option'];
+      if (option['id']) {
+        collected_data = collectAttrs(option);
+        _attrs = collected_data['_attrs'];
+        errors = collected_data['errors'];
+        if (errors.length) {
+          if (show_errors) { showErrorPopup('Пожалуйста, выберите одно из значений:', errors.join('<br/>')); };
+          return;
+        }
+        else {
+          if (just_change) {
+            sendWishlistItemData($input, true);
+          } else {
+            $input.click();
+            $button.text('Удалить из списка желаемых покупок');
+          }
+        }
+      } else {
+        if (show_errors) { showErrorPopup('Такого товара нет в наличии'); };
+      }
+    };
+  } else {
+    console.log('error: no input near');
+  }
+}
 
 
 $('.js-wishlist-button').click(function(e) {
   e.preventDefault();
+  checkWishlistAndClick(true, false);
+});
+
+
+$('body').on('click', '.js-wishlist-cart-button', function(e){
+  e.preventDefault();
 
   var $button = $(this),
-      $input = $button.siblings('.js-wishlist-input');
+      $form = $button.parents('.js-product-form'),
+      $input = $form.find('.js-wishlist-input'),
+      option_id = parseInt($input.attr('data-option-id')),
+      price = parseFloat($input.attr('data-price') || 0.0),
+      _attrs = JSON.parse($input.attr('data-attrs') || {}),
+      _extra_products = {},
+      count = 1,
+      prices = {'count': count, 'option': price}
+      data = null;
 
-  if ($input.length) {
-    if ($input.is(':checked')) { $button.text('Добавить в список желаемых покупок'); }
-    else { $button.text('Удалить из списка желаемых покупок'); };
-    $input.click();
-  } else {
-    console.log('error: no input near');
-  }
+  submitProductForm($form, $button, option_id, _attrs, _extra_products, data, count, prices);
 });

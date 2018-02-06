@@ -167,3 +167,80 @@ $('.js-auth-registration-form').on('submit', function(e) {
     sendHeaderAuthForm(url, form_data, $forms, $form);
   }
 });
+
+
+// ----- Показ попапа со списком желаемых покупок -----
+
+function showWishlistPopup($button, disable) {
+  $button = $button || $('.js-show-wishlist-button');
+  disable = disable || false;
+
+  var url = $button.attr('href'),
+      popup_id = '#wishlist',
+      $popup = $(popup_id),
+      $popup_content_div = $popup.find('.js-wishlist-popup-content');
+
+  if (disable) { $button.addClass('_disabled'); };
+
+  $.ajax({
+    url: url,
+    type: 'GET',
+    dataType: 'json',
+    contentType: 'application/json',
+
+    success: function(res){
+      var errors = res['errors'],
+          result = res['result'],
+          html = res['html'];
+
+      if (disable) { $button.removeClass('_disabled'); };
+
+      if (result == 'ok') {
+        $popup_content_div.html(html);
+        showPopup(popup_id);
+      }
+      else {
+        if (error) { showErrorPopup('При загрузке произошла ошибка:', error); }
+        else if (errors) { 
+          addErrors($form, errors);
+        }
+        else { showErrorPopup('При загрузке произошла ошибка:', res.status + ' ' + res.statusText); }
+      };
+    },
+    error: function(res){
+      if (disable) { $button.removeClass('_disabled'); };
+
+      if (res.status == 400) {
+        var response;
+        if (res.responseJSON == undefined) { response = JSON.parse(res.responseText); }
+
+        if (response != undefined) {
+          var click_to = response['click_to'],
+              popup = response['popup'],
+              error = response['error'],
+              errors = response['errors'],
+              alert_message = response['alert_message'];
+
+          if (error) { showErrorPopup('При загрузке произошла ошибка:', error); }
+          else if (errors) { 
+            if ($form) { addErrors($form, errors); }
+            else { showErrorPopup('При загрузке произошла ошибка:', errors); }
+          };
+          if (click_to) { $(click_to).click(); };
+          if (popup) { showPopup(popup); };
+          if (alert_message) { alert(alert_message); };
+        } else {
+          showErrorPopup('При загрузке произошла ошибка:', res.status + ' ' + res.statusText);
+        };
+      } else {
+        if (res.status == 0) { alert('Произошла ошибка: 500 Internal Server Error') }
+        else { alert('Произошла ошибка: ' + res.status + ' ' + res.statusText); }
+      }
+    }
+  });
+}
+
+$('.js-show-wishlist-button').click(function(e){
+  e.preventDefault();
+  showWishlistPopup($(this), true);
+});

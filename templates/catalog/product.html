@@ -36,21 +36,6 @@
 
         <style>
           .ch_title_item._custom:after { content: none; }
-
-          .usual_link {
-            color: black !important;
-            font-family: 'NeoRegular' !important;
-            font-size: 14px;
-            font-weight: bold !important;
-            cursor: pointer;
-          }
-          .usual_link:hover {
-            text-decoration: underline !important;
-            color: black !important;
-            background-color: #fff !important;
-            border-color: #fff !important;
-            border: none !important;
-          }
         </style>
 
         <h1 class="title_block">{{ product.get_h1 }}</h1>
@@ -129,10 +114,11 @@
               <a href="#" class="move_butt_item js-wishlist-button">
                 {% if in_wishlist %}Удалить из списка желаемых покупок{% else %}Добавить в список желаемых покупок{% endif %}
               </a>
-              <input class="js-wishlist-input" type="checkbox" style="display: none;" name="wishlist"
+              <input class="js-wishlist-input js-from-product-page" type="checkbox" style="display: none;" name="wishlist"
                      {% if in_wishlist %} value="1" checked="checked"{% endif %}
                      data-add-url="{% url 'wishlist:add' %}" data-remove-url="{% url 'wishlist:remove' %}"
-                     data-product-id="{{ wishlist_data.product_id }}" data-price="{{ wishlist_data.price }}"
+                     data-product-id="{{ wishlist_data.product_id }}" data-option-id="{{ wishlist_data.option_id }}"
+                     data-price="{{ wishlist_data.price }}"
                      data-attrs='{{ wishlist_data.attrs_json|safe }}' />
             {% endif %}
           </div>
@@ -140,7 +126,7 @@
         <!-- SLIDER ITEM <<< -->
           
         <!-- FORM chars ITEM >>> -->
-          <form class="wrapp_chars_item_cols" method="post" action="{% url 'cart_api:set' %}">
+          <form class="wrapp_chars_item_cols js-product-form" method="post" action="{% url 'cart_api:set' %}">
             {% csrf_token %}
             <input type="hidden" name="product_id" value="{{ product.id }}">
 
@@ -309,60 +295,13 @@
   </main>
 {% endblock %}
 
-{% block popups %}
-  <div style="display: none">
-    <a rel="leanModal1" href="#error-popup"></a>
-    <a rel="leanModal1" href="#success-popup"></a>
-  </div>
-
-  <div class="window_popap no_float mini_window_popup callback_form" id="error-popup" style="display:none;">
-      <div class="close_popap call_close js-call-close"><img src="/static/i/close_white_45.png" alt="Закрыть"></div>
-      <div class="wrap_window_popap bg_wrapp_window">
-          <div class="popap_row">
-              <div class="popap_row_wrapp">
-                  <h3 class="popup_title" style="margin-bottom: 10px;">Пожалуйста, выберите одно из нескольких значений:</h3>
-                  <p class="call_introtext popup_text"></p>
-                  {% comment %}
-                  <div class="red_bor_butt">
-                      <span class="js-call-close usual_link">Закрыть</span>
-                  </div>
-                  {% endcomment %}
-                  <div class="bt_req_call red_bor_butt js-call-close">
-                    <button class="butt_border">Закрыть</button>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
-
-  <div class="window_popap no_float mini_window_popup callback_form" id="success-popup" style="display:none;">
-      <div class="close_popap call_close js-call-close"><img src="/static/i/close_white_45.png" alt="Закрыть"></div>
-      <div class="wrap_window_popap bg_wrapp_window">
-          <div class="popap_row">
-              <div class="popap_row_wrapp">
-                  <h3 class="popup_title" style="margin-bottom: 10px;">Товар добавлен в корзину!</h3>
-                  <p class="call_introtext popup_text">
-                    Товаров в корзине: <span class="js-cart-count">{{ cart.count }}</span><br/>
-                    Общая сумма: <span class="js-cart-summary">{{ cart.summary }}</span> р.<br/>
-                  </p>
-                  <div class="red_bor_butt">
-                    <div class="bt_req_call">
-                      <a href="/cart/" class="butt_border">Перейти к корзине</a>
-                    </div>
-                    {# <span class="js-call-close usual_link">Продолжить покупки</span> #}
-                    <a href="{% url 'women' %}" class="usual_link">Продолжить покупки</a>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
+{% block popupss %}
+  {% include 'catalog/include/product_popups.html' %}
 {% endblock %}
 
 {% block extra_js %}
   <script type="text/javascript">
     window.data = {{ data_json|safe }};
-    {% include 'js/wishlist.js' %}
-    {% include 'js/product.js' %}
     $(function(){
       options = filterOptions(['style']);
       // updateShownCheckboxes(options, ['color', 'size']);

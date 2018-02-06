@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load i18n core_tags wishlist_tags %}
+
+{% block meta_title %}{{ seo_settings.wishlist.get_meta_title }}{% endblock %}
+{% block meta_desc %}{{ seo_settings.wishlist.get_meta_desc }}{% endblock %}
+{% block meta_keyw %}{{ seo_settings.wishlist.get_meta_keyw }}{% endblock %}
+
+{% block og_title %}{{ seo_settings.wishlist.get_meta_title }}{% endblock %}
+{% block og_desc %}{{ seo_settings.wishlist.get_meta_desc }}{% endblock %}
+
+{% block twitter_title %}{{ seo_settings.wishlist.get_meta_title }}{% endblock %}
+{% block twitter_desc %}{{ seo_settings.wishlist.get_meta_desc }}{% endblock %}
+
+{% block content %}
+  <main>
+    <div class="main_content main_content_video">
+      
+      <div class="blog_title">
+        <ul class="breadcrumb">
+          <li><a href="{% url 'home' %}">Главная</a></li>
+          <li><span>Список желаемых покупок</span></li>
+        </ul>
+        <h1 class="title_block">Список желаемых покупок</h1>
+      </div>
+      
+      <div id="main_content" class="content_video list_push">
+        {% if wishlist|length %}
+          <div class="item_list_wrapp item_list_wrapp_all" itemscope="" itemtype="http://schema.org/ItemList">
+            {% for item in wishlist %}
+              {% get_product item.product_id as product %}
+              {% get_product_url product item.attrs as product_url %}
+              {% get_product_option item.option_id as product_option %}
+
+              {% if product and product_option %}
+                <form class="js-product-form" method="post" action="{% url 'cart_api:set' %}" style="display: inline-block;">
+                  {% csrf_token %}
+                  <input type="hidden" name="product_id" value="{{ product.id }}">
+                  <div class="product_list product_list_all" style="height: auto; overflow: visible;">
+                    <div class="photo_list"><a href="{{ product_url }}"><img src="{{ product.cover_thumb }}" alt="{{ product.title }}"></a></div>
+                    <h3>
+                      <a href="{{ product_url }}">{{ product.title }}</a>
+                      <div class="sec_block_item">
+                        <a href="#" class="butt_put">
+                          <label for="put_item{{ forloop.counter }}" class="td_label_check_win">
+                            <input type="checkbox" name="put_item" id="put_item{{ forloop.counter }}" value="1" checked="checked"
+                                   class="js-wishlist-input"
+                                   data-add-url="{% url 'wishlist:add' %}" data-remove-url="{% url 'wishlist:remove' %}"
+                                   data-product-id="{{ item.product_id }}" data-option-id="{{ item.option_id }}"
+                                   data-price="{{ item.price }}"
+                                   data-attrs='{{ item.attrs|to_json|safe }}'/>
+                            <img src="/static/i/heart_icon.png" style="cursor: pointer !important;" alt="Отложить">
+                          </label>
+                        </a>
+                        
+                        <a href="{{ product_url }}" class="sett_butt">
+                          <img src="/static/i/sett_icon.png" alt="Изменить комплектацию" title="Изменить комплектацию">
+                        </a>
+                      </div>
+                    </h3>
+                    
+                    <h4>{% if product.subtitle %}{{ product.subtitle }}{% endif %}</h4>
+                    
+                    <ul class="settings_item">
+                      {% get_attrs_options item.attrs.items as attrs_options %}
+                      {% for option in attrs_options.size %}
+                        <li><span>{{ option.attribute.title }}:</span><strong>{{ option.title }}</strong></li>
+                      {% endfor %}
+                      {% for option in attrs_options.color %}
+                        {% if option.picture %}
+                          <li class="last_color"><span>{{ option.attribute.title }}:</span><div class="td_color_box" style="background: url('{{ option.picture_url }}'); border: 1px solid #ccc;" title="{{ option.title }}">{{ option.title }}</div></li>
+                        {% else %}
+                          <li class="last_color"><span>{{ option.attribute.title }}:</span><div class="td_color_box" style="background-color:{{ option.color }}; border: 1px solid #ccc;" title="{{ option.title }}">{{ option.title }}</div></li>
+                        {% endif %}
+                      {% endfor %}
+                    </ul>
+
+                    {% if item.price is not None %}
+                      <div class="product_price">{{ item.price|to_int_plus }}<abbr title="руб">р.</abbr></div>
+                    {% endif %}
+                    {% if product_option.in_stock %}
+                      <button class="js-wishlist-cart-button to_cart_list" data-type="add" type="submit">В корзину</button>
+                    {% else %}
+                      <button class="js-wishlist-cart-button to_cart_list" data-type="order" type="submit">Под заказ</button>
+                    {% endif %}
+                  </div>
+                </form>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% else %}
+          <h3 style="margin-bottom: 250px;">Товаров в списке желаемых покупок нет. <a href="{% url 'women' %}">Вернуться в каталог</a></h3>
+        {% endif %}
+      </div>
+      
+    </div>
+  </main>
+{% endblock %}

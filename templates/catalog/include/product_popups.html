@@ -1,0 +1,63 @@
+<style>
+  .usual_link {
+    color: black !important;
+    font-family: 'NeoRegular' !important;
+    font-size: 14px;
+    font-weight: bold !important;
+    cursor: pointer;
+  }
+  .usual_link:hover {
+    text-decoration: underline !important;
+    color: black !important;
+    background-color: #fff !important;
+    border-color: #fff !important;
+    border: none !important;
+  }
+</style>
+
+<div style="display: none">
+  <a rel="leanModal1" href="#error-popup"></a>
+  <a rel="leanModal1" href="#success-popup"></a>
+</div>
+
+<div class="window_popap no_float mini_window_popup callback_form" id="error-popup" style="display:none;">
+    <div class="close_popap call_close js-call-close"><img src="/static/i/close_white_45.png" alt="Закрыть"></div>
+    <div class="wrap_window_popap bg_wrapp_window">
+        <div class="popap_row">
+            <div class="popap_row_wrapp">
+                <h3 class="popup_title" style="margin-bottom: 10px;">Пожалуйста, выберите одно из нескольких значений:</h3>
+                <p class="call_introtext popup_text"></p>
+                {% comment %}
+                <div class="red_bor_butt">
+                    <span class="js-call-close usual_link">Закрыть</span>
+                </div>
+                {% endcomment %}
+                <div class="bt_req_call red_bor_butt js-call-close">
+                  <button class="butt_border">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="window_popap no_float mini_window_popup callback_form" id="success-popup" style="display:none;">
+    <div class="close_popap call_close js-call-close"><img src="/static/i/close_white_45.png" alt="Закрыть"></div>
+    <div class="wrap_window_popap bg_wrapp_window">
+        <div class="popap_row">
+            <div class="popap_row_wrapp">
+                <h3 class="popup_title" style="margin-bottom: 10px;">Товар добавлен в корзину!</h3>
+                <p class="call_introtext popup_text">
+                  Товаров в корзине: <span class="js-cart-count">{{ cart.count }}</span><br/>
+                  Общая сумма: <span class="js-cart-summary">{{ cart.summary }}</span> р.<br/>
+                </p>
+                <div class="red_bor_butt">
+                  <div class="bt_req_call">
+                    <a href="/cart/" class="butt_border">Перейти к корзине</a>
+                  </div>
+                  {# <span class="js-call-close usual_link">Продолжить покупки</span> #}
+                  <a href="{% url 'women' %}" class="usual_link">Продолжить покупки</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

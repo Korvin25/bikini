@@ -341,6 +341,7 @@ class ProductView(TemplateView):
         wishlist = get_wishlist_from_request(self.request)
         wishlist_data = {
             'product_id': self.product.id,
+            'option_id': self.data['option'].get('id'),
             'price': self.data['prices']['option'],
             'attrs': {},
         }

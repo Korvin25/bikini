@@ -28,10 +28,12 @@ function showErrorPopup(title, text) {
 };
 
 
-function submitProductForm($form, $button, option_id, _attrs, _extra_products) {
-  var url = $form.attr('action'),
+function submitProductForm($form, $button, option_id, _attrs, _extra_products, data, count, prices) {
+  var data = data || {'prices': {}},
+      url = $form.attr('action'),
       product_id = parseInt($form.find('input[name="product_id"]').val()),
-      prices = data.prices,
+      count = count || data.prices.count,
+      prices = prices || data.prices,
       form_data;
 
   form_data = {
@@ -39,7 +41,7 @@ function submitProductForm($form, $button, option_id, _attrs, _extra_products) {
     'option_id': option_id,
     'attrs': _attrs,
     'extra_products': _extra_products,
-    'count': prices.count,
+    'count': count,
     'prices': prices,
   };
 
@@ -154,7 +156,7 @@ $('.js-cart-button').click(function(e){
   e.preventDefault();
 
   var $button = $(this),
-      $form = $button.parents('form'),
+      $form = $button.parents('.js-product-form'),
       option = data.option || {},
       _attrs = {},
       _extra_products = {},
@@ -172,7 +174,7 @@ $('.js-cart-button').click(function(e){
   errors = collected_data['errors'];
 
   if (errors.length) { showErrorPopup('Пожалуйста, выберите одно из значений:', errors.join('<br/>')); }
-  else { submitProductForm($form, $button, option['id'], _attrs, _extra_products); }
+  else { submitProductForm($form, $button, option['id'], _attrs, _extra_products, data); }
 })
 
 
@@ -302,8 +304,17 @@ function chooseOption(update_total_price, dont_update_wishlist_input) {
 
   if (!dont_update_wishlist_input) {
     collected_data = collectAttrs(option);
+
     _attrs = collected_data['_attrs'];
-    if (_attrs) { changeWishlistInputData(data['prices']['option'], _attrs); };
+    errors = collected_data['errors'];
+
+    if (_attrs && !errors.length) {
+      changeWishlistInputData(data['option']['id'], data['prices']['option'], _attrs);
+      var $wishlistInput = $('.js-wishlist-input');
+      if ($wishlistInput.length && $wishlistInput.is(':checked')) {
+        checkWishlistAndClick(false, true);
+      }
+    }
   };
 }
 

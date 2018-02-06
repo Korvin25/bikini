@@ -48,6 +48,8 @@
 
       {% block content %}{% endblock %}
 
+      {% include 'wishlist/popup.html' %}
+      {% include 'catalog/include/product_popups.html' %}
       {% block popups %}{% endblock %}
 
       {% block footer %}
@@ -97,6 +99,8 @@
 
       // ----- Forms, etc -------
       {% include 'js/global.js' %}
+      {% include 'js/product.js' %}
+      {% include 'js/wishlist.js' %}
     </script>
 
     {% block extra_js %}{% endblock %}

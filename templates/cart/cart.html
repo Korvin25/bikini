@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 {% load i18n catalog_tags core_tags %}
 
-{% block meta_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
-{% block meta_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
-{% block meta_keyw %}{{ seo_settings.global.get_meta_keyw }}{% endblock %}
+{% block meta_title %}{{ seo_settings.cart.get_meta_title }}{% endblock %}
+{% block meta_desc %}{{ seo_settings.cart.get_meta_desc }}{% endblock %}
+{% block meta_keyw %}{{ seo_settings.cart.get_meta_keyw }}{% endblock %}
 
-{% block og_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
-{% block og_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
+{% block og_title %}{{ seo_settings.cart.get_meta_title }}{% endblock %}
+{% block og_desc %}{{ seo_settings.cart.get_meta_desc }}{% endblock %}
 
-{% block twitter_title %}{{ seo_settings.global.get_meta_title }}{% endblock %}
-{% block twitter_desc %}{{ seo_settings.global.get_meta_desc }}{% endblock %}
+{% block twitter_title %}{{ seo_settings.cart.get_meta_title }}{% endblock %}
+{% block twitter_desc %}{{ seo_settings.cart.get_meta_desc }}{% endblock %}
 
 {% block content %}
   <style>
@@ -20,16 +20,16 @@
     <div class="main_content main_cut">
       
       <ul id="touch_breadcrumb" class="breadcrumb">
-        <li><a href="#">Главная</a></li>
-        <li><a href="#">Корзина</a></li>
+        <li><a href="{% url 'home' %}">Главная</a></li>
+        <li><span>Корзина</span></li>
       </ul>
     
       <div id="main_content" class="wrapp_content">
         <ul class="breadcrumb">
-          <li><a href="#">Главная</a></li>
-          <li><a href="#">Корзина</a></li>
+          <li><a href="{% url 'home' %}">Главная</a></li>
+          <li><span>Корзина</span></li>
         </ul>
-        <h1 class="title_block">Корзина</h1>
+        <h1 class="title_block">{{ seo_settings.cart.get_h1 }}</h1>
 
         <div class="rows_cut_block js-cart-parent" data-update-url="{% url 'cart_api:update' %}" data-step0-url="{% url 'cart_api:step0' %}" data-step2-url="{% url 'cart_api:step2' %}" data-step3-url="{% url 'cart_api:step3' %}">
 
