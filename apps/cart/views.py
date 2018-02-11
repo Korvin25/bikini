@@ -28,10 +28,15 @@ class CartView(TemplateView):
             'phone': '',
             'name': '',
             'email': '',
+            'payment_method_id': None,
+            'delivery_method_id': None,
         }
         profile = self.request.user
         if profile.is_authenticated():
             shipping_data.update(profile.shipping_data)
+        for k, v in shipping_data.items():
+            if getattr(self.cart.cart, k, None):
+                shipping_data[k] = getattr(self.cart.cart, k)
 
         context = {
             'cart_items': cart_items,
@@ -43,8 +48,8 @@ class CartView(TemplateView):
             'shipping_data': shipping_data,
             'special': SpecialOffer.get_offer(),
             'random_str': str(uuid.uuid4()).replace('-', ''),
-            'delivery_methods': DeliveryMethod.objects.all(),
-            'payment_methods': PaymentMethod.objects.all(),
+            'delivery_methods': DeliveryMethod.objects.filter(is_enabled=True),
+            'payment_methods': PaymentMethod.objects.filter(is_enabled=True),
         }
         context.update(super(CartView, self).get_context_data(**kwargs))
         return context
@@ -59,6 +64,7 @@ class CartView(TemplateView):
         if not cart_items.exists():
             cart.clear()
             cart_items = CartItem.objects.none()
+        self.cart = cart
         return cart_items
 
     def _color_stuff(self, cart_items):

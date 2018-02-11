@@ -32,7 +32,7 @@ class ProfileAdmin(UserAdmin):
         }),
         ('Данные для доставки', {
             'classes': ('suit-tab', 'suit-tab-default',),
-            'fields': ('country', 'city', 'address', 'phone',)
+            'fields': ('country', 'city', 'address', 'phone', 'delivery_method', 'payment_method',)
         }),
         ('Управление доступами', {
             'classes': ('suit-tab', 'suit-tab-default',),

@@ -155,7 +155,7 @@
                   {% for method in delivery_methods %}
                     <label for="delivery_method_{{ method.id }}" class="radio_input">
                       <div class="shell_cell_row">
-                        <div class="input_cell"><input type="radio" name="delivery_method_id" value="{{ method.id }}" id="delivery_method_{{ method.id }}" class="check_radio js-choose-cart-method"{% if basket.delivery_method_id == method.id %} checked="checked"{% endif %}/></div>
+                        <div class="input_cell"><input type="radio" name="delivery_method_id" value="{{ method.id }}" id="delivery_method_{{ method.id }}" class="check_radio js-choose-cart-method"{% if shipping_data.delivery_method_id == method.id or delivery_methods.count == 1 %} checked="checked"{% endif %}/></div>
                         <p class="dott_cell"><strong><span>{{ method.title }}</span></strong><span class="val_radio_row">Стоимость : {{ method.price|to_int_plus }} руб.</span></p>
                       </div>
                     </label>
@@ -171,7 +171,7 @@
                   {% for method in payment_methods %}
                     <label for="payment_method_{{ method.id }}" class="radio_input">
                       <div class="shell_cell_row">
-                        <div class="input_cell"><input type="radio" name="payment_method_id" value="{{ method.id }}" id="payment_method_{{ method.id }}" class="check_radio js-choose-cart-method"{% if basket.payment_method_id == method.id %} checked="checked"{% endif %}/></div>
+                        <div class="input_cell"><input type="radio" name="payment_method_id" value="{{ method.id }}" id="payment_method_{{ method.id }}" class="check_radio js-choose-cart-method"{% if shipping_data.payment_method_id == method.id or payment_methods.count == 1 %} checked="checked"{% endif %}/></div>
                         <p><strong class="no_dash"><span>{{ method.title }}</span></strong></p>
                       </div>
                     </label>
@@ -454,13 +454,15 @@
               </div>
             </div>
 
-            <div class="rows_popup_input" style="margin-bottom: 15px;{% if shipping_data.email %} display: none;"{% endif %}>
-              <label class="lbl_box">
-                <p class="popup_form_label">Ваш e-mail:</p>
-                <input type="email" style="margin-top: 5px;" value="{{ shipping_data.email }}" name="email" class="input_text" />
-              </label>
-            </div>
-            
+            {% if not shipping_data.email %}
+              <div class="rows_popup_input js-email-cart-input" style="margin-bottom: 15px; display: none;">
+                <label class="lbl_box">
+                  <p class="popup_form_label">Ваш e-mail:</p>
+                  <input type="email" style="margin-top: 5px;" value="{{ shipping_data.email }}" name="email" class="input_text" />
+                </label>
+              </div>
+            {% endif %}
+
             <div class="row_form_popup row_pop_butt">
               <button class="bt_red">Оформить заказ</button>
             </div>

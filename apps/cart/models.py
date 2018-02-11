@@ -23,6 +23,7 @@ class DeliveryMethod(models.Model):
     price_rub = models.DecimalField('Стоимость, руб.', max_digits=9, decimal_places=2, default=0)
     price_eur = models.DecimalField('Стоимость, eur.', max_digits=9, decimal_places=2, default=0)
     price_usd = models.DecimalField('Стоимость, usd.', max_digits=9, decimal_places=2, default=0)
+    is_enabled = models.BooleanField('Включен?', default=True)
     order = models.PositiveSmallIntegerField(default=0, blank=False, null=False, verbose_name=mark_safe('&nbsp;&nbsp;&nbsp;&nbsp;'))
 
     class Meta:
@@ -46,6 +47,7 @@ class PaymentMethod(models.Model):
     title = models.CharField('Название', max_length=511)
     short_title = models.CharField('Краткое название', max_length=63, blank=True, help_text='для вывода в личном кабинете')
     is_paypal = models.BooleanField('Оплата через PayPal', default=False)
+    is_enabled = models.BooleanField('Включен?', default=True)
     order = models.PositiveSmallIntegerField(default=0, blank=False, null=False, verbose_name=mark_safe('&nbsp;&nbsp;&nbsp;&nbsp;'))
 
     class Meta:

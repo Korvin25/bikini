@@ -59,9 +59,16 @@ class Step0View(CartStepBaseView):
     def post(self, request, *args, **kwargs):
         status = 200
 
+        kw = {}
+        print self.DATA
         if 'additional_info' in self.DATA:
-            kwargs = {'additional_info': self.DATA['additional_info']}
-            self.cart.update(**kwargs)
+            kw = {'additional_info': self.DATA['additional_info']}
+        if 'delivery_method_id' in self.DATA:
+            kw = {'delivery_method_id': self.DATA['delivery_method_id']}
+        if 'payment_method_id' in self.DATA:
+            kw = {'payment_method_id': self.DATA['payment_method_id']}
+        if len(kw):
+            self.cart.update(**kw)
 
         basket = self.cart.cart
         if not (basket.delivery_method or basket.payment_method):
@@ -104,6 +111,8 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
         'phone': 'phone',
         'name': 'name',
         'email': 'email',
+        'delivery_method_id': 'delivery_method_id',
+        'payment_method_id': 'payment_method_id',
     }
 
     def dispatch(self, request, *args, **kwargs):

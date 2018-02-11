@@ -9,6 +9,11 @@ def cart(request):
     basket = cart.cart
     # basket_data = cart.get_basket()
 
+    profile = request.user
+    if profile.is_authenticated() and not basket.profile_id:
+        basket.profile = profile
+        basket.save()
+
     return {
         'cart': cart,
         'basket': basket,

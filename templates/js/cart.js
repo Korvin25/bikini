@@ -132,6 +132,7 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
             $.each(shipping_data, function(slug, value){
               var $input = $('#step3').find('[name="'+slug+'"]');
               $input.val(value);
+              if (slug == 'email') { $('.js-email-cart-input').remove(); };
             });
           }
           {% include 'js/csrf.js' %}
@@ -238,9 +239,15 @@ $('.js-step0-button').click(function() {
       $cart_parent = $('.js-cart-parent'),
       url = $cart_parent.attr('data-step0-url'),
       additional_info = $('[name="additional_info"]').val() || '',
+      delivery_method_id = $('[name="delivery_method_id"]:checked').val() || 0,
+      payment_method_id = $('[name="payment_method_id"]:checked').val() || 0,
       form_data;
 
-  form_data = {'additional_info': additional_info};
+  form_data = {
+    'additional_info': additional_info,
+    'delivery_method_id': delivery_method_id,
+    'payment_method_id': payment_method_id,
+  };
   sendSomeForm(url, form_data, 'step0', $button);
 });
 

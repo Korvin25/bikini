@@ -11,7 +11,7 @@ class CartCheckoutForm(forms.ModelForm):
     """
     Оформление корзины
     """
-    email = forms.EmailField(label="E-mail", required=False)
+    email = forms.EmailField(label='E-mail', required=False)
 
     class Meta:
         model = Cart

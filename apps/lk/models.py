@@ -68,6 +68,9 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     phone = models.CharField('Телефон', max_length=30, null=True, blank=True)
     name = models.CharField('Полное имя', max_length=511, null=True, blank=True)
 
+    delivery_method = models.ForeignKey('cart.DeliveryMethod', verbose_name='Способ доставки', null=True, blank=True)
+    payment_method = models.ForeignKey('cart.PaymentMethod', verbose_name='Способ оплаты', null=True, blank=True)
+
     # --- соц.сети ---
     fb_id = models.CharField('Facebook ID', max_length=255, null=True, blank=True)
     fb_name = models.CharField('Facebook name', max_length=255, null=True, blank=True)
@@ -120,6 +123,8 @@ class Profile(AbstractBaseUser, PermissionsMixin):
             'phone': self.phone or '',
             'name': self.name or '',
             'email': self.email if self.has_email else '',
+            'payment_method_id': self.payment_method_id,
+            'delivery_method_id': self.delivery_method_id,
         }
         data = {k: v for k, v in data.iteritems() if v}
         return data

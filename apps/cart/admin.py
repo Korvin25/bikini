@@ -12,13 +12,13 @@ from .translation import *
 
 @admin.register(DeliveryMethod)
 class DeliveryMethodAdmin(SortableAdminMixin, TabbedTranslationAdmin):
-    list_display = ('title', 'short_title', 'price_rub', 'price_eur', 'price_usd',)
+    list_display = ('title', 'short_title', 'price_rub', 'price_eur', 'price_usd', 'is_enabled',)
     list_editable = ('short_title', 'price_rub', 'price_eur', 'price_usd',)
 
 
 @admin.register(PaymentMethod)
 class PaymentMethodAdmin(SortableAdminMixin, TabbedTranslationAdmin):
-    list_display = ('title', 'short_title', 'is_paypal',)
+    list_display = ('title', 'short_title', 'is_paypal', 'is_enabled',)
     list_editable = ('short_title',)
 
 
