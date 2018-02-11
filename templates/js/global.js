@@ -68,7 +68,7 @@ function addErrors($form, errors, without_errors, without_names) {
 }
 
 
-// ----- Отправка форм на бекенд -----
+// ----- Формы логина/регистрации на бекенд -----
 
 function sendHeaderAuthForm(url, form_data, $to_disable, $form) {
   if ($to_disable) { $to_disable.addClass('_disabled'); };
@@ -167,6 +167,88 @@ $('.js-auth-registration-form').on('submit', function(e) {
   else { 
     sendHeaderAuthForm(url, form_data, $forms, $form);
   }
+});
+
+
+// ----- Форма обратного звонка -----
+
+function sendCallbackForm(url, form_data, $to_disable, $form) {
+  if ($to_disable) { $to_disable.addClass('_disabled'); };
+  $(document.activeElement).blur();
+
+  $.ajax({
+    url: url,
+    type: 'POST',
+    data: JSON.stringify(form_data),
+    // processData: false,
+    dataType: 'json',
+    contentType: 'application/json',
+
+    success: function(res){
+      var errors = res['errors'],
+          result = res['result'],
+          next = res['next'],
+          success_message = res['success_message'];
+
+      if ($to_disable) { $to_disable.removeClass('_disabled'); };
+
+      if (result == 'ok') {
+        if (next) { window.location = next; }
+        else if (success_message) { $form.html('<p style="color: green;">'+success_message+'</p>'); }
+        else { window.location.reload(); }
+      }
+      else {
+        if (error) { showErrorPopup('При отправке формы произошла ошибка:', error); }
+        else if (errors) { 
+          addErrors($form, errors);
+        }
+        else { showErrorPopup('При отправке формы произошла ошибка:', res.status + ' ' + res.statusText); }
+      };
+    },
+    error: function(res){
+      if ($to_disable) { $to_disable.removeClass('_disabled'); };
+
+      if (res.status == 400) {
+        var response;
+        if (res.responseJSON == undefined) { response = JSON.parse(res.responseText); }
+
+        if (response != undefined) {
+          var click_to = response['click_to'],
+              popup = response['popup'],
+              error = response['error'],
+              errors = response['errors'],
+              alert_message = response['alert_message'];
+
+          if (error) { showErrorPopup('При отправке формы произошла ошибка:', error); }
+          else if (errors) { 
+            if ($form) { addErrors($form, errors); }
+            else { showErrorPopup('При отправке формы произошла ошибка:', errors); }
+          };
+          if (click_to) { $(click_to).click(); };
+          if (popup) { showPopup(popup); };
+          if (alert_message) { alert(alert_message); };
+        } else {
+          showErrorPopup('При отправке формы произошла ошибка:', res.status + ' ' + res.statusText);
+        };
+      } else {
+        if (res.status == 0) { alert('Произошла ошибка: 500 Internal Server Error') }
+        else { alert('Произошла ошибка: ' + res.status + ' ' + res.statusText); }
+      }
+    }
+  });
+}
+
+
+$('.js-callback-form').on('submit', function(e) {
+  e.preventDefault();
+
+  var $form = $(this),
+      url = $form.attr('action'),
+      form_data;
+
+  form_data = getFormData($form);
+  removeErrors($form);
+  sendCallbackForm(url, form_data, $form, $form);
 });
 
 

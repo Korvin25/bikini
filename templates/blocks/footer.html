@@ -48,15 +48,16 @@
                 <h2>Заказать звонок</h2>
                 <p class="call_introtext">Заполните форму, и мы вам перезвоним.</p>
                 <div class="row_form_popup">
-                    <form class="callBackForm">
-                        <label for="name_callBack">
+                    <form class="callBackForm js-callback-form" method="post" action="{% url 'forms:callback' %}">
+                        {% csrf_token %}
+                        <label for="callback_id_name">
                             <span>Ваше имя:</span>
-                            <input type="text" value="" id="name_callBack" class="input_text" />
+                            <input type="text" value="{{ profile.name|default_if_none:'' }}" name="name"  id="callback_id_name" class="input_text" />
                         </label>
                         
-                        <label for="phone_callBack">
+                        <label for="callback_id_phone">
                             <span>Телефон:</span>
-                            <input type="text" value="" id="phone_callBack" class="input_text" />
+                            <input type="text" value="{{ profile.phone|default_if_none:'' }}" name="phone"  id="callback_id_phone" class="input_text" />
                         </label>
                         <div class="bt_req_call red_bor_butt">
                             <button class="butt_border">Заказать звонок</button>
