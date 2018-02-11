@@ -193,6 +193,10 @@ class Cart(models.Model):
     show_items.allow_tags = True
     show_items.short_description = 'Список позиций'
 
+    @property
+    def cart_items(self):
+        return self.cartitem_set.select_related('product', 'option').all()
+
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart)
@@ -216,6 +220,13 @@ class CartItem(models.Model):
 
     def __unicode__(self):
         return '{} units of {}'.format(self.count, self.product.title)
+
+    @property
+    def title(self):
+        return self.option.title or self.product.__unicode__()
+
+    def get_vendor_code(self):
+        return self.option.vendor_code or self.product.vendor_code
 
     @classmethod
     def had_discounts(cls, cart_ids):

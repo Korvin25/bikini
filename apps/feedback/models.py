@@ -18,4 +18,4 @@ class CallbackOrder(models.Model):
         verbose_name_plural = 'заказы обратного звонка'
 
     def __unicode__(self):
-        return '{} / {} ({})'.format(self.name, self.email, unicode(self.creation_date))
+        return '{} / {} ({})'.format(self.name, self.phone, unicode(self.datetime))

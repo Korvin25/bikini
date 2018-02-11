@@ -56,11 +56,11 @@ class CartView(TemplateView):
 
     def _get_cart_items(self):
         cart = Cart(self.request)
-        cart_items = cart.cart.cartitem_set.all().select_related('product')
+        cart_items = cart.cart.cartitem_set.all().select_related('product', 'option')
         for item in cart_items:
             if item.count == 0:
                 item.delete()
-        cart_items = cart.cart.cartitem_set.all().select_related('product')
+        cart_items = cart.cart.cartitem_set.all().select_related('product', 'option')
         if not cart_items.exists():
             cart.clear()
             cart_items = CartItem.objects.none()

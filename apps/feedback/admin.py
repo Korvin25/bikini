@@ -12,8 +12,8 @@ class CallbackOrderAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'datetime',)
     list_per_page = 200
     fieldsets = (
-        (None, {
-            'fields': (('datetime', 'id',),)
+        ('Данные о заказе', {
+            'fields': ('datetime', 'id',)
         }),
         ('Данные из формы', {
             'fields': ('profile', 'name', 'phone',)

@@ -1,71 +1,162 @@
-{% load cart_tags core_tags %}
+{% load cart_tags core_tags wishlist_tags %}
+
+<style>
+  .settings_item li.last_color {
+    white-space: nowrap;
+    line-height: 30px;
+    position: relative;
+    margin-top: -4px;
+  }
+  .settings_item li.last_style {
+    white-space: nowrap;
+    line-height: 64px;
+    position: relative;
+    margin-top: -4px;
+  }
+  .settings_item li {
+    padding: 0;
+    margin: 0 0 11px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .last_color .td_color_box {
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+  }
+  .td_color_box {
+    display: inline-block;
+    border: none;
+    text-indent: -1000px;
+    overflow: hidden;
+    height: 25px;
+    width: 25px;
+    background-color: transparent;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+  }
+  .last_style .td_style_box {
+    width: 64px;
+    height: 64px;
+    vertical-align: middle;
+  }
+  .td_style_box {
+    display: inline-block;
+    border: none;
+    /*text-indent: -1000px;*/
+    overflow: hidden;
+    height: 60px;
+    width: 60px;
+    background-color: transparent;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+  }
+</style>
 
 <ol>
-    {% for item in cart.cartitem_set.all %}
-        {% if forloop.first %}<hr/>{% endif %}
+  {% for item in cart.cart_items %}
+    {% if forloop.first %}<hr/>{% endif %}
+    <br/>
+    <li>
+      <p>
+        <strong>{{ item.title }}{% if item.option.title %} ({{ item.product }}){% endif %}</strong>
+        {% if item.product.vendor_code %}
+          <p>Артикул: {{ item.get_vendor_code }}</p>
+        {% endif %}
+        <ul class="settings_item">
+          {% comment %}
+            {% for slug, option_id in item.attrs.items %}
+              {% get_attribute slug as attr %}
+              {% if attr %}
+                {% get_option attr option_id as option %}
+                {% if option %}
+                  <li>{{ attr.title }}: {{ option.title }}</li>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          {% endcomment %}
+          {% get_all_attrs_options item.attrs.items as attrs_options %}
+          {% for option in attrs_options.color %}
+            {% if option.picture %}
+              <li class="last_color"><span>{{ option.attribute.title }}: </span><div class="td_color_box" style="background: url('{{ option.picture_url }}'); border: 1px solid #ccc;" title="{{ option.title }}" alt="{{ option.title }}">{{ option.title }}</div></li>
+            {% else %}
+              <li class="last_color"><span>{{ option.attribute.title }}: </span><div class="td_color_box" style="background-color:{{ option.color }}; border: 1px solid #ccc;" title="{{ option.title }}" alt="{{ option.title }}">{{ option.title }}</div></li>
+            {% endif %}
+          {% endfor %}
+          {% for option in attrs_options.style %}
+            <li class="last_style"><span>{{ option.attribute.title }}: </span><img class="td_style_box" title="{{ option.title }}" alt="{{ option.title }}" src="{{ option.style_photo_url }}" /></li>
+          {% endfor %}
+          {% for option in attrs_options.size %}
+            <li><span>{{ option.attribute.title }}: </span><strong>{{ option.title }}</strong></li>
+          {% endfor %}
+        </ul>
+      </p>
+      <p>
+        Цена: {{ item.option_price|to_int_plus|with_delimeter }} р.
+        {% if item.discount %}
+          <br/>Скидка: {{ item.discount }} %
+          <br/>Цена за один товар: {{ item.option_price|with_discount:item.discount }} р.
+        {% endif %}
+      </p>
+
+      {% if item.extra_products %}
         <br/>
-        <li>
-            <p>
-                <strong>{{ item.product }}</strong>
-                <ul>
-                    {% for slug, option_id in item.attrs.items %}
+        <p>Дополнительные товары:</p>
+        <ul>
+          {% for extra_product_id, attrs in item.extra_products.items %}
+            {% get_extra_product extra_product_id as extra_p %}
+            {% if extra_p %}
+              <li>
+                <p>
+                  <strong>{{ extra_p.title }}</strong>
+                  {% if extra_p.vendor_code %}
+                    <p>Артикул: {{ extra_p.vendor_code }}</p>
+                  {% endif %}
+                  <ul class="settings_item">
+                    {% comment %}
+                      {% for slug, option_id in attrs.items %}
                         {% get_attribute slug as attr %}
                         {% if attr %}
-                            {% get_option attr option_id as option %}
-                            {% if option %}
-                                <li>{{ attr.title }}: {{ option.title }}</li>
-                            {% endif %}
+                          {% get_option attr option_id as option %}
+                          {% if option %}
+                            <li>{{ attr.title }}: {{ option.title }}</li>
+                          {% endif %}
                         {% endif %}
+                      {% endfor %}
+                    {% endcomment %}
+                    {% get_all_attrs_options attrs.items as attrs_options %}
+                    {% for option in attrs_options.color %}
+                      {% if option.picture %}
+                        <li class="last_color"><span>{{ option.attribute.title }}: </span><div class="td_color_box" style="background: url('{{ option.picture_url }}'); border: 1px solid #ccc;" title="{{ option.title }}">{{ option.title }}</div></li>
+                      {% else %}
+                        <li class="last_color"><span>{{ option.attribute.title }}: </span><div class="td_color_box" style="background-color:{{ option.color }}; border: 1px solid #ccc;" title="{{ option.title }}">{{ option.title }}</div></li>
+                      {% endif %}
                     {% endfor %}
-                </ul>
-            </p>
-            <p>
-                Цена: {{ item.option_price|to_int_plus|with_delimeter }} р.
-                {% if item.discount %}
-                    <br/>Скидка: {{ item.discount }} %
-                    <br/>Цена за один товар: {{ item.option_price|with_discount:item.discount }} р.
-                {% endif %}
-            </p>
-
-            {% if item.extra_products %}
-                <br/>
-                <p>Дополнительные товары:</p>
-                <ul>
-                    {% for extra_product_id, attrs in item.extra_products.items %}
-                        {% get_extra_product extra_product_id as extra_p %}
-                        {% if extra_p %}
-                            <li>
-                                <p>
-                                    <strong>{{ extra_p.title }}</strong>
-                                    <ul>
-                                        {% for slug, option_id in attrs.items %}
-                                            {% get_attribute slug as attr %}
-                                            {% if attr %}
-                                                {% get_option attr option_id as option %}
-                                                {% if option %}
-                                                    <li>{{ attr.title }}: {{ option.title }}</li>
-                                                {% endif %}
-                                            {% endif %}
-                                        {% endfor %}
-                                    </ul>
-                                </p>
-                            </li>
-                        {% endif %}
+                    {% for option in attrs_options.style %}
+                      <li class="last_style"><span>{{ option.attribute.title }}: </span><img class="td_style_box" title="{{ option.title }}" alt="{{ option.title }}" src="{{ option.style_photo_url }}" /></li>
                     {% endfor %}
-                </ul>
-                <p>Цена доп.товаров: {{ item.extra_price|to_int_plus|with_delimeter }} р.</p>
+                    {% for option in attrs_options.size %}
+                      <li><span>{{ option.attribute.title }}: </span><strong>{{ option.title }}</strong></li>
+                    {% endfor %}
+                  </ul>
+                </p>
+              </li>
             {% endif %}
+          {% endfor %}
+        </ul>
+        <p>Цена доп.товаров: {{ item.extra_price|to_int_plus|with_delimeter }} р.</p>
+      {% endif %}
 
-            <br/>
-            <p>Кол-во: <strong>{{ item.count }}</strong></p>
-            {% if item.wrapping_price %}<p>+ Подарочная упаковка: {{ item.wrapping_price|to_int_plus|with_delimeter }} р.</p>{% endif %}
-            <p>Стоимость: <strong>{{ item.price|to_int_plus|with_delimeter }} р.</strong></p>
-            <hr/>
-        </li>
-    {% endfor %}
+      <br/>
+      <p>Кол-во: <strong>{{ item.count }}</strong></p>
+      {% if item.wrapping_price %}<p>+ Подарочная упаковка: {{ item.wrapping_price|to_int_plus|with_delimeter }} р.</p>{% endif %}
+      <p>Стоимость: <strong>{{ item.price|to_int_plus|with_delimeter }} р.</strong></p>
+      <hr/>
+    </li>
+  {% endfor %}
 </ol>
 
 <p>
-    <br/>
-    Общая стоимость заказа с доставкой: <strong>{{ cart.show_summary }}</strong> р.
+  <br/>
+  Общая стоимость заказа с доставкой: <strong>{{ cart.show_summary }}</strong> р.
 </p>

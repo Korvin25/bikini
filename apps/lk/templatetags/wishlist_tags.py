@@ -5,6 +5,8 @@ import json
 
 from django import template
 
+from apps.catalog.models import AttributeOption
+
 
 register = template.Library()
 
@@ -36,14 +38,26 @@ def to_json(obj):
 
 
 @register.simple_tag(takes_context=True)
-def get_attrs_options(context, items):
+def get_attrs_options(context, items, all=False):
     options = {'size': [], 'color': []}
+    if all is True:
+        options['style'] = []
+
+    if not context.get('options'):
+        context['options'] = {o.id: o for o in AttributeOption.objects.select_related('attribute').all()}
+
     for slug, option_id in items:
         o = get_option(context, slug, option_id)
         if o:
             attr_type = o.attribute.attr_type
             if attr_type in options.keys():
                 options[attr_type].append(o)
+
     for k, v in options.items():
         options[k] = sorted(v, key=lambda x: x.id)
     return options
+
+
+@register.simple_tag(takes_context=True)
+def get_all_attrs_options(context, items):
+    return get_attrs_options(context, items, all=True)
