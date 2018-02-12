@@ -28,7 +28,7 @@
 // };
 
 
-function submitProductForm($form, $button, option_id, _attrs, _extra_products, data, count, prices) {
+function submitProductForm($form, $button, option_id, _attrs, _extra_products, data, count, prices, $wishlistInput) {
   var data = data || {'prices': {}},
       url = $form.attr('action'),
       product_id = parseInt($form.find('input[name="product_id"]').val()),
@@ -66,6 +66,9 @@ function submitProductForm($form, $button, option_id, _attrs, _extra_products, d
       if (result == 'ok') {
         if (cart_count) { $('.js-cart-count').text(cart_count); }
         if (cart_summary) { $('.js-cart-summary').text(cart_summary); }
+        if ($wishlistInput && wishlistInput.length && $wishlistInput.is(':checked')) {
+          $wishlistInput.click();
+        }
         $('.js-call-close').filter(':visible').click();
         setTimeout( function() {
           showPopup('#success-popup');

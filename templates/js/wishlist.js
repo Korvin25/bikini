@@ -29,6 +29,7 @@ function sendWishlistItemData($input, dontShowPopup) {
       price = parseFloat($input.attr('data-price') || 0.0),
       attrs = JSON.parse($input.attr('data-attrs') || {}),
       fromProductPage = $input.hasClass('js-from-product-page'),
+      fromCartPage = $input.hasClass('js-from-cart-page'),
       adding = false,
       url,
       form_data;
@@ -58,6 +59,14 @@ function sendWishlistItemData($input, dontShowPopup) {
       if (result == 'ok') {
         if (wishlist_count != undefined) { $('.js-wishlist-count').text(wishlist_count); }
         if (fromProductPage && adding && !dontShowPopup) { showWishlistPopup(); }
+        if (fromCartPage) {
+          var $item_div = $input.parents('.js-item-div'),
+              $item_count_input = $item_div.find('input[name="item-count"]'),
+              count = $input.attr('data-count') || 1;
+          if (adding) { $item_count_input.val(0); }
+          else { $item_count_input.val(count); }
+          $item_count_input.change();
+        }
       }
       else {
         if (error) { alert('При отправке формы произошла ошибка: ', error); }
@@ -89,7 +98,7 @@ function sendWishlistItemData($input, dontShowPopup) {
 }
 
 
-$('.js-wishlist-input').on('change', function(e) {
+$('body').on('change', '.js-wishlist-input', function(e){
   var $input = $(this);
   sendWishlistItemData($input);
 });
@@ -135,7 +144,7 @@ function checkWishlistAndClick(show_errors, just_change) {
 }
 
 
-$('.js-wishlist-button').click(function(e) {
+$('body').on('click', '.js-wishlist-button', function(e){
   e.preventDefault();
   checkWishlistAndClick(true, false);
 });
@@ -152,8 +161,9 @@ $('body').on('click', '.js-wishlist-cart-button', function(e){
       _attrs = JSON.parse($input.attr('data-attrs') || {}),
       _extra_products = {},
       count = 1,
-      prices = {'count': count, 'option': price}
+      prices = {'count': count, 'option': price},
+      $wishlistInput = $form.find('.js-wishlist-input'),
       data = null;
 
-  submitProductForm($form, $button, option_id, _attrs, _extra_products, data, count, prices);
+  submitProductForm($form, $button, option_id, _attrs, _extra_products, data, count, prices, $wishlistInput);
 });

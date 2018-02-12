@@ -122,7 +122,10 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
         if (cart_summary != undefined) { $('.js-cart-summary').text(cart_summary); }
         if (order_number != undefined) { $('.js-order-number').text(order_number); }
         if ($item_div && send_type == 'set') {
-          if (item_count != undefined) { $item_div.find('input[name="item-count"]').val(item_count); }
+          if (item_count != undefined) {
+            $item_div.find('input[name="item-count"]').val(item_count);
+            if (item_count > 0) { $item_div.find('.js-with-data-count').attr('data-count', item_count); }
+          }
           if (item_price != undefined) { $item_div.find('.item-summary-span').html(item_price); }
           if (item_base_price != undefined) { $item_div.find('.item-base-summary-span').html(item_base_price); }
         };

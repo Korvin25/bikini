@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n catalog_tags core_tags %}
+{% load i18n catalog_tags core_tags wishlist_tags %}
 
 {% block meta_title %}{{ seo_settings.cart.get_meta_title }}{% endblock %}
 {% block meta_desc %}{{ seo_settings.cart.get_meta_desc }}{% endblock %}
@@ -124,8 +124,14 @@
                 
                 <div class="table_cell td_put">
                   <a href="#" class="butt_put">
-                    <label for="put_{{ forloop.counter }}" class="td_label_check_win">
-                      <input type="checkbox" name="put" id="put_{{ forloop.counter }}" value="1" />
+                    <label for="put_item{{ forloop.counter }}" class="td_label_check_win">
+                      <input type="checkbox" name="put_item" id="put_item{{ forloop.counter }}" value="1"
+                             class="js-wishlist-input js-from-cart-page js-with-data-count"
+                             data-add-url="{% url 'wishlist:add' %}" data-remove-url="{% url 'wishlist:remove' %}"
+                             data-product-id="{{ item.product_id }}" data-option-id="{{ item.option_id }}"
+                             data-price="{{ item.base_price_without_discount }}"
+                             data-count="{{ item.count }}"
+                             data-attrs='{{ item.attrs|to_json|safe }}'/>
                       <div class="window_title">
                         <span class="no_check">Добавить товар в список желаемых покупок</span>
                         <span class="y_check">Товар в списке желаемых покупок</span>
@@ -248,12 +254,6 @@
       
     </div>
   </main>
-{% endblock %}
-
-{% block extra_js %}
-  <script type="text/javascript">
-    {% include 'js/cart.js' %}
-  </script>
 {% endblock %}
 
 {% block popups %}
@@ -571,4 +571,12 @@
     </div>
   </div>
 
+{% endblock %}
+
+{% block extra_js %}
+  <script type="text/javascript">
+    {% include 'js/product.js' %}
+    {% include 'js/wishlist.js' %}
+    {% include 'js/cart.js' %}
+  </script>
 {% endblock %}
