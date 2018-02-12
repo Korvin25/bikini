@@ -14,7 +14,7 @@ from tinymce.models import HTMLField
 
 from ..blog.models import Post
 from ..catalog.models import Product
-from ..settings.models import MetatagModel
+from ..settings.models import SEOSetting, MetatagModel
 
 
 class Video(MetatagModel):
@@ -30,6 +30,7 @@ class Video(MetatagModel):
     add_dt = models.DateTimeField('Дата добавления', auto_now_add=True)
     show_at_list = models.BooleanField('Показывать в списке на странице "видео"', default=True)
     order = models.IntegerField('Порядок', default=10)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['order', '-add_dt', ]
@@ -38,6 +39,13 @@ class Video(MetatagModel):
 
     def __unicode__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        """
+        For sitemap.xml lastmod purposes
+        """
+        SEOSetting.objects.get(key='video').save()
+        return super(Video, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('video', kwargs={'slug': self.slug, 'pk': self.pk})
@@ -70,6 +78,8 @@ class Page(MetatagModel):
     # text = RichTextField('Текст')
     # text = HTMLField('Текст')
     order = models.IntegerField('Порядок', default=10)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['order', 'title', ]

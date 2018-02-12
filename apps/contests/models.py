@@ -11,7 +11,7 @@ from easy_thumbnails.fields import ThumbnailerImageField
 
 from ..catalog.models import Product
 from ..lk.models import Profile
-from ..settings.models import Setting, MetatagModel
+from ..settings.models import Setting, SEOSetting, MetatagModel
 
 
 class Contest(MetatagModel):
@@ -35,6 +35,7 @@ class Contest(MetatagModel):
     add_dt = models.DateTimeField('Дата добавления', auto_now_add=True)
     published_dt = models.DateTimeField('Дата публикации', default=timezone.now)
     accepting_to = models.DateField('Конец приема заявок', null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['status', '-published_dt', ]
@@ -43,6 +44,13 @@ class Contest(MetatagModel):
 
     def __unicode__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        """
+        For sitemap.xml lastmod purposes
+        """
+        SEOSetting.objects.get(key='contests').save()
+        return super(Contest, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('contests:contest', kwargs={'slug': self.slug})
@@ -115,6 +123,7 @@ class Participant(MetatagModel):
 
     products = models.ManyToManyField(Product, verbose_name='Товары', blank=True, related_name='contests_participants')
     add_dt = models.DateTimeField('Дата добавления', auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['contest', '-likes_count', 'id', ]
@@ -127,6 +136,7 @@ class Participant(MetatagModel):
         return '{} ({}: {})'.format(self.name, participant_str, self.likes_count)
 
     def save(self, *args, **kwargs):
+        self.contest.save()
         likes_count = self.likes + self.additional_likes - self.decreased_likes
         if likes_count < 0:
             likes_count = 0

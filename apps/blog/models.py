@@ -13,12 +13,14 @@ from easy_thumbnails.files import get_thumbnailer
 from filer.fields.image import FilerImageField
 
 from ..lk.models import Profile
-from ..settings.models import Setting, MetatagModel
+from ..settings.models import Setting, SEOSetting, MetatagModel
 
 
 class Category(MetatagModel):
     title = models.CharField('Заголовок', max_length=255)
     slug = models.SlugField('Адрес в url', max_length=255, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['title', ]
@@ -27,6 +29,13 @@ class Category(MetatagModel):
 
     def __unicode__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        """
+        For sitemap.xml lastmod purposes
+        """
+        SEOSetting.objects.get(key='blog').save()
+        return super(Category, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('blog:category', kwargs={'slug': self.slug})
@@ -50,6 +59,8 @@ class Post(MetatagModel):
     description = models.TextField('Краткое описание')
     text = RichTextUploadingField('Текст')
     datetime = models.DateTimeField('Дата и время публикации', default=timezone.now)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['-datetime', ]
@@ -58,6 +69,13 @@ class Post(MetatagModel):
 
     def __unicode__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        """
+        For sitemap.xml lastmod purposes
+        """
+        self.category.save()
+        return super(Post, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('blog:post', kwargs={'year': self.datetime.strftime('%Y'),
@@ -124,3 +142,10 @@ class PostComment(models.Model):
 
     def __unicode__(self):
         return '{} к посту {} ({})'.format(self.name, self.post.title, self.datetime.strftime('%d.%m.%Y'))
+
+    def save(self, *args, **kwargs):
+        """
+        For sitemap.xml lastmod purposes
+        """
+        self.post.save()
+        return super(PostComment, self).save(*args, **kwargs)

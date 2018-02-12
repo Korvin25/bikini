@@ -17,7 +17,7 @@ from filer.fields.image import FilerImageField
 from sortedm2m.fields import SortedManyToManyField
 
 from ..core.utils import with_watermark
-from ..settings.models import Setting, MetatagModel
+from ..settings.models import Setting, SEOSetting, MetatagModel
 
 
 # === Атрибуты (справочники) ===
@@ -245,6 +245,8 @@ class Category(MetatagModel):
     order = models.IntegerField('Порядок', default=10)
     attributes = SortedManyToManyField(Attribute, verbose_name='Атрибуты', related_name='categories', blank=True,
                                        limit_choices_to={'category': 'primary'})
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = [('sex', 'slug')]
@@ -254,6 +256,17 @@ class Category(MetatagModel):
 
     def __unicode__(self):
         return '({}) {}'.format(self.show_sex(), self.title)
+
+    def save(self, *args, **kwargs):
+        """
+        For sitemap.xml lastmod purposes
+        """
+        seo_key = {
+            'female': 'women',
+            'male': 'men',
+        }.get(self.sex, '')
+        SEOSetting.objects.get(key=seo_key).save()
+        return super(Category, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         reverse_name = {
@@ -348,10 +361,21 @@ class Certificate(models.Model):
     def __unicode__(self):
         return self.title
 
+    def save(self, *args, **kwargs):
+        """
+        For sitemap.xml lastmod purposes
+        """
+        SEOSetting.objects.get(key='certificate').save()
+        return super(Certificate, self).save(*args, **kwargs)
+
     @property
     def price(self):
         # TODO
         return self.price_rub
+
+    @property
+    def cart_cover_thumb(self):
+        return '/static/certificate_131x86.png'
 
 
 class GiftWrapping(models.Model):
@@ -399,6 +423,7 @@ class Product(MetatagModel):
     show_at_homepage = models.BooleanField('Показывать на главной', default=False)
     order_at_homepage = models.IntegerField('Порядок на главной', default=10)
     add_dt = models.DateTimeField('Дата добавления', auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     attrs = JSONField(default=dict)
 
@@ -419,6 +444,14 @@ class Product(MetatagModel):
 
     def __unicode__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        """
+        For sitemap.xml lastmod purposes
+        """
+        for cat in self.categories.all():
+            cat.save()
+        return super(Product, self).save(*args, **kwargs)
 
     # def save(self, *args, **kwargs):
     #     init_attributes = (True if (not self.id and getattr(self, 'category', None))
@@ -445,7 +478,6 @@ class Product(MetatagModel):
             title_suffix = Setting.get_seo_title_suffix()
             title = '{} — {} — {}'.format(self.title, category.get_title(), title_suffix)
         return title
-
 
     # def set_attributes_from_category(self, category):
     #     self.attributes = category.attributes.all()

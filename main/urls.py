@@ -6,6 +6,7 @@ from django.conf.urls import include, url
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.sitemaps.views import sitemap as sitemap_view
 from django.views.generic import TemplateView
 
 # from solid_i18n.urls import solid_i18n_patterns
@@ -14,6 +15,7 @@ from apps.blog.views import PostListView, PostDetailView
 from apps.cart.views import CartView, CartGetDiscountView
 from apps.cart.certificate.views import CertificateView
 from apps.catalog.views import ProductsView, ProductView, ProductWithDiscountView
+from apps.content.sitemap import sitemaps
 from apps.content.views import HomepageView, VideoListView, VideoDetailView, PageView
 from apps.lk.views import ProfileHomeView, ProfileFormView
 from apps.views import PhotoUploadView
@@ -39,6 +41,9 @@ urlpatterns = [
     url(r'^admin/salmonella/', include('salmonella.urls')),
     url(r'^filer/', include('filer.urls')),
     url(r'^tinymce/', include('tinymce.urls')),
+
+    # seo
+    url(r'^sitemap\.xml$', sitemap_view, {'sitemaps': sitemaps}),
 ]
 
 

@@ -10,6 +10,8 @@ class Setting(models.Model):
     key = models.SlugField('Код', max_length=255, unique=True)
     value = models.TextField('Значение', null=True, blank=True)
     description = models.TextField('Описание')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['key', ]
@@ -31,6 +33,8 @@ class VisualSetting(models.Model):
     key = models.SlugField('Код', max_length=255, unique=True)
     value = RichTextUploadingField('Значение', null=True, blank=True)
     description = models.TextField('Описание')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['key', ]
@@ -65,6 +69,8 @@ class SEOSetting(models.Model):
         help_text='Оставьте пустым, чтобы использовать название страницы (выше)',
     )
     seo_text = RichTextUploadingField('SEO-текст', blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['key', ]

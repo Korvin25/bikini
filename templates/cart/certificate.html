@@ -42,7 +42,7 @@
                     <div class="sertificat_title">
                       Подарочный сертификат
                     </div>
-                    <div class="product_price upper_price">3000<abbr title="руб">руб.</abbr></div>
+                    {# <div class="product_price upper_price">{{ certificate.price|to_int_plus }}<abbr title="руб">руб.</abbr></div> #}
                   </div>
                 </div>
 
@@ -85,12 +85,12 @@
                     <div class="select_img"><!--.errr-->
                       <div class="selectboxss drop_list_text" id="sertificates_select">
                         <div class="selectboxssvalue">
-                          <span class="input_text_view">{{ certificates.0.price|to_int_plus }}р.</span>
+                          <span class="input_text_view">{{ certificate.price|to_int_plus }}р.</span>
                           <img src="/static/i/arrow_down_list.png" class="arrowselect" id="arrow_select" />
                         </div>
                         <ul class="selectboxssmenu">
-                          {% for certificate in certificates %}
-                            <li class="selectoption">{{ certificate.price|to_int_plus }}р.</li>
+                          {% for cert in certificates %}
+                            <li class="selectoption" data-price="{{ cert.price|to_int_plus }}">{{ cert.price|to_int_plus }}р.</li>
                           {% endfor %}
                         </ul>
                       </div>

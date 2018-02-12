@@ -219,7 +219,7 @@ class CartItem(models.Model):
         ordering = ('cart', '-id',)
 
     def __unicode__(self):
-        return '{} units of {}'.format(self.count, self.product.title)
+        return '{} units of {}'.format(self.count, self.title)
 
     @property
     def title(self):
@@ -266,21 +266,9 @@ class CartItem(models.Model):
         return to_int_plus(price)
 
 
-class CertificateOrder(models.Model):
-    STATUS_CHOICES = (
-        (0, 'новый'),
-        (1, 'принят'),
-        (2, 'отправлен'),
-        (3, 'исполнен'),
-        (4, 'отменен'),
-    )
-    profile = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Профиль', blank=True, null=True,
-                                related_name='certificate_orders')
-    certificate = models.ForeignKey(Certificate, verbose_name='Сертификат', related_name='orders')
-
-    creation_date = models.DateTimeField('Дата создания', auto_now_add=True)
-    checked_out = models.BooleanField('Корзина оформлена', default=False)
-    checkout_date = models.DateTimeField('Дата оформления', null=True, blank=True)
+class CertificateCartItem(models.Model):
+    cart = models.ForeignKey(Cart)
+    certificate = models.ForeignKey(Certificate, verbose_name='Сертификат', related_name='cart_items')
 
     recipient_name = models.CharField('Имя получателя', max_length=255)
     recipient_email = models.EmailField('Email получателя', blank=True)
@@ -292,66 +280,31 @@ class CertificateOrder(models.Model):
     send_immediately = models.BooleanField('Отправлять сразу?', default=True)
     send_date = models.DateField('Дата отправки', blank=True, null=True)
 
-    delivery_method = models.ForeignKey(DeliveryMethod, verbose_name='Способ доставки', null=True, blank=True)
-    payment_method = models.ForeignKey(PaymentMethod, verbose_name='Способ оплаты', null=True, blank=True)
-
-    status = models.PositiveSmallIntegerField('Статус', choices=STATUS_CHOICES, default=0)
-    summary = models.DecimalField('Сумма, руб.', max_digits=9, decimal_places=2, default=0)
+    price = models.DecimalField(max_digits=9, decimal_places=2, default=0)
 
     class Meta:
-        verbose_name = 'заказ сертификата'
-        verbose_name_plural = 'заказы сертификатов'
-        ordering = ('-creation_date',)
+        verbose_name = 'сертификат'
+        verbose_name_plural = 'сертификаты'
+        ordering = ('cart', '-id',)
 
     def __unicode__(self):
-        return unicode(self.creation_date)
-
-    def save(self, *args, **kwargs):
-        if not self.checked_out:
-            self.summary = self.get_summary()
-        return super(Cart, self).save(*args, **kwargs)
-
-    def get_summary(self):
-        return self.certificate.price
-
-    def show_profile(self):
-        return self.profile or ''
-    show_profile.allow_tags = True
-    show_profile.short_description = 'Клиент'
-
-    def show_delivery_method(self):
-        method = self.delivery_method
-        return method.get_short_title() if method else '-'
-    show_delivery_method.allow_tags = True
-    show_delivery_method.short_description = 'Способ доставки'
-
-    def show_payment_method(self):
-        method = self.payment_method
-        return method.get_short_title() if method else '-'
-    show_payment_method.allow_tags = True
-    show_payment_method.short_description = 'Способ оплаты'
-
-    def _show_value(self, value):
-        value = int(value) if int(value) == value else value
-        return '{0:,}'.format(value).replace(',', ' ')
-
-    def show_summary(self):
-        return self._show_value(self.summary)
-
-    def get_order_id(self):
-        return '{0:06}'.format(self.id)
+        return self.title
 
     @property
     def title(self):
-        return '№ {}'.format(self.number)
+        return self.certificate.__unicode__()
+
+    def get_vendor_code(self):
+        return self.certificate.vendor_code
+
+    def count_price(self):
+        return self.certificate.price
+
+    def save(self, *args, **kwargs):
+        self.price = self.count_price()
+        return super(CertificateCartItem, self).save(*args, **kwargs)
 
     @property
-    def number(self):
-        # TODO: покрасивше
-        if not self.id:
-            return '0'
-        if self.id > 1000:
-            return '{:,}'.format(self.id).rjust(7, '0').replace(',', ' ')
-        else:
-            _number = '{:03}'.format(self.id)
-            return '000 {}'.format(_number)
+    def price_int(self):
+        price = self.price
+        return to_int_plus(price)

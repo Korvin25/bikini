@@ -46,19 +46,19 @@ class Cart:
 
         if product_id and option_id:
             try:
-                item = Item.objects.get(
+                item = Item.objects.filter(
                     cart=self.cart,
                     product_id=product_id,
-                    option_id=option_id,
+                    # option_id=option_id,
                     discount=kwargs.get('discount', 0),
-                )
-            except Item.DoesNotExist:
-                item = Item(
-                    cart=self.cart,
-                    product_id=product_id,
-                    option_id=option_id,
-                    discount=kwargs.get('discount', 0),
-                )
+                ).first()
+                if not item:
+                    item = Item(
+                        cart=self.cart,
+                        product_id=product_id,
+                        option_id=option_id,
+                        discount=kwargs.get('discount', 0),
+                    )
             except ValueError:
                 pass
 
@@ -74,6 +74,8 @@ class Cart:
         if not item:
             return False
 
+        if option_id:
+            item.option_id = option_id
         item.count = count
         for k, v in kwargs.items():
             setattr(item, k, v)
