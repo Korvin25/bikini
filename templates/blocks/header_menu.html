@@ -38,7 +38,7 @@
   <div class="clr clr_mrgn"></div>
   <div class="list_top_menu_wrapp">
     <ul class="list_menu_lev1">
-      <li><a href="#">Подарочный сертификат</a></li>
+      <li><a href="{% url 'certificate' %}">Подарочный сертификат</a></li>
       <li><a href="{% url 'blog:home' %}"><img src="/static/i/logo_mini.png" alt="desinger" />desinger</a></li>
       <li><a href="{% url 'videos' %}">Видео</a></li>
       <li><a href="{% url 'wishlist:home' %}" class="js-show-wishlist-button">Список желаемых покупок&nbsp;&nbsp;<img src="/static/i/desir.png" alt="" />&nbsp;&nbsp;<span class="disc_number js-wishlist-count">{{ wishlist|length }}</span></a></li>

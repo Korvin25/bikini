@@ -48,6 +48,7 @@ INSTALLED_APPS = (
     'django.contrib.postgres',
 
     'adminsortable2',
+    'anymail',
     'ckeditor',
     'colorfield',
     'crequest',
@@ -174,9 +175,17 @@ MODELTRANSLATION_AUTO_POPULATE = True
 # MODELTRANSLATION_AUTO_POPULATE = 'required'
 
 
+ANYMAIL = {
+    'MANDRILL_API_KEY': '<your Mandrill key>',
+    'MANDRILL_SENDER_DOMAIN': 'mg.example.com',
+}
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DUMMY_EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 # EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
+MANDRILL_EMAIL_BACKEND = 'anymail.backends.mandrill.MandrillBackend'
+ADMIN_EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 
 EMAIL_HOST = 'smtp.qqq.com'
 EMAIL_PORT = 0

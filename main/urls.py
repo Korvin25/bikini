@@ -12,6 +12,7 @@ from django.views.generic import TemplateView
 
 from apps.blog.views import PostListView, PostDetailView
 from apps.cart.views import CartView, CartGetDiscountView
+from apps.cart.certificate.views import CertificateView
 from apps.catalog.views import ProductsView, ProductView, ProductWithDiscountView
 from apps.content.views import HomepageView, VideoListView, VideoDetailView, PageView
 from apps.lk.views import ProfileHomeView, ProfileFormView
@@ -25,6 +26,7 @@ urlpatterns = [
 
     # api
     url(r'^api/cart/', include('apps.cart.api.urls', namespace='cart_api')),
+    url(r'^api/certificate/', include('apps.cart.certificate.urls', namespace='certificate_api')),
     url(r'^api/auth/', include('apps.lk.auth.urls', namespace='auth')),
     url(r'^api/profile/edit/', ProfileFormView.as_view(), name='profile-edit'),
     url(r'^api/forms/', include('apps.feedback.urls', namespace='forms')),
@@ -64,6 +66,7 @@ urlpatterns += i18n_patterns(
 
     url(r'^cart/$', CartView.as_view(), name='cart'),
     url(r'^cart/get_discount/$', CartGetDiscountView.as_view(), name='cart_get_discount'),
+    url(r'^certificate/$', CertificateView.as_view(), name='certificate'),
     url(r'^profile/$', ProfileHomeView.as_view(), name='profile'),
 
     url(r'^women/$', ProductsView.as_view(with_category=False, sex='female'), name='women'),

@@ -5,7 +5,10 @@ from django.conf import settings
 from django.core.mail import EmailMessage, EmailMultiAlternatives, get_connection
 from django.template import Context
 from django.template.loader import get_template
+from django.utils import translation
+from django.utils.translation import ugettext as _
 
+from anymail.exceptions import AnymailError
 from crequest.middleware import CrequestMiddleware
 
 from ..settings.models import Setting
@@ -40,30 +43,37 @@ def email_admin(subject, email_key, obj=None, settings_key='feedback_email', **k
     text_content = template_text.render(context)
     html_content = template_html.render(context)
 
+    admin_backend = get_connection(settings.ADMIN_EMAIL_BACKEND)
     message = EmailMultiAlternatives(subject, text_content, from_email, to)
     message.attach_alternative(html_content, "text/html")
     msg = message.send()
-    # try:
-    #     msg = message.send()
-    # except AnymailError:
-    #     pass
 
 
-def admin_send_registration_email(obj):
+def admin_send_registration_email(obj, **kwargs):
+    """
+    TODO
+    """
     subject = 'Bikinimini.ru: Новая регистрация на сайте'
     email_key = 'new_registration'
     admin_slug = 'lk/profile'
-    email_admin(subject, email_key, obj, admin_slug=admin_slug)
+    email_admin(subject, email_key, obj, admin_slug=admin_slug, **kwargs)
 
 
-def admin_send_order_email(obj, *args):
+def admin_send_order_email(obj, **kwargs):
     """
     TODO
     """
     pass
 
 
-def email_user(subject, email_key, profile, obj=None, **kwargs):
+def admin_send_callback_order_email(obj, **kwargs):
+    subject = 'Bikinimini.ru: Заказ обратного завонка'
+    email_key = 'callback_order'
+    admin_slug = 'feedback/callbackorder'
+    email_admin(subject, email_key, obj, admin_slug=admin_slug, **kwargs)
+
+
+def email_user(subject, email_key, profile=None, obj=None, language_to=None, mandrill=False, dummy=False, **kwargs):
     request = CrequestMiddleware.get_request()
 
     from_email = settings.DEFAULT_FROM_EMAIL
@@ -78,31 +88,83 @@ def email_user(subject, email_key, profile, obj=None, **kwargs):
         if not site:
             site = DEFAULT_SITENAME
 
-    template_text = get_template('email/to_user/{0}.txt'.format(email_key))
-    template_html = get_template('email/to_user/{0}.html'.format(email_key))
+    curr_language = translation.get_language()
+    if language_to:
+        translation.activate(language_to)
+        subject = _(subject)
 
-    context = {'profile': profile, 'subject': subject, 'site': site, 'obj': obj}
-    context.update(kwargs)
-    text_content = template_text.render(context)
-    html_content = template_html.render(context)
+    if kwargs.get('APPEND_ORDER_NUMBER'):
+        subject = '{}: {}'.format(subject, kwargs.get('APPEND_ORDER_NUMBER'))
 
-    message = EmailMultiAlternatives(subject, text_content, from_email, to)
-    message.attach_alternative(html_content, "text/html")
-    msg = message.send()
+    msg = None
 
-    try:
-        return msg[0]
-    except TypeError:
-        return
+    if mandrill is False:
+        template_text = get_template('email/to_user/{}.txt'.format(email_key))
+        template_html = get_template('email/to_user/{}.html'.format(email_key))
+
+        context = {'profile': profile, 'subject': subject, 'site': site, 'obj': obj}
+        context.update(kwargs)
+        text_content = template_text.render(context)
+        html_content = template_html.render(context)
+
+        if dummy is True:
+            user_backend = get_connection(settings.DUMMY_EMAIL_BACKEND)
+        else:
+            user_backend = get_connection(settings.EMAIL_BACKEND)
+
+        message = EmailMultiAlternatives(subject, text_content, from_email, to)
+        message.attach_alternative(html_content, "text/html")
+        try:
+            msg = message.send()
+        except AnymailError:
+            pass
+
+        if language_to:
+            translation.activate(curr_language)
+
+        try:
+            return msg[0]
+        except TypeError:
+            return
+
+    else:
+        user_backend = get_connection(settings.MANDRILL_EMAIL_BACKEND)
+
+        message = EmailMessage(
+            subject=subject,
+            to=to,
+            from_email=from_email,
+            connection=user_backend,
+        )
+        message.template_id = kwargs.get('mandrill_template', None)
+        message.merge_global_data = kwargs.get('mandrill_merge_global_data', {})
+        try:
+            msg = message.send()
+        except AnymailError:
+            pass
+
+        if language_to:
+            translation.activate(curr_language)
+
+        try:
+            return msg[0]
+        except TypeError:
+            return
 
 
 def send_registration_email(profile):
+    """
+    TODO
+    """
     subject = 'Регистрация на сайте Bikinimini.ru'
     email_key = 'registration'
     email_user(subject, email_key, profile)
 
 
 def send_reset_password_email(profile, passwd):
+    """
+    TODO
+    """
     subject = 'Bikinimini.ru: Сброс пароля'
     email_key = 'reset_password'
     profile_kwargs = {'passwd': passwd}

@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.views.generic import CreateView
 
 from ..core.mixins import JSONFormMixin
-# from ..lk.email import admin_send_order_email, send_order_email
+from ..lk.email import admin_send_callback_order_email
 from .forms import CallbackOrderForm
 from .models import CallbackOrder
 
@@ -33,8 +33,7 @@ class CallbackOrderFormView(JSONFormMixin, CreateView):
             order.profile = profile
             order.save()
 
-        # send_admin_order_email(order=cart)
-        # send_customer_order_email(order.profile, order=cart)
+        admin_send_callback_order_email(order)
 
         success_message = 'Спасибо! Мы обязательно вам перезвоним.'
         data = {'result': 'ok', 'order_id': order.id, 'success_message': success_message}

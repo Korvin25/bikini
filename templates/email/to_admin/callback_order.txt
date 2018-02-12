@@ -1,0 +1,9 @@
+{{ subject }}
+
+Дата и время: {{ obj.datetime|date:"d.m.Y H:i:s" }}{% if obj.profile %}
+Профиль: {{ obj.profile }}{% endif %}
+
+Имя: {{ obj.name }}
+Телефон: {{ obj.phone }}
+
+Ссылка на заказ в админке: http://{{ site }}/admin/{{ admin_slug }}/{{ obj.id }}/

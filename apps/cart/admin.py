@@ -24,8 +24,8 @@ class PaymentMethodAdmin(SortableAdminMixin, TabbedTranslationAdmin):
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
-    list_display = ('id', 'profile', 'checked_out', 'is_order_with_discount', 'checkout_date', 'summary', 'country',
-                    'show_delivery_method', 'show_payment_method', 'status',)
+    list_display = ('id', 'profile', 'checked_out', 'is_order_with_discount', 'checkout_date', 'summary', 'count',
+                    'country', 'show_delivery_method', 'show_payment_method', 'status',)
     list_display_links = ('id', 'profile',)
     list_filter = ('status', 'delivery_method', 'payment_method',)
     list_per_page = 200
@@ -51,5 +51,5 @@ class CartAdmin(admin.ModelAdmin):
 
     def get_queryset(self, *args, **kwargs):
         qs = super(CartAdmin, self).get_queryset(*args, **kwargs)
-        qs = qs.filter(checked_out=True)
+        qs = qs.prefetch_related('cartitem_set').filter(checked_out=True)
         return qs

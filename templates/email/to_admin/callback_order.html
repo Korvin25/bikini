@@ -1,0 +1,17 @@
+<h3>{{ subject }}</h3>
+
+<p>
+    <strong>Дата и время:</strong> {{ obj.datetime|date:"d.m.Y H:i:s" }}<br/>
+    {% if obj.profile %}
+        <strong>Профиль:</strong> {{ obj.profile }}<br/>
+    {% endif %}
+</p>
+
+<p>
+    <strong>Имя:</strong> {{ obj.name }}<br/>
+    <strong>Телефон:</strong> {{ obj.phone }}<br/>
+</p>
+
+<p>
+    Ссылка на заказ в админке: <a href="http://{{ site }}/admin/{{ admin_slug }}/{{ obj.id }}/">http://{{ site }}/admin/{{ admin_slug }}/{{ obj.id }}/</a>
+</p>
