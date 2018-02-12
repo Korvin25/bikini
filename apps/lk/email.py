@@ -67,7 +67,7 @@ def admin_send_order_email(obj, **kwargs):
 
 
 def admin_send_callback_order_email(obj, **kwargs):
-    subject = 'Bikinimini.ru: Заказ обратного завонка'
+    subject = 'Bikinimini.ru: Заказ обратного звонка'
     email_key = 'callback_order'
     admin_slug = 'feedback/callbackorder'
     email_admin(subject, email_key, obj, admin_slug=admin_slug, **kwargs)
