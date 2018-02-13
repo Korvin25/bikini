@@ -25,8 +25,9 @@ class CheckCartMixin(object):
         for item in cart_items:
             if item.count == 0:
                 item.delete()
-        cart_items = cart.cart.cartitem_set.all().select_related('product')
-        if not cart_items:
+        cart_items = cart.cart.cartitem_set.all()
+        certificate_items = cart.cart.certificatecartitem_set.all()
+        if not (cart_items or certificate_items):
             raise EmptyCartError
 
 
@@ -145,23 +146,21 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
 
             profile = cart.profile
 
-            # send_admin_order_email(order=cart)
-            # send_customer_order_email(order.profile, order=cart)
-
-            # admin_send_order_email(order=cart)
-            # send_order_email(order.profile, order=cart)
-
             if self.request.session.get('CART_ID'):
                 del self.request.session['CART_ID']
 
             for k in self.mapping.keys():
                 key = {'country': 'country_id'}.get(k, k)
-                if not getattr(profile, key, None):
+                if not getattr(profile, key, None) or key in ['delivery_method_id', 'payment_method_id']:
                     setattr(profile, key, getattr(cart, key))
                 if not profile.has_email and form.cleaned_data.get('email'):
                     profile.email = form.cleaned_data['email']
                     profile.has_email = True
             profile.save()
+
+            admin_send_order_email(cart)
+            if profile and profile.has_email:
+                send_order_email(profile, cart)
 
             count = cart.count()
             summary = cart.show_summary()
