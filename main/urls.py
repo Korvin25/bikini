@@ -7,7 +7,7 @@ from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap as sitemap_view
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 
 # from solid_i18n.urls import solid_i18n_patterns
 
@@ -26,7 +26,9 @@ urlpatterns = [
     url(r'^ajax/upload/$', PhotoUploadView.as_view(), name='photo_upload'),
     url(r'^paypal/', include('paypal.standard.ipn.urls')),
 
-    url(r'^robots\.txt$', robots_txt),
+    url(r'^robots\.txt$', robots_txt, name='robots_txt'),
+    # url(r'^robots\.txt/$', RedirectView.as_view(pattern_name='robots_txt', permanent=True)),
+    url(r'^robots\.txt/$', RedirectView.as_view(pattern_name='robots_txt', permanent=False)),
 
     # api
     url(r'^api/cart/', include('apps.cart.api.urls', namespace='cart_api')),
