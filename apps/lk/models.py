@@ -102,7 +102,10 @@ class Profile(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = 'профили'
 
     def __unicode__(self):
-        return '{} ({})'.format(self.name, self.email) if self.name else self.email
+        return ('{} ({}, id #{})'.format(self.name, self.email, self.id) if self.name and self.has_email
+                else '{} (id #{})'.format(self.name, self.id) if self.name
+                else '{} (id #{})'.format(self.email, self.id) if self.has_email
+                else 'id #{}'.format(self.id))
 
     def get_short_name(self):
         return self.name or self.email

@@ -9,6 +9,7 @@ from django.template.loader import get_template
 from django.utils.safestring import mark_safe
 
 from ..catalog.models import Certificate, Product, ProductOption
+from ..catalog.templatetags.catalog_tags import get_product_attrs_url
 from ..geo.models import Country
 
 
@@ -233,6 +234,10 @@ class CartItem(models.Model):
 
     def get_vendor_code(self):
         return self.option.vendor_code or self.product.vendor_code
+
+    @property
+    def url(self):
+        return get_product_attrs_url(self.product, self.attrs, self.extra_products, self.wrapping_price, self.count)
 
     @classmethod
     def had_discounts(cls, cart_ids):

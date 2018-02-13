@@ -9,7 +9,7 @@ from django.views.generic import View, FormView, CreateView, RedirectView
 
 from apps.cart.cart import Cart
 from apps.core.mixins import JSONFormMixin
-from apps.lk.email import admin_send_registration_email, send_registration_email
+# from apps.lk.email import admin_send_registration_email, send_registration_email
 from apps.lk.models import Profile, WishListItem
 from apps.lk.utils import get_error_message
 from .forms import LoginForm, RegistrationForm

@@ -1,0 +1,36 @@
+{% load core_tags %}{{ subject }}
+
+Уважаемая(ый) {{ obj.name }}! Рады сообщить, что Ваш заказ № {{ obj.number }} от {{ obj.checkout_date|date:'d.m.Y' }} был оформлен.
+
+
+Данные для доставки
+-------------------
+Страна: {{ obj.country }}
+Город: {{ obj.city }}
+Адрес: {{ obj.address|safe }}
+Телефон: {{ obj.phone }}
+
+Способ доставки: {{ obj.delivery_method }}{% if obj.delivery_method.price %} ({{ obj.delivery_method.price|to_int_plus }} р.){% endif %}
+Способ оплаты: {{ obj.payment_method }}
+{% if obj.additional_info %}
+Дополнительная информация: {{ obj.additional_info|safe }}{% endif %}
+
+
+Содержимое заказа
+-----------------
+{% include 'email/include/order_items.txt' with obj=obj for_admin=False %}
+
+Итого к оплате: {{ obj.show_summary }} р.
+
+
+Для подтверждения заказа ожидайте звонка от нашего оператора.
+
+Мы будем рады ответить на Ваши вопросы
+по телефону: +7 (916) 445-65-55
+или по электронной почте: info@bikinimini.ru.  
+
+
+----
+
+С уважением, Ваша команда Bikinimini
+http://bikinimini.ru

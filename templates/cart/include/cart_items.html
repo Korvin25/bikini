@@ -167,10 +167,10 @@
         <ul class="settings_item">
           <li><span>Имя получателя: </span><strong>{{ item.recipient_name }}</strong></li>
           {% if item.recipient_email %}<li><span>Email получателя: </span><strong>{{ item.recipient_email }}</strong></li>{% endif %}
-          {% if item.recipient_email %}<li><span>Имя отправителя: </span><strong>{{ item.sender_name }}</strong></li>{% endif %}
+          {% if item.sender_name %}<li><span>Имя отправителя: </span><strong>{{ item.sender_name }}</strong></li>{% endif %}
           <li><span>Телефон отправителя: </span><strong>{{ item.sender_phone }}</strong></li>
           <li><span>Email отправителя: </span><strong>{{ item.sender_email }}</strong></li>
-          {% if item.recipient_email %}
+          {% if item.message %}
             <li><span>Сообщение получателю: </span><br/><strong>{{ item.message|linebreaksbr }}</strong></li>
           {% endif %}
           {% if item.send_immediately or item.send_date %}

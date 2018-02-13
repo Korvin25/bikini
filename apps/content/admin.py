@@ -4,11 +4,10 @@ from __future__ import unicode_literals
 from django.contrib import admin
 
 from embed_video.admin import AdminVideoMixin
-# from jet.admin import CompactInline
-from modeltranslation.admin import TranslationInlineModelAdmin, TabbedTranslationAdmin
-
 from filer.admin import FolderAdmin as _FolderAdmin
 from filer.models import Folder
+from modeltranslation.admin import TranslationInlineModelAdmin, TabbedTranslationAdmin
+from paypal.standard.ipn.models import PayPalIPN
 
 from .models import Video, Page, Menu, MenuItem
 from .translation import *
@@ -21,6 +20,7 @@ class FolderAdmin(_FolderAdmin):
     order_by_file_fields = ('-uploaded_at', 'original_filename', )
 
 
+admin.site.unregister(PayPalIPN)
 admin.site.unregister(Folder)
 admin.site.register(Folder, FolderAdmin)
 

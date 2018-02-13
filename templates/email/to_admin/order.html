@@ -1,0 +1,46 @@
+{% load core_tags %}
+<h3>{{ subject }}</h3>
+
+<p>
+    <strong>Дата оформления:</strong> {{ obj.checkout_date|date:"d.m.Y H:i:s" }}<br/>
+    {% if obj.profile %}
+        <strong>Профиль:</strong> {{ obj.profile }}<br/>
+    {% endif %}
+</p>
+
+<p>
+    <br/>
+    <strong>Данные для доставки</strong><br/>
+    -------------------<br/>
+    Страна: {{ obj.country }}<br/>
+    Город: {{ obj.city }}<br/>
+    Адрес: {{ obj.address }}<br/>
+    Телефон: {{ obj.phone }}<br/>
+    {% if obj.profile.has_email %}
+        Email:</strong> {{ obj.profile.email }}<br/>
+    {% endif %}
+    <br/>
+    Способ доставки: {{ obj.delivery_method }}{% if obj.delivery_method.price %} ({{ obj.delivery_method.price|to_int_plus }} р.){% endif %}<br/>
+    Способ оплаты: {{ obj.payment_method }}<br/>
+    {% if obj.additional_info %}
+        <br/>
+        Дополнительная информация: {{ obj.additional_info }}<br/>
+    {% endif %}
+</p>
+
+<p>
+    <br/>
+    <strong>Содержимое заказа</strong><br/>
+    -------------------<br/>
+    {% include 'email/include/order_items.html' with obj=obj for_admin=True %}
+</p>
+
+<p>
+    <br/><br/>
+    <strong>Итого к оплате: {{ obj.show_summary }} р.</strong><br/>
+</p>
+
+<p>
+    ----<br/>
+    Ссылка на заказ в админке: <a href="http://{{ site }}/admin/{{ admin_slug }}/{{ obj.id }}/">http://{{ site }}/admin/{{ admin_slug }}/{{ obj.id }}/</a><br/>
+</p>

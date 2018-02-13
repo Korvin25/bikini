@@ -49,21 +49,18 @@ def email_admin(subject, email_key, obj=None, settings_key='feedback_email', **k
     msg = message.send()
 
 
-def admin_send_registration_email(obj, **kwargs):
-    """
-    TODO
-    """
-    subject = 'Bikinimini.ru: Новая регистрация на сайте'
-    email_key = 'new_registration'
-    admin_slug = 'lk/profile'
-    email_admin(subject, email_key, obj, admin_slug=admin_slug, **kwargs)
+# def admin_send_registration_email(obj, **kwargs):
+#     subject = 'Bikinimini.ru: Новая регистрация на сайте'
+#     email_key = 'new_registration'
+#     admin_slug = 'lk/profile'
+#     email_admin(subject, email_key, obj, admin_slug=admin_slug, **kwargs)
 
 
 def admin_send_order_email(obj, **kwargs):
-    """
-    TODO
-    """
-    pass
+    subject = 'Bikinimini.ru: Заказ № {}'.format(obj.number)
+    email_key = 'order'
+    admin_slug = 'cart/cart'
+    email_admin(subject, email_key, obj, admin_slug=admin_slug, **kwargs)
 
 
 def admin_send_callback_order_email(obj, **kwargs):
@@ -152,27 +149,19 @@ def email_user(subject, email_key, profile=None, obj=None, language_to=None, man
             return
 
 
-def send_registration_email(profile):
-    """
-    TODO
-    """
-    subject = 'Регистрация на сайте Bikinimini.ru'
-    email_key = 'registration'
-    email_user(subject, email_key, profile)
+# def send_registration_email(profile):
+#     subject = 'Регистрация на сайте Bikinimini.ru'
+#     email_key = 'registration'
+#     email_user(subject, email_key, profile)
 
 
-def send_reset_password_email(profile, passwd):
-    """
-    TODO
-    """
-    subject = 'Bikinimini.ru: Сброс пароля'
-    email_key = 'reset_password'
-    profile_kwargs = {'passwd': passwd}
-    email_user(subject, email_key, profile, **profile_kwargs)
+# def send_reset_password_email(profile, passwd):
+#     subject = 'Bikinimini.ru: Сброс пароля'
+#     email_key = 'reset_password'
+#     email_user(subject, email_key, profile, passwd=passwd)
 
 
-def send_order_email(obj, *args):
-    """
-    TODO
-    """
-    pass
+def send_order_email(profile, obj, **kwargs):
+    subject = 'Ваш заказ на Bikinimini.ru: № {}'.format(obj.number)
+    email_key = 'order'
+    email_user(subject, email_key, profile, obj=obj, **kwargs)

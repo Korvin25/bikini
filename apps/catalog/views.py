@@ -422,30 +422,3 @@ class ProductWithDiscountView(ProductView):
 
         self.discount = special_offer.discount
         return super(ProductWithDiscountView, self).get(request, *args, **kwargs)
-
-    # def get_context_data(self, **kwargs):
-    #     context = super(ProductWithDiscountView, self).get_context_data(**kwargs)
-    #     data = 
-
-    #     product = self.get_product()
-    #     category = self.category
-    #     self.get_attributes()
-    #     self.get_data_json()
-    #     context = {
-    #         'product': product,
-    #         'category': category,
-    #         'sex': self.sex,
-    #         'attrs': self.attrs,
-    #         'attrs_dict': self.attrs_dict,
-    #         'attrs_ids': self.attrs_ids,
-    #         'extra_products': self.extra_products,
-    #         'photos': product.photos.all(),
-    #         'gift_wrapping_price': to_int_plus(GiftWrapping.get_price() or 0),
-    #         'have_option': self.have_option,
-    #         'price': self.price,
-    #         'count': self.count,
-    #         'maximum_in_stock': self.maximum_in_stock,
-    #         'data_json': self.data_json,
-    #     }
-    #     context.update(super(ProductView, self).get_context_data(**kwargs))
-    #     return context
