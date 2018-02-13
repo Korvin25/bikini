@@ -42,7 +42,7 @@
                     <div class="sertificat_title">
                       Подарочный сертификат
                     </div>
-                    {# <div class="product_price upper_price">{{ certificate.price|to_int_plus }}<abbr title="руб">руб.</abbr></div> #}
+                    <div class="product_price upper_price"><span class="js-certificte-price">{{ certificate.price|to_int_plus }}</span><abbr title="руб">руб.</abbr></div>
                   </div>
                 </div>
 
@@ -73,13 +73,15 @@
                           var $option = $(this),
                               $select = $option.closest("#sertificates_select"),
                               t = $option.closest("li.selectoption").text(),
-                              cert_id = $option.attr('data-id');
+                              cert_id = $option.attr('data-id'),
+                              price = $option.attr('data-price');
 
                           $select.height(selectDefaultHeight);
                           $select.find('#arrow_select').attr("style", "rotate(0deg);");
                           $select.find('.selectboxssvalue span.input_text_view').text(t);
 
                           $('input[name="certificate"]').val(cert_id);
+                          $('.js-certificte-price').text(price);
                         });
                       };
                     })( jQuery );
@@ -98,7 +100,7 @@
                         </div>
                         <ul class="selectboxssmenu">
                           {% for cert in certificates %}
-                            <li class="selectoption js-select-option" data-id="{{ cert.id }}">{{ cert.price|to_int_plus }}р.</li>
+                            <li class="selectoption js-select-option" data-id="{{ cert.id }}" data-price="{{ cert.price|to_int_plus }}">{{ cert.price|to_int_plus }}р.</li>
                           {% endfor %}
                         </ul>
                       </div>
