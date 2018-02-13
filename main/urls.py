@@ -16,7 +16,7 @@ from apps.cart.views import CartView, CartGetDiscountView
 from apps.cart.certificate.views import CertificateView
 from apps.catalog.views import ProductsView, ProductView, ProductWithDiscountView
 from apps.content.sitemap import sitemaps
-from apps.content.views import HomepageView, VideoListView, VideoDetailView, PageView
+from apps.content.views import HomepageView, VideoListView, VideoDetailView, PageView, robots_txt
 from apps.lk.views import ProfileHomeView, ProfileFormView
 from apps.views import PhotoUploadView
 
@@ -25,6 +25,8 @@ urlpatterns = [
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^ajax/upload/$', PhotoUploadView.as_view(), name='photo_upload'),
     url(r'^paypal/', include('paypal.standard.ipn.urls')),
+
+    url(r'^robots\.txt$', robots_txt),
 
     # api
     url(r'^api/cart/', include('apps.cart.api.urls', namespace='cart_api')),
@@ -48,27 +50,33 @@ urlpatterns = [
 
 
 urlpatterns += i18n_patterns(
-    # pages
+    # -- home --
     url(r'^$', HomepageView.as_view(), name='home'),
-    url(r'^pages/$', TemplateView.as_view(template_name='pages.html'), name='pages'),
 
-    url(r'^konkurs-itog/$', TemplateView.as_view(template_name='konkurs-itog.html'), name='konkurs-itog'),
-    url(r'^konkurs-model/$', TemplateView.as_view(template_name='konkurs-model.html'), name='konkurs-model'),
-    url(r'^konkurs1/$', TemplateView.as_view(template_name='konkurs1.html'), name='konkurs1'),
-    url(r'^my-cut-1/$', TemplateView.as_view(template_name='my-cut-1.html'), name='my-cut-1'),
-    url(r'^my-cut-2/$', TemplateView.as_view(template_name='my-cut-2.html'), name='my-cut-2'),
-    url(r'^my-cut-3/$', TemplateView.as_view(template_name='my-cut-3.html'), name='my-cut-3'),
-    url(r'^my-cut-4/$', TemplateView.as_view(template_name='my-cut-4.html'), name='my-cut-4'),
-    url(r'^my-cut-after/$', TemplateView.as_view(template_name='my-cut-after.html'), name='my-cut-after'),
-    url(r'^my-cut-spisok/$', TemplateView.as_view(template_name='my-cut-spisok.html'), name='my-cut-spisok'),
-    url(r'^my-cut/$', TemplateView.as_view(template_name='my-cut.html'), name='my-cut'),
-    url(r'^pd-and-history/$', TemplateView.as_view(template_name='pd-and-history.html'), name='pd-and-history'),
-    url(r'^podarochnyi-sertificat/$', TemplateView.as_view(template_name='podarochnyi-sertificat.html'), name='podarochnyi-sertificat'),
-    url(r'^spisok-pokupok/$', TemplateView.as_view(template_name='spisok-pokupok.html'), name='spisok-pokupok'),
+    # -- old --
+    # url(r'^pages/$', TemplateView.as_view(template_name='pages.html'), name='pages'),
 
-    url(r'^men-detail/$', TemplateView.as_view(template_name='catalog/men-detail.html'), name='men-detail'),
-    url(r'^women-detail/$', TemplateView.as_view(template_name='catalog/women-detail.html'), name='women-detail'),
+    # url(r'^konkurs-itog/$', TemplateView.as_view(template_name='konkurs-itog.html'), name='konkurs-itog'),
+    # url(r'^konkurs-model/$', TemplateView.as_view(template_name='konkurs-model.html'), name='konkurs-model'),
+    # url(r'^konkurs1/$', TemplateView.as_view(template_name='konkurs1.html'), name='konkurs1'),
+    # url(r'^my-cut-1/$', TemplateView.as_view(template_name='my-cut-1.html'), name='my-cut-1'),
+    # url(r'^my-cut-2/$', TemplateView.as_view(template_name='my-cut-2.html'), name='my-cut-2'),
+    # url(r'^my-cut-3/$', TemplateView.as_view(template_name='my-cut-3.html'), name='my-cut-3'),
+    # url(r'^my-cut-4/$', TemplateView.as_view(template_name='my-cut-4.html'), name='my-cut-4'),
+    # url(r'^my-cut-after/$', TemplateView.as_view(template_name='my-cut-after.html'), name='my-cut-after'),
+    # url(r'^my-cut-spisok/$', TemplateView.as_view(template_name='my-cut-spisok.html'), name='my-cut-spisok'),
+    # url(r'^my-cut/$', TemplateView.as_view(template_name='my-cut.html'), name='my-cut'),
+    # url(r'^pd-and-history/$', TemplateView.as_view(template_name='pd-and-history.html'), name='pd-and-history'),
+    # url(r'^podarochnyi-sertificat/$', TemplateView.as_view(template_name='podarochnyi-sertificat.html'), name='podarochnyi-sertificat'),
+    # url(r'^spisok-pokupok/$', TemplateView.as_view(template_name='spisok-pokupok.html'), name='spisok-pokupok'),
 
+    # url(r'^men-detail/$', TemplateView.as_view(template_name='catalog/men-detail.html'), name='men-detail'),
+    # url(r'^women-detail/$', TemplateView.as_view(template_name='catalog/women-detail.html'), name='women-detail'),
+
+    # url(r'^blog-old/$', TemplateView.as_view(template_name='blog.html'), name='blog-old'),
+    # url(r'^blog-page/$', TemplateView.as_view(template_name='blog-page.html'), name='blog-page'),
+
+    # -- new --
     url(r'^cart/$', CartView.as_view(), name='cart'),
     url(r'^cart/get_discount/$', CartGetDiscountView.as_view(), name='cart_get_discount'),
     url(r'^certificate/$', CertificateView.as_view(), name='certificate'),
@@ -91,9 +99,6 @@ urlpatterns += i18n_patterns(
     url(r'^blog/', include('apps.blog.urls', namespace='blog')),
     url(r'^contests/', include('apps.contests.urls', namespace='contests')),
     url(r'^wishlist/', include('apps.lk.wishlist.urls', namespace='wishlist')),
-
-    url(r'^blog-old/$', TemplateView.as_view(template_name='blog.html'), name='blog-old'),
-    url(r'^blog-page/$', TemplateView.as_view(template_name='blog-page.html'), name='blog-page'),
 
     url(r'^(?P<slug>[^/]+)/$', PageView.as_view(), name='page'),
     prefix_default_language=False,

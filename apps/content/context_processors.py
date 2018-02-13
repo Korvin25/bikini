@@ -17,6 +17,7 @@ def content(request):
     liked_participants = request.session.get('liked_participants', [])
     profile = request.user
     wishlist = get_wishlist_from_request(request)
+    DEBUG = settings.DEBUG
 
     content = {
         'menu': menu,
@@ -27,5 +28,6 @@ def content(request):
         'liked_participants': liked_participants,
         'profile': profile,
         'wishlist': wishlist,
+        'DEBUG': DEBUG,
     }
     return content

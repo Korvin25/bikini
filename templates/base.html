@@ -59,6 +59,11 @@
 
     {% csrf_token %}
 
+    {% if not DEBUG %}
+      {% if settings.ym_code %}{{ settings.ym_code|safe }}{% endif %}
+      {% if settings.ga_code %}{{ settings.ga_code|safe }}{% endif %}
+    {% endif %}
+
     <script type="text/javascript">
       $(document).ready(function(){
         var touch_top = $('#touch-menu-top');
