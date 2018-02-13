@@ -95,7 +95,7 @@
         Цена: {{ item.option_price|to_int_plus|with_delimeter }} р.
         {% if item.discount %}
           <br/>Скидка: {{ item.discount }} %
-          <br/>Цена за один товар: {{ item.option_price|with_discount:item.discount }} р.
+          <br/>Цена за один товар: {{ item.option_price|with_discount:item.discount|with_delimeter }} р.
         {% endif %}
       </p>
 
@@ -145,11 +145,43 @@
           {% endfor %}
         </ul>
         <p>Цена доп.товаров: {{ item.extra_price|to_int_plus|with_delimeter }} р.</p>
+        <br/>
       {% endif %}
 
-      <br/>
       <p>Кол-во: <strong>{{ item.count }}</strong></p>
       {% if item.wrapping_price %}<p>+ Подарочная упаковка: {{ item.wrapping_price|to_int_plus|with_delimeter }} р.</p>{% endif %}
+      <p>Стоимость: <strong>{{ item.price|to_int_plus|with_delimeter }} р.</strong></p>
+      <hr/>
+    </li>
+  {% endfor %}
+
+  {% for item in cart.certificate_items %}
+    {% if forloop.first and not cart.cart_items.count %}<hr/>{% endif %}
+    <br/>
+    <li>
+      <p>
+        <strong>{{ item.title }}</strong>
+        {% if item.certificate.vendor_code %}
+          <p>Артикул: {{ item.get_vendor_code }}</p>
+        {% endif %}
+        <ul class="settings_item">
+          <li><span>Имя получателя: </span><strong>{{ item.recipient_name }}</strong></li>
+          {% if item.recipient_email %}<li><span>Email получателя: </span><strong>{{ item.recipient_email }}</strong></li>{% endif %}
+          {% if item.recipient_email %}<li><span>Имя отправителя: </span><strong>{{ item.sender_name }}</strong></li>{% endif %}
+          <li><span>Телефон отправителя: </span><strong>{{ item.sender_phone }}</strong></li>
+          <li><span>Email отправителя: </span><strong>{{ item.sender_email }}</strong></li>
+          {% if item.recipient_email %}
+            <li><span>Сообщение получателю: </span><br/><strong>{{ item.message|linebreaksbr }}</strong></li>
+          {% endif %}
+          {% if item.send_immediately or item.send_date %}
+            <li><span>Когда отправлять: </span><strong>{% if item.send_immediately %}сразу{% else %}{{ item.send_date|date:'d.m.Y' }}{% endif %}</strong></li>
+          {% endif %}
+        </ul>
+      </p>
+      <p>
+        Цена: {{ item.price|to_int_plus|with_delimeter }} р.
+      </p>
+      {# <p>Кол-во: <strong>{{ item.count }}</strong></p> #}
       <p>Стоимость: <strong>{{ item.price|to_int_plus|with_delimeter }} р.</strong></p>
       <hr/>
     </li>

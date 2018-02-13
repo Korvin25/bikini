@@ -120,7 +120,7 @@ class Cart(models.Model):
 
     def count(self):
         count_list = self.cartitem_set.all().values_list('count', flat=True)
-        result = sum(count_list)
+        result = sum(count_list) + self.certificatecartitem_set.count()
         return result
     count.allow_tags = True
     count.short_description = 'Количество товара'
@@ -128,6 +128,8 @@ class Cart(models.Model):
     def get_summary(self):
         price_list = self.cartitem_set.all().values_list('price', flat=True)
         result = sum(price_list)
+        certificate_price_list = self.certificatecartitem_set.all().values_list('price', flat=True)
+        result += sum(certificate_price_list)
         delivery_method = self.delivery_method
         if delivery_method:
             result = result + delivery_method.price
@@ -196,6 +198,10 @@ class Cart(models.Model):
     @property
     def cart_items(self):
         return self.cartitem_set.select_related('product', 'option').all()
+
+    @property
+    def certificate_items(self):
+        return self.certificatecartitem_set.select_related('certificate').all()
 
 
 class CartItem(models.Model):
@@ -291,8 +297,16 @@ class CertificateCartItem(models.Model):
         return self.title
 
     @property
+    def url(self):
+        return '{}?_certificate={}'.format(reverse('certificate'), self.certificate_id)
+
+    @property
     def title(self):
         return self.certificate.__unicode__()
+
+    @property
+    def count(self):
+        return 1
 
     def get_vendor_code(self):
         return self.certificate.vendor_code

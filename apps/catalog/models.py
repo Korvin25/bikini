@@ -375,7 +375,7 @@ class Certificate(models.Model):
 
     @property
     def cart_cover_thumb(self):
-        return '/static/certificate_131x86.png'
+        return '/static/images/certificate/certificate_131x86.png'
 
 
 class GiftWrapping(models.Model):

@@ -11,15 +11,22 @@ from ..catalog.models import Attribute, GiftWrapping, SpecialOffer
 from ..core.templatetags.core_tags import to_int_plus
 from ..geo.models import Country
 from .cart import Cart
-from .models import DeliveryMethod, PaymentMethod, CartItem
+from .models import DeliveryMethod, PaymentMethod, CartItem, CertificateCartItem
 
 
 class CartView(TemplateView):
     template_name = 'cart/cart.html'
 
     def get_context_data(self, **kwargs):
+        self.cart = Cart(self.request)
         cart_items = self._get_cart_items()
+        certificate_items = self._get_certificate_items()
         self._color_stuff(cart_items)
+
+        if not (cart_items.exists() or certificate_items.exists()):
+            self.cart.clear()
+            cart_items = CartItem.objects.none()
+            certificate_items = CertificateCartItem.objects.none()
 
         shipping_data = {
             'country': 132,  # Россия
@@ -40,6 +47,7 @@ class CartView(TemplateView):
 
         context = {
             'cart_items': cart_items,
+            'certificate_items': certificate_items,
             'with_color': self.with_color,
             'color_attribute': self.color_attribute,
             'with_gift_wrapping': True,
@@ -55,17 +63,18 @@ class CartView(TemplateView):
         return context
 
     def _get_cart_items(self):
-        cart = Cart(self.request)
+        cart = self.cart
         cart_items = cart.cart.cartitem_set.all().select_related('product', 'option')
         for item in cart_items:
             if item.count == 0:
                 item.delete()
         cart_items = cart.cart.cartitem_set.all().select_related('product', 'option')
-        if not cart_items.exists():
-            cart.clear()
-            cart_items = CartItem.objects.none()
-        self.cart = cart
         return cart_items
+
+    def _get_certificate_items(self):
+        cart = self.cart
+        certificate_items = cart.cart.certificatecartitem_set.all().select_related('certificate')
+        return certificate_items
 
     def _color_stuff(self, cart_items):
         with_color = False

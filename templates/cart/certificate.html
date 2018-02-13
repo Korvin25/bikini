@@ -52,7 +52,7 @@
               </div>
               
               <div class="table_cell row_cell sell_sert_form">
-                <form action="">
+                <form class="js-certificate-form" action="{% url 'certificate_api:set' %}" method="post">
                   <script>
                     (function( $ ) {
                       $.fn.selectbox2 = function() {
@@ -69,17 +69,25 @@
                           }
                         });
                         $('li.selectoption').click(function() {
-                          $(this).closest("#sertificates_select").height(selectDefaultHeight);
-                          $(this).closest("#sertificates_select").find('#arrow_select').attr("style", "rotate(0deg);");
-                          
-                          var t = $(this).closest("li.selectoption").text();
-                          $(this).closest("#sertificates_select").find('.selectboxssvalue span.input_text_view').text(t);
+                          // custom
+                          var $option = $(this),
+                              $select = $option.closest("#sertificates_select"),
+                              t = $option.closest("li.selectoption").text(),
+                              cert_id = $option.attr('data-id');
+
+                          $select.height(selectDefaultHeight);
+                          $select.find('#arrow_select').attr("style", "rotate(0deg);");
+                          $select.find('.selectboxssvalue span.input_text_view').text(t);
+
+                          $('input[name="certificate"]').val(cert_id);
                         });
                       };
                     })( jQuery );
                   </script>
                   <script> $(document).ready(function(){ $('#sertificates_select').selectbox2(); }); </script>
-                  
+
+                  <input type="hidden" name="certificate" value="{{ certificate.id }}" />
+
                   <div class="title_normal">Выберите номинал:<span class="orange_text">*</span></div>
                   <div class="input_shell select_shel">
                     <div class="select_img"><!--.errr-->
@@ -90,7 +98,7 @@
                         </div>
                         <ul class="selectboxssmenu">
                           {% for cert in certificates %}
-                            <li class="selectoption" data-price="{{ cert.price|to_int_plus }}">{{ cert.price|to_int_plus }}р.</li>
+                            <li class="selectoption js-select-option" data-id="{{ cert.id }}">{{ cert.price|to_int_plus }}р.</li>
                           {% endfor %}
                         </ul>
                       </div>
@@ -100,36 +108,42 @@
                   
                   <div class="title_normal">Имя получателя:<span class="orange_text">*</span></div>
                   <div class="input_shell">
-                    <input type="text" value="" name="name" class="input_text " placeholder="" />
+                    <input type="text" value="" name="recipient_name" class="input_text" required placeholder="" />
                     <span class="err_r">Заполните поле</span>
                   </div>
                   
                   <div class="title_normal">E-mail получателя:</div>
                   <div class="input_shell">
-                    <input type="text" value="" name="mail" class="input_text" placeholder="" />
+                    <input type="email" value="" name="recipient_email" class="input_text" placeholder="" />
+                    <span class="err_r">Заполните поле</span>
+                  </div>
+                  
+                  <div class="title_normal">Имя отправителя:</div>
+                  <div class="input_shell">
+                    <input type="text" value="" name="sender_name" class="input_text" placeholder="" />
                     <span class="err_r">Заполните поле</span>
                   </div>
                   
                   <div class="title_normal">Телефон отправителя:<span class="orange_text">*</span></div>
                   <div class="input_shell">
-                    <input type="text" value="" name="phone" class="input_text" placeholder="" />
+                    <input type="text" value="" name="sender_phone" class="input_text" required placeholder="" />
                     <span class="err_r">Заполните поле</span>
                   </div>
                   
                   <div class="title_normal">E-mail отправителя:<span class="orange_text">*</span></div>
                   <div class="input_shell">
-                    <input type="text" value="" name="mail_to" class="input_text" placeholder="" />
+                    <input type="text" value="" name="sender_email" class="input_text" required placeholder="" />
                     <span class="err_r">Заполните поле</span>
                   </div>
                   
                   <div class="title_normal">Сообщение получателю:</div>
                   <div class="input_shell">
-                    <textarea name="text" rows="4" id="text" class="t_area input_text bg_area"></textarea>
+                    <textarea name="message" rows="4" id="text" class="t_area input_text bg_area"></textarea>
                     <span class="err_r">Заполните поле</span>
                   </div>
                   
                   <div class="title_normal">Когда отправлять:<span class="orange_text">*</span></div>
-                  <div class="input_shell radio_float"><!-- класс ошибки .errr вставлять сюда -->
+                  <div class="input_shell radio_float">
                     <label for="radio_id_1" class="radio_input">
                       <div class="input_cell">
                         <input type="radio" name="date" value="today" id="radio_id_1" class="check_radio" checked />
@@ -139,17 +153,22 @@
                     
                     <label for="radio_id_2" class="radio_input">
                       <div class="input_cell">
-                        <input type="radio" name="date" value="add_date" id="radio_id_2" class="check_radio" />
+                        <input type="radio" name="date" value="on_date" id="radio_id_2" class="check_radio" />
                       </div>
                       <p class="dott_cell"><span>Выбрать дату</span></p>
                     </label>
-                    
-                    
-                    <span class="err_r">Заполните поле</span>
                   </div>
                   
+                  <div class="js-send-date-div" style="display: none;">
+                    <div class="title_normal">Дата отправки:<span class="orange_text">*</span></div>
+                    <div class="input_shell">
+                      <input type="text" value="{% now 'd.m.Y' %}" name="send_date" class="input_text" placeholder="" />
+                      <span class="err_r">Заполните поле</span>
+                    </div>
+                  </div>
+
                   <div class="row_form_popup row_pop_butt">
-                    <button class="bt_red">Купить</button>
+                    <button class="bt_red js-certificate-button" type="submit">Купить</button>
                   </div>
                 </form>
               </div>
@@ -159,4 +178,10 @@
       
     </div>
   </main>
+{% endblock %}
+
+{% block extra_js %}
+  <script type="text/javascript">
+    {% include 'js/certificate.js' %}
+  </script>
 {% endblock %}

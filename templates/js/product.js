@@ -58,7 +58,8 @@ function submitProductForm($form, $button, option_id, _attrs, _extra_products, d
     success: function(res){
       $button.removeClass('_disabled');
 
-      var err = res['errors'],
+      var error = res['error'],
+          errors = res['errors'],
           result = res['result'],
           cart_count = res['count'],
           cart_summary = res['summary'];
@@ -66,7 +67,7 @@ function submitProductForm($form, $button, option_id, _attrs, _extra_products, d
       if (result == 'ok') {
         if (cart_count) { $('.js-cart-count').text(cart_count); }
         if (cart_summary) { $('.js-cart-summary').text(cart_summary); }
-        if ($wishlistInput && wishlistInput.length && $wishlistInput.is(':checked')) {
+        if ($wishlistInput && $wishlistInput.length && $wishlistInput.is(':checked')) {
           $wishlistInput.click();
         }
         $('.js-call-close').filter(':visible').click();

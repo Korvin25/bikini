@@ -97,6 +97,44 @@ class Cart:
             # raise ItemDoesNotExist
             pass
 
+    def set_certificate(self, certificate_id, **kwargs):
+        Item = models.CertificateCartItem
+        item = None
+
+        try:
+            item = Item.objects.get(
+                cart=self.cart,
+                certificate_id=certificate_id,
+            )
+        except Item.DoesNotExist:
+            item = Item(
+                cart=self.cart,
+                certificate_id=certificate_id,
+                **kwargs
+            )
+
+        if not item:
+            return False
+
+        for k, v in kwargs.items():
+            setattr(item, k, v)
+        item.save()
+        self.cart.save()
+        return item
+
+    def remove_certificate(self, item_id):
+        Item = models.CertificateCartItem
+        try:
+            item = Item.objects.get(
+                cart=self.cart,
+                id=item_id,
+            )
+            item.delete()
+            self.cart.save()
+
+        except Item.DoesNotExist:
+            pass
+
     def count(self):
         return self.cart.count()
 
@@ -109,5 +147,7 @@ class Cart:
 
     def clear(self):
         for item in self.cart.cartitem_set.all():
+            item.delete()
+        for item in self.cart.certificatecartitem_set.all():
             item.delete()
         self.cart.delete()

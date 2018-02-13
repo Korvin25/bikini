@@ -13,7 +13,7 @@
 
 {% block content %}
   <style>
-     .popup_form_label { color: #3d697a !important; font-size: 12px;  }
+    .popup_form_label { color: #3d697a !important; font-size: 12px; }
   </style>
 
   <main>
@@ -36,17 +36,17 @@
           <div class="table_shell js-hide-if-not-cart"{% if not cart.count %} style="display: none;"{% endif %}>
             <div class="table_head">
               <div class="table_cell tb_photo"><div class="tb_title">Фото</div></div>
-              <div class="table_cell tb_model"><div class="tb_title">Название модели</div></div>
-              {% if with_color %}<div class="table_cell tb_color"><div class="tb_title">Цвет</div></div>{% endif %}
-
-              {# <div class="table_cell tb_fason"><div class="tb_title">Фасон</div></div> #}
-              
-              <div class="table_cell tb_price"><div class="tb_title">Цена</div></div>
-              <div class="table_cell tb_cnt"><div class="tb_title">Количество</div></div>
-              {% if with_gift_wrapping %}<div class="table_cell tb_summ"><div class="tb_title">Подарочная упаковка<br/>({{ gift_wrapping_price }}р.)</div></div>{% endif %}
+              <div class="table_cell tb_model"><div class="tb_title">Название{% if not certificate_items %} модели{% endif %}</div></div>
+              {% if cart_items %}
+                {% if with_color %}<div class="table_cell tb_color"><div class="tb_title">Цвет</div></div>{% endif %}
+                {# <div class="table_cell tb_fason"><div class="tb_title">Фасон</div></div> #}
+                <div class="table_cell tb_price"><div class="tb_title">Цена</div></div>
+                <div class="table_cell tb_cnt"><div class="tb_title">Количество</div></div>
+                {% if with_gift_wrapping %}<div class="table_cell tb_summ"><div class="tb_title">Подарочная упаковка<br/>({{ gift_wrapping_price }}р.)</div></div>{% endif %}
+              {% endif %}
               <div class="table_cell tb_summ"><div class="tb_title">Стоимость</div></div>
               
-              <div class="table_cell tb_put"><div class="tb_title">Отложить</div></div>
+              {% if cart_items %}<div class="table_cell tb_put"><div class="tb_title">Отложить</div></div>{% endif %}
               <div class="table_cell tb_del"><div class="tb_title">Удалить</div></div>
             </div>
 
@@ -140,6 +140,45 @@
                     </label>
                   </a>
                 </div>
+                <div class="table_cell td_del">
+                  <a href="#" class="butt_del js-remove-item"><img src="/static/i/delete.gif" alt="Удалить" /></a>
+                </div>
+              </div>
+
+              {% if not forloop.last or certificate_items.count %}
+                <!--разделитель между товарами--><div class="item_content_block table_row table_row_clr" id="js-row-clear-{{ item.id }}"><div class="table_cell">&nbsp;</div></div>
+              {% endif %}
+            {% endfor %}
+
+            {% for item in certificate_items %}
+              <div class="item_content_block table_row js-item-div" data-item-id="{{ item.id }}" data-set-url="{% url 'certificate_api:set' %}" data-remove-url="{% url 'certificate_api:remove' %}" data-row-clear-selector="#js-row-clear-{{ item.id }}">
+                <div class="table_cell cell_image">
+                  <a href="{{ item.url }}"><div class="td_photo" style="background-image:url({{ item.certificate.cart_cover_thumb }})"></div></a>
+                </div>
+                <div class="table_cell td_title">
+                  <h3 class="title_upper"><a href="{{ item.url }}">{{ item.title }}</a></h3>
+                  <h4 class="title_low">
+                    Для {{ item.recipient_name }}
+                    {% if not item.send_immediately and item.send_date %}
+                      <br/>Отправить {{ item.send_date|date:'d.m.Y' }}
+                    {% endif %}
+                  </h4>
+                </div>
+
+                {% if cart_items %}
+                  {% if with_color %}<div class="table_cell td_color"></div>{% endif %}
+                  <div class="clr clr_table"></div>
+                  <div class="table_cell td_price"></div>
+                  <div class="table_cell td_cnt"></div>
+                  {% if with_gift_wrapping %}<div class="table_cell td_summ"></div>{% endif %}
+                {% endif %}
+
+                <div class="table_cell td_summ">
+                  <div class="tb_title">Стоимость</div>
+                  <div class="product_price"><span class="item-summary-span" id="price_ID-{{ forloop.counter }}">{{ item.price|to_int_str }}</span><abbr title="руб">р.</abbr></div>
+                </div>
+                
+                {% if cart_items %}<div class="table_cell td_put"></div>{% endif %}
                 <div class="table_cell td_del">
                   <a href="#" class="butt_del js-remove-item"><img src="/static/i/delete.gif" alt="Удалить" /></a>
                 </div>
@@ -575,8 +614,8 @@
 
 {% block extra_js %}
   <script type="text/javascript">
-    {% include 'js/product.js' %}
-    {% include 'js/wishlist.js' %}
+    // {% include 'js/product.js' %}
+    // {% include 'js/wishlist.js' %}
     {% include 'js/cart.js' %}
   </script>
 {% endblock %}
