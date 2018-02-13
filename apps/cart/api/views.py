@@ -61,13 +61,12 @@ class Step0View(CartStepBaseView):
         status = 200
 
         kw = {}
-        print self.DATA
         if 'additional_info' in self.DATA:
-            kw = {'additional_info': self.DATA['additional_info']}
+            kw['additional_info'] = self.DATA['additional_info']
         if 'delivery_method_id' in self.DATA:
-            kw = {'delivery_method_id': self.DATA['delivery_method_id']}
+            kw['delivery_method_id'] = self.DATA['delivery_method_id']
         if 'payment_method_id' in self.DATA:
-            kw = {'payment_method_id': self.DATA['payment_method_id']}
+            kw['payment_method_id'] = self.DATA['payment_method_id']
         if len(kw):
             self.cart.update(**kw)
 
