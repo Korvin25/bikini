@@ -6,6 +6,8 @@ import json
 from django.http import JsonResponse, HttpResponse
 from django.http.request import QueryDict
 
+from .utils import get_error_message
+
 
 class JSONViewMixin(object):
 

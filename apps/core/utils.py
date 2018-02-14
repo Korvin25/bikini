@@ -49,3 +49,14 @@ def get_vimeo_id(link):
     except Exception as e:
         pass
     return video_id
+
+
+def get_error_message(e):
+    try:
+        err_message = unicode(e.message).decode('utf-8') or unicode(e).decode('utf-8')
+    except UnicodeDecodeError:
+        err_message = e.message.decode('utf-8')
+    except:
+        err_message = repr(e)
+        # err_message = e.__class__.__name__
+    return err_message
