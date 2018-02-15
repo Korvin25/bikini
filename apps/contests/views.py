@@ -10,7 +10,7 @@ from django.utils import timezone
 from django.views.generic import TemplateView, DetailView, View, CreateView
 
 from ..core.http_utils import get_object_from_slug_and_kwargs
-from ..core.mixins import JSONFormMixin, GetNotAllowedMixin
+from ..core.mixins import JSONFormMixin
 from .forms import ContestApplyForm
 from .models import Contest, Participant, ParticipantPhoto
 
@@ -63,7 +63,7 @@ class ParticipantDetailView(DetailView):
         return context
 
 
-class ApplyView(GetNotAllowedMixin, JSONFormMixin, CreateView):
+class ApplyView(JSONFormMixin, CreateView):
     form_class = ContestApplyForm
     mapping = {
         'contest': 'contest',

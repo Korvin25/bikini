@@ -9,7 +9,18 @@ from django.http.request import QueryDict
 from .utils import get_error_message
 
 
-class JSONViewMixin(object):
+class GetNotAllowedMixin(object):
+    """
+    Для предотвращения ошибок вида
+    "ImproperlyConfigured: TemplateResponseMixin requires either a definition of 'template_name'"
+    во вьюхах с формами (CreateView, etc)
+    """
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponse(status=405)
+
+
+class JSONViewMixin(GetNotAllowedMixin):
 
     def dispatch(self, request, *args, **kwargs):
         self.DATA = {}
@@ -23,9 +34,10 @@ class JSONViewMixin(object):
                 return JsonResponse(data, status=400)
 
         return super(JSONViewMixin, self).dispatch(request, *args, **kwargs)
+        
 
 
-class JSONFormMixin(object):
+class JSONFormMixin(GetNotAllowedMixin):
     mapping = {}
 
     def dispatch(self, request, *args, **kwargs):
@@ -72,14 +84,3 @@ class JSONFormMixin(object):
             else:
                 errors.append({'name': k, 'label': form[k].label, 'error_message': form.errors[k][0]})
         return JsonResponse({'errors': errors}, status=400)
-
-
-class GetNotAllowedMixin(object):
-    """
-    Для предотвращения ошибок вида
-    "ImproperlyConfigured: TemplateResponseMixin requires either a definition of 'template_name'"
-    во вьюхах с формами (CreateView, etc)
-    """
-
-    def get(self, request, *args, **kwargs):
-        return HttpResponse(status=405)

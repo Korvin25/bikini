@@ -22,8 +22,8 @@ class LoginForm(forms.Form):
                 user = Profile.objects.get(email__iexact=email)
                 if not user.check_password(password):
                     raise forms.ValidationError('Неверное сочетание Email / Пароль.')
-                # elif user.is_blocked:
-                #     raise forms.ValidationError('Пользователь с данным email заблокирован.')
+                elif not user.is_active:
+                    raise forms.ValidationError('Пользователь с данным email заблокирован.')
             except Profile.DoesNotExist:
                 raise forms.ValidationError('Неверное сочетание Email / Пароль.')
         return cleaned_data

@@ -58,7 +58,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField('Дата и время регистрации', auto_now_add=True)
     subscription = models.BooleanField('Подписан на рассылку', default=True)
 
-    is_active = models.BooleanField('Активен?', default=True)
+    is_active = models.BooleanField('Активен?', default=True, help_text='снимите галку, чтобы заблокировать юзера')
     is_staff = models.BooleanField('Имеет доступ к админ-панели', default=False)
 
     # --- данные для доставки ---

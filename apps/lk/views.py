@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, JsonResponse
 from django.views.generic import TemplateView, UpdateView
 
-from ..core.mixins import JSONFormMixin, GetNotAllowedMixin
+from ..core.mixins import JSONFormMixin
 from ..geo.models import Country
 from .forms import ProfileForm
 
@@ -42,7 +42,7 @@ class ProfileHomeView(ProfileMixin, TemplateView):
         return context
 
 
-class ProfileFormView(ProfileMixin, JSONFormMixin, GetNotAllowedMixin, UpdateView):
+class ProfileFormView(ProfileMixin, JSONFormMixin, UpdateView):
     form_class = ProfileForm
     mapping = {
         'name': 'name',
