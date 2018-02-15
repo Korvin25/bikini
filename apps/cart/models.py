@@ -112,7 +112,8 @@ class Cart(models.Model):
         ordering = ('-creation_date',)
 
     def __unicode__(self):
-        return unicode(self.creation_date)
+        # return unicode(self.creation_date)
+        return self.title
 
     def save(self, *args, **kwargs):
         if not self.checked_out:
@@ -146,6 +147,20 @@ class Cart(models.Model):
 
     # # def get_order_url(self):
     # #     return reverse('profile:order', kwargs={'pk': self.id})
+
+    def profile_with_link(self):
+        p = self.profile
+        if not p:
+            return '-'
+        link = '<a href="/admin/lk/profile/{}/change/" target="_blank">{}</a>'.format(p.id, p.__unicode__())
+        return mark_safe(link)
+    profile_with_link.allow_tags = True
+    profile_with_link.short_description = 'Профиль'
+
+    # def title_with_link(self):
+    #     return '<a href="/admin/cart/cart/{}/change/" target="_blank">{}</a>'.format(self.id, self.title)
+    # title_with_link.allow_tags = True
+    # title_with_link.short_description = 'Заказ'
 
     def show_profile(self):
         return self.profile or ''

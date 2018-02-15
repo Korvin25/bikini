@@ -24,14 +24,16 @@ class PaymentMethodAdmin(SortableAdminMixin, TabbedTranslationAdmin):
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
-    list_display = ('id', 'profile', 'checked_out', 'is_order_with_discount', 'checkout_date', 'summary', 'count',
-                    'country', 'show_delivery_method', 'show_payment_method', 'status',)
-    list_display_links = ('id', 'profile',)
+    list_display = ('__unicode__', 'profile', 'checked_out', 'is_order_with_discount', 'checkout_date',
+                    'summary', 'count', 'country', 'city',
+                    'show_delivery_method', 'show_payment_method', 'status',)
+    list_display_links = ('__unicode__', 'profile',)
     list_filter = ('status', 'delivery_method', 'payment_method',)
     list_per_page = 200
     fieldsets = (
         ('Общее', {
-            'fields': ('id', 'profile', 'status',)
+            # 'fields': ('id', 'profile', 'status',)
+            'fields': ('id', 'profile_with_link', 'status',)
         }),
         ('Данные из формы', {
             'fields': ('country', 'city', 'address', 'phone', 'name',
@@ -41,7 +43,10 @@ class CartAdmin(admin.ModelAdmin):
             'fields': ('show_items',)
         }),
     )
-    readonly_fields = ('id', 'profile', 'show_items',)
+    # readonly_fields = ['id', 'profile', 'show_items',]
+    readonly_fields = ['id', 'profile_with_link', 'show_items',]
+    readonly_fields += ['country', 'city', 'address', 'phone', 'name',
+                       'delivery_method', 'payment_method', 'additional_info',]
 
     def has_add_permission(self, request):
         return None
@@ -51,5 +56,5 @@ class CartAdmin(admin.ModelAdmin):
 
     def get_queryset(self, *args, **kwargs):
         qs = super(CartAdmin, self).get_queryset(*args, **kwargs)
-        qs = qs.prefetch_related('cartitem_set').filter(checked_out=True)
+        qs = qs.prefetch_related('cartitem_set', 'certificatecartitem_set').filter(checked_out=True)
         return qs

@@ -61,7 +61,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField('Активен?', default=True, help_text='снимите галку, чтобы заблокировать юзера')
     is_staff = models.BooleanField('Имеет доступ к админ-панели', default=False)
 
-    # --- данные для доставки ---
+    # --- данные из формы в профиле ---
     country = models.ForeignKey(Country, verbose_name='Страна', null=True, blank=True)
     city = models.CharField('Город', max_length=225, null=True, blank=True)
     address = models.TextField('Адрес', null=True, blank=True)
