@@ -7,8 +7,8 @@
     
     <ul class="bt_contacts">
       <li class="bt_phone"><a href="tel:{{ settings.phone|to_phone }}">{{ settings.phone|safe }}</a></li>
-      <li class="bt_soc"><a href="#"><img src="/static/i/soc_viber.png" alt="Viber" />Viber</a></li>
-      <li class="bt_soc"><a href="#"><img src="/static/i/soc_whatsapp.png" alt="Whatsapp" />Whatsapp</a></li>
+      <li class="bt_soc"><a href="viber://chat?number={{ settings.phone|to_phone }}"><img src="/static/i/soc_viber.png" alt="Viber" />Viber</a></li>
+      <li class="bt_soc"><a href="whatsapp://send?phone={{ settings.phone|to_phone }}"><img src="/static/i/soc_whatsapp.png" alt="Whatsapp" />Whatsapp</a></li>
       <li class="clr_butt_head clr_butt_head0"></li>
       
       <li class="bt_req_call"><a rel="leanModal1" name="callback" href="#callback"><strong>Заказать звонок</strong></a></li>
