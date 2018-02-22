@@ -45,37 +45,36 @@
 
         <div class="item_content_block">
         
-        <!-- SLIDER ITEM >>> -->
-          <div class="nom_img">
-          <script language="javascript" src="/static/js/highslide/jquery.jcarousel.min.js"></script>
-          <script type="text/javascript">
-            {% include 'js/init_product_photos.js' %}
-          </script>
-          <!-- УВЕЛИЧЕНИЕ КАРТИНКИ -->
-          <script type="text/javascript" src="/static/js/highslide/highslide-with-gallery.js"></script>
-          <link rel="stylesheet" type="text/css" href="/static/js/highslide/highslide.css" />
-          <script type="text/javascript">
-            hs.graphicsDir = '/static/js/highslide/graphics/'; 
-            hs.align = 'center';
-            hs.transitions = ['expand', 'crossfade']; 
-            hs.outlineType = 'rounded-white';
-            hs.fadeInOut = true; 
-            hs.dimmingOpacity = 0.5; 
-            hs.addSlideshow({
-              interval: 5000, 
-              repeat: false, 
-              useControls: true, 
-              fixedControls: 'fit', 
-              overlayOptions: { 
-                opacity: 0.75, 
-                position: 'bottom center', 
-                hideOnMouseOut: true
-              }
-            });
-          </script>
-          <!-- УВЕЛИЧЕНИЕ КАРТИНКИ <<< -->
+          <!-- SLIDER ITEM >>> -->
+            <div class="nom_img">
+            <script language="javascript" src="/static/js/highslide/jquery.jcarousel.min.js"></script>
+            <script type="text/javascript">
+              {% include 'js/init_product_photos.js' %}
+            </script>
+            <!-- УВЕЛИЧЕНИЕ КАРТИНКИ -->
+            <script type="text/javascript" src="/static/js/highslide/highslide-with-gallery.js"></script>
+            <link rel="stylesheet" type="text/css" href="/static/js/highslide/highslide.css" />
+            <script type="text/javascript">
+              hs.graphicsDir = '/static/js/highslide/graphics/'; 
+              hs.align = 'center';
+              hs.transitions = ['expand', 'crossfade']; 
+              hs.outlineType = 'rounded-white';
+              hs.fadeInOut = true; 
+              hs.dimmingOpacity = 0.5; 
+              hs.addSlideshow({
+                interval: 5000, 
+                repeat: false, 
+                useControls: true, 
+                fixedControls: 'fit', 
+                overlayOptions: { 
+                  opacity: 0.75, 
+                  position: 'bottom center', 
+                  hideOnMouseOut: true
+                }
+              });
+            </script>
+            <!-- УВЕЛИЧЕНИЕ КАРТИНКИ <<< -->
           
-            
             <div class="{% if photos %}js-with-photos {% endif %}nom_img_med_wrap highslide-gallery">
               <ul class="nom_img_list js-photo-big-container">
                 {% for photo in photos %}

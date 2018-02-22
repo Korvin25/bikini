@@ -33,7 +33,6 @@ function submitFilterForm($form, $container, url, data, src){
 };
 
 
-
 $('.js-filter-form').on('submit', function(e){
     e.preventDefault();
 

@@ -97,11 +97,14 @@
           }
         });
       });
+    </script>
 
-
+    <script type="text/javascript">
       // ----- CSRF -------
       {% include 'js/csrf.js' %}
+    </script>
 
+    <script type="text/javascript">
       // ----- Forms, etc -------
       {% include 'js/global.js' %}
       {% include 'js/product.js' %}
@@ -109,5 +112,6 @@
     </script>
 
     {% block extra_js %}{% endblock %}
+    
   </body>
 </html>

@@ -282,7 +282,7 @@ $('.js-step1-registration-form').on('submit', function(e) {
 
   if (form_data['password'] != form_data['password_repeat']) {
     var errors = [{name: 'password', error_message: 'Введенные пароли не совпадают!'}, {name: 'password_repeat'}];
-    addErrors($form, errors,);
+    addErrors($form, errors);
   }
   else { 
     sendSomeForm(url, form_data, 'step1', $forms, $form);
