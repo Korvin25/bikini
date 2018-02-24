@@ -217,7 +217,11 @@ header,main,nav,footer {display:block;}
                 }
                 .photo_list a {text-decoration:none;display:block;height:100%;vertical-align:middle;}
                 .photo_list img {display:inline-block;line-height:199px;min-width:100%;border-radius:50%;-webkit-border-radius:50%;
-                border-radius:inherit;-webkit-border-radius:inherit;
+                border-radius:inherit;-webkit-border-radius:inherit;image-rendering: -webkit-optimize-contrast;
+                image-rendering: -moz-crisp-edges; /* Firefox */
+                -ms-interpolation-mode: nearest-neighbor;  /* IE */
+                image-rendering: crisp-edges; /* Стандартное свойство */
+                
                 /*width: 220px;
                 min-width: unset;
                 max-width: unset;*/
@@ -1775,7 +1779,7 @@ header,main,nav,footer {display:block;}
         .menu_top_line, .main_content, .text_preview_inner, .with_banner_wrapp, .footer_wrapp 
             {margin:0 auto;width: 98%;}
             
-        .photo_list img {width: 220px;min-width: unset;max-width: unset;}
+        .photo_list img {/*width: 220px;min-width: unset;max-width: unset;*/}
             
         .item_list_wrapp {margin-left: -11px;}
         .product_list {margin-left: 11px;width: 232px;}
