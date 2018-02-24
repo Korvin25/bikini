@@ -63,8 +63,8 @@ class PostCommentInline(admin.StackedInline):
     def has_add_permission(self, request):
         return None
 
-    def has_delete_permission(self, request, obj=None):
-        return None
+    # def has_delete_permission(self, request, obj=None):
+    #     return None
 
 
 @admin.register(Post)
@@ -97,6 +97,7 @@ class PostAdmin(TabbedTranslationAdmin):
 @admin.register(PostComment)
 class PostCommentAdmin(admin.ModelAdmin):
     list_display = ('datetime', 'post', 'lang', 'name', 'profile', 'show',)
+    list_editable = ('show',)
     list_filter = ('lang', 'show',)
     list_per_page = 200
     fieldsets = (
@@ -110,7 +111,7 @@ class PostCommentAdmin(admin.ModelAdmin):
             'fields': ('datetime', 'show',),
         }),
     )
-    readonly_fields = ('post', 'profile', 'name', 'comment', 'datetime',)
+    readonly_fields = ('post', 'lang', 'profile', 'datetime',)
     search_fields = ['post__title', 'profile__email', 'name', 'comment', ]
 
     def has_add_permission(self, request):

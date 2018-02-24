@@ -104,14 +104,14 @@
           </div>
         {% endif %}
       </div>
-    
+
       <div id="main_content" class="content_blog">
         <div class="rows_blog rows_bl_page">
-          
+
           <div class="row_blog row_blog_page">
             <div class="img_blog">
               <img src="{{ post.cover_detail_url }}" alt="{{ post.cover_alt }}" />
-              
+
               <a href="{{ post.category.get_absolute_url }}" class="bt_red">{{ post.category.title }}</a>
               <span class="bt_red _without_hover">{{ post.datetime|date:'d.m.Y' }}</span>
             </div>
@@ -119,7 +119,7 @@
               {{ post.text|safe }}
             </div>
           </div>
-          
+
           <div class="soc_share">
             <div class="soc_share_wrapp">
               <div class="title_mini">Поделиться в соц. сетях:</div>
@@ -136,12 +136,16 @@
               {% endcomment %}
             </div>
           </div>
-          
+
           <div class="comment_block" id="comments">
             <div class="comment_wrapp">
               <h3 class="title_block">Комментарии</h3>
 
-              {% for comment in post.comments.all %}
+              {% if posted_comment %}
+                <p style="margin: 10px 0 25px; color: green;">Спасибо! Ваш комментарий №{{ request.GET.cid }} принят и появится на сайте после одобрения модератором.</p>
+              {% endif %}
+
+              {% for comment in post.shown_comments %}
                 <div class="comment_row" id="comment{{ comment.id }}">
                   <h4>{{ comment.name }}</h4>
                   <div class="comment_date">{{ comment.datetime|date:'d N Y'|lower }}</div>
@@ -150,20 +154,26 @@
                   </div>
                 </div>
               {% empty %}
-                <p style="margin-bottom: 40px;">Комментариев еще нет, оставьте первым</p>
+                <p style="margin-bottom: 40px;">Комментариев еще нет{% if not request.user.is_anonymous %}, оставьте первым{% endif %}</p>
               {% endfor %}
-              
-              <form action="{{ request.post }}" method="post" class="comment_form">
-                {% csrf_token %}
-                <div class="input_shell">
-                  <input name="name" id="name" required placeholder="Имя" class="t_area input_text bg_area"/>
-                  <textarea name="comment" rows="4" id="comment" required class="t_area input_text bg_area" placeholder="Комментарий"></textarea>
-                  <span class="err_r">Заполните поле</span>
-                </div>
-                <div class="row_form_popup row_pop_butt">
-                  <button class="bt_red">Отправить</button>
-                </div>
-              </form>
+
+              {% if not request.user.is_anonymous %}
+                {% if not posted_comment %}
+                  <p style="margin-bottom: 15px; color: #444;">Комментарий появится на сайте только после одобрения модератором.</p>
+                {% endif %}
+
+                <form action="{{ request.post }}" method="post" class="comment_form">
+                  {% csrf_token %}
+                  <div class="input_shell">
+                    <input name="name" id="name" required placeholder="Имя" class="t_area input_text bg_area"/>
+                    <textarea name="comment" rows="4" id="comment" required class="t_area input_text bg_area" placeholder="Комментарий"></textarea>
+                    <span class="err_r">Заполните поле</span>
+                  </div>
+                  <div class="row_form_popup row_pop_butt">
+                    <button class="bt_red">Отправить</button>
+                  </div>
+                </form>
+              {% endif %}
               
             </div>
           </div>

@@ -129,6 +129,24 @@ class PostDetailView(DetailView):
         post = get_object_from_slug_and_kwargs(self.request, model=Post, slug=self.kwargs.get('slug'), **kw)
         return post
 
+    def get_context_data(self, **kwargs):
+        posted_comment = None
+
+        profile = self.request.user
+        comment_id = self.request.GET.get('cid')
+
+        if comment_id and not profile.is_anonymous():
+            try:
+                posted_comment = PostComment.objects.get(id=comment_id, profile_id=profile.id, show=False)
+            except (PostComment.DoesNotExist, ValueError) as e:
+                pass
+
+        context = {
+            'posted_comment': posted_comment,
+        }
+        context.update(super(PostDetailView, self).get_context_data(**kwargs))
+        return context
+
     def post(self, request, *args, **kwargs):
         post = self.get_object()
         redirect_url = post.get_absolute_url()
@@ -138,8 +156,14 @@ class PostDetailView(DetailView):
         profile = request.user if not request.user.is_anonymous() else None
 
         if name and comment:
-            c = PostComment.objects.create(post=post, lang=request.LANGUAGE_CODE,
-                                           name=name, comment=comment, profile=profile)
-            redirect_url = '{}#comment{}'.format(redirect_url, c.id)
+            try:
+                c = PostComment.objects.create(post=post, lang=request.LANGUAGE_CODE,
+                                               name=name, comment=comment, profile=profile,
+                                               show=False)
+                # redirect_url = '{}#comment{}'.format(redirect_url, c.id)
+                # send email
+                redirect_url = '{}?cid={}#comments'.format(redirect_url, c.id)
+            except Exception as e:
+                pass
 
         return HttpResponseRedirect(redirect_url)

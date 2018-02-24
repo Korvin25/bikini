@@ -98,6 +98,10 @@ class Post(MetatagModel):
     def cover_alt(self):
         return self.cover_attributes or self.title
 
+    @property
+    def shown_comments(self):
+        return self.comments.filter(show=True)
+
 
 class GalleryPhoto(models.Model):
     post = models.ForeignKey(Post, verbose_name='Пост', related_name='gallery')

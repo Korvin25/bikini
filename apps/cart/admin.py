@@ -32,7 +32,6 @@ class CartAdmin(admin.ModelAdmin):
     list_per_page = 200
     fieldsets = (
         ('Общее', {
-            # 'fields': ('id', 'profile', 'status',)
             'fields': ('id', 'profile_with_link', 'status',)
         }),
         ('Данные из формы', {
@@ -43,10 +42,10 @@ class CartAdmin(admin.ModelAdmin):
             'fields': ('show_items',)
         }),
     )
-    # readonly_fields = ['id', 'profile', 'show_items',]
     readonly_fields = ['id', 'profile_with_link', 'show_items',]
     readonly_fields += ['country', 'city', 'address', 'phone', 'name',
-                       'delivery_method', 'payment_method', 'additional_info',]
+                       # 'delivery_method', 'payment_method',
+                       'additional_info',]
 
     def has_add_permission(self, request):
         return None
