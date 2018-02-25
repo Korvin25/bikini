@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import copy
+
 from django.contrib.postgres.fields import JSONField
 from django.core.urlresolvers import reverse
 from django.conf import settings
@@ -11,6 +13,7 @@ from django.utils.safestring import mark_safe
 from ..catalog.models import Certificate, Product, ProductOption
 from ..catalog.templatetags.catalog_tags import get_product_attrs_url
 from ..geo.models import Country
+from .utils import make_hash
 
 
 def to_int_plus(value):
@@ -221,13 +224,14 @@ class Cart(models.Model):
 
 
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart)
-    product = models.ForeignKey(Product, verbose_name='Товар')
+    cart = models.ForeignKey(Cart, db_index=True)
+    product = models.ForeignKey(Product, verbose_name='Товар', db_index=True)
     option = models.ForeignKey(ProductOption, verbose_name='Вариант')
     count = models.PositiveIntegerField('Количество')
 
     attrs = JSONField(default=dict)
     extra_products = JSONField(default=dict)
+    hash = models.IntegerField(default=0, db_index=True)
 
     option_price = models.DecimalField(max_digits=9, decimal_places=2, default=0)
     discount = models.PositiveSmallIntegerField(default=0)
@@ -281,6 +285,18 @@ class CartItem(models.Model):
     def total_price_without_discount(self):
         return to_int_plus(self.base_price_without_discount*self.count + self.wrapping_price if self.count
                            else 0)
+
+    def set_hash(self):
+        hash = 0
+        if self.extra_products:
+            x = copy.deepcopy(self.attrs)
+            x.update(self.extra_products)
+            hash = make_hash(x)
+        else:
+            hash = make_hash(self.attrs)
+        self.hash = hash
+        self.save()
+        return hash
 
     def save(self, *args, **kwargs):
         self.price = self.count_price()
