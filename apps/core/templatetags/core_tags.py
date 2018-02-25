@@ -118,6 +118,17 @@ def to_phone(phone_number):
 
 
 @register.filter
+def to_viber(phone_number):
+    phone = ''.join([s for s in phone_number if s in '+1234567890'])
+    if phone[0] == '+':
+        phone = phone[1:]
+    if phone.startswith('7'):
+        phone = phone[1:]
+    #phone = '+38{}'.format(phone)
+    return phone
+
+
+@register.filter
 def get_value(dict_value, key):
     return dict_value.get(key)
 
