@@ -231,7 +231,7 @@ class CartItem(models.Model):
 
     attrs = JSONField(default=dict)
     extra_products = JSONField(default=dict)
-    hash = models.IntegerField(default=0, db_index=True)
+    hash = models.BigIntegerField(default=0, db_index=True)
 
     option_price = models.DecimalField(max_digits=9, decimal_places=2, default=0)
     discount = models.PositiveSmallIntegerField(default=0)
