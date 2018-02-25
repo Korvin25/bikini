@@ -40,7 +40,7 @@ class Cart:
         cart.save()
         return cart
 
-    def set(self, product_id, option_id, item_id, count, **kwargs):
+    def set(self, product_id, hash, option_id, item_id, count, **kwargs):
         Item = models.CartItem
         item = None
 
@@ -49,6 +49,7 @@ class Cart:
                 item = Item.objects.filter(
                     cart=self.cart,
                     product_id=product_id,
+                    hash=hash,
                     # option_id=option_id,
                     discount=kwargs.get('discount', 0),
                 ).first()
@@ -56,6 +57,7 @@ class Cart:
                     item = Item(
                         cart=self.cart,
                         product_id=product_id,
+                        hash=hash,
                         option_id=option_id,
                         discount=kwargs.get('discount', 0),
                     )
@@ -80,6 +82,7 @@ class Cart:
         for k, v in kwargs.items():
             setattr(item, k, v)
         item.save()
+        item.set_hash()
         self.cart.save()
         return item
 

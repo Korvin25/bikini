@@ -10,6 +10,7 @@ from django.utils import timezone
 from apps.catalog.models import Product
 from apps.cart.cart import Cart
 from apps.cart.forms import CartCheckoutForm
+from apps.cart.utils import make_hash_from_cartitem
 from apps.core.mixins import JSONFormMixin
 from apps.lk.email import admin_send_order_email, send_order_email
 
@@ -254,7 +255,11 @@ class CartAjaxView(View):
                     data = {'result': 'error', 'error': 'Неправильный формат запроса'}
                     return JsonResponse(data, status=400)
 
-                item = cart.set(product_id, option_id, item_id, count, **kwargs)
+                attrs = kwargs.get('attrs', {})
+                extra_products = kwargs.get('extra_products', {})
+                hash = make_hash_from_cartitem(attrs, extra_products)
+
+                item = cart.set(product_id, hash, option_id, item_id, count, **kwargs)
                 count = cart.count()
                 summary = cart.summary()
 

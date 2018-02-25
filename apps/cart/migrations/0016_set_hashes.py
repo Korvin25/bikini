@@ -6,26 +6,14 @@ import copy
 
 from django.db import migrations
 
-from ..utils import make_hash
-
-
-def _set_hash(obj):
-    hash = 0
-    if obj.extra_products:
-        x = copy.deepcopy(obj.attrs)
-        x.update(obj.extra_products)
-        hash = make_hash(x)
-    else:
-        hash = make_hash(obj.attrs)
-    obj.hash = hash
-    obj.save()
-    return hash
+from ..utils import make_hash_from_cartitem
 
 
 def set_hashes(apps, schema_editor):
     CartItem = apps.get_model('cart', 'CartItem')
     for c in CartItem.objects.all().order_by('-id'):
-        _set_hash(c)
+        c.hash = make_hash_from_cartitem(c.attrs, c.extra_products)
+        c.save()
         print c.id, c.hash
 
 

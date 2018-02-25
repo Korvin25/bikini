@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import copy
-
 from django.contrib.postgres.fields import JSONField
 from django.core.urlresolvers import reverse
 from django.conf import settings
@@ -13,7 +11,7 @@ from django.utils.safestring import mark_safe
 from ..catalog.models import Certificate, Product, ProductOption
 from ..catalog.templatetags.catalog_tags import get_product_attrs_url
 from ..geo.models import Country
-from .utils import make_hash
+from .utils import make_hash_from_cartitem
 
 
 def to_int_plus(value):
@@ -287,13 +285,7 @@ class CartItem(models.Model):
                            else 0)
 
     def set_hash(self):
-        hash = 0
-        if self.extra_products:
-            x = copy.deepcopy(self.attrs)
-            x.update(self.extra_products)
-            hash = make_hash(x)
-        else:
-            hash = make_hash(self.attrs)
+        hash = make_hash_from_cartitem(self.attrs, self.extra_products)
         self.hash = hash
         self.save()
         return hash
