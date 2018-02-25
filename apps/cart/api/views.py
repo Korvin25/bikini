@@ -64,10 +64,15 @@ class Step0View(CartStepBaseView):
         kw = {}
         if 'additional_info' in self.DATA:
             kw['additional_info'] = self.DATA['additional_info']
+
         if 'delivery_method_id' in self.DATA:
-            kw['delivery_method_id'] = self.DATA['delivery_method_id']
+            delivery_method_id = self.DATA.get('delivery_method_id')
+            if delivery_method_id not in [None, '0', 0]:
+                kw['delivery_method_id'] = delivery_method_id
         if 'payment_method_id' in self.DATA:
-            kw['payment_method_id'] = self.DATA['payment_method_id']
+            payment_method_id = self.DATA.get('payment_method_id')
+            if payment_method_id not in [None, '0', 0]:
+                kw['payment_method_id'] = payment_method_id
         if len(kw):
             self.cart.update(**kw)
 
