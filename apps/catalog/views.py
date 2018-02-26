@@ -340,6 +340,16 @@ class ProductView(TemplateView):
                 }
             data['extra_products'][extra_p['id']] = extra_p_dict
 
+            is_chosen = False
+            chosen_key = 'extra_{}'.format(extra_p['id'])
+            for k in self.chosen_options.keys():
+                if k.startswith(chosen_key):
+                    is_chosen = True
+                    break
+            if is_chosen is True:
+                data['extra_p_selected'][extra_p['id']] = extra_p_dict
+                data['prices']['extra'] += extra_p['price']
+
         p = data['prices']
         p['total_price'] = (p['option']+p['extra'])*p['count'] + p['wrapping'];
 
@@ -359,10 +369,13 @@ class ProductView(TemplateView):
             'option_id': self.data['option'].get('id'),
             'price': self.data['prices']['option'],
             'attrs': {},
+            'extra_products': {},
         }
+        # TODO: getting hash
+        hash = None
         wishlist_item = None
         for item in wishlist:
-            if self.product.id == item['product_id']:
+            if self.product.id == item['product_id'] and hash == item['hash']:
                 wishlist_item = item
                 break
         in_wishlist = bool(wishlist_item)
@@ -370,8 +383,10 @@ class ProductView(TemplateView):
         if wishlist_item:
             wishlist_data['price'] = wishlist_item['price']
             wishlist_data['attrs'] = wishlist_item['attrs']
+            wishlist_data['extra_products'] = wishlist_item['extra_products']
 
         wishlist_data['attrs_json'] = json.dumps(wishlist_data['attrs'])
+        wishlist_data['extra_products_json'] = json.dumps(wishlist_data['extra_products'])
         self.in_wishlist = in_wishlist
         self.wishlist_data = wishlist_data
 

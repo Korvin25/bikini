@@ -131,7 +131,8 @@
                              data-product-id="{{ item.product_id }}" data-option-id="{{ item.option_id }}"
                              data-price="{{ item.base_price_without_discount }}"
                              data-count="{{ item.count }}"
-                             data-attrs='{{ item.attrs|to_json|safe }}'/>
+                             data-attrs='{{ item.attrs|to_json|safe }}'
+                             data-extra-products='{{ item.extra_products|to_json|safe }}' />
                       <div class="window_title">
                         <span class="no_check">Добавить товар в список желаемых покупок</span>
                         <span class="y_check">Товар в списке желаемых покупок</span>

@@ -281,6 +281,11 @@ function filterOptions(attr_types) {
 }
 
 
+function isNotEmpty(obj) {
+  return Object.getOwnPropertyNames(obj).length;
+}
+
+
 function chooseOption(update_total_price, dont_update_wishlist_input) {
   // получаем выбранный вариант и прописываем его везде
   // update_total_price (true|false) - обновляем ли общую стоимость
@@ -313,15 +318,20 @@ function chooseOption(update_total_price, dont_update_wishlist_input) {
     collected_data = collectAttrs(option);
 
     _attrs = collected_data['_attrs'];
+    _extra_products = collected_data['_extra_products'];
     errors = collected_data['errors'];
 
-    if (_attrs && !errors.length) {
-      changeWishlistInputData(data['option']['id'], data['prices']['option'], _attrs);
-      var $wishlistInput = $('.js-wishlist-input');
-      if ($wishlistInput.length && $wishlistInput.is(':checked')) {
-        checkWishlistAndClick(false, true);
-      }
+    if (isNotEmpty(_attrs) && isNotEmpty(option) && !errors.length) {
+      // console.log('wishlist change', _attrs, errors, option);
+      changeWishlistInputData(data['option']['id'], data['prices']['option'] + data['prices']['extra'], _attrs, _extra_products);
+      // var $input = $('.js-wishlist-input'));
+      // if ($input.length && $input.is(':checked')) { checkWishlistAndClick(false, true); }
     }
+
+    var $input = $('.js-wishlist-input'),
+        $button = $('.js-wishlist-button');
+    if ($input.length) { $input.attr('checked', false); };
+    if ($button.length) { $button.text('Добавить в список желаемых покупок'); };
   };
 }
 
@@ -466,7 +476,7 @@ $('.js-not-checkbox').click(function(e) {
     }
   }  // else { e.preventDefault(); }
 
-  if (attr_type) {
+  // if (attr_type) {
     if (attr_type == 'style') {
       $('.js-expand-colors').click();
       options = filterOptions(['style']);
@@ -476,7 +486,7 @@ $('.js-not-checkbox').click(function(e) {
       updateShownCheckboxes(options, ['size']);
     };
     chooseOption(true);
-  }
+  // }
 });
 
 

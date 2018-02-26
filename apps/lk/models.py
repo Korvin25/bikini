@@ -9,6 +9,7 @@ from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils import timezone
 
+from ..cart.utils import make_hash_from_cartitem
 from ..geo.models import Country
 
 
@@ -153,19 +154,27 @@ class Profile(AbstractBaseUser, PermissionsMixin):
 
     @property
     def wishlist(self):
-        return list(self.wishlist_items.all().values('product_id', 'option_id', 'price', 'attrs'))
+        return list(self.wishlist_items.all().values('product_id', 'option_id', 'price', 'attrs', 'extra_products', 'hash',))
 
 
 class WishListItem(models.Model):
-    profile = models.ForeignKey(Profile, verbose_name='Профиль', related_name='wishlist_items')
-    product = models.ForeignKey('catalog.Product', verbose_name='Товар', related_name='wishlist_items')
+    profile = models.ForeignKey(Profile, verbose_name='Профиль', related_name='wishlist_items', db_index=True)
+    product = models.ForeignKey('catalog.Product', verbose_name='Товар', related_name='wishlist_items', db_index=True)
     option = models.ForeignKey('catalog.ProductOption', verbose_name='Вариант', related_name='wishlist_items')
     price = models.DecimalField('Цена, руб.', max_digits=9, decimal_places=2, default=0, null=True, blank=True)
+
     attrs = JSONField(default=dict)
+    extra_products = JSONField(default=dict)
+    hash = models.BigIntegerField(default=0, db_index=True)
 
     class Meta:
-        unique_together = ('profile', 'product')
         ordering = ['id', ]
 
     def __unicode__(self):
-        return self.id
+        return '{}'.format(self.id)
+
+    def set_hash(self):
+        hash = make_hash_from_cartitem(self.attrs, self.extra_products)
+        self.hash = hash
+        self.save()
+        return hash

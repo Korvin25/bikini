@@ -118,7 +118,8 @@
                      data-add-url="{% url 'wishlist:add' %}" data-remove-url="{% url 'wishlist:remove' %}"
                      data-product-id="{{ wishlist_data.product_id }}" data-option-id="{{ wishlist_data.option_id }}"
                      data-price="{{ wishlist_data.price }}"
-                     data-attrs='{{ wishlist_data.attrs_json|safe }}' />
+                     data-attrs='{{ wishlist_data.attrs_json|safe }}'
+                     data-extra-products='{{ wishlist_data.extra_products_json|safe }}' />
             {% endif %}
           </div>
           <div class="highslide-dimming"></div>

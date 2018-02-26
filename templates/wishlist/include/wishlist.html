@@ -6,7 +6,7 @@
       {% for item in wishlist %}
         {% get_product item.product_id as product %}
         {% get_product_option item.option_id as product_option %}
-        {% get_product_attrs_url product item.attrs as product_url %}
+        {% get_product_attrs_url product item.attrs item.extra_products as product_url %}
 
         {% if product and product_option %}
           <form class="js-product-form" method="post" action="{% url 'cart_api:set' %}" style="display: inline-block;">
@@ -19,7 +19,8 @@
                    data-add-url="{% url 'wishlist:add' %}" data-remove-url="{% url 'wishlist:remove' %}"
                    data-product-id="{{ item.product_id }}" data-option-id="{{ item.option_id }}"
                    data-price="{{ item.price }}"
-                   data-attrs='{{ item.attrs|to_json|safe }}'/>
+                   data-attrs='{{ item.attrs|to_json|safe }}'
+                   data-extra-products='{{ item.extra_products|to_json|safe }}' />
 
             <div class="product_list">
               <div class="photo_list"><a href="{{ product_url }}"><img src="{{ product.cover_thumb }}" alt="{{ product.title }}"></a></div>

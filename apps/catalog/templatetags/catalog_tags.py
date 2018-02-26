@@ -78,10 +78,25 @@ def item_color(item, color_attribute):
 
 
 @register.simple_tag(takes_context=True)
-def get_is_chosen(context, attr_slug, option_id):
+def get_is_chosen(context, attr_slug, option_id, extra_product_id=None):
     chosen_options = context.get('chosen_options', {})
+    attr_slug = ('extra_{}_{}'.format(extra_product_id, attr_slug) if extra_product_id
+                 else attr_slug)
     chosen_id = chosen_options.get(attr_slug, '')
     return unicode(option_id) == unicode(chosen_id)
+
+
+@register.simple_tag(takes_context=True)
+def get_extra_product_is_chosen(context, extra_product_id):
+    is_chosen = False
+
+    chosen_options = context.get('chosen_options', {})
+    key = 'extra_{}'.format(extra_product_id)
+    for k in chosen_options.keys():
+        if k.startswith(key):
+            is_chosen = True
+            break
+    return is_chosen
 
 
 @register.simple_tag()
@@ -101,7 +116,7 @@ def get_product_attrs_url(product, attrs, extra_products=None, wrapping_price=No
         attrs_strings.append('_{}={}'.format(k, v))
     for k, d in extra_products.iteritems():
         for slug, id in d.iteritems():
-            attrs_strings.append('_{}_{}={}'.format(k, slug, id))
+            attrs_strings.append('_extra_{}_{}={}'.format(k, slug, id))
     if with_wrapping:
         attrs_strings.append('_with_wrapping=1')
     if count:

@@ -54,7 +54,7 @@ class CertificateCartRemoveView(JSONViewMixin, View):
     def post(self, request, *args, **kwargs):
         cart = Cart(request)
 
-        print self.DATA
+        # print self.DATA
         cart.remove_certificate(item_id=self.DATA.get('item_id', 0))
         count = cart.count()
         summary = cart.summary()
