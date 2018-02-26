@@ -138,7 +138,7 @@ class WishListAddView(JSONViewMixin, View):
                 kwargs = {'profile_id': profile.id, 'product_id': product_id, 'hash': hash}
                 the_item = WishListItem.objects.filter(**kwargs).first()
                 if not the_item:
-                    the_item = WishListItem(**kwargs)
+                    the_item = WishListItem.objects.create(option_id=option_id, **kwargs)
                 the_item.option_id = option_id
                 the_item.price = price
                 the_item.attrs = attrs
