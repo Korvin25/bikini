@@ -1,4 +1,4 @@
-{% load i18n catalog_tags core_tags  %}
+{% load i18n catalog_tags core_tags %}
 
 
 {% if attr_type == 'color' %}
@@ -101,7 +101,7 @@
         {% get_is_chosen attr.slug option.id extra_product_id as is_chosen %}
         <label for="{{ attr.slug }}_{{ option.id }}" data-attr-slug="{{ attr.slug }}">
           <input class="js-not-checkbox js-attr-checkbox js-attr-size" data-attr-slug="{{ attr.slug }}" data-option-id="{{ option.id }}"{% if choose_option %} data-attr-type="{{ attr.attr_type }}"{% endif %} type="checkbox"{% if is_chosen %} checked="checked"{% endif %} name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
-          <span{% if attr.slug == 'diametr' %} style="font-size: 12px;"{% endif %} title="{{ option.title }}">{{ option.title }}</span>
+          <span style="{% if attr.slug == 'diametr' %}font-size: 12px;{% endif %}{% if option.is_one_size %} line-height: 20px;{% endif %}" title="{{ option.title }}">{% if option.is_one_size %}{{ option.title|with_br|safe }}{% else %}{{ option.title }}{% endif %}</span>
         </label>
       {% endfor %}
     </div>
@@ -120,7 +120,7 @@
         {% if option.id in attr.options_ids %}
           <label for="{{ attr.slug }}_{{ option.id }}" data-attr-slug="{{ attr.slug }}">
             <input class="js-not-checkbox js-attr-checkbox js-attr-size" data-attr-slug="{{ attr.slug }}" data-option-id="{{ option.id }}"{% if choose_option %} data-attr-type="{{ attr.attr_type }}"{% endif %} type="checkbox"{% if is_chosen %} checked="checked"{% endif %} name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
-            <span{% if attr.slug == 'diametr' %} style="font-size: 12px;"{% endif %} title="{{ option.title }}">{{ option.title }}</span>
+            <span style="{% if attr.slug == 'diametr' %}font-size: 12px;{% endif %}{% if option.is_one_size %} line-height: 20px;{% endif %}" title="{{ option.title }}">{% if option.is_one_size %}{{ option.title|with_br|safe }}{% else %}{{ option.title }}{% endif %}</span>
           </label>
         {% endif %}
       {% endfor %}

@@ -65,7 +65,7 @@
                   {% if option.id in attrs_options %}
                     <label for="{{ attr.slug }}_{{ option.id }}">
                       <input type="checkbox"{% if option.id in f.attrs_values %} checked{% endif %} name="_{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
-                      <span{% if attr.slug == 'diametr' %} style="font-size: 9px;"{% endif %} title="{{ option.title }}">{{ option.title }}</span>
+                      <span style="{% if attr.slug == 'diametr' %} font-size: 9px;{% endif %}{% if option.is_one_size %} line-height: 15px{% endif %}" title="{{ option.title }}">{% if option.is_one_size %}{{ option.title|with_br|safe }}{% else %}{{ option.title }}{% endif %}</span>
                     </label>
                   {% endif %}
                 {% endfor %}

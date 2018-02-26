@@ -166,3 +166,8 @@ def to_int_plus(value):
 def with_discount(price, discount):
     discount_price = price*discount // 100
     return to_int_plus(price - discount_price)
+
+
+@register.filter
+def with_br(title):
+    return title.replace(' ', '<br>')

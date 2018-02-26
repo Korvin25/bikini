@@ -170,6 +170,10 @@ class AttributeOption(models.Model):
     def style_photo_url(self):
         return self.picture['product_style'].url if self.picture else ''
 
+    @property
+    def is_one_size(self):
+        return self.title.lower() == 'one size'
+
     # @property
     # def color_style(self):
     #     style = ('background: url("{}");'.format(self.picture_url) if self.picture
