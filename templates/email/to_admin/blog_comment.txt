@@ -1,0 +1,12 @@
+Новый комментарий в блоге
+
+Дата и время: {{ obj.datetime|date:"d.m.Y H:i:s" }}
+Пост: {{ post }} (https://{{ site }}{{ post.get_absolute_url }}){% if obj.profile %}
+Профиль: {{ obj.profile }}{% endif %}
+
+Имя: {{ obj.name }}
+
+Комментарий:
+{{ obj.comment }}
+
+Ссылка на комментарий в админке: https://{{ site }}/admin/{{ admin_slug }}/{{ obj.id }}/

@@ -27,4 +27,4 @@ Email: {{ obj.profile.email }}{% endif %}
 
 ----
 
-Ссылка на заказ в админке: http://{{ site }}/admin/{{ admin_slug }}/{{ obj.id }}/
+Ссылка на заказ в админке: https://{{ site }}/admin/{{ admin_slug }}/{{ obj.id }}/

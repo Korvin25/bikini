@@ -1,0 +1,20 @@
+<h3>Новый комментарий в блоге</h3>
+
+<p>
+    <strong>Дата и время:</strong> {{ obj.datetime|date:"d.m.Y H:i:s" }}<br/>
+    <strong>Пост:</strong> <a href="https://{{ site }}{{ post.get_absolute_url }}">{{ post }}</a><br/>
+    {% if obj.profile %}
+        <strong>Профиль:</strong> {{ obj.profile }}<br/>
+    {% endif %}
+</p>
+
+<p>
+    <strong>Имя:</strong> {{ obj.name }}<br/>
+</p>
+<p>
+    <strong>Комментарий:</strong><br/> {{ obj.comment|linebreaksbr }}<br/>
+</p>
+
+<p>
+    Ссылка на комментарий в админке: <a href="https://{{ site }}/admin/{{ admin_slug }}/{{ obj.id }}/">https://{{ site }}/admin/{{ admin_slug }}/{{ obj.id }}/</a>
+</p>

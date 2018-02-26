@@ -154,10 +154,10 @@
                   </div>
                 </div>
               {% empty %}
-                <p style="margin-bottom: 40px;">Комментариев еще нет{% if not request.user.is_anonymous %}, оставьте первым{% endif %}</p>
+                <p style="margin-bottom: 40px;">Комментариев еще нет{% if not profile.is_anonymous %}, оставьте первым{% endif %}</p>
               {% endfor %}
 
-              {% if not request.user.is_anonymous %}
+              {% if not profile.is_anonymous %}
                 {% if not posted_comment %}
                   <p style="margin-bottom: 15px; color: #444;">Комментарий появится на сайте только после одобрения модератором.</p>
                 {% endif %}
@@ -165,8 +165,8 @@
                 <form action="{{ request.post }}" method="post" class="comment_form">
                   {% csrf_token %}
                   <div class="input_shell">
-                    <input name="name" id="name" required placeholder="Имя" class="t_area input_text bg_area"/>
-                    <textarea name="comment" rows="4" id="comment" required class="t_area input_text bg_area" placeholder="Комментарий"></textarea>
+                    <input name="name" id="name" required placeholder="Ваше имя" class="t_area input_text bg_area" value="{{ profile.name|default_if_none:'' }}"/>
+                    <textarea name="comment" rows="4" id="comment" required class="t_area input_text bg_area" placeholder="Ваш комментарий"></textarea>
                     <span class="err_r">Заполните поле</span>
                   </div>
                   <div class="row_form_popup row_pop_butt">

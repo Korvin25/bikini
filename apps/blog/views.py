@@ -10,6 +10,7 @@ from django.utils import timezone
 from django.views.generic import TemplateView, DetailView
 
 from ..core.http_utils import get_object_from_slug_and_kwargs
+from ..lk.email import admin_send_blog_comment_email
 from .models import Category, Post, GalleryPhoto, PostComment
 
 
@@ -161,8 +162,8 @@ class PostDetailView(DetailView):
                                                name=name, comment=comment, profile=profile,
                                                show=False)
                 # redirect_url = '{}#comment{}'.format(redirect_url, c.id)
-                # send email
                 redirect_url = '{}?cid={}#comments'.format(redirect_url, c.id)
+                admin_send_blog_comment_email(obj=c, post=post)
             except Exception as e:
                 pass
 

@@ -70,6 +70,13 @@ def admin_send_callback_order_email(obj, **kwargs):
     email_admin(subject, email_key, obj, admin_slug=admin_slug, **kwargs)
 
 
+def admin_send_blog_comment_email(obj, post, **kwargs):
+    subject = 'Bikinimini.ru: Новый комментарий к посту {}'.format(post.title)
+    email_key = 'blog_comment'
+    admin_slug = 'blog/postcomment'
+    email_admin(subject, email_key, obj, admin_slug=admin_slug, post=post, **kwargs)
+
+
 def email_user(subject, email_key, profile=None, obj=None, language_to=None, mandrill=False, dummy=False, **kwargs):
     request = CrequestMiddleware.get_request()
 
