@@ -129,6 +129,12 @@ def to_viber(phone_number):
 
 
 @register.filter
+def to_telegram(telegram_login):
+    telegram_login = (telegram_login or '').replace('@', '').replace(' ', '')
+    return telegram_login
+
+
+@register.filter
 def get_value(dict_value, key):
     return dict_value.get(key)
 
