@@ -12,11 +12,11 @@ class MenuItemAdminForm(forms.ModelForm):
         model = MenuItem
         fields = '__all__'
 
-    def clean_link(self):
+    def clean_link_ru(self):
         page = self.cleaned_data.get('page')
-        link = self.cleaned_data.get('link')
+        link_ru = self.cleaned_data.get('link_ru')
 
-        if not (page or link):
-            raise forms.ValidationError('Укажите или страницу, или ссылку.')
+        if not (page or link_ru):
+            raise forms.ValidationError('Укажите или страницу (выше), или ссылку.')
 
-        return link
+        return link_ru
