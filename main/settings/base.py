@@ -176,6 +176,10 @@ MODELTRANSLATION_AUTO_POPULATE = True
 # MODELTRANSLATION_AUTO_POPULATE = 'required'
 
 
+# 1 year in seconds
+SESSION_COOKIE_AGE = 31536000  # 60*60*24*365
+
+
 ANYMAIL = {
     'MANDRILL_API_KEY': '<your Mandrill key>',
     'MANDRILL_SENDER_DOMAIN': 'mg.example.com',
