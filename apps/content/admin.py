@@ -5,10 +5,11 @@ from django.contrib import admin
 
 from embed_video.admin import AdminVideoMixin
 from filer.models import Folder, File, Image
-from modeltranslation.admin import TranslationInlineModelAdmin, TabbedTranslationAdmin
+from modeltranslation.admin import TranslationInlineModelAdmin, TabbedTranslationAdmin, TranslationStackedInline
 from paypal.standard.ipn.models import PayPalIPN
 
 from .admin_filer import CustomFolderAdmin, CustomFileAdmin, CustomImageAdmin
+from .admin_forms import MenuItemAdminForm
 from .models import Video, Page, Menu, MenuItem
 from .translation import *
 
@@ -17,7 +18,6 @@ admin.site.site_header = 'Bikinimini.ru'
 
 
 admin.site.unregister(PayPalIPN)
-
 admin.site.unregister(Folder)
 admin.site.unregister(File)
 admin.site.unregister(Image)
@@ -74,14 +74,15 @@ class PageAdmin(TabbedTranslationAdmin):
     search_fields = ['title', 'slug', 'text', ]
 
 
-class MenuItemInline(TranslationInlineModelAdmin, admin.StackedInline):  # CompactInline
+class MenuItemInline(TranslationStackedInline):  # CompactInline
     model = MenuItem
-    fields = ('label', 'link', 'target_blank', 'order',)
+    form = MenuItemAdminForm
+    fields = ('label', 'page', 'link', 'target_blank', 'order',)
     extra = 0
 
 
 @admin.register(Menu)
-class MenuAdmin(admin.ModelAdmin):
+class MenuAdmin(TabbedTranslationAdmin):
     list_display = ('title',)
     fieldsets = (
         (None, {

@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.core.urlresolvers import reverse
+from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -89,6 +90,12 @@ class Page(MetatagModel):
     def __unicode__(self):
         return self.title
 
+    def save(self, *args, **kwargs):
+        s = super(Page, self).save(*args, **kwargs)
+        for item in self.menu_items.all():
+            item.update_link_from_page()
+        return s
+
     def get_absolute_url(self):
         return reverse('page', kwargs={'slug': self.slug})
 
@@ -113,8 +120,9 @@ class Menu(models.Model):
 
 class MenuItem(models.Model):
     menu = models.ForeignKey(Menu, verbose_name='Меню', related_name='items')
+    page = models.ForeignKey(Page, verbose_name='Страница', related_name='menu_items', null=True, blank=True)
     label = models.CharField('Название', max_length=255)
-    link = models.CharField('Ссылка', max_length=255)
+    link = models.CharField('Ссылка', max_length=255, null=True, blank=True)
     target_blank = models.BooleanField('Открывать в новой вкладке', default=False)
     order = models.IntegerField('Порядок', default=10)
 
@@ -125,3 +133,21 @@ class MenuItem(models.Model):
 
     def __unicode__(self):
         return self.label
+
+    def update_link_from_page(self, save=True):
+        page = self.page
+        if page:
+            self.link = page.slug
+            for lang_code, lang_verbose in settings.LANGUAGES:
+                slug = getattr(page, 'slug_{}'.format(lang_code))
+                if lang_code == 'ru':
+                    setattr(self, 'link_{}'.format(lang_code), '/{}/'.format(slug))
+                else:
+                    setattr(self, 'link_{}'.format(lang_code), '/{}/{}/'.format(lang_code, slug))
+        if save is True:
+            self.save(update_link=False)
+
+    def save(self, update_link=True, *args, **kwargs):
+        if update_link is True:
+            self.update_link_from_page(save=False)
+        return super(MenuItem, self).save(*args, **kwargs)

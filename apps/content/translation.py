@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from modeltranslation.translator import register, translator, TranslationOptions
 
 from ..core.translation import TitleTranslationOptions
-from .models import Video, Page, MenuItem
+from .models import Video, Page, MenuItem, Menu
 
 
 @register(Video)
@@ -15,10 +15,15 @@ class VideoTranslationOptions(TranslationOptions):
 
 @register(Page)
 class PageTranslationOptions(TranslationOptions):
-    fields = ('title', 'text',
+    fields = ('title', 'slug', 'text',
               'meta_title', 'meta_desc', 'meta_keyw', 'h1', 'seo_text',)
 
 
 @register(MenuItem)
 class MenuItemTranslationOptions(TranslationOptions):
     fields = ('label', 'link',)
+
+
+@register(Menu)
+class MenuTranslationOptions(TranslationOptions):
+    fields = ()
