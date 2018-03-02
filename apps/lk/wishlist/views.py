@@ -130,9 +130,9 @@ class WishListAddView(JSONViewMixin, View):
             the_item.update({
                 'product_id': product_id,
                 'option_id': option_id,
-                'price_rub': price_rub,
-                'price_eur': price_eur,
-                'price_usd': price_usd,
+                'price_rub': float(price_rub),
+                'price_eur': float(price_eur),
+                'price_usd': float(price_usd),
                 'attrs': attrs,
                 'extra_products': extra_products,
                 'hash': hash,
