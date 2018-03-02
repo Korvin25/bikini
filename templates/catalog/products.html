@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n core_tags %}
+{% load i18n core_tags currency_tags %}
 
 {% block meta_title %}{{ category.get_meta_title }}{% endblock %}
 {% block meta_desc %}{{ category.get_meta_desc }}{% endblock %}
@@ -74,9 +74,9 @@
 
             <div class="filtr_title">Цена:</div>
             <div class="check_box check_input">
-              <input type="text" name="price_from" value="{% if f.price_from %}{{ f.price_from }}{% endif %}" placeholder="{{ price_min_max.price_rub__min|default_if_none:0|to_int|with_delimeter }} p." />
+              <input type="text" name="price_from" value="{% if f.price_from %}{{ f.price_from }}{% endif %}" placeholder="{{ price_min_max.price__min|default_if_none:0|to_int|with_delimeter|currency_light:currency }}" />
               <span>&mdash;</span>
-              <input type="text" name="price_to" value="{% if f.price_to %}{{ f.price_to }}{% endif %}" placeholder="{{ price_min_max.price_rub__max|default_if_none:0|to_int_plus|with_delimeter }} p." />
+              <input type="text" name="price_to" value="{% if f.price_to %}{{ f.price_to }}{% endif %}" placeholder="{{ price_min_max.price__max|default_if_none:0|to_int_plus|with_delimeter|currency_light:currency }}" />
             </div>
 
             {% for attr in attrs.style %}

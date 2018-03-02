@@ -12,6 +12,8 @@ from apps.cart.cart import Cart
 from apps.cart.forms import CartCheckoutForm
 from apps.cart.utils import make_hash_from_cartitem
 from apps.core.mixins import JSONFormMixin
+from apps.core.templatetags.core_tags import to_price
+from apps.currency.utils import get_currency
 from apps.lk.email import admin_send_order_email, send_order_email
 
 
@@ -145,7 +147,7 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
         if cart.count():
             cart.checked_out = True
             cart.checkout_date = timezone.now()
-            cart.summary = cart.get_summary()
+            cart.currency = get_currency(self.request)
             cart.save()
             super(Step3View, self).form_valid(form)
 
@@ -249,10 +251,12 @@ class CartAjaxView(View):
                             kwargs[slug] = value
 
                     prices = DATA.get('prices', {})
-                    for slug in ['option', 'extra', 'wrapping']:
-                        value = prices.get(slug)
-                        if value is not None:
-                            kwargs['{}_price'.format(slug)] = int(value)
+                    if prices.get('with_wrapping') is not None:
+                        kwargs['with_wrapping'] = bool(prices['with_wrapping'])
+                    # for slug in ['option', 'extra', 'wrapping']:
+                    #     value = prices.get(slug)
+                    #     if value is not None:
+                    #         kwargs['{}_price'.format(slug)] = int(value)
                     if prices.get('discount') is not None:
                         kwargs['discount'] = prices['discount']
 
@@ -271,7 +275,7 @@ class CartAjaxView(View):
                 data = {'result': 'ok', 'count': count, 'summary': summary}
                 if item:
                     data['item_count'] = item.count
-                    data['item_price'] = item.price_int
-                    data['item_price_without_discount'] = item.total_price_without_discount
+                    data['item_price'] = to_price(item.price_int)
+                    data['item_price_without_discount'] = to_price(item.total_price_without_discount)
 
         return JsonResponse(data)

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from decimal import Decimal
 import uuid
 
 from django.core.urlresolvers import reverse
@@ -10,6 +11,7 @@ from django.db import models
 from django.utils import timezone
 
 from ..cart.utils import make_hash_from_cartitem
+from ..currency.utils import price_with_currency
 from ..geo.models import Country
 
 
@@ -154,24 +156,56 @@ class Profile(AbstractBaseUser, PermissionsMixin):
 
     @property
     def wishlist(self):
-        return list(self.wishlist_items.all().values('product_id', 'option_id', 'price', 'attrs', 'extra_products', 'hash',))
+        return list(self.wishlist_items.all().values('product_id', 'option_id', 'price_rub', 'price_eur', 'price_usd',
+                                                     'attrs', 'extra_products', 'hash',))
 
 
 class WishListItem(models.Model):
     profile = models.ForeignKey(Profile, verbose_name='Профиль', related_name='wishlist_items', db_index=True)
     product = models.ForeignKey('catalog.Product', verbose_name='Товар', related_name='wishlist_items', db_index=True)
     option = models.ForeignKey('catalog.ProductOption', verbose_name='Вариант', related_name='wishlist_items')
-    price = models.DecimalField('Цена, руб.', max_digits=9, decimal_places=2, default=0, null=True, blank=True)
 
     attrs = JSONField(default=dict)
     extra_products = JSONField(default=dict)
     hash = models.BigIntegerField(default=0, db_index=True)
+
+    price_rub = models.DecimalField('Цена, руб.', max_digits=9, decimal_places=2, default=0, null=True, blank=True)
+    price_eur = models.DecimalField('Цена, eur.', max_digits=9, decimal_places=2, default=0, null=True, blank=True)
+    price_usd = models.DecimalField('Цена, usd.', max_digits=9, decimal_places=2, default=0, null=True, blank=True)
 
     class Meta:
         ordering = ['id', ]
 
     def __unicode__(self):
         return '{}'.format(self.id)
+
+    @property
+    def price(self):
+        return price_with_currency(self)
+
+    def get_price(self):
+        option = self.option
+        option_price_rub = option.price_rub
+        option_price_eur = option.price_eur
+        option_price_usd = option.price_usd
+
+        extra_price_rub = Decimal(0.0)
+        extra_price_eur = Decimal(0.0)
+        extra_price_usd = Decimal(0.0)
+        if self.extra_products:
+            extra_products = self.product.extra_products.filter(extra_product_id__in=self.extra_products.keys())
+            prices = extra_products.values('price_rub', 'price_eur', 'price_usd')
+            extra_price_rub = sum([price['price_rub'] for price in prices])
+            extra_price_eur = sum([price['price_eur'] for price in prices])
+            extra_price_usd = sum([price['price_usd'] for price in prices])
+
+        self.price_rub = option_price_rub + extra_price_rub
+        self.price_eur = option_price_eur + extra_price_eur
+        self.price_usd = option_price_usd + extra_price_usd
+
+    def save(self, *args, **kwargs):
+        self.get_price()
+        return super(WishListItem, self).save(*args, **kwargs)
 
     def set_hash(self):
         hash = make_hash_from_cartitem(self.attrs, self.extra_products)

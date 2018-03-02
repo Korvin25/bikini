@@ -195,7 +195,7 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
 }
 
 
-function setItem($item_div, count, gift_wrapping_price) {
+function setItem($item_div, count, with_wrapping) {
   var url = $item_div.attr('data-set-url'),
       item_id = parseInt($item_div.attr('data-item-id')),
       form_data;
@@ -204,7 +204,7 @@ function setItem($item_div, count, gift_wrapping_price) {
     'item_id': item_id,
     'count': count,
     'prices': {
-      'wrapping': gift_wrapping_price,
+      'with_wrapping': with_wrapping,
     },
   };
   sendSomeForm(url, form_data, 'set', null, null, $item_div, null);
@@ -334,14 +334,15 @@ $('input[name="item-count"]').change('keyup input', function() {
       count = this.value,
       summary = 0,
       $gift_wrapping = $item_div.find('input[name="gift_wrapping"]'),
-      gift_wrapping_price = 0,
+      with_wrapping = false,
       $summary_span = $item_div.find('.item-summary-span');
 
   if (count >= 0) {
-    if ($gift_wrapping.is(':checked')) { gift_wrapping_price = parseInt($gift_wrapping.attr('data-wrapping-price')); };
+    // if ($gift_wrapping.is(':checked')) { gift_wrapping_price = parseFloat($gift_wrapping.attr('data-wrapping-price')); };
+    if ($gift_wrapping.is(':checked')) { with_wrapping = true };
     // summary = count * base_price + gift_wrapping_price;
     // $summary_span.html(summary);
-    setItem($item_div, count, gift_wrapping_price);
+    setItem($item_div, count, with_wrapping);
   }
 });
 

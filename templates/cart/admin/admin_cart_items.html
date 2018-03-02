@@ -1,4 +1,4 @@
-{% load cart_tags core_tags wishlist_tags %}
+{% load cart_tags core_tags wishlist_tags currency_tags %}
 
 <style>
   .settings_item li.last_color {
@@ -92,10 +92,10 @@
         </ul>
       </p>
       <p>
-        Цена: {{ item.option_price|to_int_plus|with_delimeter }} р.
+        Цена: {{ item.option_price|to_int_or_float|with_delimeter|currency_light:cart.currency }}
         {% if item.discount %}
           <br/>Скидка: {{ item.discount }} %
-          <br/>Цена за один товар: {{ item.option_price|with_discount:item.discount|with_delimeter }} р.
+          <br/>Цена за один товар: {{ item.option_price|with_discount:item.discount|with_delimeter|currency_light:cart.currency }}
         {% endif %}
       </p>
 
@@ -144,13 +144,13 @@
             {% endif %}
           {% endfor %}
         </ul>
-        <p>Цена доп.товаров: {{ item.extra_price|to_int_plus|with_delimeter }} р.</p>
+        <p>Цена доп.товаров: {{ item.extra_price|to_int_or_float|with_delimeter|currency_light:cart.currency }}</p>
         <br/>
       {% endif %}
 
       <p>Кол-во: <strong>{{ item.count }}</strong></p>
-      {% if item.wrapping_price %}<p>+ Подарочная упаковка: {{ item.wrapping_price|to_int_plus|with_delimeter }} р.</p>{% endif %}
-      <p>Стоимость: <strong>{{ item.price|to_int_plus|with_delimeter }} р.</strong></p>
+      {% if item.with_wrapping %}<p>+ Подарочная упаковка: {{ item.wrapping_price|to_int_or_float|with_delimeter|currency_light:cart.currency }}</p>{% endif %}
+      <p>Стоимость: <strong>{{ item.price|to_int_or_float|with_delimeter|currency_light:cart.currency }}</strong></p>
       <hr/>
     </li>
   {% endfor %}
@@ -179,10 +179,10 @@
         </ul>
       </p>
       <p>
-        Цена: {{ item.price|to_int_plus|with_delimeter }} р.
+        Цена: {{ item.price|to_int_or_float|with_delimeter|currency_light:cart.currency }}
       </p>
       {# <p>Кол-во: <strong>{{ item.count }}</strong></p> #}
-      <p>Стоимость: <strong>{{ item.price|to_int_plus|with_delimeter }} р.</strong></p>
+      <p>Стоимость: <strong>{{ item.price|to_int_or_float|with_delimeter|currency_light:cart.currency }}</strong></p>
       <hr/>
     </li>
   {% endfor %}
@@ -190,5 +190,5 @@
 
 <p>
   <br/>
-  Общая стоимость заказа с доставкой: <strong>{{ cart.show_summary }}</strong> р.
+  Общая стоимость заказа с доставкой: <strong>{{ cart.show_summary|currency_light:cart.currency }}</strong>
 </p>

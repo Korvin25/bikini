@@ -28,6 +28,13 @@
 // };
 
 
+function parsePrice(price) {
+  console.log(price, typeof(price));
+  if (parseInt(price) == parseFloat(price)) { return price; }
+  else { return price.toFixed(2); }
+}
+
+
 function submitProductForm($form, $button, option_id, _attrs, _extra_products, data, count, prices, $wishlistInput) {
   var data = data || {'prices': {}},
       url = $form.attr('action'),
@@ -168,6 +175,8 @@ $('.js-cart-button').click(function(e){
       _attrs = {},
       _extra_products = {},
       errors = [];
+
+  if (!$form.length) { $form = $('.js-product-form'); }
 
   if (!Object.keys(option).length) {
     showErrorPopup('Произошла ошибка:', 'Такого товара нет в наличии.');
@@ -378,6 +387,8 @@ function updateTotalPrice(update_cart_button) {
     chooseOption(false);  // на случай, что кол-во увеличилось - выбираем вариант с нужным кол-вом
   }
 
+  console.log(data);
+
   base_price = (p['option']+p['extra'])*p['count'] + p['wrapping'];
   data['prices']['base'] = total_price;
 
@@ -386,8 +397,8 @@ function updateTotalPrice(update_cart_button) {
   data['prices']['total'] = total_price;
   data['prices']['discount_price'] = discount_price;
 
-  $base_price_label.text(base_price);
-  $price_label.text(total_price);
+  $base_price_label.text(parsePrice(base_price));
+  $price_label.text(parsePrice(total_price));
   if (update_cart_button) {
     updateCartButton(); 
   }
@@ -431,10 +442,16 @@ function changeExtraProduct(extra_product_id, is_checked) {
 function changeGiftWrapping(price, is_checked) {
   // добавляем или удаляем подарочную упаковку (is_checked == true/false)
 
-  var price = parseInt(price);
+  var price = parseFloat(price);
 
-  if (is_checked) { data['prices']['wrapping'] = price; }
-  else { data['prices']['wrapping'] = 0; };
+  if (is_checked) {
+    data['prices']['wrapping'] = price;
+    data['prices']['with_wrapping'] = true;
+  }
+  else {
+    data['prices']['wrapping'] = 0;
+    data['prices']['wrapping'] = false;
+  };
 
   updateTotalPrice(false);
 }

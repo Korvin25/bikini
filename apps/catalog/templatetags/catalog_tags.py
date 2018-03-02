@@ -106,9 +106,8 @@ def get_product_text(product):
 
 
 @register.simple_tag()
-def get_product_attrs_url(product, attrs, extra_products=None, wrapping_price=None, count=None):
+def get_product_attrs_url(product, attrs, extra_products=None, with_wrapping=False, count=None):
     extra_products = extra_products or {}
-    with_wrapping = bool(wrapping_price)
     url = product.get_absolute_url()
 
     attrs_strings = []

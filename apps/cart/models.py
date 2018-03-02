@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from decimal import Decimal
+
 from django.contrib.postgres.fields import JSONField
 from django.core.urlresolvers import reverse
 from django.conf import settings
@@ -8,15 +10,13 @@ from django.db import models
 from django.template.loader import get_template
 from django.utils.safestring import mark_safe
 
-from ..catalog.models import Certificate, Product, ProductOption
+from ..catalog.models import Certificate, Product, ProductOption, GiftWrapping
 from ..catalog.templatetags.catalog_tags import get_product_attrs_url
+from ..core.templatetags.core_tags import to_int_or_float
+from ..currency.templatetags.currency_tags import with_currency
+from ..currency.utils import price_with_currency
 from ..geo.models import Country
 from .utils import make_hash_from_cartitem
-
-
-def to_int_plus(value):
-    int_value = int(value)
-    return int_value if int_value == value else int_value + 1
 
 
 class DeliveryMethod(models.Model):
@@ -41,8 +41,7 @@ class DeliveryMethod(models.Model):
 
     @property
     def price(self):
-        # TODO
-        return self.price_rub
+        return price_with_currency(self)
 
 
 class PaymentMethod(models.Model):
@@ -65,6 +64,11 @@ class PaymentMethod(models.Model):
 
 
 class Cart(models.Model):
+    CURRENCY_CHOICES = (
+        ('rub', 'RUB'),
+        ('eur', 'EUR'),
+        ('usd', 'USD'),
+    )
     STATUS_CHOICES = (
         (0, 'новый'),
         (1, 'принят'),
@@ -72,22 +76,12 @@ class Cart(models.Model):
         (3, 'исполнен'),
         (4, 'отменен'),
     )
-    # DELIVERY_CHOICES = (
-    #     ('0', 'Самовывоз'),
-    #     ('1', 'Курьерская доставка'),
-    #     ('2', 'Отправление первого класса'),
-    #     ('3', 'Почта'),
-    # )
-    # PAYMENT_CHOICES = (
-    #     ('0', 'Пластиковые карты'),
-    #     ('1', 'Наличные'),
-    #     ('2', 'Долг по дружбе'),
-    # )
     profile = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Профиль', blank=True, null=True)
 
     creation_date = models.DateTimeField('Дата создания', auto_now_add=True)
     checked_out = models.BooleanField('Корзина оформлена', default=False)
     checkout_date = models.DateTimeField('Дата оформления', null=True, blank=True)
+    currency = models.CharField('Валюта', max_length=3, default='rub', choices=CURRENCY_CHOICES)
 
     # postal_code = models.CharField('Почтовый код', max_length=255, null=True, blank=True)
     country = models.ForeignKey(Country, verbose_name='Страна', null=True, blank=True)
@@ -105,7 +99,9 @@ class Cart(models.Model):
     # payment_type = models.CharField('Тип оплаты', max_length=15, choices=PAYMENT_CHOICES, null=True, blank=True)
 
     status = models.PositiveSmallIntegerField('Статус', choices=STATUS_CHOICES, default=0)
-    summary = models.DecimalField('Сумма, руб.', max_digits=9, decimal_places=2, default=0)
+    summary_rub = models.DecimalField('Сумма, руб.', max_digits=9, decimal_places=2, default=0)
+    summary_eur = models.DecimalField('Сумма, eur.', max_digits=9, decimal_places=2, default=0)
+    summary_usd = models.DecimalField('Сумма, usd.', max_digits=9, decimal_places=2, default=0)
 
     class Meta:
         verbose_name = 'заказ'
@@ -116,9 +112,14 @@ class Cart(models.Model):
         # return unicode(self.creation_date)
         return self.title
 
+    @property
+    def summary(self):
+        return price_with_currency(self, 'summary')
+
     def save(self, *args, **kwargs):
         if not self.checked_out:
-            self.summary = self.get_summary()
+            self.get_summary()
+        # self.get_summary()
         return super(Cart, self).save(*args, **kwargs)
 
     def count(self):
@@ -129,14 +130,35 @@ class Cart(models.Model):
     count.short_description = 'Количество товара'
 
     def get_summary(self):
-        price_list = self.cartitem_set.all().values_list('price', flat=True)
-        result = sum(price_list)
-        certificate_price_list = self.certificatecartitem_set.all().values_list('price', flat=True)
-        result += sum(certificate_price_list)
+        prices = self.cartitem_set.all().values('price_rub', 'price_eur', 'price_usd')
+        result_rub = sum([price['price_rub'] for price in prices])
+        result_eur = sum([price['price_eur'] for price in prices])
+        result_usd = sum([price['price_usd'] for price in prices])
+
+        if self.certificatecartitem_set.count():
+            certificate_prices = self.certificatecartitem_set.all().values('price_rub', 'price_eur', 'price_usd')
+            result_rub += sum([price['price_rub'] for price in certificate_prices])
+            result_eur += sum([price['price_eur'] for price in certificate_prices])
+            result_usd += sum([price['price_usd'] for price in certificate_prices])
+
         delivery_method = self.delivery_method
         if delivery_method:
-            result = result + delivery_method.price
-        return result
+            result_rub += delivery_method.price_rub
+            result_eur += delivery_method.price_eur
+            result_usd += delivery_method.price_usd
+
+        self.summary_rub = result_rub
+        self.summary_eur = result_eur
+        self.summary_usd = result_usd
+
+        # price_list = self.cartitem_set.all().values_list('price', flat=True)
+        # result = sum(price_list)
+        # certificate_price_list = self.certificatecartitem_set.all().values_list('price', flat=True)
+        # result += sum(certificate_price_list)
+        # delivery_method = self.delivery_method
+        # if delivery_method:
+        #     result = result + delivery_method.price
+        # return result
 
     def is_order_with_discount(self):
         discounts = self.cartitem_set.all().values_list('discount', flat=True)
@@ -167,6 +189,13 @@ class Cart(models.Model):
         return self.profile or ''
     show_profile.allow_tags = True
     show_profile.short_description = 'Клиент'
+
+    def admin_show_summary(self):
+        # summary = getattr(self, 'summary_{}'.format(self.currency), self.summary)
+        summary_with_currency = with_currency(self.summary, self.currency, with_title=False)
+        return mark_safe(summary_with_currency)
+    admin_show_summary.allow_tags = True
+    admin_show_summary.short_description = 'Сумма'
 
     def show_delivery_method(self):
         method = self.delivery_method
@@ -206,7 +235,7 @@ class Cart(models.Model):
             return '000 {}'.format(_number)
 
     def show_items(self):
-        template = get_template('cart/include/cart_items.html')
+        template = get_template('cart/admin/admin_cart_items.html')
         data = template.render({'cart': self})
         return mark_safe(data)
     show_items.allow_tags = True
@@ -231,11 +260,22 @@ class CartItem(models.Model):
     extra_products = JSONField(default=dict)
     hash = models.BigIntegerField(default=0, db_index=True)
 
-    option_price = models.DecimalField(max_digits=9, decimal_places=2, default=0)
+    with_wrapping = models.BooleanField(default=False)
     discount = models.PositiveSmallIntegerField(default=0)
-    extra_price = models.DecimalField(max_digits=9, decimal_places=2, default=0)
-    wrapping_price = models.DecimalField(max_digits=9, decimal_places=2, default=0)
-    price = models.DecimalField(max_digits=9, decimal_places=2, default=0)
+
+    option_price_rub = models.DecimalField(max_digits=9, decimal_places=2, default=0)
+    option_price_eur = models.DecimalField(max_digits=9, decimal_places=2, default=0)
+    option_price_usd = models.DecimalField(max_digits=9, decimal_places=2, default=0)
+    extra_price_rub = models.DecimalField(max_digits=9, decimal_places=2, default=0)
+    extra_price_eur = models.DecimalField(max_digits=9, decimal_places=2, default=0)
+    extra_price_usd = models.DecimalField(max_digits=9, decimal_places=2, default=0)
+    wrapping_price_rub = models.DecimalField(max_digits=9, decimal_places=2, default=0)
+    wrapping_price_eur = models.DecimalField(max_digits=9, decimal_places=2, default=0)
+    wrapping_price_usd = models.DecimalField(max_digits=9, decimal_places=2, default=0)
+
+    price_rub = models.DecimalField(max_digits=9, decimal_places=2, default=0)
+    price_eur = models.DecimalField(max_digits=9, decimal_places=2, default=0)
+    price_usd = models.DecimalField(max_digits=9, decimal_places=2, default=0)
 
     class Meta:
         verbose_name = 'товар'
@@ -246,6 +286,22 @@ class CartItem(models.Model):
         return '{} units of {}'.format(self.count, self.title)
 
     @property
+    def option_price(self):
+        return price_with_currency(self, 'option_price')
+
+    @property
+    def extra_price(self):
+        return price_with_currency(self, 'extra_price')
+
+    @property
+    def wrapping_price(self):
+        return price_with_currency(self, 'wrapping_price')
+
+    @property
+    def price(self):
+        return price_with_currency(self)
+
+    @property
     def title(self):
         return self.option.title or self.product.__unicode__()
 
@@ -254,18 +310,55 @@ class CartItem(models.Model):
 
     @property
     def url(self):
-        return get_product_attrs_url(self.product, self.attrs, self.extra_products, self.wrapping_price, self.count)
+        return get_product_attrs_url(self.product, self.attrs, self.extra_products, self.with_wrapping, self.count)
 
     @classmethod
     def had_discounts(cls, cart_ids):
         return bool(cls.objects.filter(cart_id__in=cart_ids, discount__gt=0).count())
 
-    def get_base_price(self, with_discount=True):
-        option_price = self.option_price
+    def get_option_price(self):
+        option = self.option
+        self.option_price_rub = self.option_price_rub or option.price_rub
+        self.option_price_eur = self.option_price_eur or option.price_eur
+        self.option_price_usd = self.option_price_usd or option.price_usd
+
+    def get_extra_price(self):
+        if self.extra_price_rub and self.extra_price_eur and self.extra_price_usd:
+            return
+
+        extra_products = self.product.extra_products.filter(extra_product_id__in=self.extra_products.keys())
+        prices = extra_products.values('price_rub', 'price_eur', 'price_usd')
+        self.extra_price_rub = sum([price['price_rub'] for price in prices])
+        self.extra_price_eur = sum([price['price_eur'] for price in prices])
+        self.extra_price_usd = sum([price['price_usd'] for price in prices])
+
+    def get_wrapping_price(self):
+        price_rub = 0.0
+        price_eur = 0.0
+        price_usd = 0.0
+
+        if self.with_wrapping:
+            prices = GiftWrapping.get_prices()
+            price_rub = prices['rub']
+            price_eur = prices['eur']
+            price_usd = prices['usd']
+
+        self.wrapping_price_rub = Decimal(price_rub)
+        self.wrapping_price_eur = Decimal(price_eur)
+        self.wrapping_price_usd = Decimal(price_usd)
+
+    def get_base_price(self, with_discount=True, currency=None):
+        if currency is None:
+            option_price = price_with_currency(self, 'option_price')
+            extra_price = price_with_currency(self, 'extra_price')
+        else:
+            option_price = getattr(self, 'option_price_{}'.format(currency))
+            extra_price = getattr(self, 'extra_price_{}'.format(currency))
+
         if with_discount and self.discount:
             discount_price = option_price*self.discount // 100
-            option_price = to_int_plus(option_price - discount_price)
-        return option_price+self.extra_price
+            option_price = Decimal(to_int_or_float(option_price - discount_price))
+        return option_price+extra_price
 
     @property
     def base_price(self):
@@ -276,28 +369,41 @@ class CartItem(models.Model):
         return self.get_base_price(with_discount=False)
 
     def count_price(self):
-        return (self.base_price*self.count + self.wrapping_price if self.count
-                else 0)
+        price_rub = 0
+        price_eur = 0
+        price_usd = 0
+
+        if self.count:
+            price_rub = self.get_base_price(currency='rub')*self.count + self.wrapping_price_rub
+            price_eur = self.get_base_price(currency='eur')*self.count + self.wrapping_price_eur
+            price_usd = self.get_base_price(currency='usd')*self.count + self.wrapping_price_usd
+
+        self.price_rub = price_rub
+        self.price_eur = price_eur
+        self.price_usd = price_usd
 
     @property
     def total_price_without_discount(self):
-        return to_int_plus(self.base_price_without_discount*self.count + self.wrapping_price if self.count
-                           else 0)
+        return to_int_or_float((self.base_price_without_discount*self.count + self.wrapping_price) if self.count
+                               else 0)
+
+    def save(self, *args, **kwargs):
+        self.get_option_price()
+        self.get_extra_price()
+        self.get_wrapping_price()
+        self.count_price()
+        return super(CartItem, self).save(*args, **kwargs)
+
+    @property
+    def price_int(self):
+        price = self.price
+        return to_int_or_float(price)
 
     def set_hash(self):
         hash = make_hash_from_cartitem(self.attrs, self.extra_products)
         self.hash = hash
         self.save()
         return hash
-
-    def save(self, *args, **kwargs):
-        self.price = self.count_price()
-        return super(CartItem, self).save(*args, **kwargs)
-
-    @property
-    def price_int(self):
-        price = self.price
-        return to_int_plus(price)
 
 
 class CertificateCartItem(models.Model):
@@ -314,7 +420,9 @@ class CertificateCartItem(models.Model):
     send_immediately = models.BooleanField('Отправлять сразу?', default=True)
     send_date = models.DateField('Дата отправки', blank=True, null=True)
 
-    price = models.DecimalField(max_digits=9, decimal_places=2, default=0)
+    price_rub = models.DecimalField(max_digits=9, decimal_places=2, default=0)
+    price_eur = models.DecimalField(max_digits=9, decimal_places=2, default=0)
+    price_usd = models.DecimalField(max_digits=9, decimal_places=2, default=0)
 
     class Meta:
         verbose_name = 'сертификат'
@@ -323,6 +431,10 @@ class CertificateCartItem(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    @property
+    def price(self):
+        return price_with_currency(self)
 
     @property
     def url(self):
@@ -340,13 +452,16 @@ class CertificateCartItem(models.Model):
         return self.certificate.vendor_code
 
     def count_price(self):
-        return self.certificate.price
+        certificate = self.certificate
+        self.price_rub = certificate.price_rub
+        self.price_eur = certificate.price_eur
+        self.price_usd = certificate.price_usd
 
     def save(self, *args, **kwargs):
-        self.price = self.count_price()
+        self.count_price()
         return super(CertificateCartItem, self).save(*args, **kwargs)
 
     @property
     def price_int(self):
         price = self.price
-        return to_int_plus(price)
+        return to_int_or_float(price)

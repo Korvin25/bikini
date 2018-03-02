@@ -12,7 +12,7 @@ from apps.cart.utils import make_hash_from_cartitem
 from apps.catalog.models import AttributeOption, Product, ProductOption
 from apps.core.mixins import JSONViewMixin
 from apps.lk.models import WishListItem
-from .utils import get_wishlist_from_request
+from .utils import get_wishlist_from_request, get_wishlist_item_prices
 
 
 class WishListView(TemplateView):
@@ -97,7 +97,6 @@ class WishListAddView(JSONViewMixin, View):
         try:
             product_id = int(DATA['product_id'])
             option_id = int(DATA['option_id'])
-            price = float(DATA.get('price', 0.0))
             attrs = DATA.get('attrs', {})
             extra_products = DATA.get('extra_products', {})
         except ValueError:
@@ -123,10 +122,17 @@ class WishListAddView(JSONViewMixin, View):
                 the_item = {}
                 wishlist.append(the_item)
 
+            prices = get_wishlist_item_prices(product_id, option_id, extra_products)
+            price_rub = prices['rub']
+            price_eur = prices['eur']
+            price_usd = prices['usd']
+
             the_item.update({
                 'product_id': product_id,
                 'option_id': option_id,
-                'price': price,
+                'price_rub': price_rub,
+                'price_eur': price_eur,
+                'price_usd': price_usd,
                 'attrs': attrs,
                 'extra_products': extra_products,
                 'hash': hash,
@@ -138,9 +144,8 @@ class WishListAddView(JSONViewMixin, View):
                 kwargs = {'profile_id': profile.id, 'product_id': product_id, 'hash': hash}
                 the_item = WishListItem.objects.filter(**kwargs).first()
                 if not the_item:
-                    the_item = WishListItem.objects.create(option_id=option_id, **kwargs)
+                    the_item = WishListItem(option_id=option_id, **kwargs)
                 the_item.option_id = option_id
-                the_item.price = price
                 the_item.attrs = attrs
                 the_item.extra_products = extra_products
                 the_item.save()

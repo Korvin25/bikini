@@ -170,7 +170,8 @@ $('body').on('click', '.js-wishlist-cart-button', function(e){
       _attrs = JSON.parse($input.attr('data-attrs') || {}),
       _extra_products = JSON.parse($input.attr('data-extra-products') || {}),
       count = 1,
-      prices = {'count': count, 'option': price},
+      // prices = {'count': count, 'option': price},
+      prices = {'count': count},
       $wishlistInput = $form.find('.js-wishlist-input'),
       data = null;
 

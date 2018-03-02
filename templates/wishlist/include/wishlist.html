@@ -1,4 +1,4 @@
-{% load i18n core_tags catalog_tags wishlist_tags %}
+{% load i18n core_tags catalog_tags wishlist_tags currency_tags %}
 
 <div class="row_info">
   {% if wishlist|length %}
@@ -27,7 +27,7 @@
               <h3><a href="{{ product_url }}">{{ product.title }}</a></h3>
               <h4>{% if product.subtitle %}{{ product.subtitle }}{% endif %}</h4>
               {% if item.price is not None %}
-                <div class="product_price">{{ item.price|to_int_plus }}<abbr title="руб">р.</abbr></div>
+                <div class="product_price">{{ item.price|to_price|with_currency:currency|safe }}</div>
               {% endif %}
               {% if product_option.in_stock %}
                 <button class="js-wishlist-cart-button to_cart_list" data-type="add" type="submit">В корзину</button>

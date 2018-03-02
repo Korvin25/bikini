@@ -148,7 +148,7 @@ class BaseSocialView(View):
     def _vk_method(self, method_name, params, token):
         api_url = settings.VKONTAKTE_API_URL
         url = '{}/{}'.format(api_url, method_name)
-        params.update({'access_token': token})
+        params.update({'access_token': token, 'v': '5.73'})
         response = requests.get(url, params)
         return response
 

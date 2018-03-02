@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from decimal import Decimal
 import json
 
 from django.contrib.postgres.fields import JSONField
@@ -16,7 +17,9 @@ from easy_thumbnails.files import get_thumbnailer
 from filer.fields.image import FilerImageField
 from sortedm2m.fields import SortedManyToManyField
 
+from ..core.templatetags.core_tags import to_price
 from ..core.utils import with_watermark
+from ..currency.utils import price_with_currency
 from ..settings.models import Setting, SEOSetting, MetatagModel
 
 
@@ -345,8 +348,7 @@ class AdditionalProduct(models.Model):
 
     @property
     def price(self):
-        # TODO
-        return self.price_rub
+        return price_with_currency(self)
 
 
 class Certificate(models.Model):
@@ -374,8 +376,7 @@ class Certificate(models.Model):
 
     @property
     def price(self):
-        # TODO
-        return self.price_rub
+        return price_with_currency(self)
 
     @property
     def cart_cover_thumb(self):
@@ -400,10 +401,23 @@ class GiftWrapping(models.Model):
     show_name.short_description = ''
 
     @classmethod
+    def get_prices(cls):
+        prices = {
+            'rub': Decimal(0.0),
+            'eur': Decimal(0.0),
+            'usd': Decimal(0.0),
+        }
+        obj = cls.objects.first()
+        if obj:
+            prices['rub'] = obj.price_rub
+            prices['eur'] = obj.price_eur
+            prices['usd'] = obj.price_usd
+        return prices
+
+    @classmethod
     def get_price(cls):
         obj = cls.objects.first()
-        # TODO: eur, usd
-        return obj.price_rub if obj else 200.0
+        return price_with_currency(obj) if obj else Decimal(0.0)
 
 
 # === Товары + спец.предложения ===
@@ -508,8 +522,7 @@ class Product(MetatagModel):
 
     @property
     def price(self):
-        # TODO
-        return self.price_rub
+        return price_with_currency(self)
 
     @property
     def cover_thumb(self):
@@ -539,9 +552,8 @@ class Product(MetatagModel):
         # return self.photo['product_photo_big'].url
         return with_watermark(get_thumbnailer(self.photo_f)['product_photo_big'].url)
 
-    def get_price_rub(self):
-        price = self.price_rub
-        return int(price) if int(price) == price else price
+    def get_price(self):
+        return to_price(self.price)
 
     @mark_safe
     def options_instruction(self):
@@ -693,8 +705,7 @@ class ProductOption(models.Model):
 
     @property
     def price(self):
-        # TODO
-        return self.price_rub
+        return price_with_currency(self)
 
 
 class ProductExtraOption(models.Model):
@@ -727,8 +738,7 @@ class ProductExtraOption(models.Model):
 
     @property
     def price(self):
-        # TODO
-        return self.price_rub
+        return price_with_currency(self)
 
 
 class ProductPhoto(models.Model):

@@ -1,17 +1,17 @@
-{% load cart_tags core_tags wishlist_tags %}
+{% load cart_tags core_tags wishlist_tags currency_tags %}
 
 <ol>
   {% for item in obj.cart_items %}
     <li>
-      <a href="{{ item.url|full_url }}"><strong>{{ item.title }}</strong></a>{% if item.product.vendor_code %}, артикул <strong>{{ item.get_vendor_code }}</strong>{% endif %}{% if for_admin %}{% get_all_attrs_options item.attrs.items as attrs_options %}{% for option in attrs_options.color %}, {{ option.attribute.title|lower }}: {{ option.title|lower }}{% endfor %}{% for option in attrs_options.style %}, {{ option.attribute.title|lower }}: {{ option.title|lower }}{% endfor %}{% for option in attrs_options.size %}, {{ option.attribute.title|lower }}: {{ option.title|lower }}{% endfor %}{% endif %}, {% if item.discount %}цена со скидкой: {{ item.option_price|with_discount:item.discount|with_delimeter }} р.{% else %}цена: {{ item.option_price|to_int_plus|with_delimeter }} р.{% endif %}<br/>
+      <a href="{{ item.url|full_url }}"><strong>{{ item.title }}</strong></a>{% if item.product.vendor_code %}, артикул <strong>{{ item.get_vendor_code }}</strong>{% endif %}{% if for_admin %}{% get_all_attrs_options item.attrs.items as attrs_options %}{% for option in attrs_options.color %}, {{ option.attribute.title|lower }}: {{ option.title|lower }}{% endfor %}{% for option in attrs_options.style %}, {{ option.attribute.title|lower }}: {{ option.title|lower }}{% endfor %}{% for option in attrs_options.size %}, {{ option.attribute.title|lower }}: {{ option.title|lower }}{% endfor %}{% endif %}, {% if item.discount %}цена со скидкой: {{ item.option_price|with_discount:item.discount|with_delimeter|currency_light:obj.currency }}{% else %}цена: {{ item.option_price|to_int_or_float|with_delimeter|currency_light:obj.currency }}{% endif %}<br/>
 
-      {% if item.extra_products %}<br\>Дополнительные товары: {% for extra_product_id, attrs in item.extra_products.items %}{% get_extra_product extra_product_id as extra_p %}{% if extra_p %}{{ extra_p.title }}{% if extra_p.vendor_code %}, артикул {{ extra_p.vendor_code }}{% endif %}{% if for_admin %}{% get_all_attrs_options attrs.items as attrs_options %}{% for option in attrs_options.color %}, {{ option.attribute.title|lower }}: {{ option.title|lower }}{% endfor %}{% for option in attrs_options.style %}, {{ option.attribute.title|lower }}: {{ option.title|lower }}{% endfor %}{% for option in attrs_options.size %}, {{ option.attribute.title|lower }}: {{ option.title|lower }}{% endfor %}{% endif %}{% if not forloop.last %}; {% endif %}{% endif %}{% endfor %}. Цена доп.товаров: {{ item.extra_price|to_int_plus|with_delimeter }} р.<br/>{% endif %}
+      {% if item.extra_products %}<br\>Дополнительные товары: {% for extra_product_id, attrs in item.extra_products.items %}{% get_extra_product extra_product_id as extra_p %}{% if extra_p %}{{ extra_p.title }}{% if extra_p.vendor_code %}, артикул {{ extra_p.vendor_code }}{% endif %}{% if for_admin %}{% get_all_attrs_options attrs.items as attrs_options %}{% for option in attrs_options.color %}, {{ option.attribute.title|lower }}: {{ option.title|lower }}{% endfor %}{% for option in attrs_options.style %}, {{ option.attribute.title|lower }}: {{ option.title|lower }}{% endfor %}{% for option in attrs_options.size %}, {{ option.attribute.title|lower }}: {{ option.title|lower }}{% endfor %}{% endif %}{% if not forloop.last %}; {% endif %}{% endif %}{% endfor %}. Цена доп.товаров: {{ item.extra_price|to_int_or_float|with_delimeter|currency_light:obj.currency }}<br/>{% endif %}
 
       Кол-во: {{ item.count }}<br/>
-      {% if item.wrapping_price %}
-        + Подарочная упаковка: {{ item.wrapping_price|to_int_plus|with_delimeter }} р.<br/>
+      {% if item.with_wrapping %}
+        + Подарочная упаковка: {{ item.wrapping_price|to_int_or_float|with_delimeter|currency_light:obj.currency }}<br/>
       {% endif %}
-      Стоимость: {{ item.price|to_int_plus|with_delimeter }} р.<br/>
+      Стоимость: {{ item.price|to_int_or_float|with_delimeter|currency_light:obj.currency }}<br/>
     </li>
   {% endfor %}
 
@@ -22,7 +22,7 @@
       {% if item.send_immediately or item.send_date %}
         Когда отправлять: {% if item.send_immediately %}сразу{% else %}{{ item.send_date|date:'d.m.Y' }}{% endif %}<br/>
       {% endif %}
-      Стоимость: {{ item.price|to_int_plus|with_delimeter }} р.<br/>
+      Стоимость: {{ item.price|to_int_or_float|with_delimeter|currency_light:obj.currency }}<br/>
     </li>
   {% endfor %}
 </ol>

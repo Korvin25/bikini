@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n core_tags %}
+{% load i18n core_tags currency_tags %}
 
 {% block meta_title %}{{ seo_settings.certificate.get_meta_title }}{% endblock %}
 {% block meta_desc %}{{ seo_settings.certificate.get_meta_desc }}{% endblock %}
@@ -42,7 +42,7 @@
                     <div class="sertificat_title">
                       Подарочный сертификат
                     </div>
-                    <div class="product_price upper_price"><span class="js-certificte-price">{{ certificate.price|to_int_plus }}</span><abbr title="руб">руб.</abbr></div>
+                    <div class="product_price upper_price">{{ certificate.price|to_price|with_js_certificte_price:currency|safe }}</div>
                   </div>
                 </div>
 
@@ -95,12 +95,12 @@
                     <div class="select_img"><!--.errr-->
                       <div class="selectboxss drop_list_text" id="sertificates_select">
                         <div class="selectboxssvalue">
-                          <span class="input_text_view">{{ certificate.price|to_int_plus }}р.</span>
+                          <span class="input_text_view">{{ certificate.price|to_price|currency_light:currency|safe }}</span>
                           <img src="/static/i/arrow_down_list.png" class="arrowselect" id="arrow_select" />
                         </div>
                         <ul class="selectboxssmenu">
                           {% for cert in certificates %}
-                            <li class="selectoption js-select-option" data-id="{{ cert.id }}" data-price="{{ cert.price|to_int_plus }}">{{ cert.price|to_int_plus }}р.</li>
+                            <li class="selectoption js-select-option" data-id="{{ cert.id }}" data-price="{{ cert.price|to_price }}">{{ cert.price|to_price|currency_light:currency|safe }}</li>
                           {% endfor %}
                         </ul>
                       </div>

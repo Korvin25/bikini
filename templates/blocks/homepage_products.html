@@ -1,16 +1,16 @@
+{% load currency_tags %}
+
 <div class="item_list_wrapp" itemscope="" itemtype="http://schema.org/ItemList">
   {% for product in products %}
     <div class="product_list">
       <div class="photo_list"><a href="{{ product.get_absolute_url }}"><img src="{{ product.cover_thumb }}" alt="{{ product.title }}" /></a></div>
       <h3><a href="{{ product.get_absolute_url }}">{{ product.title }}</a></h3>
       <h4>{{ product.subtitle }}</h4>
-      <div class="product_price">{{ product.get_price_rub }}<abbr title="руб">р.</abbr></div>
+      <div class="product_price">{{ product.get_price|with_currency:currency|safe }}</div>
       <a href="{{ product.get_absolute_url }}" class="to_cart_list">В корзину</a>
     </div>
   {% endfor %}
   <div style="clear:both;text-align:center;">
 	<a href="{{ promo_banner.link }}" title="{{ promo_banner.link_text }}" target="_blank" class="text_link_cat" style="color:#fff;margin-left: 35px;">{{ promo_banner.link_text }}</a>
   </div>
-
 </div>
-

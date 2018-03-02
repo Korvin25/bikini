@@ -25,7 +25,7 @@ class PaymentMethodAdmin(SortableAdminMixin, TabbedTranslationAdmin):
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'profile', 'checked_out', 'is_order_with_discount', 'checkout_date',
-                    'summary', 'count', 'country', 'city',
+                    'admin_show_summary', 'count', 'country', 'city',
                     'show_delivery_method', 'show_payment_method', 'status',)
     list_display_links = ('__unicode__', 'profile',)
     list_filter = ('status', 'delivery_method', 'payment_method',)

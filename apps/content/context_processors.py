@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.conf import settings
 
 from ..banners.models import Banner
+from ..currency.utils import get_currency
 from ..lk.wishlist.utils import get_wishlist_from_request
 from .models import Menu
 
@@ -18,6 +19,7 @@ def content(request):
     profile = request.user
     wishlist = get_wishlist_from_request(request)
     DEBUG = settings.DEBUG
+    currency = get_currency(request)
 
     content = {
         'menu': menu,
@@ -29,5 +31,6 @@ def content(request):
         'profile': profile,
         'wishlist': wishlist,
         'DEBUG': DEBUG,
+        'currency': currency,
     }
     return content

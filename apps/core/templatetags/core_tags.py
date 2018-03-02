@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from decimal import Decimal
 from itertools import chain
 
 from django import template
@@ -151,6 +152,16 @@ def to_int_str(value):
 
 
 @register.filter
+def to_price(value):
+    if type(value) not in [int, float, Decimal]:
+        return unicode(value)
+
+    int_value = int(value)
+    return (int_value if int_value == value
+            else '{:.2f}'.format(value))
+
+
+@register.filter
 def with_delimeter(value):
     return '{0:,}'.format(value).replace(',', ' ')
 
@@ -158,14 +169,20 @@ def with_delimeter(value):
 @register.filter
 def to_int_plus(value):
     int_value = int(value)
-    return (int_value if int_value == value
-            else int_value + 1)
+    return int_value if int_value == value else int_value + 1
+
+
+@register.filter
+def to_int_or_float(value):
+    int_value = int(value)
+    return int_value if int_value == value else float(value)
 
 
 @register.filter
 def with_discount(price, discount):
     discount_price = price*discount // 100
-    return to_int_plus(price - discount_price)
+    # return to_int_plus(price - discount_price)
+    return to_int_or_float(price - discount_price)
 
 
 @register.filter

@@ -56,6 +56,7 @@ INSTALLED_APPS = (
     'django_cleanup',
     'django_object_actions',
     'django_select2',
+    'django_user_agents',
     'easy_thumbnails',
     'el_pagination',
     'embed_video',
@@ -71,6 +72,7 @@ INSTALLED_APPS = (
     'watermarker',
 
     'apps.core',
+    'apps.currency',
     'apps.geo',
     'apps.lk',
     'apps.settings',
@@ -93,12 +95,14 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 
+    'django_user_agents.middleware.UserAgentMiddleware',
     'request.middleware.RequestMiddleware',
 
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+    'apps.currency.middleware.CurrencyMiddleware',
     'crequest.middleware.CrequestMiddleware',
 ]
 
@@ -308,6 +312,18 @@ LOGGING = {
         },
     }
 }
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': 'localhost:6379',
+    },
+}
+
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_DB = 0
 
 
 ROSETTA_MESSAGES_PER_PAGE = 50

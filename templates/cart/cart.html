@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n catalog_tags core_tags wishlist_tags %}
+{% load i18n catalog_tags core_tags wishlist_tags currency_tags %}
 
 {% block meta_title %}{{ seo_settings.cart.get_meta_title }}{% endblock %}
 {% block meta_desc %}{{ seo_settings.cart.get_meta_desc }}{% endblock %}
@@ -42,7 +42,7 @@
                 {# <div class="table_cell tb_fason"><div class="tb_title">Фасон</div></div> #}
                 <div class="table_cell tb_price"><div class="tb_title">Цена</div></div>
                 <div class="table_cell tb_cnt"><div class="tb_title">Количество</div></div>
-                {% if with_gift_wrapping %}<div class="table_cell tb_summ"><div class="tb_title">Подарочная упаковка<br/>({{ gift_wrapping_price }}р.)</div></div>{% endif %}
+                {% if with_gift_wrapping %}<div class="table_cell tb_summ"><div class="tb_title">Подарочная упаковка<br/>({{ gift_wrapping_price|to_price|with_currency:currency|safe }})</div></div>{% endif %}
               {% endif %}
               <div class="table_cell tb_summ"><div class="tb_title">Стоимость</div></div>
               
@@ -51,9 +51,9 @@
             </div>
 
             {% for item in cart_items %}
-              {% get_product_attrs_url item.product item.attrs item.extra_products item.wrapping_price item.count as product_url %}
+              {% get_product_attrs_url item.product item.attrs item.extra_products item.with_wrapping item.count as product_url %}
 
-              <div class="item_content_block table_row js-item-div" data-item-id="{{ item.id }}" data-set-url="{% url 'cart_api:set' %}" data-remove-url="{% url 'cart_api:remove' %}" data-base-price="{{ item.base_price|to_int_str }}" data-row-clear-selector="#js-row-clear-{{ item.id }}">
+              <div class="item_content_block table_row js-item-div" data-item-id="{{ item.id }}" data-set-url="{% url 'cart_api:set' %}" data-remove-url="{% url 'cart_api:remove' %}" data-base-price="{{ item.base_price|to_price }}" data-row-clear-selector="#js-row-clear-{{ item.id }}">
                 <div class="table_cell cell_image">
                   <a href="{{ product_url }}"><div class="td_photo" style="background-image:url({{ item.product.cart_cover_thumb }})"></div></a>
                 </div>
@@ -89,7 +89,7 @@
                 <div class="clr clr_table"></div>
                 <div class="table_cell td_price">
                   <div class="tb_title">Цена</div>
-                  <div class="product_price">{{ item.base_price|to_int_str }}<abbr title="руб">р.</abbr></div>
+                  <div class="product_price">{{ item.base_price|to_price|with_currency:currency|safe }}</div>
                 </div>
                 <div class="table_cell td_cnt">
                   <div class="tb_title">Количество</div>
@@ -105,7 +105,7 @@
                     <div class="tb_title">Подарочная упаковка</div>
                     <div>
                       <label for="gift-wrapping-{{ item.id }}" class="check_pr_input checke_lab" style="margin-top: 0;">
-                        <input type="checkbox"{% if item.wrapping_price %} checked="checked"{% endif %} class="" data-wrapping-price="{{ gift_wrapping_price|to_int_str }}" name="gift_wrapping" id="gift-wrapping-{{ item.id }}" value="1" />
+                        <input type="checkbox"{% if item.with_wrapping %} checked="checked"{% endif %} class="" data-wrapping-price="{{ gift_wrapping_price|to_price }}" name="gift_wrapping" id="gift-wrapping-{{ item.id }}" value="1" />
                       </label>
                     </div>
                   </div>
@@ -115,10 +115,10 @@
                   <div class="tb_title">Стоимость</div>
                   {% if item.discount %}
                     <div class="txt_price_to">Цена для вас:</div>
-                    <div class="product_price sale_price"><s class="item-base-summary-span" style="font-family: NeoRegular;">{{ item.total_price_without_discount }}</s><abbr title="руб">р.</abbr></div>
-                    <div class="product_price" style="color: #8c2c34;"><span class="js-cart-price item-summary-span">{{ item.price|to_int_plus }}</span><abbr title="руб">р.</abbr></div>
+                    <div class="product_price sale_price">{% prefix_currency currency item.total_price_without_discount %}<s class="item-base-summary-span" style="font-family: NeoRegular;">{{ item.total_price_without_discount }}</s>{% postfix_currency currency item.total_price_without_discount %}</div>
+                    <div class="product_price" style="color: #8c2c34;">{% prefix_currency currency item.price|to_int_or_float %}<span class="js-cart-price item-summary-span">{{ item.price|to_int_or_float }}</span>{% postfix_currency currency item.price|to_int_or_float %}</div>
                   {% else %}
-                    <div class="product_price"><span class="item-summary-span" id="price_ID-{{ forloop.counter }}">{{ item.price|to_int_str }}</span><abbr title="руб">р.</abbr></div>
+                    <div class="product_price">{% prefix_currency currency item.price|to_price %}<span class="item-summary-span" id="price_ID-{{ forloop.counter }}">{{ item.price|to_price }}</span>{% postfix_currency currency item.price|to_price %}</div>
                   {% endif %}
                 </div>
                 
@@ -176,7 +176,7 @@
 
                 <div class="table_cell td_summ">
                   <div class="tb_title">Стоимость</div>
-                  <div class="product_price"><span class="item-summary-span" id="price_ID-{{ forloop.counter }}">{{ item.price|to_int_str }}</span><abbr title="руб">р.</abbr></div>
+                  <div class="product_price"><span class="item-summary-span" id="price_ID-{{ forloop.counter }}">{{ item.price|to_price }}</span><abbr title="руб">р.</abbr></div>
                 </div>
                 
                 {% if cart_items %}<div class="table_cell td_put"></div>{% endif %}
@@ -202,7 +202,7 @@
                     <label for="delivery_method_{{ method.id }}" class="radio_input">
                       <div class="shell_cell_row">
                         <div class="input_cell"><input type="radio" name="delivery_method_id" value="{{ method.id }}" id="delivery_method_{{ method.id }}" class="check_radio js-choose-cart-method"{% if shipping_data.delivery_method_id == method.id or delivery_methods.count == 1 %} checked="checked"{% endif %}/></div>
-                        <p class="dott_cell"><strong><span>{{ method.title }}</span></strong><span class="val_radio_row">Стоимость : {{ method.price|to_int_plus }} руб.</span></p>
+                        <p class="dott_cell"><strong><span>{{ method.title }}</span></strong><span class="val_radio_row">Стоимость: {{ method.price|to_price|with_currency:currency|safe }}</span></p>
                       </div>
                     </label>
                   {% endfor %}
@@ -233,51 +233,9 @@
           
           <div class="foot_form_cut">
             <div class="foot_form_cut_row">
-              <h2 class="title_block">Итого товаров: <span class="price_table_summ"><span class="js-cart-count">{{ cart.count }}</span> на сумму <div class="product_price"><span class="js-cart-summary">{{ cart.summary }}</span><abbr title="руб">р.</abbr></div></span></h2>
+              <h2 class="title_block">Итого товаров: <span class="price_table_summ"><span class="js-cart-count">{{ cart.count }}</span> на сумму <div class="product_price">{{ cart.summary|with_js_cart_summary:currency|safe }}</div></span></h2>
               
-              <div class="block_curr_down">
-                <span class="title_down_block">Цена в: </span>
-                <script>
-                  (function( $ ) {
-                    $.fn.selectbox = function() {
-                    //var selectDefaultHeight = $('.selectboxss').height();
-                    var selectDefaultHeight = 40;
-                      $('.selectboxss .selectboxssvalue').click(function() {
-                        var currentHeight = $(this).closest(".selectboxss").height();
-                        if (currentHeight < 100 || currentHeight == selectDefaultHeight) {
-                          $(this).closest(".selectboxss").height("auto");
-                          $(this).find('.arrowselect').attr("style", "border-radius: 1000px;transition: 0.2s;transform: rotate(180deg);");
-                        }
-                        if (currentHeight >= 101) {
-                          $(this).closest(".selectboxss").height(selectDefaultHeight);
-                          $(this).find('.arrowselect').attr("style", "rotate(0deg);");
-                        }
-                      });
-                      $('li.selectoption').click(function() {
-                        $(this).closest(".selectboxss").height(selectDefaultHeight);
-                        $(this).closest(".selectboxss").find('.arrowselect').attr("style", "rotate(0deg);");
-                        
-                        var t = $(this).closest("li.selectoption").text();
-                        $(this).closest(".selectboxss").find('.selectboxssvalue img.input_mage').attr('src', t);
-                      });
-                    };
-                  })( jQuery );
-                </script>
-                <script> $(document).ready(function(){ $('.selectboxss').selectbox(); }); </script>
-                <div class="select_img">
-                  <div class="selectboxss">
-                    <div class="selectboxssvalue">
-                      <img src="/static/i/rub_img.png" class="input_mage" />
-                      <img src="/static/i/arrow_down_list.png" class="arrowselect" />
-                    </div>
-                    <ul class="selectboxssmenu">
-                      <li class="selectoption" style="background-image:url(/static/i/rub_img.png);"><span>/static/i/rub_img.png</span></li>
-                      <li class="selectoption" style="background-image:url(/static/i/dol_img.png);"><span>/static/i/dol_img.png</span></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              
+              {% include 'blocks/currency_change.html' %}
             </div>
             <button class="bt_red js-step0-button js-disabled-if-not-cart{% if not cart.count %} _disabled{% endif %}">Оформить заказ</button>
           </div>
@@ -523,7 +481,7 @@
           <h2 class="title_popap">Заказ успешно <br />оформлен</h2>
           <div class="row_form_popup">
             <p><strong>Заказ №:</strong><span class="js-order-number">111 111</span></p>
-            <p><strong >На сумму:</strong><span class="js-cart-summary">11 111р.</span></p>
+            <p><strong >На сумму:</strong>{{ '11 111'|with_js_cart_summary:currency|safe }}</p>
             {# <p><strong>Способ получения:</strong><span>Самовывоз</span></p> #}
 
             <p style="margin-top: 30px;">В ближайшее время с вами всяжутся 
@@ -552,7 +510,7 @@
           <div>№ заказа: </strong><span class="js-order-number">111 111</span><br/></div>
           <div class="content_pup">
             <div class="p_pup">Итоговая стоимость заказа:</div> 
-            <div class="product_price upper_price price_strong"><span class="js-cart-summary">11 111</span><abbr title="руб">руб.</abbr></div>
+            <div class="product_price upper_price price_strong">{{ '11 111'|with_js_cart_summary:currency|safe }}</div>
 
             <p>В ближайшее время с вами всяжутся 
             менеджеры отдела доставки для уточнения 
@@ -589,8 +547,8 @@
                   <h4>{{ sp.subtitle }}</h4>
                   <div class="txt_price_to">Цена для вас:</div>
                   
-                  <div class="product_price sale_price"><s>{{ sp.price|to_int_plus }}</s><abbr title="руб">р.</abbr></div>
-                  <div class="product_price">{{ sp.price|with_discount:special.discount }}<abbr title="руб">р.</abbr></div>
+                  <div class="product_price sale_price">{% prefix_currency currency sp.price|to_price %}<s>{{ sp.price|to_price }}</s>{% postfix_currency currency sp.price|to_price %}</div>
+                  <div class="product_price">{{ sp.price|with_discount:special.discount|to_price|with_currency:currency|safe }}</div>
                   
                   <div class="clr"></div>
                   <a href="{{ special.get_discount_url }}?code={{ random_str }}" class="to_cart_list">В корзину</a>

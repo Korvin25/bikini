@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n core_tags %}
+{% load i18n core_tags currency_tags %}
 
 {% block meta_title %}{{ participant.get_meta_title }}{% endblock %}
 {% block meta_desc %}{{ participant.get_meta_desc }}{% endblock %}
@@ -165,7 +165,7 @@
                 <div class="photo_list"><a href="{{ product.get_absolute_url }}"><img src="{{ product.cover_thumb }}" alt="{{ product.title }}" /></a></div>
                 <h3><a href="{{ product.get_absolute_url }}">{{ product.title }}</a></h3>
                 <h4>{{ product.subtitle }}</h4>
-                <div class="product_price">{{ product.get_price_rub }}<abbr title="руб">р.</abbr></div>
+                <div class="product_price">{{ product.get_price|with_currency:currency|safe }}</div>
                 <a href="{{ product.get_absolute_url }}" class="to_cart_list">В корзину</a>
               </div>
             {% endfor %}

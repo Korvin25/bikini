@@ -17,6 +17,7 @@ from apps.cart.certificate.views import CertificateView
 from apps.catalog.views import ProductsView, ProductView, ProductWithDiscountView
 from apps.content.sitemap import sitemaps
 from apps.content.views import HomepageView, VideoListView, VideoDetailView, PageView, robots_txt
+from apps.currency.views import SetCurrencyView
 from apps.lk.views import ProfileHomeView, ProfileFormView
 from apps.views import PhotoUploadView
 
@@ -36,6 +37,7 @@ urlpatterns = [
     url(r'^api/auth/', include('apps.lk.auth.urls', namespace='auth')),
     url(r'^api/profile/edit/', ProfileFormView.as_view(), name='profile-edit'),
     url(r'^api/forms/', include('apps.feedback.urls', namespace='forms')),
+    url(r'^api/currency/set/', SetCurrencyView.as_view(), name='set_currency'),
 
     # 3rd party apps
     # url(r'^jet/', include('jet.urls', 'jet')),

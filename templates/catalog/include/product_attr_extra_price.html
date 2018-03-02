@@ -1,11 +1,11 @@
-{% load i18n catalog_tags core_tags  %}
+{% load i18n catalog_tags core_tags currency_tags %}
 
 <div class="check_bx_check">
   <label for="fason-{{ attr.id }}" class="check_pr_input"{% if float_none %} style="float: none;"{% endif %}>
     {% get_extra_product_is_chosen extra_product_id as is_chosen %}
     <input type="checkbox" class="js-extra-product-trigger" data-extra-product-id="{{ extra_product_id }}" name="fason-{{ attr.id }}" id="fason-{{ attr.id }}" value="1"{% if is_chosen %} checked="checked"{% endif %} />
     <abbr class="abbr_check">Добавить к комплекту</abbr>
-    <div class="product_price"><span id="price_ID--{{ attr.id }}">{{ attr.price|to_int_str }}</span><abbr title="руб">р.</abbr></div>
+    <div class="product_price">{% prefix_currency currency attr.price|to_price %}<span id="price_ID--{{ attr.id }}">{{ attr.price|to_price }}</span>{% postfix_currency currency attr.price|to_price %}</div>
     <div class="del_check js-extra-product-remove" data-extra-product-id="{{ extra_product_id }}">Убрать из комплекта</div>
   </label>
 </div>

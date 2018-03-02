@@ -15,9 +15,9 @@ admin.site.unregister(Group)
 
 class CartInline(admin.TabularInline):
     model = Cart
-    fields = ('checkout_date', 'summary', 'count', 'status', 'country', 'city',
+    fields = ('checkout_date', 'admin_show_summary', 'count', 'status', 'country', 'city',
               'delivery_method', 'payment_method',)
-    readonly_fields = ('checkout_date', 'summary', 'count', 'country', 'city',
+    readonly_fields = ('checkout_date', 'admin_show_summary', 'count', 'country', 'city',
                        'delivery_method', 'payment_method',)
     suit_classes = 'suit-tab suit-tab-orders'
     extra = 0

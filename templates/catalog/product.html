@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n catalog_tags core_tags embed_video_tags %}
+{% load i18n catalog_tags core_tags embed_video_tags currency_tags %}
 
 {% block meta_title %}{{ product|get_product_meta_title:category }}{% endblock %}
 {% block meta_desc %}{{ product.get_meta_desc }}{% endblock %}
@@ -126,10 +126,12 @@
         <!-- SLIDER ITEM <<< -->
           
         <!-- FORM chars ITEM >>> -->
-          <form class="wrapp_chars_item_cols js-product-form" method="post" action="{% url 'cart_api:set' %}">
+          <form class="js-product-form" method="post" action="{% url 'cart_api:set' %}">
             {% csrf_token %}
             <input type="hidden" name="product_id" value="{{ product.id }}">
+          </form>
 
+          <div class="wrapp_chars_item_cols">
             <div class="chars_item_cols">
               {% for attr in attrs.color %}
                 {% include 'catalog/include/product_attr.html' with attr=attr attr_type='color' choose_option=True %}
@@ -217,14 +219,14 @@
                 {% if discount %}
                   <div class="js-hide-if-not-option"{% if not have_option %} style="display: none;"{% endif %}>
                     <div class="txt_price_to">Цена для вас:</div>
-                    <div class="product_price sale_price"><s class="js-base-price" style="font-family: NeoRegular;">{{ price|to_int_plus }}</s><abbr title="руб">р.</abbr></div>
-                    <div class="product_price" style="color: #8c2c34;"><span class="js-cart-price">{{ price|with_discount:discount }}</span><abbr title="руб">р.</abbr></div>
+                    <div class="product_price sale_price">{% prefix_currency currency price|to_price %}<s class="js-base-price" style="font-family: NeoRegular;">{{ price|to_price }}</s>{% postfix_currency currency price|to_price %}</div>
+                    <div class="product_price" style="color: #8c2c34;">{% prefix_currency currency price|with_discount:discount|to_price %}<span class="js-cart-price">{{ price|with_discount:discount|to_price }}</span>{% postfix_currency currency price|with_discount:discount|to_price %}</div>
                   </div>
                 {% else %}
-                  <div class="product_price js-hide-if-not-option"><span id="price_ID-373" class="js-cart-price">{{ price }}</span><abbr title="руб">р.</abbr></div>
+                  <div class="product_price js-hide-if-not-option">{% prefix_currency currency price|to_price %}<span id="price_ID-373" class="js-cart-price">{{ price|to_price }}</span>{% postfix_currency currency price|to_price %}</div>
                 {% endif %}
 
-                <input type="hidden" name="price-item" id="price-hidd-val" value="{{ price }}">
+                <input type="hidden" name="price-item" id="price-hidd-val" value="{{ price|to_price }}">
                 <div class="button-div"{% if discount %} style="clear: both;"{% endif %}>
                   {% if not have_option %}
                     <button class="js-cart-button to_cart_list _disabled" data-type="none" type="submit">Такого товара нет в наличии</button>
@@ -235,16 +237,17 @@
                   {% endif %}
                   
                   <label for="pak" class="check_pr_input checke_lab js-hide-if-not-option"{% if not have_option %} style="display: none;"{% endif %}>
-                    <input type="checkbox" class="js-gift-wrapping-trigger"{% if with_wrapping %} checked="checked"{% endif %} data-wrapping-price="{{ gift_wrapping_price|to_int_str }}" name="gift_wrapping" id="pak" value="1" />
+                    <input type="checkbox" class="js-gift-wrapping-trigger"{% if with_wrapping %} checked="checked"{% endif %} data-wrapping-price="{{ gift_wrapping_price|to_price }}" name="gift_wrapping" id="pak" value="1" />
                     <abbr class="abbr_check">Подарочная<br />упаковка</abbr>
-                    
-                    <div class="product_price"><span id="price_ID--gift-wrapping">{{ gift_wrapping_price|to_int_str }}</span><abbr title="руб">р.</abbr></div>
+                    <div class="product_price">{% prefix_currency currency gift_wrapping_price|to_price %}<span id="price_ID--gift-wrapping">{{ gift_wrapping_price|to_price }}</span>{% postfix_currency currency gift_wrapping_price|to_price %}</div>
                   </label>
                 </div>
               </div>
-              
+
+              {% include 'blocks/currency_change.html' with currency_change_label='Цены в' currency_change_style="margin-top: 20px;" %}
+
             </div>
-          </form>
+          </div>
         <!-- FORM chars ITEM <<< -->
           
         </div>
@@ -283,7 +286,7 @@
                 <div class="photo_list"><a href="{{ also_p.get_absolute_url }}"><img src="{{ also_p.cover_thumb }}" alt="{{ also_p.title }}" /></a></div>
                 <h3><a href="{{ also_p.get_absolute_url }}">{{ also_p.title }}</a></h3>
                 <h4>{{ also_p.subtitle }}</h4>
-                <div class="product_price">{{ also_p.get_price_rub }}<abbr title="руб">р.</abbr></div>
+                <div class="product_price">{{ also_p.get_price|with_currency:currency|safe }}</div>
                 <a href="{{ also_p.get_absolute_url }}" class="to_cart_list">В корзину</a>
               </div>
             {% endfor %}

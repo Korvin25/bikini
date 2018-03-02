@@ -1,4 +1,4 @@
-{% load core_tags %}
+{% load core_tags currency_tags %}
 <h3>{{ subject }}</h3>
 
 <p>
@@ -20,7 +20,7 @@
         Email:</strong> {{ obj.profile.email }}<br/>
     {% endif %}
     <br/>
-    Способ доставки: {{ obj.delivery_method }}{% if obj.delivery_method.price %} ({{ obj.delivery_method.price|to_int_plus }} р.){% endif %}<br/>
+    Способ доставки: {{ obj.delivery_method }}{% if obj.delivery_method.price %} ({{ obj.delivery_method.price|to_price|currency_light:obj.currency }}){% endif %}<br/>
     Способ оплаты: {{ obj.payment_method }}<br/>
     {% if obj.additional_info %}
         <br/>
@@ -37,7 +37,7 @@
 
 <p>
     <br/><br/>
-    <strong>Итого к оплате: {{ obj.show_summary }} р.</strong><br/>
+    <strong>Итого к оплате: {{ obj.show_summary|currency_light:obj.currency }}</strong><br/>
 </p>
 
 <p>

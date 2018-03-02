@@ -8,7 +8,7 @@ from django.views.generic import TemplateView, View
 from django.http import HttpResponseRedirect
 
 from ..catalog.models import Attribute, GiftWrapping, SpecialOffer
-from ..core.templatetags.core_tags import to_int_plus
+from ..core.templatetags.core_tags import to_int_or_float
 from ..geo.models import Country
 from .cart import Cart
 from .models import DeliveryMethod, PaymentMethod, CartItem, CertificateCartItem
@@ -51,7 +51,7 @@ class CartView(TemplateView):
             'with_color': self.with_color,
             'color_attribute': self.color_attribute,
             'with_gift_wrapping': True,
-            'gift_wrapping_price': to_int_plus(GiftWrapping.get_price() or 0),
+            'gift_wrapping_price': to_int_or_float(GiftWrapping.get_price() or 0),
             'countries': Country.objects.values('id', 'title'),
             'shipping_data': shipping_data,
             'special': SpecialOffer.get_offer(),

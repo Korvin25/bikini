@@ -9,8 +9,9 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 
-from ..core.templatetags.core_tags import to_int_plus
+from ..core.templatetags.core_tags import to_int_or_float
 from ..core.http_utils import get_object_from_slug_and_kwargs
+from ..currency.utils import get_currency
 from ..lk.wishlist.utils import get_wishlist_from_request
 from .models import Attribute, Category, GiftWrapping, Product, ProductOption, SpecialOffer
 
@@ -91,15 +92,16 @@ class ProductsView(TemplateView):
     def get_filter(self):
         f = {}
         if self.f.get('price_from'):
-            f['price_rub__gte'] = self.f['price_from']
+            f['price_{}__gte'.format(self.currency)] = self.f['price_from']
         if self.f.get('price_to'):
-            f['price_rub__lte'] = self.f['price_to']
+            f['price_{}__lte'.format(self.currency)] = self.f['price_to']
         self.filter = f
         return f
 
     def get_queryset(self, **kwargs):
         GET = self.request.GET
         self.f = {'attrs': {}, 'attrs_values': []}
+        self.currency = get_currency(self.request)
 
         qs = Product.objects.prefetch_related('categories', 'options').filter(show=True)
         if self.category:
@@ -108,7 +110,9 @@ class ProductsView(TemplateView):
             qs = qs.filter(categories__sex=self.sex)
 
         self.base_qs = qs
-        self.price_min_max = qs.aggregate(Min('price_rub'), Max('price_rub'))
+        self.price_min_max = qs.aggregate(Min('price_{}'.format(self.currency)), Max('price_{}'.format(self.currency)))
+        self.price_min_max['price__min'] = self.price_min_max['price_{}__min'.format(self.currency)]
+        self.price_min_max['price__max'] = self.price_min_max['price_{}__max'.format(self.currency)]
         self.get_attributes()
 
         price_from = GET.get('price_from')
@@ -244,13 +248,13 @@ class ProductView(TemplateView):
                 _attr = attrs['size'][0]
             elif attrs['color']:
                 _attr = attrs['color'][0]
-            _attr['price'] = to_int_plus(extra_p.price or 0)
+            _attr['price'] = float(extra_p.price or 0)
 
             extra_product_dict = {
                 'id': extra_p.extra_product.id,
                 'title': extra_p.extra_product.title,
                 'slug': extra_p.extra_product.slug,
-                'price': to_int_plus(extra_p.price or 0),
+                'price': float(extra_p.price or 0),
                 'attrs': attrs,
                 'attrs_dict': attrs_dict,
                 'attrs_ids': attrs_ids,
@@ -265,7 +269,7 @@ class ProductView(TemplateView):
         self.chosen_options = chosen_options
 
     def get_wrapping_price(self):
-        wrapping_price = to_int_plus(GiftWrapping.get_price() or 0)
+        wrapping_price = float(GiftWrapping.get_price() or 0)
         self.wrapping_price = wrapping_price
 
     def get_data_json(self):
@@ -274,10 +278,11 @@ class ProductView(TemplateView):
             'options': {},  # {id: {id, attrs: <json>, price, in_stock}}
             'option': {},  # {id, attrs: <json>, price, in_stock}
             'prices': {
-                'option': to_int_plus(self.product.price_rub or 0),
+                'option': float(self.product.price or 0),
                 'discount': 0,
                 'extra': 0,
                 'wrapping': 0,
+                'with_wrapping': False,
                 'count': 1,
                 'maximum_in_stock': 0,
                 'extra_maximum_in_stock': 0,
@@ -312,13 +317,13 @@ class ProductView(TemplateView):
             option_dict = {
                 'id': option.id,
                 'attrs': option.attrs,
-                'price': to_int_plus(option.price_rub or self.product.price_rub or 0),
+                'price': float(option.price or self.product.price or 0),
                 'in_stock': option.in_stock,
             }
             data['options'][option.id] = option_dict
             if i == 0 or (data['prices']['maximum_in_stock'] == 0 and option_dict['in_stock']):
                 data['option'] = option_dict
-                data['prices']['option'] = option_dict['price']
+                data['prices']['option'] = float(option_dict['price'])
                 data['prices']['maximum_in_stock'] = option_dict['in_stock']
 
         for extra_p in self.extra_products:
@@ -326,7 +331,7 @@ class ProductView(TemplateView):
                 'id': extra_p['id'],
                 'title': extra_p['title'],
                 'slug': extra_p['slug'],
-                'price': extra_p['price'],
+                'price': float(extra_p['price'] or 0),
                 'attrs': extra_p['attrs_json'],
                 'in_stock': extra_p['in_stock'],
             }
@@ -351,7 +356,7 @@ class ProductView(TemplateView):
                 data['prices']['extra'] += extra_p['price']
 
         p = data['prices']
-        p['total_price'] = (p['option']+p['extra'])*p['count'] + p['wrapping'];
+        p['total_price'] = float((p['option']+p['extra'])*p['count'] + p['wrapping'])
 
         self.have_option = bool(data['option'])
         self.price = data['prices']['total_price']
@@ -381,7 +386,7 @@ class ProductView(TemplateView):
         in_wishlist = bool(wishlist_item)
 
         if wishlist_item:
-            wishlist_data['price'] = wishlist_item['price']
+            wishlist_data['price'] = float(wishlist_item['price'] or 0.0)
             wishlist_data['attrs'] = wishlist_item['attrs']
             wishlist_data['extra_products'] = wishlist_item['extra_products']
 

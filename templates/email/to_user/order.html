@@ -1,4 +1,4 @@
-{% load core_tags %}
+{% load core_tags currency_tags %}
 <h3>{{ subject }}</h3>
 
 <p>
@@ -14,7 +14,7 @@
     Адрес: {{ obj.address }}<br/>
     Телефон: {{ obj.phone }}<br/>
     <br/>
-    Способ доставки: {{ obj.delivery_method }}{% if obj.delivery_method.price %} ({{ obj.delivery_method.price|to_int_plus }} р.){% endif %}<br/>
+    Способ доставки: {{ obj.delivery_method }}{% if obj.delivery_method.price %} ({{ obj.delivery_method.price|to_price|currency_light:obj.currency }}){% endif %}<br/>
     Способ оплаты: {{ obj.payment_method }}<br/>
     {% if obj.additional_info %}
         <br/>
@@ -31,7 +31,7 @@
 
 <p>
     <br/><br/>
-    <strong>Итого к оплате: {{ obj.show_summary }} р.</strong><br/>
+    <strong>Итого к оплате: {{ obj.show_summary|currency_light:obj.currency }}</strong><br/>
 </p>
 
 <p>
@@ -48,5 +48,5 @@
 <p>
     ----<br/><br/>
     С уважением, Ваша команда Bikinimini<br/>
-    <a href="http://bikinimini.ru">http://bikinimini.ru</a>
+    <a href="https://bikinimini.ru">https://bikinimini.ru</a>
 </p>

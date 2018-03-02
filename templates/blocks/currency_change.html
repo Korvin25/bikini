@@ -1,0 +1,57 @@
+<div class="block_curr_down"{% if currency_change_style %} style="{{ currency_change_style }}"{% endif %}>
+  <span class="title_down_block">{{ currency_change_label|default:'Цена в' }}: </span>
+  <script>
+    (function( $ ) {
+      $.fn.selectbox = function() {
+      //var selectDefaultHeight = $('.selectboxss').height();
+      var selectDefaultHeight = 40;
+        $('.selectboxss .selectboxssvalue').click(function() {
+          var currentHeight = $(this).closest(".selectboxss").height();
+          if (currentHeight < 100 || currentHeight == selectDefaultHeight) {
+            $(this).closest(".selectboxss").height("auto");
+            $(this).find('.arrowselect').attr("style", "border-radius: 1000px;transition: 0.2s;transform: rotate(180deg);");
+          }
+          if (currentHeight >= 101) {
+            $(this).closest(".selectboxss").height(selectDefaultHeight);
+            $(this).find('.arrowselect').attr("style", "rotate(0deg);");
+          }
+        });
+        $('li.selectoption').click(function() {
+          var $li = $(this);
+          $li.closest(".selectboxss").height(selectDefaultHeight);
+          $li.closest(".selectboxss").find('.arrowselect').attr("style", "rotate(0deg);");
+          
+          var t = $li.closest("li.selectoption").text();
+          $li.closest(".selectboxss").find('.selectboxssvalue img.input_mage').attr('src', t);
+
+          // custom
+          var currency = $li.attr('data-currency'),
+              $form = $('form.js-set-currency-form');
+
+          console.log('woo');
+          $form.find('input[name="currency"]').val(currency);
+          $form.submit();
+        });
+      };
+    })( jQuery );
+  </script>
+  <script> $(document).ready(function(){ $('.selectboxss').selectbox(); }); </script>
+  <div class="select_img">
+    <div class="selectboxss">
+      <div class="selectboxssvalue">
+        <img src="/static/i/{{ currency }}_img.png" class="input_mage" />
+        <img src="/static/i/arrow_down_list.png" class="arrowselect" />
+      </div>
+      <ul class="selectboxssmenu js-currency-ul" data-current-currency="{{ currency }}">
+        <li class="selectoption js-currency-li" data-currency="rub" style="background-image:url(/static/i/rub_img.png);"><span>/static/i/rub_img.png</span></li>
+        <li class="selectoption js-currency-li" data-currency="eur" style="background-image:url(/static/i/eur_img.png);"><span>/static/i/eur_img.png</span></li>
+        <li class="selectoption js-currency-li" data-currency="usd" style="background-image:url(/static/i/usd_img.png);"><span>/static/i/usd_img.png</span></li>
+      </ul>
+      <form style="display: none;" class="js-set-currency-form" method="post" action="{% url 'set_currency' %}">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.build_absolute_uri }}">
+        <input type="hidden" name="currency" value="">
+      </form>
+    </div>
+  </div>
+</div>

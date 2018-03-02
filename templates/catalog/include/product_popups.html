@@ -1,3 +1,5 @@
+{% load currency_tags %}
+
 <style>
   .usual_link {
     color: black !important;
@@ -48,7 +50,7 @@
                 <h3 class="popup_title" style="margin-bottom: 10px;">Товар добавлен в корзину!</h3>
                 <p class="call_introtext popup_text">
                   Товаров в корзине: <span class="js-cart-count">{{ cart.count }}</span><br/>
-                  Общая сумма: <span class="js-cart-summary">{{ cart.summary }}</span> р.<br/>
+                  Общая сумма: {% prefix_currency currency %} <span class="js-cart-summary">{{ cart.summary }}</span> {% postfix_currency currency %}<br/>
                 </p>
                 <div class="red_bor_butt">
                   <div class="bt_req_call">

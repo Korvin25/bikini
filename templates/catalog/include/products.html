@@ -1,4 +1,4 @@
-{% load catalog_tags %}
+{% load catalog_tags currency_tags %}
 
 {% if products|length %}
 
@@ -9,7 +9,7 @@
           <div class="photo_list"><a href="{{ product_url }}"><img src="{{ product.cover_thumb }}" alt="{{ product.title }}" /></a></div>
           <h3><a href="{{ product_url }}">{{ product.title }}</a></h3>
           <h4>{{ product.subtitle }}</h4>
-          <div class="product_price">{{ product.get_price_rub }}<abbr title="руб">р.</abbr></div>
+          <div class="product_price">{{ product.get_price|with_currency:currency|safe }}</div>
           <a href="{{ product_url }}" class="to_cart_list">В корзину</a>
         {% endwith %}
       </div>
