@@ -1,4 +1,5 @@
 {% load currency_tags %}
+{% load i18n %}
 
 <div class="item_list_wrapp" itemscope="" itemtype="http://schema.org/ItemList">
   {% for product in products %}
@@ -7,7 +8,7 @@
       <h3><a href="{{ product.get_absolute_url }}">{{ product.title }}</a></h3>
       <h4>{{ product.subtitle }}</h4>
       <div class="product_price">{{ product.get_price|with_currency:currency|safe }}</div>
-      <a href="{{ product.get_absolute_url }}" class="to_cart_list">В корзину</a>
+      <a href="{{ product.get_absolute_url }}" class="to_cart_list">{% trans 'В корзину' %}</a>
     </div>
   {% endfor %}
   <div style="clear:both;text-align:center;">

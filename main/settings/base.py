@@ -83,8 +83,6 @@ INSTALLED_APPS = (
     'apps.contests',
     'apps.banners',
     'apps.feedback',
-    # 'apps.payments',
-    # 'apps.mailings',
 )
 
 MIDDLEWARE = [

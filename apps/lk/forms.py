@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django import forms
+from django.utils.translation import ugettext_lazy as _
 
 from .models import Profile
 
@@ -28,14 +29,14 @@ class ProfileForm(forms.ModelForm):
         email = self.cleaned_data.get('email')
         if email != self.instance.email:
             if Profile.objects.filter(email__iexact=email).count():
-                raise forms.ValidationError('Такой email уже занят.')
+                raise forms.ValidationError(_('Такой email уже занят.'))
         return email
 
     def clean_old_password(self):
         old_password = self.cleaned_data.get('old_password')
         if old_password:
             if not self.instance.check_password(old_password):
-                raise forms.ValidationError('Неверный пароль.')
+                raise forms.ValidationError(_('Неверный пароль.'))
         return old_password
 
     def clean_new_password(self):
@@ -47,7 +48,7 @@ class ProfileForm(forms.ModelForm):
                     # значит, старый пароль был неправильный и не попал в self.data
                     return None
                 else:
-                    raise forms.ValidationError('Введите старый пароль.')
+                    raise forms.ValidationError(_('Введите старый пароль.'))
         return new_password
 
     def save(self, commit=True):

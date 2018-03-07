@@ -17,9 +17,9 @@
 
       {% block touch_breadcrumbs %}
         <ul id="touch_breadcrumb" class="breadcrumb">
-          <li><a href="{% url 'home' %}">Главная</a></li>
-          {% if sex == 'female' %}<li><a href="{% url 'women' %}">Женщинам</a></li>
-          {% elif sex == 'male' %}<li><a href="{% url 'men' %}">Мужчинам</a></li>
+          <li><a href="{% url 'home' %}">{% trans 'Главная' %}</a></li>
+          {% if sex == 'female' %}<li><a href="{% url 'women' %}">{% trans 'Женщинам' %}</a></li>
+          {% elif sex == 'male' %}<li><a href="{% url 'men' %}">{% trans 'Мужчинам' %}</a></li>
           {% endif %}
           <li>{{ category.title }}</li>
         </ul>
@@ -29,17 +29,17 @@
         
         <div class="sec_menu">
           <ul>
-            <li class="title_sec_block">Категории</li>
+            <li class="title_sec_block">{% trans 'Категории' %}</li>
             {% for cat in categories %}
               <li{% if cat == category %} class="title_sec_block"{% endif %}><a href="{{ cat.get_absolute_url }}"><strong>{{ cat.title }}</strong></a></li>
             {% endfor %}
-            <li{% if not category %} class="title_sec_block"{% endif %}><a href="{% if sex == 'female' %}{% url 'women' %}{% else %}{% url 'men' %}{% endif %}">Смотреть все</a></li>
+            <li{% if not category %} class="title_sec_block"{% endif %}><a href="{% if sex == 'female' %}{% url 'women' %}{% else %}{% url 'men' %}{% endif %}">{% trans 'Смотреть все' %}</a></li>
           </ul>
         </div>
         
         <div class="sec_filtr">
           <form method="get" action="{{ request.path }}" class="sec_filtr_wrapp js-filter-form" data-container-id="products_div">
-            <div class="title_sec_block">Фильтр</div>
+            <div class="title_sec_block">{% trans 'Фильтр' %}</div>
             {% for attr in attrs.color %}
               <div class="filtr_title">{{ attr.title }}:</div>
               <div class="check_box check_mini">
@@ -72,7 +72,7 @@
               </div>
             {% endfor %}
 
-            <div class="filtr_title">Цена:</div>
+            <div class="filtr_title">{% trans 'Цена' %}:</div>
             <div class="check_box check_input">
               <input type="text" name="price_from" value="{% if f.price_from %}{{ f.price_from }}{% endif %}" placeholder="{{ price_min_max.price__min|default_if_none:0|to_int|with_delimeter|currency_light:currency }}" />
               <span>&mdash;</span>
@@ -110,8 +110,8 @@
               </div>
             {% endfor %}
 
-            <button class="bt_red js-form-button">Показать</button>
-            <button class="reset_frm js-form-reset js-form-button">Сбросить</button>
+            <button class="bt_red js-form-button">{% trans 'Показать' %}</button>
+            <button class="reset_frm js-form-reset js-form-button">{% trans 'Сбросить' %}</button>
           </form>
         </div>
         
@@ -121,9 +121,9 @@
 
         {% block breadcrumbs %}
           <ul class="breadcrumb">
-            <li><a href="{% url 'home' %}">Главная</a></li>
-            {% if sex == 'female' %}<li><a href="{% url 'women' %}">Женщинам</a></li>
-            {% elif sex == 'male' %}<li><a href="{% url 'men' %}">Мужчинам</a></li>
+            <li><a href="{% url 'home' %}">{% trans 'Главная' %}</a></li>
+            {% if sex == 'female' %}<li><a href="{% url 'women' %}">{% trans 'Женщинам' %}</a></li>
+            {% elif sex == 'male' %}<li><a href="{% url 'men' %}">{% trans 'Мужчинам' %}</a></li>
             {% endif %}
             <li>{{ category.title }}</li>
           </ul>

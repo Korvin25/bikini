@@ -1,6 +1,5 @@
 {% load i18n catalog_tags core_tags %}
 
-
 {% if attr_type == 'color' %}
   <div class="filtr_title ch_title_item">{{ attr.title }}:</div>
   <div class="check_box check_mini check_mini_item">
@@ -17,7 +16,7 @@
     {% endfor %}
   </div>
   {% if attr.options.count > 4 %}
-    <a href="#" class="yet_more js-expand-colors" data-attr-id="{{ attr.id }}">Ещё цвета</a>
+    <a href="#" class="yet_more js-expand-colors" data-attr-id="{{ attr.id }}">{% trans 'Ещё цвета' %}</a>
   {% endif %}
   {% if attr.price %}
     {% include 'catalog/include/product_attr_extra_price.html' with attr=attr extra_product_id=extra_product_id %}

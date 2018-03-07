@@ -3,9 +3,13 @@ from __future__ import unicode_literals
 
 from django import template
 from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _
 
 
 register = template.Library()
+
+
+RUB = _('руб')
 
 
 @register.simple_tag
@@ -26,7 +30,7 @@ def postfix_currency(currency, value=''):
         pure_value = unicode(value)
         empty_char = ' ' if (' ' in pure_value) else ''
 
-        return mark_safe('{}<abbr title="руб">р.</abbr>'.format(empty_char))
+        return mark_safe('{}<abbr title="{}">р.</abbr>'.format(empty_char, RUB))
     return ''
 
 
@@ -37,9 +41,9 @@ def with_currency(value, currency, pure_value=None, full=False, with_dot=True, l
     empty_char = ' ' if (' ' in pure_value) else ''
 
     if currency == 'rub':
-        rub = 'руб' if full else 'р'
+        rub = RUB if full else 'р'
         rub = '{}.'.format(rub) if with_dot else rub
-        title = ' title="руб"' if with_title else ''
+        title = ' title="{}"'.format(RUB) if with_title else ''
         value = ('{}{}<abbr{}>{}</abbr>'.format(value, empty_char, title, rub) if not light
                  else '{} {}'.format(value, rub) if not without_space
                  else '{}{}'.format(value, rub))

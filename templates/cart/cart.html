@@ -20,14 +20,14 @@
     <div class="main_content main_cut">
       
       <ul id="touch_breadcrumb" class="breadcrumb">
-        <li><a href="{% url 'home' %}">Главная</a></li>
-        <li><span>Корзина</span></li>
+        <li><a href="{% url 'home' %}">{% trans 'Главная' %}</a></li>
+        <li><span>{% trans 'Корзина' %}</span></li>
       </ul>
     
       <div id="main_content" class="wrapp_content">
         <ul class="breadcrumb">
-          <li><a href="{% url 'home' %}">Главная</a></li>
-          <li><span>Корзина</span></li>
+          <li><a href="{% url 'home' %}">{% trans 'Главная' %}</a></li>
+          <li><span>{% trans 'Корзина' %}</span></li>
         </ul>
         <h1 class="title_block">{{ seo_settings.cart.get_h1 }}</h1>
 
@@ -35,19 +35,19 @@
 
           <div class="table_shell js-hide-if-not-cart"{% if not cart.count %} style="display: none;"{% endif %}>
             <div class="table_head">
-              <div class="table_cell tb_photo"><div class="tb_title">Фото</div></div>
-              <div class="table_cell tb_model"><div class="tb_title">Название{% if not certificate_items %} модели{% endif %}</div></div>
+              <div class="table_cell tb_photo"><div class="tb_title">{% trans 'Фото' %}</div></div>
+              <div class="table_cell tb_model"><div class="tb_title">{% if not certificate_items %}{% trans 'Название модели' %}{% else %}{% trans 'Название' %}{% endif %}</div></div>
               {% if cart_items %}
-                {% if with_color %}<div class="table_cell tb_color"><div class="tb_title">Цвет</div></div>{% endif %}
-                {# <div class="table_cell tb_fason"><div class="tb_title">Фасон</div></div> #}
-                <div class="table_cell tb_price"><div class="tb_title">Цена</div></div>
-                <div class="table_cell tb_cnt"><div class="tb_title">Количество</div></div>
-                {% if with_gift_wrapping %}<div class="table_cell tb_summ"><div class="tb_title">Подарочная упаковка<br/>({{ gift_wrapping_price|to_price|with_currency:currency|safe }})</div></div>{% endif %}
+                {% if with_color %}<div class="table_cell tb_color"><div class="tb_title">{% trans 'Цвет' %}</div></div>{% endif %}
+                {# <div class="table_cell tb_fason"><div class="tb_title">{% trans 'Фасон' %}</div></div> #}
+                <div class="table_cell tb_price"><div class="tb_title">{% trans 'Цена' %}</div></div>
+                <div class="table_cell tb_cnt"><div class="tb_title">{% trans 'Количество' %}</div></div>
+                {% if with_gift_wrapping %}<div class="table_cell tb_summ"><div class="tb_title">{% trans 'Подарочная упаковка' %}<br/>({{ gift_wrapping_price|to_price|with_currency:currency|safe }})</div></div>{% endif %}
               {% endif %}
-              <div class="table_cell tb_summ"><div class="tb_title">Стоимость</div></div>
+              <div class="table_cell tb_summ"><div class="tb_title">{% trans 'Стоимость' %}</div></div>
               
-              {% if cart_items %}<div class="table_cell tb_put"><div class="tb_title">Отложить</div></div>{% endif %}
-              <div class="table_cell tb_del"><div class="tb_title">Удалить</div></div>
+              {% if cart_items %}<div class="table_cell tb_put"><div class="tb_title">{% trans 'Отложить' %}</div></div>{% endif %}
+              <div class="table_cell tb_del"><div class="tb_title">{% trans 'Удалить' %}</div></div>
             </div>
 
             {% for item in cart_items %}
@@ -88,11 +88,11 @@
                 
                 <div class="clr clr_table"></div>
                 <div class="table_cell td_price">
-                  <div class="tb_title">Цена</div>
+                  <div class="tb_title">{% trans 'Цена' %}</div>
                   <div class="product_price">{{ item.base_price|to_price|with_currency:currency|safe }}</div>
                 </div>
                 <div class="table_cell td_cnt">
-                  <div class="tb_title">Количество</div>
+                  <div class="tb_title">{% trans 'Количество' %}</div>
                   <div class="number">
                     <span class="minus" id="">-</span>
                     <input type="text" name="item-count" value="{{ item.count }}" maxlength="3" onkeyup="this.value = this.value.replace(/\D/, '')" id="cnt_item-{{ forloop.counter }}" />
@@ -102,7 +102,7 @@
 
                 {% if with_gift_wrapping %}
                   <div class="table_cell td_summ">
-                    <div class="tb_title">Подарочная упаковка</div>
+                    <div class="tb_title">{% trans 'Подарочная упаковка' %}</div>
                     <div>
                       <label for="gift-wrapping-{{ item.id }}" class="check_pr_input checke_lab" style="margin-top: 0;">
                         <input type="checkbox"{% if item.with_wrapping %} checked="checked"{% endif %} class="" data-wrapping-price="{{ gift_wrapping_price|to_price }}" name="gift_wrapping" id="gift-wrapping-{{ item.id }}" value="1" />
@@ -112,9 +112,9 @@
                 {% endif %}
 
                 <div class="table_cell td_summ">
-                  <div class="tb_title">Стоимость</div>
+                  <div class="tb_title">{% trans 'Стоимость' %}</div>
                   {% if item.discount %}
-                    <div class="txt_price_to">Цена для вас:</div>
+                    <div class="txt_price_to">{% trans 'Цена для вас' %}:</div>
                     <div class="product_price sale_price">{% prefix_currency currency item.total_price_without_discount %}<s class="item-base-summary-span" style="font-family: NeoRegular;">{{ item.total_price_without_discount }}</s>{% postfix_currency currency item.total_price_without_discount %}</div>
                     <div class="product_price" style="color: #8c2c34;">{% prefix_currency currency item.price|to_int_or_float %}<span class="js-cart-price item-summary-span">{{ item.price|to_int_or_float }}</span>{% postfix_currency currency item.price|to_int_or_float %}</div>
                   {% else %}
@@ -134,15 +134,15 @@
                              data-attrs='{{ item.attrs|to_json|safe }}'
                              data-extra-products='{{ item.extra_products|to_json|safe }}' />
                       <div class="window_title">
-                        <span class="no_check">Добавить товар в список желаемых покупок</span>
-                        <span class="y_check">Товар в списке желаемых покупок</span>
+                        <span class="no_check">{% trans 'Добавить товар в список желаемых покупок' %}</span>
+                        <span class="y_check">{% trans 'Товар в списке желаемых покупок' %}</span>
                       </div>
-                      <img src="/static/i/heart_icon.png" alt="Отложить" />
+                      <img src="/static/i/heart_icon.png" alt="{% trans 'Отложить' %}" />
                     </label>
                   </a>
                 </div>
                 <div class="table_cell td_del">
-                  <a href="#" class="butt_del js-remove-item"><img src="/static/i/delete.gif" alt="Удалить" /></a>
+                  <a href="#" class="butt_del js-remove-item"><img src="/static/i/delete.gif" alt="{% trans 'Удалить' %}" /></a>
                 </div>
               </div>
 
@@ -159,9 +159,9 @@
                 <div class="table_cell td_title">
                   <h3 class="title_upper"><a href="{{ item.url }}">{{ item.title }}</a></h3>
                   <h4 class="title_low">
-                    Для {{ item.recipient_name }}
+                    {% trans 'Для' %} {{ item.recipient_name }}
                     {% if not item.send_immediately and item.send_date %}
-                      <br/>Отправить {{ item.send_date|date:'d.m.Y' }}
+                      <br/>{% trans 'Отправить' %} {{ item.send_date|date:'d.m.Y' }}
                     {% endif %}
                   </h4>
                 </div>
@@ -175,13 +175,13 @@
                 {% endif %}
 
                 <div class="table_cell td_summ">
-                  <div class="tb_title">Стоимость</div>
-                  <div class="product_price"><span class="item-summary-span" id="price_ID-{{ forloop.counter }}">{{ item.price|to_price }}</span><abbr title="руб">р.</abbr></div>
+                  <div class="tb_title">{% trans 'Стоимость' %}</div>
+                  <div class="product_price"><span class="item-summary-span" id="price_ID-{{ forloop.counter }}">{{ item.price|to_price }}</span><abbr title="{% trans 'руб' %}">р.</abbr></div>
                 </div>
                 
                 {% if cart_items %}<div class="table_cell td_put"></div>{% endif %}
                 <div class="table_cell td_del">
-                  <a href="#" class="butt_del js-remove-item"><img src="/static/i/delete.gif" alt="Удалить" /></a>
+                  <a href="#" class="butt_del js-remove-item"><img src="/static/i/delete.gif" alt="{% trans 'Удалить' %}" /></a>
                 </div>
               </div>
 
@@ -191,12 +191,12 @@
                       
           </div>
 
-          <h3 class="js-show-if-not-cart" style="margin-bottom: 250px;{% if cart.count %} display: none;{% endif %}">Товаров в корзине нет. <a href="{% url 'women' %}">Вернуться в каталог</a></h3>
+          <h3 class="js-show-if-not-cart" style="margin-bottom: 250px;{% if cart.count %} display: none;{% endif %}">{% trans 'Товаров в корзине нет' %}. <a href="{% url 'women' %}">{% trans 'Вернуться в каталог' %}</a></h3>
 
           <div class="rows_block_info js-hide-if-not-cart"{% if not cart.count %} style="display: none;"{% endif %}>
             {% if delivery_methods.count %}
               <div class="row_info">
-                <h2 class="title_block">Выбор способа доставки</h2>
+                <h2 class="title_block">{% trans 'Выбор способа доставки' %}</h2>
                 <div class="rows_radio_block js-method-inputs-parent">
                   {% for method in delivery_methods %}
                     <label for="delivery_method_{{ method.id }}" class="radio_input">
@@ -212,7 +212,7 @@
             
             {% if payment_methods.count %}
               <div class="row_info">
-                <h2 class="title_block">Выбор способа оплаты</h2>
+                <h2 class="title_block">{% trans 'Выбор способа оплаты' %}</h2>
                 <div class="rows_radio_block js-method-inputs-parent">
                   {% for method in payment_methods %}
                     <label for="payment_method_{{ method.id }}" class="radio_input">
@@ -228,16 +228,16 @@
 
           </div>
 
-          <h2 class="title_block js-hide-if-not-cart"{% if not cart.count %} style="display: none;"{% endif %}>Дополнительная информация</h2>
+          <h2 class="title_block js-hide-if-not-cart"{% if not cart.count %} style="display: none;"{% endif %}>{% trans 'Дополнительная информация' %}</h2>
           <textarea name="additional_info" rows="9" id="text" class="t_area js-hide-if-not-cart"{% if not cart.count %} style="display: none;"{% endif %}>{% if basket.additional_info %}{{ basket.additional_info }}{% endif %}</textarea>
           
           <div class="foot_form_cut">
             <div class="foot_form_cut_row">
-              <h2 class="title_block">Итого товаров: <span class="price_table_summ"><span class="js-cart-count">{{ cart.count }}</span> на сумму <div class="product_price">{{ cart.summary|with_js_cart_summary:currency|safe }}</div></span></h2>
+              <h2 class="title_block">{% trans 'Итого товаров' %}: <span class="price_table_summ"><span class="js-cart-count">{{ cart.count }}</span> {% trans 'на сумму' %} <div class="product_price">{{ cart.summary|with_js_cart_summary:currency|safe }}</div></span></h2>
               
               {% include 'blocks/currency_change.html' %}
             </div>
-            <button class="bt_red js-step0-button js-disabled-if-not-cart{% if not cart.count %} _disabled{% endif %}">Оформить заказ</button>
+            <button class="bt_red js-step0-button js-disabled-if-not-cart{% if not cart.count %} _disabled{% endif %}">{% trans 'Оформить заказ' %}</button>
           </div>
           
         </div>
@@ -265,19 +265,19 @@
   </div>
 
   <div class="window_popap no_float mini_window_popup callback_form" id="error-popup" style="display:none;">
-      <div class="close_popap call_close js-call-close"><img src="/static/i/close_white_45.png" alt="Закрыть"></div>
+      <div class="close_popap call_close js-call-close"><img src="/static/i/close_white_45.png" alt="{% trans 'Закрыть' %}"></div>
       <div class="wrap_window_popap bg_wrapp_window">
           <div class="popap_row">
               <div class="popap_row_wrapp">
-                  <h3 class="popup_title" style="margin-bottom: 10px;">При отправке формы произошла ошибка:</h3>
+                  <h3 class="popup_title" style="margin-bottom: 10px;">{% trans 'При отправке формы произошла ошибка' %}:</h3>
                   <p class="call_introtext popup_text"></p>
                   {% comment %}
                   <div class="red_bor_butt">
-                      <span class="js-call-close usual_link">Закрыть</span>
+                      <span class="js-call-close usual_link">{% trans 'Закрыть' %}</span>
                   </div>
                   {% endcomment %}
                   <div class="bt_req_call red_bor_butt js-call-close">
-                    <button class="butt_border">Закрыть</button>
+                    <button class="butt_border">{% trans 'Закрыть' %}</button>
                   </div>
               </div>
           </div>
@@ -285,25 +285,25 @@
   </div>
 
   <div class="window_popap" id="step1" style="display: none;">
-    <div class="close_popap js-call-close"><img src="/static/i/close_icon.png" alt="Закрыть"></div>
+    <div class="close_popap js-call-close"><img src="/static/i/close_icon.png" alt="{% trans 'Закрыть' %}"></div>
     <div class="wrap_window_popap bg_wrapp_window">
       <div class="popap_row">
         <div class="popap_row_wrapp">
-          <h2 class="title_popap">Я уже являюсь <br>клиентом BIKINIMINI</h2>
+          <h2 class="title_popap">{% trans 'Я уже являюсь <br>клиентом BIKINIMINI' %}</h2>
 
           <form class="js-step1-form js-step1-login-form" action="{% url 'auth:login' %}" method="post">
             <div class="error-messages"></div>
 
             <div class="row_form_popup">
               <label class="lbl_box">
-                <p>Ваш e-mail</p>
+                <p>{% trans 'Ваш e-mail' %}</p>
                 <input type="email" required="required" value="" name="email" class="input_text">
               </label>
             </div>
             
             <div class="row_form_popup">
               <label class="lbl_box">
-                <p>Ваш пароль</p>
+                <p>{% trans 'Ваш пароль' %}</p>
                 <input type="password" required="required" value="" name="password" class="input_text">
               </label>
             </div>
@@ -311,22 +311,22 @@
             <div class="row_form_popup">
               <label class="lbl_box check_popap_row">
                 <input class="check_form" type="checkbox" name="remember_me">
-                <p>Запомнить меня на сайте</p>
+                <p>{% trans 'Запомнить меня на сайте' %}</p>
               </label>
             </div>
             
             <div class="row_form_popup row_pop_butt">
-              <button class="bt_red">Войти</button>
-              {# <a href="#">Забыли пароль?</a> #}
+              <button class="bt_red">{% trans 'Войти' %}</button>
+              {# <a href="#">{% trans 'Забыли пароль?' %}</a> #}
             </div>
             
             <div class="row_form_popup">
-              <p>Войти при помощи соц. сетей:</p>
+              <p>{% trans 'Войти при помощи соц. сетей' %}:</p>
               <div class="soc_enter">
-                <a href="{% url 'auth:social:fb' %}"><img src="/static/i/soc_face.png" alt="Facebook"></a>
-                <a href="{% url 'auth:social:vk' %}"><img src="/static/i/soc_vk.png" alt="ВКонтакте"></a>
-                <a href="{% url 'auth:social:gp' %}"><img src="/static/i/soc_gplus.png" alt="Google Plus"></a>
-                <a href="{% url 'auth:social:ig' %}"><img src="/static/i/soc_ins.png" alt="Instagram"></a>
+                <a href="{% url 'auth:social:fb' %}"><img src="/static/i/soc_face.png" alt="{% trans 'Facebook' %}"></a>
+                <a href="{% url 'auth:social:vk' %}"><img src="/static/i/soc_vk.png" alt="{% trans 'ВКонтакте' %}"></a>
+                <a href="{% url 'auth:social:gp' %}"><img src="/static/i/soc_gplus.png" alt="{% trans 'Google Plus' %}"></a>
+                <a href="{% url 'auth:social:ig' %}"><img src="/static/i/soc_ins.png" alt="{% trans 'Instagram' %}"></a>
               </div>
             </div>
 
@@ -335,45 +335,45 @@
         </div>
       </div>
       
-      <div class="or_block">или</div>
+      <div class="or_block">{% trans 'или' %}</div>
       
       <div class="popap_row bg_popap">
         <div class="popap_row_wrapp">
-          <h2 class="title_popap">Я новый <br>клиент BIKINIMINI</h2>
+          <h2 class="title_popap">{% trans 'Я новый <br>клиент BIKINIMINI' %}</h2>
 
           <form class="js-step1-form js-step1-registration-form" action="{% url 'auth:registration' %}" method="post">
             <div class="error-messages"></div>
 
             <div class="row_form_popup">
               <label class="lbl_box">
-                <p>Ваш e-mail</p>
+                <p>{% trans 'Ваш e-mail' %}</p>
                 <input type="email" required="required" value="" name="email" class="input_text">
               </label>
             </div>
             
             <div class="row_form_popup">
               <label class="lbl_box">
-                <p>Ваш пароль</p>
+                <p>{% trans 'Ваш пароль' %}</p>
                 <input type="password" required="required" value="" name="password" class="input_text">
               </label>
             </div>
             
             <div class="row_form_popup">
               <label class="lbl_box">
-                <p>Ваш пароль ещё раз</p>
+                <p>{% trans 'Ваш пароль ещё раз' %}</p>
                 <input type="password" required="required" value="" name="password_repeat" class="input_text">
               </label>
             </div>
             
             <div class="row_form_popup">
               <label class="lbl_box">
-                <p>ФИО</p>
+                <p>{% trans 'ФИО' %}</p>
                 <input type="text" required="required" value="" name="name" class="input_text">
               </label>
             </div>
 
             <div class="row_form_popup row_pop_butt">
-              <button class="bt_red">Далее</button>
+              <button class="bt_red">{% trans 'Далее' %}</button>
             </div>
           </form>
           
@@ -385,14 +385,14 @@
 
   {% comment %}
   <div class="window_popap no_float mini_window_popup callback_form" id="step2" style="display:none;">
-      <div class="close_popap call_close js-call-close"><img src="/static/i/close_white_45.png" alt="Закрыть"></div>
+      <div class="close_popap call_close js-call-close"><img src="/static/i/close_white_45.png" alt="{% trans 'Закрыть' %}"></div>
       <div class="wrap_window_popap bg_wrapp_window">
           <div class="popap_row">
               <div class="popap_row_wrapp">
                   <h3 class="popup_title" style="margin-bottom: 10px;">Шаг 2!</h3>
                   <p class="call_introtext popup_text"></p>
                   <div class="bt_req_call red_bor_butt js-call-close">
-                    <button class="butt_border">Закрыть</button>
+                    <button class="butt_border">{% trans 'Закрыть' %}</button>
                   </div>
               </div>
           </div>
@@ -401,18 +401,18 @@
   {% endcomment %}
 
   <div class="window_popap no_float" id="step3" style="display:none;">
-    <div class="close_popap js-call-close"><img src="/static/i/close_icon.png" alt="Закрыть" /></div>
+    <div class="close_popap js-call-close"><img src="/static/i/close_icon.png" alt="{% trans 'Закрыть' %}" /></div>
     <div class="wrap_window_popap bg_wrapp_window">
       <div class="popap_row">
         <div class="popap_row_wrapp">
-          <h2 class="title_popap">Данные для доставки</h2>
+          <h2 class="title_popap">{% trans 'Данные для доставки' %}</h2>
           <form class="js-step3-form" action="{% url 'cart_api:step3' %}" method="post">
             <div class="error-messages"></div>
 
             <div class="rows_popup_input">
               <div class="row_form_popup">
                 <label class="lbl_box">
-                  <p>Страна:<span class="orange_text">*</span></p>
+                  <p>{% trans 'Страна' %}:<span class="orange_text">*</span></p>
                   <select required name="country" value="{{ shipping_data.country }}" class="country_select">
                     {% for country in countries %}
                       <option value="{{ country.id }}"{% if country.id == shipping_data.country %} selected="selected"{% endif %}>{{ country.title }}</option>
@@ -423,7 +423,7 @@
               
               <div class="row_form_popup">
                 <label class="lbl_box">
-                  <p>Город:<span class="orange_text">*</span></p>
+                  <p>{% trans 'Город' %}:<span class="orange_text">*</span></p>
                   <input required type="text" value="{{ shipping_data.city }}" name="city" class="input_text" />
                 </label>
               </div>
@@ -431,7 +431,7 @@
 
             <div class="rows_popup_input">
               <label class="lbl_box">
-                  <p class="popup_form_label">Адрес:<span class="orange_text">*</span></p>
+                  <p class="popup_form_label">{% trans 'Адрес' %}:<span class="orange_text">*</span></p>
                   <textarea required name="address" class="input_text no_hover_border" style="padding: 12px 2.25% 0; width: 95.45%; height: 135px;">{{ shipping_data.address }}</textarea>
                 </label>
             </div>            
@@ -439,14 +439,14 @@
             <div class="rows_popup_input">
               <div class="row_form_popup">
                 <label class="lbl_box">
-                  <p>Контактный телефон:<span class="orange_text">*</span></p>
+                  <p>{% trans 'Контактный телефон' %}:<span class="orange_text">*</span></p>
                   <input required type="text" value="{{ shipping_data.phone }}" name="phone" class="input_text" />
                 </label>
               </div>
               
               <div class="row_form_popup">
                 <label class="lbl_box">
-                  <p>Имя, Фамилия, Отчество:<span class="orange_text">*</span></p>
+                  <p>И{% trans 'мя, Фамилия, Отчество' %}:<span class="orange_text">*</span></p>
                   <input required type="text" value="{{ shipping_data.name }}" name="name" class="input_text" />
                 </label>
               </div>
@@ -455,14 +455,14 @@
             {% if not shipping_data.email %}
               <div class="rows_popup_input js-email-cart-input" style="margin-bottom: 15px; display: none;">
                 <label class="lbl_box">
-                  <p class="popup_form_label">Ваш e-mail:</p>
+                  <p class="popup_form_label">{% trans 'Ваш e-mail' %}:</p>
                   <input type="email" style="margin-top: 5px;" value="{{ shipping_data.email }}" name="email" class="input_text" />
                 </label>
               </div>
             {% endif %}
 
             <div class="row_form_popup row_pop_butt">
-              <button class="bt_red">Оформить заказ</button>
+              <button class="bt_red">{% trans 'Оформить заказ' %}</button>
             </div>
             
           </form>
@@ -474,56 +474,56 @@
   </div>
 
   <div class="window_popap no_float mini_window_popup" id="step4" style="display:none;">
-    <div class="close_popap js-call-close"><img src="/static/i/close_icon.png" alt="Закрыть" /></div>
+    <div class="close_popap js-call-close"><img src="/static/i/close_icon.png" alt="{% trans 'Закрыть' %}" /></div>
     <div class="wrap_window_popap bg_wrapp_window">
       <div class="popap_row">
         <div class="popap_row_wrapp">
-          <h2 class="title_popap">Заказ успешно <br />оформлен</h2>
+          <h2 class="title_popap">{% trans 'Заказ успешно <br />оформлен' %}</h2>
           <div class="row_form_popup">
-            <p><strong>Заказ №:</strong><span class="js-order-number">111 111</span></p>
-            <p><strong >На сумму:</strong>{{ '11 111'|with_js_cart_summary:currency|safe }}</p>
-            {# <p><strong>Способ получения:</strong><span>Самовывоз</span></p> #}
+            <p><strong>{% trans 'Заказ №' %}:</strong><span class="js-order-number">111 111</span></p>
+            <p><strong >{% trans 'На сумму' %}:</strong>{{ '11 111'|with_js_cart_summary:currency|safe }}</p>
+            {# <p><strong>{% trans 'Способ получения' %}:</strong><span>Самовывоз</span></p> #}
 
-            <p style="margin-top: 30px;">В ближайшее время с вами всяжутся 
+            <p style="margin-top: 30px;">{% blocktrans trimmed 'В ближайшее время с вами всяжутся 
             менеджеры отдела доставки для уточнения 
-            деталей заказа</p>
+            деталей заказа' %}</p>
 
-            <p>Если у вас возникли какие либо вопросы,
-            вы можете связаться с нами по телефону  
+            <p>{% blocktrans trimmed 'Если у вас возникли какие либо вопросы,
+            вы можете связаться с нами по телефону' %}
             <strong class="pup_strong">+7 (916) 445 -65 -55</strong></p>
 
-            <p>С уважением, администация Bikinimini.ru</p>
+            <p>{% trans 'С уважением, администация Bikinimini.ru' %}</p>
           </div>
 
-          {# <a href="{% url 'women' %}" class="to_cart_list">Продолжить покупки</a> #}
+          {# <a href="{% url 'women' %}" class="to_cart_list">{% trans 'Продолжить покупки' %}</a> #}
         </div>
       </div>
     </div>
   </div>
 
   <div class="window_popap after_popap" id="step5" style="display:none;">
-    <div class="close_popap js-call-close"><img src="/static/i/close_icon.png" alt="Закрыть" /></div>
+    <div class="close_popap js-call-close"><img src="/static/i/close_icon.png" alt="{% trans 'Закрыть' %}" /></div>
     <div class="wrap_window_popap bg_wrapp_window">
       <div class="popap_row">
         <div class="popap_row_wrapp">
-          <h2 class="title_string">Ваш заказ принят!</h2>
+          <h2 class="title_string">{% trans 'Ваш заказ принят' %}!</h2>
           <div>№ заказа: </strong><span class="js-order-number">111 111</span><br/></div>
           <div class="content_pup">
-            <div class="p_pup">Итоговая стоимость заказа:</div> 
+            <div class="p_pup">{% trans 'Итоговая стоимость заказа' %}:</div> 
             <div class="product_price upper_price price_strong">{{ '11 111'|with_js_cart_summary:currency|safe }}</div>
 
-            <p>В ближайшее время с вами всяжутся 
+            <p style="margin-top: 30px;">{% blocktrans trimmed 'В ближайшее время с вами всяжутся 
             менеджеры отдела доставки для уточнения 
-            деталей заказа</p>
+            деталей заказа' %}</p>
 
-            <p>Если у вас возникли какие либо вопросы,
-            вы можете связаться с нами по телефону  
+            <p>{% blocktrans trimmed 'Если у вас возникли какие либо вопросы,
+            вы можете связаться с нами по телефону' %}
             <strong class="pup_strong">+7 (916) 445 -65 -55</strong></p>
 
-            <p>С уважением, администация Bikinimini.ru</p>
+            <p>{% trans 'С уважением, администация Bikinimini.ru' %}</p>
           </div>
 
-          {# <a href="{% url 'women' %}" class="to_cart_list">Продолжить покупки</a> #}
+          {# <a href="{% url 'women' %}" class="to_cart_list">{% trans 'Продолжить покупки' %}</a> #}
         </div>
       </div>
 
@@ -531,8 +531,8 @@
         {% with special.product as sp %}
           <div class="popap_row bg_popap">
             <div class="popap_row_wrapp">
-              <h2 class="title_string">Специальное предложение <br />Только для Вас!</h2>
-              <h3 class="h3_pup">Добавьте еще одну модель </h3>
+              <h2 class="title_string">{% trans 'Специальное предложение <br />Только для Вас' %}!</h2>
+              <h3 class="h3_pup">{% trans 'Добавьте еще одну модель' %}</h3>
 
               <div class="pup_details_item">
                 <div class="details_item_photo">
@@ -545,7 +545,7 @@
                 <div class="details_item_content">
                   <h3><a href="{{ special.get_discount_url }}?code={{ random_str }}"> {{ sp.title }}</a></h3>
                   <h4>{{ sp.subtitle }}</h4>
-                  <div class="txt_price_to">Цена для вас:</div>
+                  <div class="txt_price_to">{% trans 'Цена для вас' %}:</div>
                   
                   <div class="product_price sale_price">{% prefix_currency currency sp.price|to_price %}<s>{{ sp.price|to_price }}</s>{% postfix_currency currency sp.price|to_price %}</div>
                   <div class="product_price">{{ sp.price|with_discount:special.discount|to_price|with_currency:currency|safe }}</div>
@@ -557,9 +557,9 @@
               </div>
               
               <div class="pup_details_txt">
-                <strong>Примечание:</strong> Скидкой можете воспользоватся только вы, 
+                <strong>{% trans 'Примечание' %}:</strong> {% blocktrans trimmed 'Скидкой можете воспользоватся только вы, 
                 перейдя по ссылке с данной страницы в течение следующих двух часов.
-                Если вы покинете данную страницу, скидка более не распространяется.
+                Если вы покинете данную страницу, скидка более не распространяется.' %}
               </div>
               
             </div>

@@ -14,8 +14,8 @@
 {% block breadcrumbs %}
   <div class="blog_title">
     <ul class="breadcrumb">
-      <li><a href="{% url 'home' %}">Главная</a></li>
-      <li><a href="{% url 'blog:home' %}">Блог</a></li>
+      <li><a href="{% url 'home' %}">{% trans 'Главная' %}</a></li>
+      <li><a href="{% url 'blog:home' %}">{% trans 'Блог' %}</a></li>
       <li>{{ category.title }}</li>
     </ul>
     <h1 class="title_block">{{ category.get_h1 }}</h1>

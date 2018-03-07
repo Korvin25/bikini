@@ -1,3 +1,4 @@
+{% load i18n %}
 
 // ----- Добавляем в вишлист / удаляем из него -----
 
@@ -73,8 +74,8 @@ function sendWishlistItemData($input, dontShowPopup) {
         }
       }
       else {
-        if (error) { alert('При отправке формы произошла ошибка: ', error); }
-        else { alert('При отправке формы произошла ошибка: ', res.status + ' ' + res.statusText); }
+        if (error) { alert('{% trans "При отправке формы произошла ошибка" %}: ', error); }
+        else { alert('{% trans "При отправке формы произошла ошибка" %}: ', res.status + ' ' + res.statusText); }
       };
     },
     error: function(res){
@@ -87,15 +88,15 @@ function sendWishlistItemData($input, dontShowPopup) {
               error = response['error'],
               alert_message = response['alert_message'];
 
-          if (error) { alert('При отправке формы произошла ошибка: ', error); };
+          if (error) { alert('{% trans "При отправке формы произошла ошибка" %}: ', error); };
           if (click_to) { $(click_to).click(); };
           if (alert_message) { alert(alert_message); };
         } else {
-          alert('При отправке формы произошла ошибка: ', res.status + ' ' + res.statusText);
+          alert('{% trans "При отправке формы произошла ошибка" %}: ', res.status + ' ' + res.statusText);
         };
       } else {
-        if (res.status == 0) { alert('Произошла ошибка: 500 Internal Server Error') }
-        else { alert('Произошла ошибка: ' + res.status + ' ' + res.statusText); }
+        if (res.status == 0) { alert('{% trans "Произошла ошибка" %}: 500 Internal Server Error') }
+        else { alert('{% trans "Произошла ошибка" %}: ' + res.status + ' ' + res.statusText); }
       }
     }
   });
@@ -121,7 +122,7 @@ function checkWishlistAndClick(show_errors, just_change) {
   if ($input.length) {
     if ($input.is(':checked') && !just_change) {
       $input.click();
-      $button.text('Добавить в список желаемых покупок');
+      $button.text('{% trans "Добавить в список желаемых покупок" %}');
     }
     else {
       var option = data['option'];
@@ -131,7 +132,7 @@ function checkWishlistAndClick(show_errors, just_change) {
         _extra_products = collected_data['_extra_products'];
         errors = collected_data['errors'];
         if (errors.length) {
-          if (show_errors) { showErrorPopup('Пожалуйста, выберите одно из значений:', errors.join('<br/>')); };
+          if (show_errors) { showErrorPopup('{% trans "Пожалуйста, выберите одно из значений" %}:', errors.join('<br/>')); };
           return;
         }
         else {
@@ -139,11 +140,11 @@ function checkWishlistAndClick(show_errors, just_change) {
             sendWishlistItemData($input, true);
           } else {
             $input.click();
-            $button.text('Удалить из списка желаемых покупок');
+            $button.text('{% trans "Удалить из списка желаемых покупок" %}');
           }
         }
       } else {
-        if (show_errors) { showErrorPopup('Такого товара нет в наличии'); };
+        if (show_errors) { showErrorPopup('{% trans "Такого товара нет в наличии" %}'); };
       }
     };
   } else {

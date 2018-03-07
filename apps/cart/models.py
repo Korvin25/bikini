@@ -9,6 +9,7 @@ from django.conf import settings
 from django.db import models
 from django.template.loader import get_template
 from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _
 
 from ..catalog.models import Certificate, Product, ProductOption, GiftWrapping
 from ..catalog.templatetags.catalog_tags import get_product_attrs_url
@@ -84,15 +85,15 @@ class Cart(models.Model):
     currency = models.CharField('Валюта', max_length=3, default='rub', choices=CURRENCY_CHOICES)
 
     # postal_code = models.CharField('Почтовый код', max_length=255, null=True, blank=True)
-    country = models.ForeignKey(Country, verbose_name='Страна', null=True, blank=True)
-    city = models.CharField('Город', max_length=225, null=True, blank=True)
-    address = models.TextField('Адрес', null=True, blank=True)
-    phone = models.CharField('Телефон', max_length=30, null=True, blank=True)
-    name = models.CharField('Полное имя', max_length=511, null=True, blank=True)
+    country = models.ForeignKey(Country, verbose_name=_('Страна'), null=True, blank=True)
+    city = models.CharField(_('Город'), max_length=225, null=True, blank=True)
+    address = models.TextField(_('Адрес'), null=True, blank=True)
+    phone = models.CharField(_('Телефон'), max_length=30, null=True, blank=True)
+    name = models.CharField(_('Полное имя'), max_length=511, null=True, blank=True)
 
-    delivery_method = models.ForeignKey(DeliveryMethod, verbose_name='Способ доставки', null=True, blank=True)
-    payment_method = models.ForeignKey(PaymentMethod, verbose_name='Способ оплаты', null=True, blank=True)
-    additional_info = models.TextField('Дополнительная информация', blank=True)
+    delivery_method = models.ForeignKey(DeliveryMethod, verbose_name=_('Способ доставки'), null=True, blank=True)
+    payment_method = models.ForeignKey(PaymentMethod, verbose_name=_('Способ оплаты'), null=True, blank=True)
+    additional_info = models.TextField(_('Дополнительная информация'), blank=True)
 
     # tracking_number = models.CharField('Номер отслеживания', max_length=255, null=True, blank=True)
     # delivery_type = models.CharField('Тип доставки', max_length=15, choices=DELIVERY_CHOICES, null=True, blank=True)

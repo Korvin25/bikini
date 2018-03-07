@@ -1,5 +1,8 @@
+{% load i18n %}
+
 <div class="block_curr_down"{% if currency_change_style %} style="{{ currency_change_style }}"{% endif %}>
-  <span class="title_down_block">{{ currency_change_label|default:'Цена в' }}: </span>
+  {% trans 'Цена в' as transDefaultLabel %}
+  <span class="title_down_block">{{ currency_change_label|default:transDefaultLabel }}: </span>
   <script>
     (function( $ ) {
       $.fn.selectbox = function() {

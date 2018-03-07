@@ -1,4 +1,5 @@
 {% load catalog_tags currency_tags %}
+{% load i18n %}
 
 {% if products|length %}
 
@@ -10,7 +11,7 @@
           <h3><a href="{{ product_url }}">{{ product.title }}</a></h3>
           <h4>{{ product.subtitle }}</h4>
           <div class="product_price">{{ product.get_price|with_currency:currency|safe }}</div>
-          <a href="{{ product_url }}" class="to_cart_list">В корзину</a>
+          <a href="{{ product_url }}" class="to_cart_list">{% trans 'В корзину' %}</a>
         {% endwith %}
       </div>
     {% endfor %}
@@ -48,5 +49,9 @@
   {% endcomment %}
 
 {% else %}
-  <p><center style="margin: 100px 0;">В {% if category %}данной категории{% else %}этом разделе{% endif %} пока что нет товаров</center></p>
+  {% if category %}
+    <p><center style="margin: 100px 0;">{% trans 'В данной категории пока что нет товаров' %}</center></p>
+  {% else %}
+    <p><center style="margin: 100px 0;">{% trans 'В этом разделе пока что нет товаров' %}</center></p>
+  {% endif %}
 {% endif %}

@@ -109,12 +109,12 @@ class ContestTitleLine(models.Model):
 
 
 class Participant(MetatagModel):
-    contest = models.ForeignKey(Contest, verbose_name='Конкурс', related_name='participants')
-    profile = models.ForeignKey(Profile, verbose_name='Профиль', related_name='contests_participants')
+    contest = models.ForeignKey(Contest, verbose_name=_('Конкурс'), related_name='participants')
+    profile = models.ForeignKey(Profile, verbose_name=_('Профиль'), related_name='contests_participants')
 
-    name = models.CharField('Имя', max_length=255)
-    description = models.TextField('Описание', max_length=1000, blank=True)
-    photo = ThumbnailerImageField('Фото', upload_to='contests/participants/')
+    name = models.CharField(_('Имя'), max_length=255)
+    description = models.TextField(_('Описание'), max_length=1000, blank=True)
+    photo = ThumbnailerImageField(_('Фото'), upload_to='contests/participants/')
 
     likes = models.IntegerField('Количество лайков', default=0)
     additional_likes = models.IntegerField('Увеличить на', default=0)

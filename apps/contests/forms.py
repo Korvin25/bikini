@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django import forms
+from django.utils.translation import ugettext_lazy as _
 
 from .models import Contest, Participant
 
@@ -30,12 +31,12 @@ class ContestApplyForm(forms.ModelForm):
     def clean_contest(self):
         contest = self.cleaned_data.get('contest')
         if not contest.accepting_enabled:
-            raise forms.ValidationError('Заявки на участие в конкурсе больше не принимаются.')
+            raise forms.ValidationError(_('Заявки на участие в конкурсе больше не принимаются.'))
         return contest
 
     def clean_profile(self):
         profile = self.cleaned_data.get('profile')
         contest = self.cleaned_data.get('contest')
         if contest and profile.id in contest.participants_profiles:
-            raise forms.ValidationError('Вы уже принимаете участие в конурсе.')
+            raise forms.ValidationError(_('Вы уже принимаете участие в конурсе.'))
         return profile

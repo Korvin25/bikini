@@ -20,8 +20,8 @@
         <div class="item_content_block">
         <div class="text_preview_page text_item">
           <ul class="breadcrumb">
-            <li><a href="{% url 'home' %}">Главная</a></li>
-            <li><a href="{% url 'contests:home' %}">Конкурсы</a></li>
+            <li><a href="{% url 'home' %}">{% trans 'Главная' %}</a></li>
+            <li><a href="{% url 'contests:home' %}">{% trans 'Конкурсы' %}</a></li>
             <li><a href="{{ contest.get_absolute_url }}">{{ contest.title }}</a></li>
             <li><span>{{ participant.name }}</span></li>
           </ul>
@@ -37,14 +37,14 @@
             <a href="#" class="butt_put">
               <label for="id_like_{{ participant.id }}" class="td_label_check_win">
                 <input type="checkbox" class="js-like-participant" name="like_participant" id="id_like_{{ participant.id }}" value="1"{% if participant.id|to_str in liked_participants %} checked="checked"{% endif %} data-participant-id="{{ participant.id }}" data-like-url="{% url 'contests:like' %}" data-dislike-url="{% url 'contests:dislike' %}">
-                <img src="/static/i/heart_icon.png" alt="Оценить участницу">
+                <img src="/static/i/heart_icon.png" alt="{% trans 'Оценить участницу' %}">
               </label>
             </a>
             <span class="disc_number js-likes-count-span">{{ participant.likes_count }}</span>
           </div>                
 
           <div class="bt_req_call red_bor_butt">
-            <a href="#" class="js-rate-participant">{% if participant.id|to_str in liked_participants %}Ваш лайк засчитан{% else %}Оценить участницу{% endif %}</a>
+            <a href="#" class="js-rate-participant">{% if participant.id|to_str in liked_participants %}{% trans 'Ваш лайк засчитан' %}{% else %}{% trans 'Оценить участницу' %}{% endif %}</a>
           </div>
 
           <div class="share_banner" style="color: #000; text-align: left; margin-top: 20px;">
@@ -158,7 +158,7 @@
         </div>
 
         {% if participant.products.count %}
-          <h2 class="title_block">Участница демонстрирует:</h2>
+          <h2 class="title_block">{% trans 'Участница демонстрирует' %}:</h2>
           <div class="item_list_wrapp" itemscope="" itemtype="http://schema.org/ItemList">
             {% for product in participant.products.all %}
               <div class="product_list">
@@ -166,7 +166,7 @@
                 <h3><a href="{{ product.get_absolute_url }}">{{ product.title }}</a></h3>
                 <h4>{{ product.subtitle }}</h4>
                 <div class="product_price">{{ product.get_price|with_currency:currency|safe }}</div>
-                <a href="{{ product.get_absolute_url }}" class="to_cart_list">В корзину</a>
+                <a href="{{ product.get_absolute_url }}" class="to_cart_list">{% trans 'В корзину' %}</a>
               </div>
             {% endfor %}
           </div>

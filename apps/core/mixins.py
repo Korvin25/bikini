@@ -5,8 +5,13 @@ import json
 
 from django.http import JsonResponse, HttpResponse
 from django.http.request import QueryDict
+from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as __
 
 from .utils import get_error_message
+
+
+translated_strings = (_('Неправильный формат запроса'), _('Ошибка при парсинге запроса'),)
 
 
 class GetNotAllowedMixin(object):
@@ -30,7 +35,7 @@ class JSONViewMixin(GetNotAllowedMixin):
                 self.DATA = json.loads(request.body.decode('utf-8'))
             except Exception as e:
                 err_message = get_error_message(e)
-                data = {'result': 'error', 'error': 'Неправильный формат запроса'}
+                data = {'result': 'error', 'error': __('Неправильный формат запроса')}
                 return JsonResponse(data, status=400)
 
         return super(JSONViewMixin, self).dispatch(request, *args, **kwargs)
@@ -50,7 +55,8 @@ class JSONFormMixin(GetNotAllowedMixin):
                 self.JSON_POST = json.loads(request.body.decode('utf-8'))
             except Exception as e:
                 err_message = get_error_message(e)
-                error = {'name': '__all__', 'error_message': 'Ошибка при парсинге запроса: {}'.format(err_message)}
+                message_label = __('Ошибка при парсинге запроса')
+                error = {'name': '__all__', 'error_message': '{}: {}'.format(message_label, err_message)}
                 data = {'errors': [error]}
                 return JsonResponse(data, status=400)
 

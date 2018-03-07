@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django import forms
+from django.utils.translation import ugettext_lazy as _
 
 from apps.lk.models import Profile
 
@@ -10,8 +11,8 @@ class LoginForm(forms.Form):
     """
     Форма логина
     """
-    email = forms.EmailField(label="E-mail")
-    password = forms.CharField(label="Пароль", widget=forms.PasswordInput)
+    email = forms.EmailField(label=_("E-mail"))
+    password = forms.CharField(label=_("Пароль"), widget=forms.PasswordInput)
 
     def clean(self):
         cleaned_data = super(LoginForm, self).clean()
@@ -21,18 +22,18 @@ class LoginForm(forms.Form):
             try:
                 user = Profile.objects.get(email__iexact=email)
                 if not user.check_password(password):
-                    raise forms.ValidationError('Неверное сочетание Email / Пароль.')
+                    raise forms.ValidationError(_('Неверное сочетание Email / Пароль.'))
                 elif not user.is_active:
-                    raise forms.ValidationError('Пользователь с данным email заблокирован.')
+                    raise forms.ValidationError(_('Пользователь с данным email заблокирован.'))
             except Profile.DoesNotExist:
-                raise forms.ValidationError('Неверное сочетание Email / Пароль.')
+                raise forms.ValidationError(_('Неверное сочетание Email / Пароль.'))
         return cleaned_data
 
 
 class RegistrationForm(forms.ModelForm):
-    email = forms.EmailField(label="E-mail")
-    password = forms.CharField(label="Пароль", widget=forms.PasswordInput)
-    name = forms.CharField(label="ФИО")
+    email = forms.EmailField(label=_("E-mail"))
+    password = forms.CharField(label=_("Пароль"), widget=forms.PasswordInput)
+    name = forms.CharField(label=_("ФИО"))
 
     class Meta:
         model = Profile
@@ -41,7 +42,7 @@ class RegistrationForm(forms.ModelForm):
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if Profile.objects.filter(email__iexact=email).count():
-            raise forms.ValidationError('Профиль с таким email уже существует.')
+            raise forms.ValidationError(_('Профиль с таким email уже существует.'))
         return email
 
     def save(self, commit=True):
@@ -65,5 +66,5 @@ class ResetPasswordForm(forms.Form):
             try:
                 Profile.objects.get(email__iexact=email)
             except Profile.DoesNotExist:
-                raise forms.ValidationError('Пользователя с таким email не существует.')
+                raise forms.ValidationError(_('Пользователя с таким email не существует.'))
         return cleaned_data

@@ -3,11 +3,16 @@ from __future__ import unicode_literals
 
 from django.http import JsonResponse
 from django.views.generic import CreateView
+from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as __
 
 from ..core.mixins import JSONFormMixin
 from ..lk.email import admin_send_callback_order_email
 from .forms import CallbackOrderForm
 from .models import CallbackOrder
+
+
+translated_strings = (_('Спасибо! Мы обязательно вам перезвоним.'),)
 
 
 class CallbackOrderFormView(JSONFormMixin, CreateView):
@@ -35,6 +40,6 @@ class CallbackOrderFormView(JSONFormMixin, CreateView):
 
         admin_send_callback_order_email(order)
 
-        success_message = 'Спасибо! Мы обязательно вам перезвоним.'
+        success_message = __('Спасибо! Мы обязательно вам перезвоним.')
         data = {'result': 'ok', 'order_id': order.id, 'success_message': success_message}
         return JsonResponse(data)

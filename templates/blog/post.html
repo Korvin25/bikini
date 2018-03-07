@@ -24,8 +24,8 @@
 
       <div class="blog_title">
         <ul class="breadcrumb">
-          <li><a href="{% url 'home' %}">Главная</a></li>
-          <li><a href="{% url 'blog:home' %}">Блог</a></li>
+          <li><a href="{% url 'home' %}">{% trans 'Главная' %}</a></li>
+          <li><a href="{% url 'blog:home' %}">{% trans 'Блог' %}</a></li>
           <li><a href="{{ post.category.get_absolute_url }}">{{ post.category.title }}</a></li>
           <li>{{ post.title }}</li>
         </ul>
@@ -37,7 +37,7 @@
         {% if post.videos.count %}
           <div class="arhive_block mini_video">
             <div class="arhive_wrapp mini_video_wrapp">
-              <h2>Видео</h2>
+              <h2>{% trans 'Видео' %}</h2>
               
               <div class="list_mini_video">
                 {% for video in post.videos.all %}
@@ -122,7 +122,7 @@
 
           <div class="soc_share">
             <div class="soc_share_wrapp">
-              <div class="title_mini">Поделиться в соц. сетях:</div>
+              <div class="title_mini">{% trans 'Поделиться в соц. сетях' %}:</div>
               <script src="//yastatic.net/es5-shims/0.0.2/es5-shims.min.js"></script>
               <script src="//yastatic.net/share2/share.js"></script>
               <div class="ya-share2" data-services="facebook,vkontakte,twitter,odnoklassniki,gplus" data-description="{{ post.description }}" data-hashtags="Bikinimini.ru" data-image="{{ post.cover_detail_url|full_url }}" data-lang="{{ request.LANGUAGE_CODE }}"></div>
@@ -139,10 +139,10 @@
 
           <div class="comment_block" id="comments">
             <div class="comment_wrapp">
-              <h3 class="title_block">Комментарии</h3>
+              <h3 class="title_block">{% trans 'Комментарии' %}</h3>
 
               {% if posted_comment %}
-                <p style="margin: 10px 0 25px; color: green;">Спасибо! Ваш комментарий №{{ request.GET.cid }} принят и появится на сайте после одобрения модератором.</p>
+                <p style="margin: 10px 0 25px; color: green;">{% trans 'Спасибо' %}! {% trans 'Ваш комментарий' %} №{{ request.GET.cid }} {% trans 'принят и появится на сайте после одобрения модератором' %}.</p>
               {% endif %}
 
               {% for comment in post.shown_comments %}
@@ -154,23 +154,23 @@
                   </div>
                 </div>
               {% empty %}
-                <p style="margin-bottom: 40px;">Комментариев еще нет{% if not profile.is_anonymous %}, оставьте первым{% endif %}</p>
+                <p style="margin-bottom: 40px;">{% trans 'Комментариев еще нет' %}{% if not profile.is_anonymous %}, {% trans 'оставьте первым' %}{% endif %}</p>
               {% endfor %}
 
               {% if not profile.is_anonymous %}
                 {% if not posted_comment %}
-                  <p style="margin-bottom: 15px; color: #444;">Комментарий появится на сайте только после одобрения модератором.</p>
+                  <p style="margin-bottom: 15px; color: #444;">{% trans 'Комментарий появится на сайте только после одобрения модератором' %}.</p>
                 {% endif %}
 
                 <form action="{{ request.post }}" method="post" class="comment_form">
                   {% csrf_token %}
                   <div class="input_shell">
-                    <input name="name" id="name" required placeholder="Ваше имя" class="t_area input_text bg_area" value="{{ profile.name|default_if_none:'' }}"/>
-                    <textarea name="comment" rows="4" id="comment" required class="t_area input_text bg_area" placeholder="Ваш комментарий"></textarea>
-                    <span class="err_r">Заполните поле</span>
+                    <input name="name" id="name" required placeholder="{% trans 'Ваше имя' %}" class="t_area input_text bg_area" value="{{ profile.name|default_if_none:'' }}"/>
+                    <textarea name="comment" rows="4" id="comment" required class="t_area input_text bg_area" placeholder="{% trans 'Ваш комментарий' %}"></textarea>
+                    <span class="err_r">{% trans 'Заполните поле' %}</span>
                   </div>
                   <div class="row_form_popup row_pop_butt">
-                    <button class="bt_red">Отправить</button>
+                    <button class="bt_red">{% trans 'Отправить' %}</button>
                   </div>
                 </form>
               {% endif %}

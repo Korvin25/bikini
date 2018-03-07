@@ -13,14 +13,14 @@
 
 {% block touch_breadcrumbs %}
   <ul id="touch_breadcrumb" class="breadcrumb">
-    <li><a href="{% url 'home' %}">Главная</a></li>
-    <li>Женщинам</li>
+    <li><a href="{% url 'home' %}">{% trans 'Главная' %}</a></li>
+    <li>{% trans 'Женщинам' %}</li>
   </ul>
 {% endblock %}
 
 {% block breadcrumbs %}
   <ul class="breadcrumb">
-    <li><a href="{% url 'home' %}">Главная</a></li>
-    <li>Женщинам</li>
+    <li><a href="{% url 'home' %}">{% trans 'Главная' %}</a></li>
+    <li>{% trans 'Женщинам' %}</li>
   </ul>
 {% endblock %}

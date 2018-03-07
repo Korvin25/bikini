@@ -20,26 +20,26 @@
     <div class="main_content main_cut">
       
       <ul id="touch_breadcrumb" class="breadcrumb">
-        <li><a href="{% url 'home' %}">Главная</a></li>
-        <li><span>Личный кабинет</span></li>
+        <li><a href="{% url 'home' %}">{% trans 'Главная' %}</a></li>
+        <li><span>{% trans 'Личный кабинет' %}</span></li>
       </ul>
     
       <div id="main_content" class="wrapp_content">
         <ul class="breadcrumb">
-          <li><a href="{% url 'home' %}">Главная</a></li>
-          <li><span>Личный кабинет</span></li>
+          <li><a href="{% url 'home' %}">{% trans 'Главная' %}</a></li>
+          <li><span>{% trans 'Личный кабинет' %}</span></li>
         </ul>
-        <h1 class="title_block">Личный кабинет</h1>
+        <h1 class="title_block">{% trans 'Личный кабинет' %}</h1>
 
         <div class="wns_tubs">
           <div class="wns_buttons">
             <div class="lnk_bt_wns">
-              <img src="/static/i/icon_user.png" alt="Мои данные" />
-              <abbr>Мои данные</abbr>
+              <img src="/static/i/icon_user.png" alt="{% trans 'Мои данные' %}" />
+              <abbr>{% trans 'Мои данные' %}</abbr>
             </div>
             <div class="lnk_bt_wns">
-              <img src="/static/i/icon_myorders.png" alt="Мои заказы" />
-              <abbr>Мои заказы</abbr>
+              <img src="/static/i/icon_myorders.png" alt="{% trans 'Мои заказы' %}" />
+              <abbr>{% trans 'Мои заказы' %}</abbr>
             </div>
           </div>
           
@@ -51,10 +51,10 @@
                 
                   <div class="wns_row_input">
                     <label class="wns_lbl">
-                      <p class="wns_title_row_frm">Как к вам обращаться:</p>
+                      <p class="wns_title_row_frm">{% trans 'Как к вам обращаться' %}:</p>
                       <div class="input_shell">
-                        <input type="text" value="{{ shipping_data.name }}" name="name" class="input_text" placeholder="Фамилия, Имя, Отчество" />
-                        <span class="err_r">Заполните поле</span>
+                        <input type="text" value="{{ shipping_data.name }}" name="name" class="input_text" placeholder="{% trans 'Фамилия, Имя, Отчество' %}" />
+                        <span class="err_r">{% trans 'Заполните поле' %}</span>
                       </div>
                     </label>
                   </div>
@@ -62,7 +62,7 @@
                   
                   <div class="wns_row_input wns_row_input1900">
                     <div class="wns_lbl">
-                      <p class="wns_title_row_frm">Данные для доставки:</p>
+                      <p class="wns_title_row_frm">{% trans 'Данные для доставки' %}:</p>
                       {% comment %}
                         <script>
                           (function( $ ) {
@@ -103,7 +103,7 @@
                               </ul>
                             </div>
                           </div>
-                          <span class="err_r">Заполните поле</span>
+                          <span class="err_r">{% trans 'Заполните поле' %}</span>
                         </div>
                         <script>
                           (function( $ ) {
@@ -150,41 +150,41 @@
                               </ul>
                             </div>
                           </div>
-                          <span class="err_r">Заполните поле</span>
+                          <span class="err_r">{% trans 'Заполните поле' %}</span>
                         </div>
                         
                         <div class="input_shell">
                           <input type="text" value="" name="index" class="input_text" placeholder="Индекс *" />
-                          <span class="err_r">Заполните поле</span>
+                          <span class="err_r">{% trans 'Заполните поле' %}</span>
                         </div>
                         
                         <div class="input_shell">
                           <input type="text" value="" name="street" class="input_text" placeholder="Улица *" />
-                          <span class="err_r">Заполните поле</span>
+                          <span class="err_r">{% trans 'Заполните поле' %}</span>
                         </div>
                         
                         <div class="rows_popup_input rows_wns_input">
                           <div class="row_form_popup two_rows">
                             <label class="input_shell">
                               <input type="text" value="" name="street" class="input_text" placeholder="Дом *" />
-                              <span class="err_r">Заполните поле</span>
+                              <span class="err_r">{% trans 'Заполните поле' %}</span>
                             </label>
                             
                             <label class="input_shell">
                               <input type="text" value="" name="street" class="input_text" placeholder="Строение" />
-                              <span class="err_r">Заполните поле</span>
+                              <span class="err_r">{% trans 'Заполните поле' %}</span>
                             </label>
                           </div>
                           
                           <div class="row_form_popup two_rows">
                             <label class="input_shell">
                               <input type="text" value="" name="street" class="input_text" placeholder="Корпус" />
-                              <span class="err_r">Заполните поле</span>
+                              <span class="err_r">{% trans 'Заполните поле' %}</span>
                             </label>
                             
                             <label class="input_shell">
                               <input type="text" value="" name="street" class="input_text errr" placeholder="Квартира *" />
-                              <span class="err_r">Заполните поле</span>
+                              <span class="err_r">{% trans 'Заполните поле' %}</span>
                             </label>
                           </div>
                         </div>
@@ -197,22 +197,22 @@
                             <option value="{{ country.id }}"{% if country.id == shipping_data.country %} selected="selected"{% endif %}>{{ country.title }}</option>
                           {% endfor %}
                         </select>
-                        <span class="err_r">Заполните поле</span>
+                        <span class="err_r">{% trans 'Заполните поле' %}</span>
                       </div>
 
                       <div class="input_shell">
-                        <input type="text" value="{{ shipping_data.city }}" name="city" class="input_text" placeholder="Город" />
-                        <span class="err_r">Заполните поле</span>
+                        <input type="text" value="{{ shipping_data.city }}" name="city" class="input_text" placeholder="{% trans 'Город' %}" />
+                        <span class="err_r">{% trans 'Заполните поле' %}</span>
                       </div>
 
                       <div class="input_shell">
-                        <textarea name="address" class="input_text no_hover_border" style="padding: 12px 2.25% 0; width: 94.5%; height: 135px;" placeholder="Адрес">{{ shipping_data.address }}</textarea>
-                        <span class="err_r">Заполните поле</span>
+                        <textarea name="address" class="input_text no_hover_border" style="padding: 12px 2.25% 0; width: 94.5%; height: 135px;" placeholder="{% trans 'Адрес' %}">{{ shipping_data.address }}</textarea>
+                        <span class="err_r">{% trans 'Заполните поле' %}</span>
                       </div>
                       
                       <div class="input_shell">
-                        <input type="text" value="{{ shipping_data.phone }}" name="phone" class="input_text" placeholder="Контактный телефон" />
-                        <span class="err_r">Заполните поле</span>
+                        <input type="text" value="{{ shipping_data.phone }}" name="phone" class="input_text" placeholder="{% trans 'Контактный телефон' %}" />
+                        <span class="err_r">{% trans 'Заполните поле' %}</span>
                       </div>
                       
                     </div>
@@ -222,10 +222,10 @@
                   
                   <div class="wns_row_input">
                     <label class="wns_lbl">
-                      <p class="wns_title_row_frm">Ваш e-mail:</p>
+                      <p class="wns_title_row_frm">{% trans 'Ваш e-mail' %}:</p>
                       <div class="input_shell">
-                        <input required type="text" value="{{ shipping_data.email }}" name="email" class="input_text{% if not shipping_data.email %} errr{% endif %}" placeholder="E-mail *" />
-                        <span class="err_r">Заполните поле</span>
+                        <input required type="text" value="{{ shipping_data.email }}" name="email" class="input_text{% if not shipping_data.email %} errr{% endif %}" placeholder="{% trans 'E-mail' %} *" />
+                        <span class="err_r">{% trans 'Заполните поле' %}</span>
                       </div>
                     </label>
                   </div>
@@ -234,14 +234,14 @@
                   <div class="wns_row_input wns_row_w100">
                     <div class="wns_lbl wns_lblW">
                       <div class="pass_wns_box js-password-button-container">
-                        <abbr>Пароль:</abbr>
-                        <div class="bt_red js-password-button password_button">Изменить</div>
+                        <abbr>{% trans 'Пароль' %}:</abbr>
+                        <div class="bt_red js-password-button password_button">{% trans 'Изменить' %}</div>
                       </div>
                       
                       <div class="row_form_popup">
                         <label class="lbl_box check_popap_row">
                           <input class="check_form" type="checkbox" value="" name="save_vhod">
-                          <p>Я хочу получать информацию о скидках и новинках <a href="#">Изменить</a></p>
+                          <p>{% trans 'Я хочу получать информацию о скидках и новинках' %} <a href="#">{% trans 'Изменить' %}</a></p>
                         </label>
                       </div>
                       
@@ -250,23 +250,23 @@
 
                   <div class="js-password-container wns_row_input wns_row_input1900" style="margin-top: 10px; display: none;">
                     <div class="wns_lbl">
-                      <p class="wns_title_row_frm">Пароль:</p>
+                      <p class="wns_title_row_frm">{% trans 'Пароль' %}:</p>
 
                       <div class="input_shell">
-                        <input type="password"{% if profile.has_password is False %} style="display: none;"{% endif %} value="" name="old_password" class="input_text" placeholder="Старый пароль" />
-                        <span class="err_r">Заполните поле</span>
+                        <input type="password"{% if profile.has_password is False %} style="display: none;"{% endif %} value="" name="old_password" class="input_text" placeholder="{% trans 'Старый пароль' %}" />
+                        <span class="err_r">{% trans 'Заполните поле' %}</span>
                       </div>
                       
                       <div class="input_shell">
-                        <input type="password" value="" name="new_password" class="input_text" placeholder="Новый пароль" />
-                        <span class="err_r">Заполните поле</span>
+                        <input type="password" value="" name="new_password" class="input_text" placeholder="{% trans 'Новый пароль' %}" />
+                        <span class="err_r">{% trans 'Заполните поле' %}</span>
                       </div>
                       
                     </div>
                   </div>
 
                   <div class="row_form_popup row_pop_butt">
-                    <button class="bt_red">Сохранить</button>
+                    <button class="bt_red">{% trans 'Сохранить' %}</button>
                   </div>
                   
                 </form>
@@ -280,45 +280,45 @@
 
                   {% if profile.complete_orders.count %}
                     <div class="table_head tb_head">
-                      <div class="table_cell"><div class="tb_title">Дата заказа</div></div>
-                      <div class="table_cell"><div class="tb_title">Номер заказа</div></div>
-                      <div class="table_cell"><div class="tb_title">Способ доставки</div></div>
-                      <div class="table_cell"><div class="tb_title">Способ оплаты</div></div>
-                      <div class="table_cell"><div class="tb_title">Статус</div></div>
-                      <div class="table_cell"><div class="tb_title">Итого к оплате</div></div>
+                      <div class="table_cell"><div class="tb_title">{% trans 'Дата заказа' %}</div></div>
+                      <div class="table_cell"><div class="tb_title">{% trans 'Номер заказа' %}</div></div>
+                      <div class="table_cell"><div class="tb_title">{% trans 'Способ доставки' %}</div></div>
+                      <div class="table_cell"><div class="tb_title">{% trans 'Способ оплаты' %}</div></div>
+                      <div class="table_cell"><div class="tb_title">{% trans 'Статус' %}</div></div>
+                      <div class="table_cell"><div class="tb_title">{% trans 'Итого к оплате' %}</div></div>
                     </div>
 
                     {% for order in profile.complete_orders %}
                       <div class="table_row  tb_row">
                         <div class="table_cell">
-                          <div class="tb_title">Дата заказа</div>
+                          <div class="tb_title">{% trans 'Дата заказа' %}</div>
                           {# <div class="txt_cell_td">12 августа</div> #}
                           <div class="txt_cell_td">{{ order.checkout_date|date:"d.m.Y" }}</div>
                         </div>
                         
                         <div class="table_cell">
-                          <div class="tb_title">Номер заказа</div>
+                          <div class="tb_title">{% trans 'Номер заказа' %}</div>
                           {# <div class="txt_cell_td">201612356890</div> #}
                           <div class="txt_cell_td">{{ order.number }}</div>
                         </div>
 
                         <div class="table_cell">
-                          <div class="tb_title">Способ доставки</div>
+                          <div class="tb_title">{% trans 'Способ доставки' %}</div>
                           <div class="txt_cell_td">{{ order.show_delivery_method }}</div>
                         </div>
                         
                         <div class="table_cell">
-                          <div class="tb_title">Способ оплаты</div>
+                          <div class="tb_title">{% trans 'Способ оплаты' %}</div>
                           <div class="txt_cell_td">{{ order.show_payment_method }}</div>
                         </div>
                         
                         <div class="table_cell">
-                          <div class="tb_title">Статус</div>
+                          <div class="tb_title">{% trans 'Статус' %}</div>
                           <div class="txt_cell_td">{{ order.get_status_display }}</div>
                         </div>
                         
                         <div class="table_cell">
-                          <div class="tb_title">Итого к оплате</div>
+                          <div class="tb_title">{% trans 'Итого к оплате' %}</div>
                           <div class="txt_cell_td"><div class="product_price">{{ order.show_summary|with_currency:order.currency|safe }}</div></div>
                         </div>
                       
@@ -326,7 +326,7 @@
                     {% endfor %}
                   {% else %}
                     <br/>
-                    <h4>У вас пока нет заказов. <a href="{% url 'women' %}">Перейти к каталогу</a></h4>
+                    <h4>{% trans 'У вас пока нет заказов' %}. <a href="{% url 'women' %}">{% trans 'Перейти к каталогу' %}</a></h4>
                   {% endif %}
                 </div>
               </div>
@@ -378,19 +378,19 @@
   </div>
 
   <div class="window_popap no_float mini_window_popup callback_form" id="error-popup" style="display:none;">
-      <div class="close_popap call_close js-call-close"><img src="/static/i/close_white_45.png" alt="Закрыть"></div>
+      <div class="close_popap call_close js-call-close"><img src="/static/i/close_white_45.png" alt="{% trans 'Закрыть' %}"></div>
       <div class="wrap_window_popap bg_wrapp_window">
           <div class="popap_row">
               <div class="popap_row_wrapp">
-                  <h3 class="popup_title" style="margin-bottom: 10px;">При отправке формы произошла ошибка:</h3>
+                  <h3 class="popup_title" style="margin-bottom: 10px;">{% trans 'При отправке формы произошла ошибка' %}:</h3>
                   <p class="call_introtext popup_text"></p>
                   {% comment %}
                   <div class="red_bor_butt">
-                      <span class="js-call-close usual_link">Закрыть</span>
+                      <span class="js-call-close usual_link">{% trans 'Закрыть' %}</span>
                   </div>
                   {% endcomment %}
                   <div class="bt_req_call red_bor_butt js-call-close">
-                    <button class="butt_border">Закрыть</button>
+                    <button class="butt_border">{% trans 'Закрыть' %}</button>
                   </div>
               </div>
           </div>

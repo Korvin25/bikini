@@ -1,4 +1,3 @@
-
 // ----- CSRF -------
 
 var csrftoken = $.cookie('csrftoken');

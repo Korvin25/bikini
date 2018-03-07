@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load embed_video_tags catalog_tags %}
+{% load i18n %}
 
 {% block meta_title %}{{ video.get_meta_title }}{% endblock %}
 {% block meta_desc %}{{ video.get_meta_desc }}{% endblock %}
@@ -17,8 +18,8 @@
       
       <div class="blog_title">
         <ul class="breadcrumb">
-          <li><a href="{% url 'home' %}">Главная</a></li>
-          <li><a href="{% url 'videos' %}">Видео</a></li>
+          <li><a href="{% url 'home' %}">{% trans 'Главная' %}</a></li>
+          <li><a href="{% url 'videos' %}">{% trans 'Видео' %}</a></li>
           <li><span>{{ video.title }}</span></li>
         </ul>
         <!--h1 class="title_block">{{ video.get_h1 }}</h1-->
@@ -43,7 +44,7 @@
             {% endif %}
             {% with video.product as product %}
               {% if product %}
-                <a href="{{ product.get_absolute_url }}" class="red_button">Купить товар из этого видео</a>
+                <a href="{{ product.get_absolute_url }}" class="red_button">{% trans 'Купить товар из этого видео' %}</a>
               {% endif %}
             {% endwith %}
           </div>
@@ -67,13 +68,6 @@
           {% endcomment %}
           
         </div>
-
-        {% comment %}
-          <div class="bt_req_call red_bor_butt">
-            <a href="#" onclick="return false">Показать ещё</a>
-          </div>
-        {% endcomment %}
-
       </div>
       
     </div>

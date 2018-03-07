@@ -1,3 +1,4 @@
+{% load i18n %}
 
 // ----- Отправка форм на бекенд: вспомогательные функции -----
 
@@ -91,12 +92,12 @@ $('.js-apply-form').on('submit', function(e) {
         else if (popup) { showPopup(popup); };
       }
       else {
-        if (error) { showErrorPopup('При отправке формы произошла ошибка:', error); }
+        if (error) { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', error); }
         else if (errors) { 
           if ($form) { addErrors($form, errors); }
-          else { showErrorPopup('При отправке формы произошла ошибка:', errors); }
+          else { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', errors); }
         }
-        else { showErrorPopup('При отправке формы произошла ошибка:', res.status + ' ' + res.statusText); }
+        else { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', res.status + ' ' + res.statusText); }
       };
     },
     error: function(res){
@@ -113,20 +114,20 @@ $('.js-apply-form').on('submit', function(e) {
               errors = response['errors'],
               alert_message = response['alert_message'];
 
-          if (error) { showErrorPopup('При отправке формы произошла ошибка:', error); }
+          if (error) { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', error); }
           else if (errors) { 
             if ($form) { addErrors($form, errors); }
-            else { showErrorPopup('При отправке формы произошла ошибка:', errors); }
+            else { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', errors); }
           };
           if (click_to) { $(click_to).click(); };
           if (popup) { showPopup(popup); };
           if (alert_message) { alert(alert_message); };
         } else {
-          showErrorPopup('При отправке формы произошла ошибка:', res.status + ' ' + res.statusText);
+          showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', res.status + ' ' + res.statusText);
         };
       } else {
-        if (res.status == 0) { alert('Произошла ошибка: 500 Internal Server Error') }
-        else { alert('Произошла ошибка: ' + res.status + ' ' + res.statusText); }
+        if (res.status == 0) { alert('{% trans "Произошла ошибка" %}: 500 Internal Server Error') }
+        else { alert('{% trans "Произошла ошибка" %}: ' + res.status + ' ' + res.statusText); }
       }
     }
   });
@@ -186,12 +187,12 @@ $('.js-like-participant').on('change', function(){
         if (button_text) { $button_text.text(button_text); };
       }
       else {
-        // if (error) { showErrorPopup('При отправке формы произошла ошибка:', error); }
-        // if (errors) { showErrorPopup('При отправке формы произошла ошибка:', errors); }
-        // else { showErrorPopup('При отправке формы произошла ошибка:', res.status + ' ' + res.statusText); }
-        if (error) { alert('При отправке формы произошла ошибка: ' + error); }
-        if (errors) { alert('При отправке формы произошла ошибка: '+  errors); }
-        else { alert('При отправке формы произошла ошибка: ' + res.status + ' ' + res.statusText); }
+        // if (error) { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', error); }
+                // if (errors) { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', errors); }
+        // else { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', res.status + ' ' + res.statusText); }
+        if (error) { alert('{% trans "При отправке формы произошла ошибка" %}: ' + error); }
+        if (errors) { alert('{% trans "При отправке формы произошла ошибка" %}: '+  errors); }
+        else { alert('{% trans "При отправке формы произошла ошибка" %}: ' + res.status + ' ' + res.statusText); }
       };
     },
     error: function(res){
@@ -208,18 +209,18 @@ $('.js-like-participant').on('change', function(){
               errors = response['errors'],
               alert_message = response['alert_message'];
 
-          // if (error) { showErrorPopup('При отправке формы произошла ошибка:', error); };
-          if (error) { alert('При отправке формы произошла ошибка: ' + error); };
+          // if (error) { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', error); };
+          if (error) { alert('{% trans "При отправке формы произошла ошибка" %}: ' + error); };
           if (errors) { add_errors($form, errors, true); };
           if (click_to) { $(click_to).click(); };
           if (alert_message) { alert(alert_message); };
         } else {
-          // showErrorPopup('При отправке формы произошла ошибка:', res.status + ' ' + res.statusText);
-          alert('При отправке формы произошла ошибка: ' + res.status + ' ' + res.statusText);
+          // showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', res.status + ' ' + res.statusText);
+          alert('{% trans "При отправке формы произошла ошибка" %}: ' + res.status + ' ' + res.statusText);
         };
       } else {
-        if (res.status == 0) { alert('Произошла ошибка: 500 Internal Server Error') }
-        else { alert('Произошла ошибка: ' + res.status + ' ' + res.statusText); }
+        if (res.status == 0) { alert('{% trans "Произошла ошибка" %}: 500 Internal Server Error') }
+        else { alert('{% trans "Произошла ошибка" %}: ' + res.status + ' ' + res.statusText); }
       }
     }
   });

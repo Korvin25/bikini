@@ -57,30 +57,7 @@ urlpatterns += i18n_patterns(
     # -- home --
     url(r'^$', HomepageView.as_view(), name='home'),
 
-    # -- old --
-    # url(r'^pages/$', TemplateView.as_view(template_name='pages.html'), name='pages'),
-
-    # url(r'^konkurs-itog/$', TemplateView.as_view(template_name='konkurs-itog.html'), name='konkurs-itog'),
-    # url(r'^konkurs-model/$', TemplateView.as_view(template_name='konkurs-model.html'), name='konkurs-model'),
-    # url(r'^konkurs1/$', TemplateView.as_view(template_name='konkurs1.html'), name='konkurs1'),
-    # url(r'^my-cut-1/$', TemplateView.as_view(template_name='my-cut-1.html'), name='my-cut-1'),
-    # url(r'^my-cut-2/$', TemplateView.as_view(template_name='my-cut-2.html'), name='my-cut-2'),
-    # url(r'^my-cut-3/$', TemplateView.as_view(template_name='my-cut-3.html'), name='my-cut-3'),
-    # url(r'^my-cut-4/$', TemplateView.as_view(template_name='my-cut-4.html'), name='my-cut-4'),
-    # url(r'^my-cut-after/$', TemplateView.as_view(template_name='my-cut-after.html'), name='my-cut-after'),
-    # url(r'^my-cut-spisok/$', TemplateView.as_view(template_name='my-cut-spisok.html'), name='my-cut-spisok'),
-    # url(r'^my-cut/$', TemplateView.as_view(template_name='my-cut.html'), name='my-cut'),
-    # url(r'^pd-and-history/$', TemplateView.as_view(template_name='pd-and-history.html'), name='pd-and-history'),
-    # url(r'^podarochnyi-sertificat/$', TemplateView.as_view(template_name='podarochnyi-sertificat.html'), name='podarochnyi-sertificat'),
-    # url(r'^spisok-pokupok/$', TemplateView.as_view(template_name='spisok-pokupok.html'), name='spisok-pokupok'),
-
-    # url(r'^men-detail/$', TemplateView.as_view(template_name='catalog/men-detail.html'), name='men-detail'),
-    # url(r'^women-detail/$', TemplateView.as_view(template_name='catalog/women-detail.html'), name='women-detail'),
-
-    # url(r'^blog-old/$', TemplateView.as_view(template_name='blog.html'), name='blog-old'),
-    # url(r'^blog-page/$', TemplateView.as_view(template_name='blog-page.html'), name='blog-page'),
-
-    # -- new --
+    # -- apps --
     url(r'^cart/$', CartView.as_view(), name='cart'),
     url(r'^cart/get_discount/$', CartGetDiscountView.as_view(), name='cart_get_discount'),
     url(r'^certificate/$', CertificateView.as_view(), name='certificate'),

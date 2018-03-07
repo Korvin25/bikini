@@ -16,7 +16,7 @@
     <div class="with_banner_page banner_konkurs{% if contest.winner %} banner_konkurs_itog{% endif %}" style="background-image:url({{ contest.cover_url }});">
       <div class="with_banner_padd_page">
         {% if contest.winner %}
-          <div class="with_mini_text with_makro_text">Победитель конкурса</div>
+          <div class="with_mini_text with_makro_text">{% trans 'Победитель конкурса' %}</div>
           <div class="with_mini_text with_middle_text">{{ contest.title }}</div>
           <div class="with_big_text">{{ contest.winner.name }}</div>
           <div class="photo_list"><a href="{{ contest.winner.get_absolute_url }}"><img src="{{ contest.winner.cover_winner_url }}" alt="{{ contest.winner.name }}"></a></div>
@@ -33,7 +33,7 @@
           {% if contest.accepting_enabled %}        
             <a href="#apply"
                data-popup-id="{% if profile.is_anonymous %}#auth{% elif profile.id in contest.participants_profiles %}#already-participating{% else %}#contest-apply{% endif %}"
-               class="butt_with js-apply-button">Принять участие</a>
+               class="butt_with js-apply-button">{% trans 'Принять участие' %}</a>
           {% endif %}
         {% endif %}
         
@@ -58,7 +58,7 @@
   <main>
     <div class="main_content main_content_video">
       {% if contest and contest.show_terms %}
-        <div class="blog_title"><h1 class="title_block">Условия конкурса</h1></div>
+        <div class="blog_title"><h1 class="title_block">{% trans 'Условия конкурса' %}</h1></div>
       {% endif %}
     
       <div id="main_content" class="content_video list_push cnt_left">
@@ -70,7 +70,7 @@
         {% endif %}
 
         {% if contest and contest.participants.count %}
-          <h2 class="title_block">Участники конкурса</h2>
+          <h2 class="title_block">{% trans 'Участники конкурса' %}</h2>
           <div class="item_list_wrapp item_list_wrapp_all list_face" itemscope="" itemtype="http://schema.org/ItemList">
 
             {% for participant in contest.participants.all %}
@@ -82,7 +82,7 @@
                     <a href="#" class="butt_put">
                       <label for="id_like_{{ participant.id }}" class="td_label_check_win">
                         <input type="checkbox" class="js-like-participant" name="like_participant" id="id_like_{{ participant.id }}" value="1"{% if participant.id|to_str in liked_participants %} checked="checked"{% endif %} data-participant-id="{{ participant.id }}" data-like-url="{% url 'contests:like' %}" data-dislike-url="{% url 'contests:dislike' %}">
-                        <img src="/static/i/heart_icon.png" alt="Оценить участницу">
+                        <img src="/static/i/heart_icon.png" alt="{% trans 'Оценить участницу' %}">
                       </label>
                     </a>
                     <span class="disc_number js-likes-count-span">{{ participant.likes_count }}</span>
@@ -95,13 +95,13 @@
         {% endif %}
 
         {% if another_contests.count %}
-          <h2 class="title_block">Архив конкурсов</h2>
+          <h2 class="title_block">{% trans 'Архив конкурсов' %}</h2>
           
           <div class="item_list_wrapp item_list_wrapp_all list_face arhive_list_jpg">
             {% for a_contest in another_contests %}
               <a href="{{ a_contest.get_absolute_url }}" class="product_list product_face" style="background-image:url({{ a_contest.list_cover_url }});">
                 <div class="txt_product">
-                  <p><strong>Конкурс</strong></p>
+                  <p><strong>{% trans 'Конкурс' %}</strong></p>
                   <h2>{{ a_contest.title }}</h2>
                   <p>{{ a_contest.published_dt|date:'d.m.Y' }}</p>
                 </div>
@@ -124,19 +124,19 @@
   </div>
 
   <div class="window_popap no_float mini_window_popup callback_form" id="error-popup" style="display:none;">
-      <div class="close_popap call_close js-call-close"><img src="/static/i/close_white_45.png" alt="Закрыть"></div>
+      <div class="close_popap call_close js-call-close"><img src="/static/i/close_white_45.png" alt="{% trans 'Закрыть' %}"></div>
       <div class="wrap_window_popap bg_wrapp_window">
           <div class="popap_row">
               <div class="popap_row_wrapp">
-                  <h3 class="popup_title" style="margin-bottom: 10px;">При отправке формы произошла ошибка:</h3>
+                  <h3 class="popup_title" style="margin-bottom: 10px;">{% trans 'При отправке формы произошла ошибка' %}:</h3>
                   <p class="call_introtext popup_text"></p>
                   {% comment %}
                   <div class="red_bor_butt">
-                      <span class="js-call-close usual_link">Закрыть</span>
+                      <span class="js-call-close usual_link">{% trans 'Закрыть' %}</span>
                   </div>
                   {% endcomment %}
                   <div class="bt_req_call red_bor_butt js-call-close">
-                    <button class="butt_border">Закрыть</button>
+                    <button class="butt_border">{% trans 'Закрыть' %}</button>
                   </div>
               </div>
           </div>
@@ -144,14 +144,14 @@
   </div>
 
   <div class="window_popap no_float mini_window_popup callback_form" id="already-participating" style="display:none;">
-      <div class="close_popap call_close js-call-close"><img src="/static/i/close_white_45.png" alt="Закрыть"></div>
+      <div class="close_popap call_close js-call-close"><img src="/static/i/close_white_45.png" alt="{% trans 'Закрыть' %}"></div>
       <div class="wrap_window_popap bg_wrapp_window">
           <div class="popap_row">
               <div class="popap_row_wrapp">
-                  <h3 class="popup_title" style="margin-bottom: 10px;">Ошибка:</h3>
-                  <p class="call_introtext popup_text">Вы уже принимаете участие в конкурсе.</p>
+                  <h3 class="popup_title" style="margin-bottom: 10px;">{% trans 'Ошибка' %}:</h3>
+                  <p class="call_introtext popup_text">{% trans 'Вы уже принимаете участие в конкурсе' %}.</p>
                   <div class="bt_req_call red_bor_butt js-call-close">
-                    <button class="butt_border">Закрыть</button>
+                    <button class="butt_border">{% trans 'Закрыть' %}</button>
                   </div>
               </div>
           </div>
@@ -160,11 +160,11 @@
 
   {% if contest.accepting_enabled %}
     <div class="window_popap no_float" id="contest-apply" style="display:none;">
-      <div class="close_popap js-call-close"><img src="/static/i/close_icon.png" alt="Закрыть" /></div>
+      <div class="close_popap js-call-close"><img src="/static/i/close_icon.png" alt="{% trans 'Закрыть' %}" /></div>
       <div class="wrap_window_popap bg_wrapp_window">
         <div class="popap_row">
           <div class="popap_row_wrapp">
-            <h2 class="title_popap">Принять участие в конкурсе "{{ contest.title }}"</h2>
+            <h2 class="title_popap">{% trans 'Принять участие в конкурсе' %} "{{ contest.title }}"</h2>
             <form class="js-apply-form dropzone" id="loadingFiles" action="{% url 'contests:apply' %}" method="post" enctype="multipart/form-data">
               <input type="hidden" name="contest" value="{{ contest.id }}">
               <div class="error-messages"></div>
@@ -188,8 +188,8 @@
                 <label class="lbl_box">
                   <p>Фото:<span class="orange_text">*</span></p>
                   <div class="download">
-                    <div class="download_ttl"><b>Перетащите сюда файлы или <a class="open-file dz-message" href="javascript:void(0);">выберите на компьютере</a></b></div>
-                    <div class="download_text">Максимальный размер фото - 10МБ. Не более 5 фотографий.</div>
+                    <div class="download_ttl"><b>{% trans 'Перетащите сюда файлы или' %} <a class="open-file dz-message" href="javascript:void(0);">{% trans 'выберите на компьютере' %}</a></b></div>
+                    <div class="download_text">{% trans 'Максимальный размер фото - 10МБ. Не более 5 фотографий' %}.</div>
                     <div class="dropzone-previews"></div>
                     <input type="hidden" name="photos">
                   </div>
@@ -197,7 +197,7 @@
               </div>
 
               <div class="row_form_popup row_pop_butt">
-                <button class="bt_red" type="submit">Принять участие</button>
+                <button class="bt_red" type="submit">{% trans 'Принять участие' %}</button>
               </div>
             </form>
           </div>

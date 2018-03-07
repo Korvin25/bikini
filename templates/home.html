@@ -20,7 +20,7 @@
 {% block content %}
   <main>
     <div class="main_content">
-      <h2 class="title_block">Популярные товары</h2>
+      <h2 class="title_block">{% trans 'Популярные товары' %}</h2>
       {% include 'blocks/homepage_products.html' %}
     </div>
     
@@ -46,10 +46,10 @@
             {% endcomment %}
             <div class="w_inner_box">
               <div class="tabs_butt tabs3">
-                <a href="#tab1" class="INS on">Instagram</a>
-                <a href="#tab2" class="VK">ВКонтакте</a>
-                <a href="#tab3" class="FB">FaceBook</a>
-                <a href="#tab4" class="TW">Twitter</a>
+                <a href="#tab1" class="INS on">{% trans 'Instagram' %}</a>
+                <a href="#tab2" class="VK">{% trans 'ВКонтакте' %}</a>
+                <a href="#tab3" class="FB">{% trans 'FaceBook' %}</a>
+                <a href="#tab4" class="TW">{% trans 'Twitter' %}</a>
               </div>
               <div class="tabs_content">
                 <div class="tab3" id="tabCont1" style="display: block;">
@@ -72,7 +72,7 @@
                 <div class="tab3" id="tabCont3" style="display: none;">
                   <div>
                     <!--FB-->
-                    <a href="https://www.facebook.com/wwwbikinimini/" target="_blank" title="Перейти к нам на страницу Facebook"><img src="/static/images/facebook_photo.jpg" alt="Присоединяйтесь к Bikinimini на Facebook"></a>
+                    <a href="https://www.facebook.com/wwwbikinimini/" target="_blank" title="{% trans 'Перейти к нам на страницу Facebook' %}"><img src="/static/images/facebook_photo.jpg" alt="{% trans 'Присоединяйтесь к Bikinimini на Facebook' %}"></a>
                     {% comment %}
                       <div id="fb-root"></div>
                       <script>(function(d, s, id) {
@@ -88,7 +88,7 @@
                   </div>
                 </div>
                 <div class="tab3" id="tabCont4" style="display: none;">
-                  <a class="twitter-timeline" href="https://twitter.com/wwwBikinimini" data-widget-id="592618967962877952">Твиты от @wwwBikinimini</a>
+                  <a class="twitter-timeline" href="https://twitter.com/wwwBikinimini" data-widget-id="592618967962877952">{% trans 'Твиты от @wwwBikinimini' %}</a>
                   <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
                 </div>
               </div>
@@ -147,18 +147,18 @@
         {% if not banner.has_button %}
           <a href="{{ banner.url }}"{% if banner.target_blank %} target="_blank"{% endif %}>
         {% endif %}
-            <div class="with_banner">
-              <div class="with_banner_wrapp" style="background-image:url({{ banner.image_url }});">
-                {% if banner.has_text or banner.has_button %}
-                  <div class="with_banner_padd">
-                    {% for line in banner.lines.all %}
-                      <div class="{% if line.big %}with_big_text{% else %}with_mini_text{% endif %}">{{ line.line }}</div>
-                    {% endfor %}
-                    {% if banner.has_button %}<a href="{{ banner.url }}"{% if banner.target_blank %} target="_blank"{% endif %} class="butt_with">{{ banner.button_text }}</a>{% endif %}
-                  </div>
-                {% endif %}
-              </div>
+          <div class="with_banner">
+            <div class="with_banner_wrapp" style="background-image:url({{ banner.image_url }});">
+              {% if banner.has_text or banner.has_button %}
+                <div class="with_banner_padd">
+                  {% for line in banner.lines.all %}
+                    <div class="{% if line.big %}with_big_text{% else %}with_mini_text{% endif %}">{{ line.line }}</div>
+                  {% endfor %}
+                  {% if banner.has_button %}<a href="{{ banner.url }}"{% if banner.target_blank %} target="_blank"{% endif %} class="butt_with">{{ banner.button_text }}</a>{% endif %}
+                </div>
+              {% endif %}
             </div>
+          </div>
         {% if not banner.has_button %}
           </a>
         {% endif %}

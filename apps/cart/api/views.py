@@ -6,6 +6,8 @@ import json
 from django.http import Http404, JsonResponse
 from django.views.generic import View, UpdateView
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as __
 
 from apps.catalog.models import Product
 from apps.cart.cart import Cart
@@ -15,6 +17,10 @@ from apps.core.mixins import JSONFormMixin
 from apps.core.templatetags.core_tags import to_price
 from apps.currency.utils import get_currency
 from apps.lk.email import admin_send_order_email, send_order_email
+
+
+translated_strings = (_('Корзина пуста'), _('Неправильный формат запроса'), _('Неправильный id товара'),
+                      _('Выберите способы оставки и оплаты'), _('Выберите способ доставки'), _('Выберите способ оплаты'))
 
 
 class EmptyCartError(Exception):
@@ -43,13 +49,13 @@ class CartStepBaseView(CheckCartMixin, View):
         try:
             self.check_cart(self.cart)
         except EmptyCartError:
-            data = {'result': 'error', 'error': 'Корзина пуста', 'error_code': 'CART_EMPTY'}
+            data = {'result': 'error', 'error': __('Корзина пуста'), 'error_code': 'CART_EMPTY'}
             return JsonResponse(data, status=400)
 
         try:
             self.DATA = json.loads(request.body)
         except ValueError:
-            data = {'result': 'error', 'error': 'Неправильный формат запроса'}
+            data = {'result': 'error', 'error': __('Неправильный формат запроса')}
             return JsonResponse(data, status=400)
 
         return super(CartStepBaseView, self).dispatch(request, *args, **kwargs)
@@ -80,13 +86,13 @@ class Step0View(CartStepBaseView):
 
         basket = self.cart.cart
         if not (basket.delivery_method or basket.payment_method):
-            data = {'result': 'error', 'error': 'Выберите способы оставки и оплаты'}
+            data = {'result': 'error', 'error': __('Выберите способы оставки и оплаты')}
             status = 400
         elif not basket.delivery_method:
-            data = {'result': 'error', 'error': 'Выберите способ доставки'}
+            data = {'result': 'error', 'error': __('Выберите способ доставки')}
             status = 400
         elif not basket.payment_method:
-            data = {'result': 'error', 'error': 'Выберите способ оплаты'}
+            data = {'result': 'error', 'error': __('Выберите способ оплаты')}
             status = 400
         else:
             if request.user.is_anonymous():
@@ -129,7 +135,7 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
         try:
             self.check_cart(self.cart)
         except EmptyCartError:
-            data = {'result': 'error', 'error': 'Корзина пуста', 'error_code': 'CART_EMPTY'}
+            data = {'result': 'error', 'error': __('Корзина пуста'), 'error_code': 'CART_EMPTY'}
             return JsonResponse(data, status=400)
 
         return super(Step3View, self).dispatch(request, *args, **kwargs)
@@ -178,7 +184,7 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
             return JsonResponse(data)
 
         else:
-            data = {'result': 'error', 'error_message': 'Корзина пуста'}
+            data = {'result': 'error', 'error_message': __('Корзина пуста')}
             return JsonResponse(data, status=400)
 
 
@@ -192,7 +198,7 @@ class UpdateCartView(View):
         try:
             DATA = json.loads(request.body)
         except ValueError:
-            data = {'result': 'error', 'error': 'Неправильный формат запроса'}
+            data = {'result': 'error', 'error': __('Неправильный формат запроса')}
             return JsonResponse(data, status=400)
 
         cart.update(**DATA)
@@ -226,7 +232,7 @@ class CartAjaxView(View):
             try:
                 DATA = json.loads(request.body)
             except ValueError:
-                data = {'result': 'error', 'error': 'Неправильный формат запроса'}
+                data = {'result': 'error', 'error': __('Неправильный формат запроса')}
                 return JsonResponse(data, status=400)
 
             if self.action == 'remove':
@@ -261,7 +267,7 @@ class CartAjaxView(View):
                         kwargs['discount'] = prices['discount']
 
                 except ValueError:
-                    data = {'result': 'error', 'error': 'Неправильный формат запроса'}
+                    data = {'result': 'error', 'error': __('Неправильный формат запроса')}
                     return JsonResponse(data, status=400)
 
                 attrs = kwargs.get('attrs', {})

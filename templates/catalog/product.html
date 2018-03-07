@@ -16,9 +16,9 @@
     <div class="main_content">
       
       <ul id="touch_breadcrumb" class="breadcrumb">
-        <li><a href="{% url 'home' %}">Главная</a></li>
-        {% if sex == 'female' %}<li><a href="{% url 'women' %}">Женщинам</a></li>
-        {% elif sex == 'male' %}<li><a href="{% url 'men' %}">Мужчинам</a></li>
+        <li><a href="{% url 'home' %}">{% trans 'Главная' %}</a></li>
+        {% if sex == 'female' %}<li><a href="{% url 'women' %}">{% trans 'Женщинам' %}</a></li>
+        {% elif sex == 'male' %}<li><a href="{% url 'men' %}">{% trans 'Мужчинам' %}</a></li>
         {% endif %}
         <li><a href="{{ category.get_absolute_url }}">{{ category.title }}</a></li>
         <li>{{ product.title }}</li>
@@ -26,9 +26,9 @@
     
       <div id="main_content" class="wrapp_content">
         <ul class="breadcrumb">
-          <li><a href="{% url 'home' %}">Главная</a></li>
-          {% if sex == 'female' %}<li><a href="{% url 'women' %}">Женщинам</a></li>
-          {% elif sex == 'male' %}<li><a href="{% url 'men' %}">Мужчинам</a></li>
+          <li><a href="{% url 'home' %}">{% trans 'Главная' %}</a></li>
+          {% if sex == 'female' %}<li><a href="{% url 'women' %}">{% trans 'Женщинам' %}</a></li>
+          {% elif sex == 'male' %}<li><a href="{% url 'men' %}">{% trans 'Мужчинам' %}</a></li>
           {% endif %}
           <li><a href="{{ category.get_absolute_url }}">{{ category.title }}</a></li>
           <li>{{ product.title }}</li>
@@ -40,7 +40,7 @@
 
         <h1 class="title_block">{{ product.get_h1 }}</h1>
         {% if product.vendor_code %}
-          <div style="margin: -20px 0 20px;"><span class="ch_title_item _custom">Артикул: </span>{{ product.vendor_code }}</div> 
+          <div style="margin: -20px 0 20px;"><span class="ch_title_item _custom">{% trans 'Артикул' %}: </span>{{ product.vendor_code }}</div> 
         {% endif %}
 
         <div class="item_content_block">
@@ -111,7 +111,7 @@
             </div>
             {% if attrs_ids|length %}
               <a href="#" class="move_butt_item js-wishlist-button">
-                {% if in_wishlist %}Удалить из списка желаемых покупок{% else %}Добавить в список желаемых покупок{% endif %}
+                {% if in_wishlist %}{% trans 'Удалить из списка желаемых покупок' %}{% else %}{% trans 'Добавить в список желаемых покупок' %}{% endif %}
               </a>
               <input class="js-wishlist-input js-from-product-page" type="checkbox" style="display: none;" name="wishlist"
                      {% if in_wishlist %} value="1" checked="checked"{% endif %}
@@ -218,7 +218,7 @@
 
                 {% if discount %}
                   <div class="js-hide-if-not-option"{% if not have_option %} style="display: none;"{% endif %}>
-                    <div class="txt_price_to">Цена для вас:</div>
+                    <div class="txt_price_to">{% trans 'Цена для вас' %}:</div>
                     <div class="product_price sale_price">{% prefix_currency currency price|to_price %}<s class="js-base-price" style="font-family: NeoRegular;">{{ price|to_price }}</s>{% postfix_currency currency price|to_price %}</div>
                     <div class="product_price" style="color: #8c2c34;">{% prefix_currency currency price|with_discount:discount|to_price %}<span class="js-cart-price">{{ price|with_discount:discount|to_price }}</span>{% postfix_currency currency price|with_discount:discount|to_price %}</div>
                   </div>
@@ -229,22 +229,23 @@
                 <input type="hidden" name="price-item" id="price-hidd-val" value="{{ price|to_price }}">
                 <div class="button-div"{% if discount %} style="clear: both;"{% endif %}>
                   {% if not have_option %}
-                    <button class="js-cart-button to_cart_list _disabled" data-type="none" type="submit">Такого товара нет в наличии</button>
+                    <button class="js-cart-button to_cart_list _disabled" data-type="none" type="submit">{% trans 'Такого товара нет в наличии' %}</button>
                   {% elif count > maximum_in_stock %}
-                    <button class="js-cart-button to_cart_list" data-type="order" type="submit">Под заказ</button>
+                    <button class="js-cart-button to_cart_list" data-type="order" type="submit">{% trans 'Под заказ' %}</button>
                   {% else %}
-                    <button class="js-cart-button to_cart_list" data-type="add" type="submit">В корзину</button>
+                    <button class="js-cart-button to_cart_list" data-type="add" type="submit">{% trans 'В корзину' %}</button>
                   {% endif %}
                   
                   <label for="pak" class="check_pr_input checke_lab js-hide-if-not-option"{% if not have_option %} style="display: none;"{% endif %}>
                     <input type="checkbox" class="js-gift-wrapping-trigger"{% if with_wrapping %} checked="checked"{% endif %} data-wrapping-price="{{ gift_wrapping_price|to_price }}" name="gift_wrapping" id="pak" value="1" />
-                    <abbr class="abbr_check">Подарочная<br />упаковка</abbr>
+                    <abbr class="abbr_check">{% trans 'Подарочная<br />упаковка' %}</abbr>
                     <div class="product_price">{% prefix_currency currency gift_wrapping_price|to_price %}<span id="price_ID--gift-wrapping">{{ gift_wrapping_price|to_price }}</span>{% postfix_currency currency gift_wrapping_price|to_price %}</div>
                   </label>
                 </div>
               </div>
 
-              {% include 'blocks/currency_change.html' with currency_change_label='Цены в' currency_change_style="margin-top: 20px;" %}
+              {% trans 'Цены в' as transCurrencyChangeLabel %}
+              {% include 'blocks/currency_change.html' with currency_change_label=transCurrencyChangeLabel currency_change_style="margin-top: 20px;" %}
 
             </div>
           </div>
@@ -271,7 +272,7 @@
                   </div>
                 {% endfor %}
                 {% if product.videos.count > 1 %}
-                  <div class="bt_req_call"><a href="#" class="js-expand-videos">Смотреть всё видео</a></div>
+                  <div class="bt_req_call"><a href="#" class="js-expand-videos">{% trans 'Смотреть всё видео' %}</a></div>
                 {% endif %}
               </div>
             </div>
@@ -279,7 +280,7 @@
         {% endif %}
 
         {% if product.also_products.count %}
-          <h2 class="title_block">С этим товаром также покупают:</h2>
+          <h2 class="title_block">{% trans 'С этим товаром также покупают' %}:</h2>
           <div class="item_list_wrapp" itemscope="" itemtype="http://schema.org/ItemList">
             {% for also_p in product.also_products.all %}
               <div class="product_list">
@@ -287,7 +288,7 @@
                 <h3><a href="{{ also_p.get_absolute_url }}">{{ also_p.title }}</a></h3>
                 <h4>{{ also_p.subtitle }}</h4>
                 <div class="product_price">{{ also_p.get_price|with_currency:currency|safe }}</div>
-                <a href="{{ also_p.get_absolute_url }}" class="to_cart_list">В корзину</a>
+                <a href="{{ also_p.get_absolute_url }}" class="to_cart_list">{% trans 'В корзину' %}</a>
               </div>
             {% endfor %}
           </div>

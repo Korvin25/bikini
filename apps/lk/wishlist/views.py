@@ -7,12 +7,17 @@ from django.db.utils import IntegrityError
 from django.http import Http404, JsonResponse
 from django.views.generic import View, TemplateView
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as __
 
 from apps.cart.utils import make_hash_from_cartitem
 from apps.catalog.models import AttributeOption, Product, ProductOption
 from apps.core.mixins import JSONViewMixin
 from apps.lk.models import WishListItem
 from .utils import get_wishlist_from_request, get_wishlist_item_prices
+
+
+translated_strings = (_('Неправильный формат запроса'), _('Неправильный id товара'),)
 
 
 class WishListView(TemplateView):
@@ -100,7 +105,7 @@ class WishListAddView(JSONViewMixin, View):
             attrs = DATA.get('attrs', {})
             extra_products = DATA.get('extra_products', {})
         except ValueError:
-            data = {'result': 'error', 'error': 'Неправильный формат запроса'}
+            data = {'result': 'error', 'error': __('Неправильный формат запроса')}
             return JsonResponse(data, status=400)
 
         hash = make_hash_from_cartitem(attrs, extra_products)
@@ -150,7 +155,7 @@ class WishListAddView(JSONViewMixin, View):
                 the_item.extra_products = extra_products
                 the_item.save()
             except IntegrityError:
-                data = {'result': 'error', 'error': 'Неправильный id товара'}
+                data = {'result': 'error', 'error': __('Неправильный id товара')}
                 return JsonResponse(data, status=400)
 
         wishlist = get_wishlist_from_request(self.request)
@@ -169,7 +174,7 @@ class WishListRemoveView(JSONViewMixin, View):
             attrs = DATA.get('attrs', {})
             extra_products = DATA.get('extra_products', {})
         except ValueError:
-            data = {'result': 'error', 'error': 'Неправильный формат запроса'}
+            data = {'result': 'error', 'error': __('Неправильный формат запроса')}
             return JsonResponse(data, status=400)
 
         hash = make_hash_from_cartitem(attrs, extra_products)
@@ -190,7 +195,7 @@ class WishListRemoveView(JSONViewMixin, View):
                     if the_item:
                         the_item.delete()
                 except IntegrityError:
-                    data = {'result': 'error', 'error': 'Неправильный id товара'}
+                    data = {'result': 'error', 'error': __('Неправильный id товара')}
                     return JsonResponse(data, status=400)
 
         wishlist = get_wishlist_from_request(self.request)

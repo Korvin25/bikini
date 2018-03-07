@@ -1,0 +1,1126 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-03-07 21:10+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: .\apps\blog\models.py:46 .\templates\blog\category.html:18
+#: .\templates\blog\post.html:28
+msgid "Блог"
+msgstr ""
+
+#: .\apps\cart\api\views.py:22
+msgid "Корзина пуста"
+msgstr ""
+
+#: .\apps\cart\api\views.py:22 .\apps\core\mixins.py:14
+#: .\apps\lk\wishlist\views.py:20
+msgid "Неправильный формат запроса"
+msgstr ""
+
+#: .\apps\cart\api\views.py:22 .\apps\lk\wishlist\views.py:20
+msgid "Неправильный id товара"
+msgstr ""
+
+#: .\apps\cart\api\views.py:23
+msgid "Выберите способы оставки и оплаты"
+msgstr ""
+
+#: .\apps\cart\api\views.py:23
+msgid "Выберите способ доставки"
+msgstr ""
+
+#: .\apps\cart\api\views.py:23
+msgid "Выберите способ оплаты"
+msgstr ""
+
+#: .\apps\cart\certificate\forms.py:11
+msgid "Сертификат"
+msgstr ""
+
+#: .\apps\cart\certificate\forms.py:12 .\templates\cart\certificate.html:111
+msgid "Имя получателя"
+msgstr ""
+
+#: .\apps\cart\certificate\forms.py:13
+msgid "Email получателя"
+msgstr ""
+
+#: .\apps\cart\certificate\forms.py:14 .\templates\cart\certificate.html:123
+msgid "Имя отправителя"
+msgstr ""
+
+#: .\apps\cart\certificate\forms.py:15 .\templates\cart\certificate.html:129
+msgid "Телефон отправителя"
+msgstr ""
+
+#: .\apps\cart\certificate\forms.py:16
+msgid "Email отправителя"
+msgstr ""
+
+#: .\apps\cart\certificate\forms.py:17 .\templates\cart\certificate.html:141
+msgid "Сообщение получателю"
+msgstr ""
+
+#: .\apps\cart\certificate\forms.py:18 .\templates\cart\certificate.html:147
+msgid "Когда отправлять"
+msgstr ""
+
+#: .\apps\cart\certificate\forms.py:19 .\templates\cart\certificate.html:165
+msgid "Дата отправки"
+msgstr ""
+
+#: .\apps\cart\certificate\forms.py:24
+msgid "Сертификата с таким ID не существует."
+msgstr ""
+
+#: .\apps\cart\certificate\forms.py:36
+msgid "Обязательное поле."
+msgstr ""
+
+#: .\apps\cart\forms.py:15 .\apps\lk\auth\forms.py:14
+#: .\apps\lk\auth\forms.py:34 .\templates\profile\profile.html:228
+msgid "E-mail"
+msgstr ""
+
+#: .\apps\cart\forms.py:34 .\apps\lk\forms.py:32
+msgid "Такой email уже занят."
+msgstr ""
+
+#: .\apps\cart\models.py:88 .\apps\lk\models.py:69
+#: .\templates\cart\cart.html:418
+msgid "Страна"
+msgstr ""
+
+#: .\apps\cart\models.py:89 .\apps\lk\models.py:70
+#: .\templates\cart\cart.html:429 .\templates\profile\profile.html:205
+msgid "Город"
+msgstr ""
+
+#: .\apps\cart\models.py:90 .\apps\lk\models.py:71
+#: .\templates\cart\cart.html:437 .\templates\profile\profile.html:210
+msgid "Адрес"
+msgstr ""
+
+#: .\apps\cart\models.py:91 .\apps\feedback\models.py:14
+#: .\apps\lk\models.py:72 .\templates\blocks\footer.html:60
+msgid "Телефон"
+msgstr ""
+
+#: .\apps\cart\models.py:92 .\apps\lk\models.py:73
+msgid "Полное имя"
+msgstr ""
+
+#: .\apps\cart\models.py:94 .\apps\lk\models.py:75
+#: .\templates\profile\profile.html:286 .\templates\profile\profile.html:307
+msgid "Способ доставки"
+msgstr ""
+
+#: .\apps\cart\models.py:95 .\apps\lk\models.py:76
+#: .\templates\profile\profile.html:287 .\templates\profile\profile.html:312
+msgid "Способ оплаты"
+msgstr ""
+
+#: .\apps\cart\models.py:96 .\templates\cart\cart.html:232
+msgid "Дополнительная информация"
+msgstr ""
+
+#: .\apps\content\admin_filer.py:153
+msgid ""
+"Items must be selected in order to perform actions on them. No items have "
+"been changed."
+msgstr ""
+
+#: .\apps\content\admin_filer.py:173
+#, python-format
+msgid "%(total_count)s selected"
+msgid_plural "All %(total_count)s selected"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\apps\content\admin_filer.py:212
+#, python-format
+msgid "0 of %(cnt)s selected"
+msgstr ""
+
+#: .\apps\contests\forms.py:34
+msgid "Заявки на участие в конкурсе больше не принимаются."
+msgstr ""
+
+#: .\apps\contests\forms.py:41
+msgid "Вы уже принимаете участие в конурсе."
+msgstr ""
+
+#: .\apps\contests\models.py:61 .\templates\contests\participant.html:24
+msgid "Конкурсы"
+msgstr ""
+
+#: .\apps\contests\models.py:112 .\templates\contests\contest.html:105
+msgid "Конкурс"
+msgstr ""
+
+#: .\apps\contests\models.py:113
+msgid "Профиль"
+msgstr ""
+
+#: .\apps\contests\models.py:115 .\apps\feedback\models.py:13
+msgid "Имя"
+msgstr ""
+
+#: .\apps\contests\models.py:116
+msgid "Описание"
+msgstr ""
+
+#: .\apps\contests\models.py:117 .\apps\contests\views.py:20
+#: .\templates\cart\cart.html:38
+msgid "Фото"
+msgstr ""
+
+#: .\apps\contests\views.py:20
+msgid "Обязательное поле"
+msgstr ""
+
+#: .\apps\contests\views.py:20 .\templates\contests\participant.html:47
+msgid "Ваш лайк засчитан"
+msgstr ""
+
+#: .\apps\contests\views.py:20
+msgid "Оценить участницу +"
+msgstr ""
+
+#: .\apps\core\mixins.py:14
+msgid "Ошибка при парсинге запроса"
+msgstr ""
+
+#: .\apps\currency\templatetags\currency_tags.py:12
+#: .\templates\cart\cart.html:180
+msgid "руб"
+msgstr ""
+
+#: .\apps\feedback\views.py:15
+msgid "Спасибо! Мы обязательно вам перезвоним."
+msgstr ""
+
+#: .\apps\lk\auth\forms.py:15 .\apps\lk\auth\forms.py:35
+#: .\templates\profile\profile.html:238 .\templates\profile\profile.html:254
+msgid "Пароль"
+msgstr ""
+
+#: .\apps\lk\auth\forms.py:25 .\apps\lk\auth\forms.py:29
+msgid "Неверное сочетание Email / Пароль."
+msgstr ""
+
+#: .\apps\lk\auth\forms.py:27
+msgid "Пользователь с данным email заблокирован."
+msgstr ""
+
+#: .\apps\lk\auth\forms.py:36 .\templates\cart\cart.html:372
+msgid "ФИО"
+msgstr ""
+
+#: .\apps\lk\auth\forms.py:45
+msgid "Профиль с таким email уже существует."
+msgstr ""
+
+#: .\apps\lk\auth\forms.py:69
+msgid "Пользователя с таким email не существует."
+msgstr ""
+
+#: .\apps\lk\forms.py:39
+msgid "Неверный пароль."
+msgstr ""
+
+#: .\apps\lk\forms.py:51
+msgid "Введите старый пароль."
+msgstr ""
+
+#: .\apps\lk\models.py:61
+msgid "Email"
+msgstr ""
+
+#: .\suit\admin_filters.py:6
+msgid "Is present"
+msgstr ""
+
+#: .\suit\admin_filters.py:7
+msgid "Is Null"
+msgstr ""
+
+#: .\suit\admin_filters.py:21
+msgid "All"
+msgstr ""
+
+#: .\suit\menu.py:110
+#: .\suit\templates\registration\password_change_form.html:7
+#: .\templates\admin\catalog\product\change_attributes.html:6
+#: .\templates\admin\catalog\product\change_categories.html:6
+#: .\templates\admin\catalog\product\change_category.html:6
+msgid "Home"
+msgstr ""
+
+#: .\suit\templates\admin\auth\user\add_form.html:8
+msgid ""
+"First, enter a username and password. Then, you'll be able to edit more user "
+"options."
+msgstr ""
+
+#: .\suit\templates\admin\auth\user\add_form.html:10
+msgid "Enter a username and password."
+msgstr ""
+
+#: .\suit\templates\admin\base.html:13
+msgid "Django site admin"
+msgstr ""
+
+#: .\suit\templates\admin\base.html:18 .\suit\templates\admin\base.html:104
+msgid "Django administration"
+msgstr ""
+
+#: .\suit\templates\admin\base.html:19
+msgid "Admin"
+msgstr ""
+
+#: .\suit\templates\admin\base.html:50
+msgid "View site"
+msgstr ""
+
+#: .\suit\templates\admin\base.html:57
+msgid "Documentation"
+msgstr ""
+
+#: .\suit\templates\admin\base.html:62
+msgid "Change password"
+msgstr ""
+
+#: .\suit\templates\admin\base.html:65
+msgid "Log out"
+msgstr ""
+
+#: .\suit\templates\admin\change_list.html:10
+msgid "Filter"
+msgstr ""
+
+#: .\suit\templates\admin\change_list_results.html:17
+msgid "Remove from sorting"
+msgstr ""
+
+#: .\suit\templates\admin\change_list_results.html:18
+#, python-format
+msgid "Sorting priority: %(priority_number)s"
+msgstr ""
+
+#: .\suit\templates\admin\change_list_results.html:19
+msgid "Toggle sorting"
+msgstr ""
+
+#: .\suit\templates\admin\login.html:9
+#: .\suit\templates\registration\password_change_form.html:21
+msgid "Please correct the error below."
+msgstr ""
+
+#: .\suit\templates\admin\login.html:10
+#: .\suit\templates\registration\password_change_form.html:21
+msgid "Please correct the errors below."
+msgstr ""
+
+#: .\suit\templates\admin\login.html:26
+#, python-format
+msgid ""
+"You are authenticated as %(username)s, but are not authorized to access this "
+"page. Would you like to login to a different account?"
+msgstr ""
+
+#: .\suit\templates\admin\login.html:47
+msgid "Forgotten your password or username?"
+msgstr ""
+
+#: .\suit\templates\admin\login.html:51
+msgid "Log in"
+msgstr ""
+
+#: .\suit\templates\registration\password_change_form.html:8
+msgid "Password change"
+msgstr ""
+
+#: .\suit\templates\registration\password_change_form.html:26
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new "
+"password twice so we can verify you typed it in correctly."
+msgstr ""
+
+#: .\suit\templates\registration\password_change_form.html:54
+msgid "Change my password"
+msgstr ""
+
+#: .\suit\templates\suit\search_form.html:15
+msgid "Search"
+msgstr ""
+
+#: .\suit\templates\suit\search_form.html:17
+#, python-format
+msgid ""
+"%(counter)s result\n"
+"                        "
+msgid_plural "%(counter)s results"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\suit\templates\suit\search_form.html:20
+#, python-format
+msgid ""
+"%(full_result_count)s total\n"
+"                        "
+msgstr ""
+
+#: .\suit\templates\suit\search_form.html:21
+msgid "Show all"
+msgstr ""
+
+#: .\templates\admin\edit_inline\compact.html:3
+msgid "Remove"
+msgstr ""
+
+#: .\templates\admin\edit_inline\compact.html:12
+#, python-format
+msgid "Add another %(verbose_name)s"
+msgstr ""
+
+#: .\templates\admin\edit_inline\compact.html:37
+msgid "Change"
+msgstr ""
+
+#: .\templates\admin\edit_inline\compact.html:43
+msgid "View on site"
+msgstr ""
+
+#: .\templates\admin\filer\folder\directory_listing.html:16
+msgid "Adds a new Folder"
+msgstr ""
+
+#: .\templates\admin\filer\folder\directory_listing.html:19
+msgid "New Folder"
+msgstr ""
+
+#: .\templates\admin\filer\folder\directory_listing.html:24
+#: .\templates\admin\filer\folder\directory_listing.html:28
+#: .\templates\admin\filer\folder\directory_listing.html:31
+#: .\templates\admin\filer\folder\directory_listing.html:35
+#: .\templates\admin\filer\folder\directory_listing.html:42
+msgid "Upload Files"
+msgstr ""
+
+#: .\templates\admin\filer\folder\directory_listing.html:40
+msgid "You have to select a folder first"
+msgstr ""
+
+#: .\templates\blocks\currency_change.html:4
+msgid "Цена в"
+msgstr ""
+
+#: .\templates\blocks\footer.html:7 .\templates\blocks\header_menu.html:21
+#: .\templates\blocks\header_menu.html:26
+msgid "МиниБикини"
+msgstr ""
+
+#: .\templates\blocks\footer.html:21
+msgid "Обратный звонок"
+msgstr ""
+
+#: .\templates\blocks\footer.html:46 .\templates\cart\cart.html:269
+#: .\templates\cart\cart.html:282 .\templates\cart\cart.html:290
+#: .\templates\cart\cart.html:407 .\templates\cart\cart.html:480
+#: .\templates\cart\cart.html:508
+#: .\templates\catalog\include\product_popups.html:27
+#: .\templates\catalog\include\product_popups.html:40
+#: .\templates\catalog\include\product_popups.html:48
+#: .\templates\contests\contest.html:128 .\templates\contests\contest.html:141
+#: .\templates\contests\contest.html:149 .\templates\contests\contest.html:156
+#: .\templates\contests\contest.html:165 .\templates\profile\profile.html:382
+#: .\templates\profile\profile.html:395
+msgid "Закрыть"
+msgstr ""
+
+#: .\templates\blocks\footer.html:50 .\templates\blocks\footer.html:64
+#: .\templates\blocks\header.html:17 .\templates\blocks\header_home.html:17
+msgid "Заказать звонок"
+msgstr ""
+
+#: .\templates\blocks\footer.html:51
+msgid "Заполните форму, и мы вам перезвоним"
+msgstr ""
+
+#: .\templates\blocks\footer.html:56 .\templates\blog\post.html:170
+msgid "Ваше имя"
+msgstr ""
+
+#: .\templates\blocks\header.html:13 .\templates\blocks\header_home.html:13
+msgid "Telegram"
+msgstr ""
+
+#: .\templates\blocks\header.html:14 .\templates\blocks\header_home.html:14
+msgid "Whatsapp"
+msgstr ""
+
+#: .\templates\blocks\header.html:21 .\templates\blocks\header_home.html:21
+#: .\templates\blocks\header_menu.html:29 .\templates\catalog\product.html:21
+#: .\templates\catalog\product.html:31 .\templates\catalog\products.html:22
+#: .\templates\catalog\products.html:126
+#: .\templates\catalog\products_men.html:17
+#: .\templates\catalog\products_men.html:24
+msgid "Мужчинам"
+msgstr ""
+
+#: .\templates\blocks\header.html:22 .\templates\blocks\header_home.html:22
+#: .\templates\blocks\header_menu.html:30 .\templates\catalog\product.html:20
+#: .\templates\catalog\product.html:30 .\templates\catalog\products.html:21
+#: .\templates\catalog\products.html:125
+#: .\templates\catalog\products_women.html:17
+#: .\templates\catalog\products_women.html:24
+msgid "Женщинам"
+msgstr ""
+
+#: .\templates\blocks\header.html:25 .\templates\blocks\header_home.html:25
+#: .\templates\cart\cart.html:24 .\templates\cart\cart.html:30
+msgid "Корзина"
+msgstr ""
+
+#: .\templates\blocks\header.html:25 .\templates\blocks\header_home.html:25
+msgid "Кол-во"
+msgstr ""
+
+#: .\templates\blocks\header_home.html:58
+msgid "Дерзко Стильно Провокационно"
+msgstr ""
+
+#: .\templates\blocks\header_menu.html:8
+#: .\templates\blocks\header_menu.html:49
+msgid "Язык"
+msgstr ""
+
+#: .\templates\blocks\header_menu.html:41 .\templates\cart\certificate.html:20
+#: .\templates\cart\certificate.html:26 .\templates\cart\certificate.html:43
+msgid "Подарочный сертификат"
+msgstr ""
+
+#: .\templates\blocks\header_menu.html:42
+msgid "desinger"
+msgstr ""
+
+#: .\templates\blocks\header_menu.html:43 .\templates\blog\post.html:40
+#: .\templates\video\video.html:22 .\templates\video\videos.html:21
+#: .\templates\video\videos.html:23
+msgid "Видео"
+msgstr ""
+
+#: .\templates\blocks\header_menu.html:44
+msgid "Список желаемых покупок"
+msgstr ""
+
+#: .\templates\blocks\header_menu.html:80
+msgid "Вход / регистрация"
+msgstr ""
+
+#: .\templates\blocks\header_menu.html:81
+msgid "Мой профиль"
+msgstr ""
+
+#: .\templates\blocks\header_menu.html:82
+msgid "История покупок"
+msgstr ""
+
+#: .\templates\blocks\header_menu.html:83
+msgid "Выход"
+msgstr ""
+
+#: .\templates\blocks\homepage_products.html:11
+#: .\templates\catalog\include\products.html:14
+#: .\templates\catalog\product.html:236 .\templates\catalog\product.html:291
+#: .\templates\contests\participant.html:169
+msgid "В корзину"
+msgstr ""
+
+#: .\templates\blog\category.html:17 .\templates\blog\home.html:25
+#: .\templates\blog\post.html:27 .\templates\cart\cart.html:23
+#: .\templates\cart\cart.html:29 .\templates\cart\certificate.html:19
+#: .\templates\cart\certificate.html:25 .\templates\catalog\product.html:19
+#: .\templates\catalog\product.html:29 .\templates\catalog\products.html:20
+#: .\templates\catalog\products.html:124
+#: .\templates\catalog\products_men.html:16
+#: .\templates\catalog\products_men.html:23
+#: .\templates\catalog\products_women.html:16
+#: .\templates\catalog\products_women.html:23
+#: .\templates\contests\participant.html:23
+#: .\templates\profile\profile.html:23 .\templates\profile\profile.html:29
+#: .\templates\video\video.html:21 .\templates\video\videos.html:20
+msgid "Главная"
+msgstr ""
+
+#: .\templates\blog\home.html:35
+msgid "Поиск"
+msgstr ""
+
+#: .\templates\blog\home.html:37
+msgid "Найти"
+msgstr ""
+
+#: .\templates\blog\home.html:44
+msgid "Архив"
+msgstr ""
+
+#: .\templates\blog\home.html:60
+msgid "Галерея"
+msgstr ""
+
+#: .\templates\blog\home.html:76
+msgid "Ничего не найдено"
+msgstr ""
+
+#: .\templates\blog\post.html:126
+msgid "Поделиться в соц. сетях"
+msgstr ""
+
+#: .\templates\blog\post.html:144
+msgid "Комментарии"
+msgstr ""
+
+#: .\templates\blog\post.html:147
+msgid "Спасибо"
+msgstr ""
+
+#: .\templates\blog\post.html:147 .\templates\blog\post.html:171
+msgid "Ваш комментарий"
+msgstr ""
+
+#: .\templates\blog\post.html:147
+msgid "принят и появится на сайте после одобрения модератором"
+msgstr ""
+
+#: .\templates\blog\post.html:159
+msgid "Комментариев еще нет"
+msgstr ""
+
+#: .\templates\blog\post.html:159
+msgid "оставьте первым"
+msgstr ""
+
+#: .\templates\blog\post.html:164
+msgid "Комментарий появится на сайте только после одобрения модератором"
+msgstr ""
+
+#: .\templates\blog\post.html:172 .\templates\cart\certificate.html:108
+#: .\templates\cart\certificate.html:114 .\templates\cart\certificate.html:120
+#: .\templates\cart\certificate.html:126 .\templates\cart\certificate.html:132
+#: .\templates\cart\certificate.html:138 .\templates\cart\certificate.html:144
+#: .\templates\cart\certificate.html:168 .\templates\profile\profile.html:57
+#: .\templates\profile\profile.html:201 .\templates\profile\profile.html:206
+#: .\templates\profile\profile.html:211 .\templates\profile\profile.html:216
+#: .\templates\profile\profile.html:229 .\templates\profile\profile.html:258
+#: .\templates\profile\profile.html:263
+msgid "Заполните поле"
+msgstr ""
+
+#: .\templates\blog\post.html:175 .\templates\cart\cart.html:165
+msgid "Отправить"
+msgstr ""
+
+#: .\templates\cart\cart.html:39
+msgid "Название модели"
+msgstr ""
+
+#: .\templates\cart\cart.html:39
+msgid "Название"
+msgstr ""
+
+#: .\templates\cart\cart.html:41
+msgid "Цвет"
+msgstr ""
+
+#: .\templates\cart\cart.html:43 .\templates\cart\cart.html:92
+#: .\templates\catalog\products.html:75
+msgid "Цена"
+msgstr ""
+
+#: .\templates\cart\cart.html:44 .\templates\cart\cart.html:96
+msgid "Количество"
+msgstr ""
+
+#: .\templates\cart\cart.html:45 .\templates\cart\cart.html:106
+msgid "Подарочная упаковка"
+msgstr ""
+
+#: .\templates\cart\cart.html:47 .\templates\cart\cart.html:116
+#: .\templates\cart\cart.html:179
+msgid "Стоимость"
+msgstr ""
+
+#: .\templates\cart\cart.html:49 .\templates\cart\cart.html:141
+msgid "Отложить"
+msgstr ""
+
+#: .\templates\cart\cart.html:50 .\templates\cart\cart.html:146
+#: .\templates\cart\cart.html:185
+msgid "Удалить"
+msgstr ""
+
+#: .\templates\cart\cart.html:118 .\templates\cart\cart.html:551
+#: .\templates\catalog\product.html:221
+msgid "Цена для вас"
+msgstr ""
+
+#: .\templates\cart\cart.html:138
+msgid "Добавить товар в список желаемых покупок"
+msgstr ""
+
+#: .\templates\cart\cart.html:139
+msgid "Товар в списке желаемых покупок"
+msgstr ""
+
+#: .\templates\cart\cart.html:163
+msgid "Для"
+msgstr ""
+
+#: .\templates\cart\cart.html:195
+msgid "Товаров в корзине нет"
+msgstr ""
+
+#: .\templates\cart\cart.html:195
+msgid "Вернуться в каталог"
+msgstr ""
+
+#: .\templates\cart\cart.html:200
+msgid "Выбор способа доставки"
+msgstr ""
+
+#: .\templates\cart\cart.html:216
+msgid "Выбор способа оплаты"
+msgstr ""
+
+#: .\templates\cart\cart.html:237
+msgid "Итого товаров"
+msgstr ""
+
+#: .\templates\cart\cart.html:237
+msgid "на сумму"
+msgstr ""
+
+#: .\templates\cart\cart.html:241 .\templates\cart\cart.html:468
+msgid "Оформить заказ"
+msgstr ""
+
+#: .\templates\cart\cart.html:273 .\templates\contests\contest.html:132
+#: .\templates\profile\profile.html:386
+msgid "При отправке формы произошла ошибка"
+msgstr ""
+
+#: .\templates\cart\cart.html:294
+msgid "Я уже являюсь <br>клиентом BIKINIMINI"
+msgstr ""
+
+#: .\templates\cart\cart.html:301 .\templates\cart\cart.html:351
+#: .\templates\cart\cart.html:461 .\templates\profile\profile.html:226
+msgid "Ваш e-mail"
+msgstr ""
+
+#: .\templates\cart\cart.html:308 .\templates\cart\cart.html:358
+msgid "Ваш пароль"
+msgstr ""
+
+#: .\templates\cart\cart.html:316
+msgid "Запомнить меня на сайте"
+msgstr ""
+
+#: .\templates\cart\cart.html:321
+msgid "Войти"
+msgstr ""
+
+#: .\templates\cart\cart.html:326
+msgid "Войти при помощи соц. сетей"
+msgstr ""
+
+#: .\templates\cart\cart.html:328
+msgid "Facebook"
+msgstr ""
+
+#: .\templates\cart\cart.html:329 .\templates\home.html:51
+msgid "ВКонтакте"
+msgstr ""
+
+#: .\templates\cart\cart.html:330
+msgid "Google Plus"
+msgstr ""
+
+#: .\templates\cart\cart.html:331 .\templates\home.html:50
+msgid "Instagram"
+msgstr ""
+
+#: .\templates\cart\cart.html:340
+msgid "или"
+msgstr ""
+
+#: .\templates\cart\cart.html:344
+msgid "Я новый <br>клиент BIKINIMINI"
+msgstr ""
+
+#: .\templates\cart\cart.html:365
+msgid "Ваш пароль ещё раз"
+msgstr ""
+
+#: .\templates\cart\cart.html:378
+msgid "Далее"
+msgstr ""
+
+#: .\templates\cart\cart.html:411 .\templates\profile\profile.html:65
+msgid "Данные для доставки"
+msgstr ""
+
+#: .\templates\cart\cart.html:445 .\templates\profile\profile.html:215
+msgid "Контактный телефон"
+msgstr ""
+
+#: .\templates\cart\cart.html:452
+msgid "мя, Фамилия, Отчество"
+msgstr ""
+
+#: .\templates\cart\cart.html:484
+msgid "Заказ успешно <br />оформлен"
+msgstr ""
+
+#: .\templates\cart\cart.html:486
+msgid "Заказ №"
+msgstr ""
+
+#: .\templates\cart\cart.html:487
+msgid "На сумму"
+msgstr ""
+
+#: .\templates\cart\cart.html:498 .\templates\cart\cart.html:526
+msgid "С уважением, администация Bikinimini.ru"
+msgstr ""
+
+#: .\templates\cart\cart.html:512
+msgid "Ваш заказ принят"
+msgstr ""
+
+#: .\templates\cart\cart.html:515
+msgid "Итоговая стоимость заказа"
+msgstr ""
+
+#: .\templates\cart\cart.html:537
+msgid "Специальное предложение <br />Только для Вас"
+msgstr ""
+
+#: .\templates\cart\cart.html:538
+msgid "Добавьте еще одну модель"
+msgstr ""
+
+#: .\templates\cart\cart.html:563
+msgid "Примечание"
+msgstr ""
+
+#: .\templates\cart\certificate.html:19 .\templates\cart\certificate.html:25
+msgid "#"
+msgstr ""
+
+#: .\templates\cart\certificate.html:37
+msgid "Bikinimini"
+msgstr ""
+
+#: .\templates\cart\certificate.html:40
+msgid "Anastasia Ivanovskaia"
+msgstr ""
+
+#: .\templates\cart\certificate.html:93
+msgid "Выберите номинал"
+msgstr ""
+
+#: .\templates\cart\certificate.html:117
+msgid "E-mail получателя"
+msgstr ""
+
+#: .\templates\cart\certificate.html:135
+msgid "E-mail отправителя"
+msgstr ""
+
+#: .\templates\cart\certificate.html:153
+msgid "Сейчас"
+msgstr ""
+
+#: .\templates\cart\certificate.html:160
+msgid "Выбрать дату"
+msgstr ""
+
+#: .\templates\cart\certificate.html:173
+msgid "Купить"
+msgstr ""
+
+#: .\templates\catalog\include\product_attr.html:19
+msgid "Ещё цвета"
+msgstr ""
+
+#: .\templates\catalog\include\product_attr_extra_price.html:7
+msgid "Добавить к комплекту"
+msgstr ""
+
+#: .\templates\catalog\include\product_attr_extra_price.html:9
+msgid "Убрать из комплекта"
+msgstr ""
+
+#: .\templates\catalog\include\product_popups.html:31
+msgid "Пожалуйста, выберите одно из нескольких значений"
+msgstr ""
+
+#: .\templates\catalog\include\product_popups.html:52
+msgid "Товар добавлен в корзину"
+msgstr ""
+
+#: .\templates\catalog\include\product_popups.html:54
+msgid "Товаров в корзине"
+msgstr ""
+
+#: .\templates\catalog\include\product_popups.html:55
+msgid "Общая сумма"
+msgstr ""
+
+#: .\templates\catalog\include\product_popups.html:59
+msgid "Перейти к корзине"
+msgstr ""
+
+#: .\templates\catalog\include\product_popups.html:61
+msgid "Продолжить покупки"
+msgstr ""
+
+#: .\templates\catalog\include\products.html:54
+msgid "В данной категории пока что нет товаров"
+msgstr ""
+
+#: .\templates\catalog\include\products.html:56
+msgid "В этом разделе пока что нет товаров"
+msgstr ""
+
+#: .\templates\catalog\product.html:43
+msgid "Артикул"
+msgstr ""
+
+#: .\templates\catalog\product.html:114
+msgid "Удалить из списка желаемых покупок"
+msgstr ""
+
+#: .\templates\catalog\product.html:114
+msgid "Добавить в список желаемых покупок"
+msgstr ""
+
+#: .\templates\catalog\product.html:232
+msgid "Такого товара нет в наличии"
+msgstr ""
+
+#: .\templates\catalog\product.html:234
+msgid "Под заказ"
+msgstr ""
+
+#: .\templates\catalog\product.html:241
+msgid "Подарочная<br />упаковка"
+msgstr ""
+
+#: .\templates\catalog\product.html:247
+msgid "Цены в"
+msgstr ""
+
+#: .\templates\catalog\product.html:275
+msgid "Смотреть всё видео"
+msgstr ""
+
+#: .\templates\catalog\product.html:283
+msgid "С этим товаром также покупают"
+msgstr ""
+
+#: .\templates\catalog\products.html:32
+msgid "Категории"
+msgstr ""
+
+#: .\templates\catalog\products.html:36
+msgid "Смотреть все"
+msgstr ""
+
+#: .\templates\catalog\products.html:42
+msgid "Фильтр"
+msgstr ""
+
+#: .\templates\catalog\products.html:113
+msgid "Показать"
+msgstr ""
+
+#: .\templates\catalog\products.html:114
+msgid "Сбросить"
+msgstr ""
+
+#: .\templates\contests\contest.html:19
+msgid "Победитель конкурса"
+msgstr ""
+
+#: .\templates\contests\contest.html:36 .\templates\contests\contest.html:202
+msgid "Принять участие"
+msgstr ""
+
+#: .\templates\contests\contest.html:62
+msgid "Условия конкурса"
+msgstr ""
+
+#: .\templates\contests\contest.html:74
+msgid "Участники конкурса"
+msgstr ""
+
+#: .\templates\contests\contest.html:86
+#: .\templates\contests\participant.html:40
+#: .\templates\contests\participant.html:47
+msgid "Оценить участницу"
+msgstr ""
+
+#: .\templates\contests\contest.html:99
+msgid "Архив конкурсов"
+msgstr ""
+
+#: .\templates\contests\contest.html:153
+msgid "Ошибка"
+msgstr ""
+
+#: .\templates\contests\contest.html:154
+msgid "Вы уже принимаете участие в конкурсе"
+msgstr ""
+
+#: .\templates\contests\contest.html:169
+msgid "Принять участие в конкурсе"
+msgstr ""
+
+#: .\templates\contests\contest.html:193
+msgid "Перетащите сюда файлы или"
+msgstr ""
+
+#: .\templates\contests\contest.html:193
+msgid "выберите на компьютере"
+msgstr ""
+
+#: .\templates\contests\contest.html:194
+msgid "Максимальный размер фото - 10МБ. Не более 5 фотографий"
+msgstr ""
+
+#: .\templates\contests\participant.html:161
+msgid "Участница демонстрирует"
+msgstr ""
+
+#: .\templates\el_pagination\show_more.html:5
+msgid "Показать ещё"
+msgstr ""
+
+#: .\templates\el_pagination\show_more.html:6
+msgid "Идет загрузка..."
+msgstr ""
+
+#: .\templates\home.html:23
+msgid "Популярные товары"
+msgstr ""
+
+#: .\templates\home.html:52
+msgid "FaceBook"
+msgstr ""
+
+#: .\templates\home.html:53
+msgid "Twitter"
+msgstr ""
+
+#: .\templates\home.html:76
+msgid "Перейти к нам на страницу Facebook"
+msgstr ""
+
+#: .\templates\home.html:76
+msgid "Присоединяйтесь к Bikinimini на Facebook"
+msgstr ""
+
+#: .\templates\home.html:93
+msgid "Твиты от @wwwBikinimini"
+msgstr ""
+
+#: .\templates\profile\profile.html:24 .\templates\profile\profile.html:30
+#: .\templates\profile\profile.html:32
+msgid "Личный кабинет"
+msgstr ""
+
+#: .\templates\profile\profile.html:37 .\templates\profile\profile.html:38
+msgid "Мои данные"
+msgstr ""
+
+#: .\templates\profile\profile.html:41 .\templates\profile\profile.html:42
+msgid "Мои заказы"
+msgstr ""
+
+#: .\templates\profile\profile.html:54
+msgid "Как к вам обращаться"
+msgstr ""
+
+#: .\templates\profile\profile.html:56
+msgid "Фамилия, Имя, Отчество"
+msgstr ""
+
+#: .\templates\profile\profile.html:239 .\templates\profile\profile.html:245
+msgid "Изменить"
+msgstr ""
+
+#: .\templates\profile\profile.html:245
+msgid "Я хочу получать информацию о скидках и новинках"
+msgstr ""
+
+#: .\templates\profile\profile.html:257
+msgid "Старый пароль"
+msgstr ""
+
+#: .\templates\profile\profile.html:262
+msgid "Новый пароль"
+msgstr ""
+
+#: .\templates\profile\profile.html:270
+msgid "Сохранить"
+msgstr ""
+
+#: .\templates\profile\profile.html:284 .\templates\profile\profile.html:295
+msgid "Дата заказа"
+msgstr ""
+
+#: .\templates\profile\profile.html:285 .\templates\profile\profile.html:301
+msgid "Номер заказа"
+msgstr ""
+
+#: .\templates\profile\profile.html:288 .\templates\profile\profile.html:317
+msgid "Статус"
+msgstr ""
+
+#: .\templates\profile\profile.html:289 .\templates\profile\profile.html:322
+msgid "Итого к оплате"
+msgstr ""
+
+#: .\templates\profile\profile.html:330
+msgid "У вас пока нет заказов"
+msgstr ""
+
+#: .\templates\profile\profile.html:330
+msgid "Перейти к каталогу"
+msgstr ""
+
+#: .\templates\video\include\videos.html:9
+msgid "перейти"
+msgstr ""
+
+#: .\templates\video\video.html:47
+msgid "Купить товар из этого видео"
+msgstr ""

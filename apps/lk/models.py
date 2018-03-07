@@ -9,6 +9,7 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, Permis
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 
 from ..cart.utils import make_hash_from_cartitem
 from ..currency.utils import price_with_currency
@@ -57,7 +58,7 @@ class UserManager(BaseUserManager):
 
 
 class Profile(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField('Email', unique=True)
+    email = models.EmailField(_('Email'), unique=True)
     date_joined = models.DateTimeField('Дата и время регистрации', auto_now_add=True)
     subscription = models.BooleanField('Подписан на рассылку', default=True)
 
@@ -65,14 +66,14 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField('Имеет доступ к админ-панели', default=False)
 
     # --- данные из формы в профиле ---
-    country = models.ForeignKey(Country, verbose_name='Страна', null=True, blank=True)
-    city = models.CharField('Город', max_length=225, null=True, blank=True)
-    address = models.TextField('Адрес', null=True, blank=True)
-    phone = models.CharField('Телефон', max_length=30, null=True, blank=True)
-    name = models.CharField('Полное имя', max_length=511, null=True, blank=True)
+    country = models.ForeignKey(Country, verbose_name=_('Страна'), null=True, blank=True)
+    city = models.CharField(_('Город'), max_length=225, null=True, blank=True)
+    address = models.TextField(_('Адрес'), null=True, blank=True)
+    phone = models.CharField(_('Телефон'), max_length=30, null=True, blank=True)
+    name = models.CharField(_('Полное имя'), max_length=511, null=True, blank=True)
 
-    delivery_method = models.ForeignKey('cart.DeliveryMethod', verbose_name='Способ доставки', null=True, blank=True)
-    payment_method = models.ForeignKey('cart.PaymentMethod', verbose_name='Способ оплаты', null=True, blank=True)
+    delivery_method = models.ForeignKey('cart.DeliveryMethod', verbose_name=_('Способ доставки'), null=True, blank=True)
+    payment_method = models.ForeignKey('cart.PaymentMethod', verbose_name=_('Способ оплаты'), null=True, blank=True)
 
     # --- соц.сети ---
     fb_id = models.CharField('Facebook ID', max_length=255, null=True, blank=True)

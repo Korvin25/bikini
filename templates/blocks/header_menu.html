@@ -18,16 +18,16 @@
     </ul>
   </div>
   
-  <div id="logo_mini"><a href="/" title="МиниБикини"><img src="/static/i/logo.png" alt="МиниБикини" /></a></div>
+  <div id="logo_mini"><a href="/" title="{% trans 'МиниБикини' %}"><img src="/static/i/logo.png" alt="{% trans 'МиниБикини' %}" /></a></div>
   <a href="#" id="touch-menu-top">Меню</a>
 </div>
 
 <div class="menu_top_line_wrapp">
-  <div class="logo"><a href="/" title="МиниБикини"><img src="/static/i/logo.png" alt="МиниБикини" /></a></div>
+  <div class="logo"><a href="/" title="{% trans 'МиниБикини' %}"><img src="/static/i/logo.png" alt="{% trans 'МиниБикини' %}" /></a></div>
   
   <ul class="cat_row_top">
-    <li><a href="{% url 'men' %}" title="Мужчинам">Мужчинам</a></li>
-    <li><a href="{% url 'women' %}" title="Женщинам">Женщинам</a></li>
+    <li><a href="{% url 'men' %}" title="{% trans 'Мужчинам' %}">{% trans 'Мужчинам' %}</a></li>
+    <li><a href="{% url 'women' %}" title="{% trans 'Женщинам' %}">{% trans 'Женщинам' %}</a></li>
   </ul>
   
   <ul class="cat_row_top cat_row_top2">
@@ -38,10 +38,10 @@
   <div class="clr clr_mrgn"></div>
   <div class="list_top_menu_wrapp">
     <ul class="list_menu_lev1">
-      <li><a href="{% url 'certificate' %}">Подарочный сертификат</a></li>
-      <li><a href="{% url 'blog:home' %}"><img src="/static/i/logo_mini.png" alt="desinger" />desinger</a></li>
-      <li><a href="{% url 'videos' %}">Видео</a></li>
-      <li><a href="{% url 'wishlist:home' %}" class="js-show-wishlist-button">Список желаемых покупок&nbsp;&nbsp;<img src="/static/i/desir.png" alt="" />&nbsp;&nbsp;<span class="disc_number js-wishlist-count">{{ wishlist|length }}</span></a></li>
+      <li><a href="{% url 'certificate' %}">{% trans 'Подарочный сертификат' %}</a></li>
+      <li><a href="{% url 'blog:home' %}"><img src="/static/i/logo_mini.png" alt="desinger" />{% trans 'desinger' %}</a></li>
+      <li><a href="{% url 'videos' %}">{% trans 'Видео' %}</a></li>
+      <li><a href="{% url 'wishlist:home' %}" class="js-show-wishlist-button">{% trans 'Список желаемых покупок' %}&nbsp;&nbsp;<img src="/static/i/desir.png" alt="" />&nbsp;&nbsp;<span class="disc_number js-wishlist-count">{{ wishlist|length }}</span></a></li>
     </ul>
     <div style="display: none"><a rel="leanModal1" href="#wishlist"></a></div>
     <ul class="list_menu_lev1 list_menu_lev2 js-header-menu">
@@ -77,10 +77,10 @@
           }
         }
       </script>
-      <li class="js-auth-switch"{% if not profile.is_anonymous %} style="display: none;"{% endif %}><a rel="leanModal1" href="#auth" href="#">Вход / регистрация</a></li>
-      <li class="js-auth-switch"{% if profile.is_anonymous %} style="display: none;"{% endif %}><a href="{% url 'profile' %}">Мой профиль</a></li>
-      <li class="js-auth-switch"{% if profile.is_anonymous %} style="display: none;"{% endif %}><a href="{% url 'profile' %}?tab=orders">История покупок</a></li>
-      <li class="js-auth-switch"{% if profile.is_anonymous %} style="display: none;"{% endif %}><a href="{% url 'auth:logout' %}">Выход</a></li>
+      <li class="js-auth-switch"{% if not profile.is_anonymous %} style="display: none;"{% endif %}><a rel="leanModal1" href="#auth" href="#">{% trans 'Вход / регистрация' %}</a></li>
+      <li class="js-auth-switch"{% if profile.is_anonymous %} style="display: none;"{% endif %}><a href="{% url 'profile' %}">{% trans 'Мой профиль' %}</a></li>
+      <li class="js-auth-switch"{% if profile.is_anonymous %} style="display: none;"{% endif %}><a href="{% url 'profile' %}?tab=orders">{% trans 'История покупок' %}</a></li>
+      <li class="js-auth-switch"{% if profile.is_anonymous %} style="display: none;"{% endif %}><a href="{% url 'auth:logout' %}">{% trans 'Выход' %}</a></li>
     </ul>
   </div>
 </div>

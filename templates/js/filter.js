@@ -1,3 +1,5 @@
+{% load i18n %}
+
 var objListState;
 
 function submitFilterForm($form, $container, url, data, src){
@@ -27,7 +29,7 @@ function submitFilterForm($form, $container, url, data, src){
         },
         error: function(){
             $container.removeClass('_disabled');
-            alert('Произошла ошибка');
+            alert('{% trans "Произошла ошибка" %}');
         }
     });
 };

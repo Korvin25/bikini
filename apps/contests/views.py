@@ -8,11 +8,16 @@ from django.http import Http404, HttpResponseRedirect, JsonResponse, HttpRespons
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.views.generic import TemplateView, DetailView, View, CreateView
+from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as __
 
 from ..core.http_utils import get_object_from_slug_and_kwargs
 from ..core.mixins import JSONFormMixin
 from .forms import ContestApplyForm
 from .models import Contest, Participant, ParticipantPhoto
+
+
+translated_strings = (_('Фото'), _('Обязательное поле'), _('Ваш лайк засчитан'), _('Оценить участницу +'),)
 
 
 class ContestsHomeView(TemplateView):
@@ -112,7 +117,8 @@ class ApplyView(JSONFormMixin, CreateView):
 
         if not participant.photo or not participant.photos.count():
             participant.delete()
-            data = {'result': 'error', 'errors': [{'name': 'photos', 'label': 'Фото', 'error_message': 'Обязательное поле'}]}
+            data = {'result': 'error', 'errors': [{'name': 'photos', 'label': __('Фото'),
+                                                   'error_message': __('Обязательное поле')}]}
             return JsonResponse(data, status=400)
 
         participant = form.instance
@@ -136,7 +142,7 @@ class AddLikeView(View):
                     liked_participants.append(participant_id)
                     request.session['liked_participants'] = liked_participants
 
-                button_text = 'Ваш лайк засчитан'
+                button_text = __('Ваш лайк засчитан')
                 return JsonResponse({'result': 'ok', 'count': participant.likes_count, 'button_text': button_text})
 
             except (ValueError, KeyError, Participant.DoesNotExist) as e:
@@ -163,7 +169,7 @@ class RemoveLikeView(View):
                     liked_participants.pop(liked_participants.index(participant_id))
                     request.session['liked_participants'] = liked_participants
 
-                button_text = 'Оценить участницу +'
+                button_text = __('Оценить участницу +')
                 return JsonResponse({'result': 'ok', 'count': participant.likes_count, 'button_text': button_text})
 
             except (ValueError, KeyError, Participant.DoesNotExist) as e:

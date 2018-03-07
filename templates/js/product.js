@@ -1,3 +1,4 @@
+{% load i18n %}
 
 // ----- Офомление заказа -----
 
@@ -83,9 +84,9 @@ function submitProductForm($form, $button, option_id, _attrs, _extra_products, d
         }, 500);
       }
       else {
-        if (error) { showErrorPopup('При отправке формы произошла ошибка:', error); }
-        if (errors) { showErrorPopup('При отправке формы произошла ошибка:', errors); }
-        else { showErrorPopup('При отправке формы произошла ошибка:', res.status + ' ' + res.statusText); }
+        if (error) { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', error); }
+        if (errors) { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', errors); }
+        else { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', res.status + ' ' + res.statusText); }
       };
     },
     error: function(res){
@@ -101,16 +102,16 @@ function submitProductForm($form, $button, option_id, _attrs, _extra_products, d
               errors = response['errors'],
               alert_message = response['alert_message'];
 
-          if (error) { showErrorPopup('При отправке формы произошла ошибка:', error); };
+          if (error) { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', error); };
           if (errors) { add_errors($form, errors, true); };
           if (click_to) { $(click_to).click(); };
           if (alert_message) { alert(alert_message); };
         } else {
-          showErrorPopup('При отправке формы произошла ошибка:', res.status + ' ' + res.statusText);
+          showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', res.status + ' ' + res.statusText);
         };
       } else {
-        if (res.status == 0) { alert('Произошла ошибка: 500 Internal Server Error') }
-        else { alert('Произошла ошибка: ' + res.status + ' ' + res.statusText); }
+        if (res.status == 0) { alert('{% trans "Произошла ошибка" %}: 500 Internal Server Error') }
+        else { alert('{% trans "Произошла ошибка" %}: ' + res.status + ' ' + res.statusText); }
       }
     }
   });
@@ -179,7 +180,7 @@ $('.js-cart-button').click(function(e){
   if (!$form.length) { $form = $('.js-product-form'); }
 
   if (!Object.keys(option).length) {
-    showErrorPopup('Произошла ошибка:', 'Такого товара нет в наличии.');
+    showErrorPopup('{% trans "Произошла ошибка" %}:', '{% trans "Такого товара нет в наличии" %}.');
     return;
   }
 
@@ -189,7 +190,7 @@ $('.js-cart-button').click(function(e){
   _extra_products = collected_data['_extra_products'];
   errors = collected_data['errors'];
 
-  if (errors.length) { showErrorPopup('Пожалуйста, выберите одно из значений:', errors.join('<br/>')); }
+  if (errors.length) { showErrorPopup('{% trans "Пожалуйста, выберите одно из значений" %}:', errors.join('<br/>')); }
   else { submitProductForm($form, $button, option['id'], _attrs, _extra_products, data); }
 })
 
@@ -340,7 +341,7 @@ function chooseOption(update_total_price, dont_update_wishlist_input) {
     var $input = $('.js-wishlist-input'),
         $button = $('.js-wishlist-button');
     if ($input.length) { $input.attr('checked', false); };
-    if ($button.length) { $button.text('Добавить в список желаемых покупок'); };
+    if ($button.length) { $button.text('{% trans "Добавить в список желаемых покупок" %}'); };
   };
 }
 
@@ -356,17 +357,17 @@ function updateCartButton() {
     $blocks_to_hide.hide();
     $button.addClass('_disabled');
 
-    $button.text('Такого товара нет в наличии');
+    $button.text('{% trans "Такого товара нет в наличии" %}');
     $button.attr('data-type', 'none');
   } else {
     $blocks_to_hide.show();
     $button.removeClass('_disabled');
 
     if (p['count'] > p['maximum_in_stock']) {
-      $button.text('Под заказ');
+      $button.text('{% trans "Под заказ" %}');
       $button.attr('data-type', 'order');
     } else {
-      $button.text('В корзину');
+      $button.text('{% trans "В корзину" %}');
       $button.attr('data-type', 'add');
     }
   }

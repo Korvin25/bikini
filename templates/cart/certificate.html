@@ -16,14 +16,14 @@
     <div class="main_content main_cut">
       
       <ul id="touch_breadcrumb" class="breadcrumb">
-        <li><a href="#">Главная</a></li>
-        <li><span>Подарочный сертификат</span></li>
+        <li><a href="{% trans '#' %}">{% trans 'Главная' %}</a></li>
+        <li><span>{% trans 'Подарочный сертификат' %}</span></li>
       </ul>
     
       <div id="main_content" class="wrapp_content">
         <ul class="breadcrumb">
-          <li><a href="#">Главная</a></li>
-          <li><span>Подарочный сертификат</span></li>
+          <li><a href="{% trans '#' %}">{% trans 'Главная' %}</a></li>
+          <li><span>{% trans 'Подарочный сертификат' %}</span></li>
         </ul>
         <h1 class="title_block">{{ seo_settings.certificate.get_h1 }}</h1>
         
@@ -34,13 +34,13 @@
                 <div class="sertificat_block" style="background-image: url(/static/images/sertificates/bg_sertificat1.gif);">
                   <div class="sertificat_wrapp">
                     <div class="sertificat_logo">
-                      <img src="/static/i/sertificat_logo.png" alt="Bikinimini" />
+                      <img src="/static/i/sertificat_logo.png" alt="{% trans 'Bikinimini' %}" />
                     </div>
                     <div class="sertificat_logo_name">
-                      <img src="/static/i/sertificat_logo_name.png" alt="Anastasia Ivanovskaia" />
+                      <img src="/static/i/sertificat_logo_name.png" alt="{% trans 'Anastasia Ivanovskaia' %}" />
                     </div>
                     <div class="sertificat_title">
-                      Подарочный сертификат
+                      {% trans 'Подарочный сертификат' %}
                     </div>
                     <div class="product_price upper_price">{{ certificate.price|to_price|with_js_certificte_price:currency|safe }}</div>
                   </div>
@@ -90,7 +90,7 @@
 
                   <input type="hidden" name="certificate" value="{{ certificate.id }}" />
 
-                  <div class="title_normal">Выберите номинал:<span class="orange_text">*</span></div>
+                  <div class="title_normal">{% trans 'Выберите номинал' %}:<span class="orange_text">*</span></div>
                   <div class="input_shell select_shel">
                     <div class="select_img"><!--.errr-->
                       <div class="selectboxss drop_list_text" id="sertificates_select">
@@ -105,72 +105,72 @@
                         </ul>
                       </div>
                     </div>
-                    <span class="err_r">Заполните поле</span>
+                    <span class="err_r">{% trans 'Заполните поле' %}</span>
                   </div>
                   
-                  <div class="title_normal">Имя получателя:<span class="orange_text">*</span></div>
+                  <div class="title_normal">{% trans 'Имя получателя' %}:<span class="orange_text">*</span></div>
                   <div class="input_shell">
                     <input type="text" value="" name="recipient_name" class="input_text" required placeholder="" />
-                    <span class="err_r">Заполните поле</span>
+                    <span class="err_r">{% trans 'Заполните поле' %}</span>
                   </div>
                   
-                  <div class="title_normal">E-mail получателя:</div>
+                  <div class="title_normal">{% trans 'E-mail получателя' %}:</div>
                   <div class="input_shell">
                     <input type="email" value="" name="recipient_email" class="input_text" placeholder="" />
-                    <span class="err_r">Заполните поле</span>
+                    <span class="err_r">{% trans 'Заполните поле' %}</span>
                   </div>
                   
-                  <div class="title_normal">Имя отправителя:</div>
+                  <div class="title_normal">{% trans 'Имя отправителя' %}:</div>
                   <div class="input_shell">
                     <input type="text" value="" name="sender_name" class="input_text" placeholder="" />
-                    <span class="err_r">Заполните поле</span>
+                    <span class="err_r">{% trans 'Заполните поле' %}</span>
                   </div>
                   
-                  <div class="title_normal">Телефон отправителя:<span class="orange_text">*</span></div>
+                  <div class="title_normal">{% trans 'Телефон отправителя' %}:<span class="orange_text">*</span></div>
                   <div class="input_shell">
                     <input type="text" value="" name="sender_phone" class="input_text" required placeholder="" />
-                    <span class="err_r">Заполните поле</span>
+                    <span class="err_r">{% trans 'Заполните поле' %}</span>
                   </div>
                   
-                  <div class="title_normal">E-mail отправителя:<span class="orange_text">*</span></div>
+                  <div class="title_normal">{% trans 'E-mail отправителя' %}:<span class="orange_text">*</span></div>
                   <div class="input_shell">
                     <input type="text" value="" name="sender_email" class="input_text" required placeholder="" />
-                    <span class="err_r">Заполните поле</span>
+                    <span class="err_r">{% trans 'Заполните поле' %}</span>
                   </div>
                   
-                  <div class="title_normal">Сообщение получателю:</div>
+                  <div class="title_normal">{% trans 'Сообщение получателю' %}:</div>
                   <div class="input_shell">
                     <textarea name="message" rows="4" id="text" class="t_area input_text bg_area"></textarea>
-                    <span class="err_r">Заполните поле</span>
+                    <span class="err_r">{% trans 'Заполните поле' %}</span>
                   </div>
                   
-                  <div class="title_normal">Когда отправлять:<span class="orange_text">*</span></div>
+                  <div class="title_normal">{% trans 'Когда отправлять' %}:<span class="orange_text">*</span></div>
                   <div class="input_shell radio_float">
                     <label for="radio_id_1" class="radio_input">
                       <div class="input_cell">
                         <input type="radio" name="date" value="today" id="radio_id_1" class="check_radio" checked />
                       </div>
-                      <p class="dott_cell"><span>Сейчас</span></p>
+                      <p class="dott_cell"><span>{% trans 'Сейчас' %}</span></p>
                     </label>
                     
                     <label for="radio_id_2" class="radio_input">
                       <div class="input_cell">
                         <input type="radio" name="date" value="on_date" id="radio_id_2" class="check_radio" />
                       </div>
-                      <p class="dott_cell"><span>Выбрать дату</span></p>
+                      <p class="dott_cell"><span>{% trans 'Выбрать дату' %}</span></p>
                     </label>
                   </div>
                   
                   <div class="js-send-date-div" style="display: none;">
-                    <div class="title_normal">Дата отправки:<span class="orange_text">*</span></div>
+                    <div class="title_normal">{% trans 'Дата отправки' %}:<span class="orange_text">*</span></div>
                     <div class="input_shell">
                       <input type="text" value="{% now 'd.m.Y' %}" name="send_date" class="input_text" placeholder="" />
-                      <span class="err_r">Заполните поле</span>
+                      <span class="err_r">{% trans 'Заполните поле' %}</span>
                     </div>
                   </div>
 
                   <div class="row_form_popup row_pop_butt">
-                    <button class="bt_red js-certificate-button" type="submit">Купить</button>
+                    <button class="bt_red js-certificate-button" type="submit">{% trans 'Купить' %}</button>
                   </div>
                 </form>
               </div>

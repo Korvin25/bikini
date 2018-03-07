@@ -1,4 +1,6 @@
 {% load core_tags %}
+{% load i18n %}
+
 <header style="background-image: url({{ promo_banner.get_cover_url }});">
   <div class="menu_top_line">
     {% include 'blocks/header_menu.html' %}
@@ -7,20 +9,20 @@
     
     <ul class="bt_contacts">
       <li class="bt_phone"><a href="tel:{{ settings.phone|to_phone }}">{{ settings.phone|safe }}</a></li>
-      {# <li class="bt_soc"><a href="viber://chat?number={{ settings.phone|to_viber }}"><img src="/static/i/soc_viber.png" alt="Viber" />Viber</a></li> #}
-      <li class="bt_soc"><a href="tg://resolve?domain={{ settings.telegram_login|to_telegram }}"><img src="/static/i/soc_telegram.png" alt="Telegram">Telegram</a></li>
-      <li class="bt_soc"><a href="whatsapp://send?phone={{ settings.phone|to_phone }}"><img src="/static/i/soc_whatsapp.png" alt="Whatsapp" />Whatsapp</a></li>
+      {# <li class="bt_soc"><a href="viber://chat?number={{ settings.phone|to_viber }}"><img src="/static/i/soc_viber.png" alt="{% trans 'Viber' %}" />{% trans 'Viber' %}</a></li> #}
+      <li class="bt_soc"><a href="tg://resolve?domain={{ settings.telegram_login|to_telegram }}"><img src="/static/i/soc_telegram.png" alt="{% trans 'Telegram' %}">{% trans 'Telegram' %}</a></li>
+      <li class="bt_soc"><a href="whatsapp://send?phone={{ settings.phone|to_phone }}"><img src="/static/i/soc_whatsapp.png" alt="{% trans 'Whatsapp' %}" />{% trans 'Whatsapp' %}</a></li>
       <li class="clr_butt_head clr_butt_head0"></li>
       
-      <li class="bt_req_call"><a rel="leanModal1" name="callback" href="#callback"><strong>Заказать звонок</strong></a></li>
+      <li class="bt_req_call"><a rel="leanModal1" name="callback" href="#callback"><strong>{% trans 'Заказать звонок' %}</strong></a></li>
       <li class="clr_butt_head"></li>
       <li class="butt_categories_head">
         <ul class="cat_row_top">
-          <li><a href="/muzhskie-bikini/" title="Мужчинам">Мужчинам</a></li>
-          <li><a href="/women/" title="Женщинам">Женщинам</a></li>
+          <li><a href="/muzhskie-bikini/" title="{% trans 'Мужчинам' %}">{% trans 'Мужчинам' %}</a></li>
+          <li><a href="/women/" title="{% trans 'Женщинам' %}">{% trans 'Женщинам' %}</a></li>
         </ul>
       </li>
-      <li class="bt_cart"><a href="{% url 'cart' %}"><img src="/static/i/cart_icon.png" alt="Корзина" /><strong>Корзина</strong> <span title="Кол-во" class="js-cart-count">{{ cart.count }}</span></a></li>
+      <li class="bt_cart"><a href="{% url 'cart' %}"><img src="/static/i/cart_icon.png" alt="{% trans 'Корзина' %}" /><strong>{% trans 'Корзина' %}</strong> <span title="{% trans 'Кол-во' %}" class="js-cart-count">{{ cart.count }}</span></a></li>
     </ul>
     
     <div class="clr"></div>
@@ -51,8 +53,8 @@
 
   </div>
   
-  {# <h3 class="sl_text" style="background-image: url(/static/images/sl_text.png);">Дерзко Стильно Провокационно</h3> #}
-  <h3 class="sl_text" style="background-image: url(/static/images/re.jsx1.png);">Дерзко Стильно Провокационно</h3>
+  {# <h3 class="sl_text" style="background-image: url(/static/images/sl_text.png);">{% trans 'Дерзко Стильно Провокационно' %}</h3> #}
+  <h3 class="sl_text" style="background-image: url(/static/images/re.jsx1.png);">{% trans 'Дерзко Стильно Провокационно' %}</h3>
   {% with promo_banner.girl as girl %}
     {% if girl %}
       <span class="grl_head" style="background-image: url({{ girl.get_photo.url }}); height: {{ girl.get_photo.height }}px; width: {{ girl.get_photo.width }}px; margin-left: {{ girl.margin_left }}px;"></span>
