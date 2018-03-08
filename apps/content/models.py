@@ -151,3 +151,16 @@ class MenuItem(models.Model):
         if update_link is True:
             self.update_link_from_page(save=False)
         return super(MenuItem, self).save(*args, **kwargs)
+
+
+import os
+from django.conf import settings
+from django.dispatch import receiver
+from rosetta.signals import post_save
+
+
+@receiver(post_save)
+def restart_server(sender, **kwargs):
+    touchme_path = getattr(settings, 'UWSGI_TOUCHME', '')
+    if touchme_path:
+        os.system('sleep 1 && touch {}'.format(touchme_path))

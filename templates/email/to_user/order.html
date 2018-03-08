@@ -2,51 +2,51 @@
 <h3>{{ subject }}</h3>
 
 <p>
-    Уважаемая(ый) {{ obj.name }}! Рады сообщить, что Ваш заказ № {{ obj.number }} от {{ obj.checkout_date|date:'d.m.Y' }} был оформлен.
+    {% trans 'Уважаемая(ый)' %} {{ obj.name }}! {% trans 'Рады сообщить, что Ваш заказ' %} № {{ obj.number }} от {{ obj.checkout_date|date:'d.m.Y' }} {% trans 'был оформлен' %}.
 </p>
 
 <p>
     <br/>
-    <strong>Данные для доставки</strong><br/>
+    <strong>{% trans 'Данные для доставки' %}</strong><br/>
     -------------------<br/>
-    Страна: {{ obj.country }}<br/>
-    Город: {{ obj.city }}<br/>
-    Адрес: {{ obj.address }}<br/>
-    Телефон: {{ obj.phone }}<br/>
+    {% trans 'Страна' %}: {{ obj.country }}<br/>
+    {% trans 'Город' %}: {{ obj.city }}<br/>
+    {% trans 'Адрес' %}: {{ obj.address }}<br/>
+    {% trans 'Телефон' %}: {{ obj.phone }}<br/>
     <br/>
-    Способ доставки: {{ obj.delivery_method }}{% if obj.delivery_method.price %} ({{ obj.delivery_method.price|to_price|currency_light:obj.currency }}){% endif %}<br/>
-    Способ оплаты: {{ obj.payment_method }}<br/>
+    {% trans 'Способ доставки' %}: {{ obj.delivery_method }}{% if obj.delivery_method.price %} ({{ obj.delivery_method.price|to_price|currency_light:obj.currency }}){% endif %}<br/>
+    {% trans 'Способ оплаты' %}: {{ obj.payment_method }}<br/>
     {% if obj.additional_info %}
         <br/>
-        Дополнительная информация: {{ obj.additional_info }}<br/>
+        {% trans 'Дополнительная информация' %}: {{ obj.additional_info }}<br/>
     {% endif %}
 </p>
 
 <p>
     <br/>
-    <strong>Содержимое заказа</strong><br/>
+    <strong>{% trans 'Содержимое заказа' %}</strong><br/>
     -------------------<br/>
     {% include 'email/include/order_items.html' with obj=obj for_admin=False %}
 </p>
 
 <p>
     <br/><br/>
-    <strong>Итого к оплате: {{ obj.show_summary|currency_light:obj.currency }}</strong><br/>
+    <strong>{% trans 'Итого к оплате' %}: {{ obj.show_summary|currency_light:obj.currency }}</strong><br/>
 </p>
 
 <p>
     <br/>
-    Для подтверждения заказа ожидайте звонка от нашего оператора.<br/>
+    {% trans 'Для подтверждения заказа ожидайте звонка от нашего оператора' %}.<br/>
 </p>
 
 <p>
-    Мы будем рады ответить на Ваши вопросы<br/>
-    по телефону: +7 (916) 445-65-55<br/>
-    или по электронной почте: info@bikinimini.ru.<br/>
+    {% trans 'Мы будем рады ответить на Ваши вопросы' %}<br/>
+    {% trans 'по телефону' %}: +7 (916) 445-65-55<br/>
+    {% trans 'или по электронной почте' %}: info@bikinimini.ru.<br/>
 </p>
 
 <p>
     ----<br/><br/>
-    С уважением, Ваша команда Bikinimini<br/>
+    {% trans 'С уважением, Ваша команда Bikinimini' %}<br/>
     <a href="https://bikinimini.ru">https://bikinimini.ru</a>
 </p>

@@ -22,7 +22,7 @@ django-salmonella==1.1
 django-select2==6.0.0
 django-sortedm2m==1.5.0
 #django-suit==0.2.25
-#-e git://github.com/darklow/django-suit.git@v2#egg=django-suit  # v2.0a1
+-e git://github.com/darklow/django-suit.git@v2#egg=django-suit  # v2.0a1
 #django-tabbed-admin==1.0.2
 django-tinymce==2.6.0
 django-uuslug==1.1.8

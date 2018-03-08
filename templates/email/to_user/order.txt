@@ -1,36 +1,36 @@
 {% load core_tags currency_tags %}{{ subject }}
 
-Уважаемая(ый) {{ obj.name }}! Рады сообщить, что Ваш заказ № {{ obj.number }} от {{ obj.checkout_date|date:'d.m.Y' }} был оформлен.
+{% trans 'Уважаемая(ый)' %} {{ obj.name }}! {% trans 'Рады сообщить, что Ваш заказ' %} № {{ obj.number }} от {{ obj.checkout_date|date:'d.m.Y' }} {% trans 'был оформлен' %}.
 
 
-Данные для доставки
+{% trans 'Данные для доставки' %}
 -------------------
-Страна: {{ obj.country }}
-Город: {{ obj.city }}
-Адрес: {{ obj.address|safe }}
-Телефон: {{ obj.phone }}
+{% trans 'Страна' %}: {{ obj.country }}
+{% trans 'Город' %}: {{ obj.city }}
+{% trans 'Адрес' %}: {{ obj.address|safe }}
+{% trans 'Телефон' %}: {{ obj.phone }}
 
-Способ доставки: {{ obj.delivery_method }}{% if obj.delivery_method.price %} ({{ obj.delivery_method.price|to_price|currency_light:obj.currency }}){% endif %}
-Способ оплаты: {{ obj.payment_method }}
+{% trans 'Способ доставки' %}: {{ obj.delivery_method }}{% if obj.delivery_method.price %} ({{ obj.delivery_method.price|to_price|currency_light:obj.currency }}){% endif %}
+{% trans 'Способ оплаты' %}: {{ obj.payment_method }}
 {% if obj.additional_info %}
-Дополнительная информация: {{ obj.additional_info|safe }}{% endif %}
+{% trans 'Дополнительная информация' %}: {{ obj.additional_info|safe }}{% endif %}
 
 
-Содержимое заказа
+{% trans 'Содержимое заказа' %}
 -----------------
 {% include 'email/include/order_items.txt' with obj=obj for_admin=False %}
 
-Итого к оплате: {{ obj.show_summary|currency_light:obj.currency }}
+{% trans 'Итого к оплате' %}: {{ obj.show_summary|currency_light:obj.currency }}
 
 
-Для подтверждения заказа ожидайте звонка от нашего оператора.
+{% trans 'Для подтверждения заказа ожидайте звонка от нашего оператора' %}.
 
-Мы будем рады ответить на Ваши вопросы
-по телефону: +7 (916) 445-65-55
-или по электронной почте: info@bikinimini.ru.  
+{% trans 'Мы будем рады ответить на Ваши вопросы' %}
+{% trans 'по телефону' %}: +7 (916) 445-65-55
+{% trans 'или по электронной почте' %}: info@bikinimini.ru.  
 
 
 ----
 
-С уважением, Ваша команда Bikinimini
+{% trans 'С уважением, Ваша команда Bikinimini' %}
 https://bikinimini.ru
