@@ -58,7 +58,7 @@
 
     {% csrf_token %}
 
-    {% if not DEBUG %}
+    {% if ENABLE_METRICS %}
       {% if settings.ym_code %}{{ settings.ym_code|safe }}{% endif %}
       {% if settings.ga_code %}{{ settings.ga_code|safe }}{% endif %}
     {% endif %}

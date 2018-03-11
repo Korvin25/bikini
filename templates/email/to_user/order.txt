@@ -1,4 +1,4 @@
-{% load core_tags currency_tags %}{{ subject }}
+{% load i18n core_tags currency_tags %}{{ subject }}
 
 {% trans 'Уважаемая(ый)' %} {{ obj.name }}! {% trans 'Рады сообщить, что Ваш заказ' %} № {{ obj.number }} от {{ obj.checkout_date|date:'d.m.Y' }} {% trans 'был оформлен' %}.
 

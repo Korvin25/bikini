@@ -26,6 +26,7 @@ FIXTURE_DIRS = (os.path.join(BASE_DIR, 'fixtures'), )
 SECRET_KEY = '2N5asL3=923u41iW1v1wj-0nP1(#jqs6dd%radf62&*%@8jmip&'
 
 DEBUG = False
+ENABLE_METRICS = False
 
 ALLOWED_HOSTS = []
 DEFAULT_SITENAME = 'localhost:8000'

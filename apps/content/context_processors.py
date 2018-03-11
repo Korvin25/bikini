@@ -19,6 +19,7 @@ def content(request):
     profile = request.user
     wishlist = get_wishlist_from_request(request)
     DEBUG = settings.DEBUG
+    ENABLE_METRICS = getattr(settings, 'ENABLE_METRICS', False)
     currency = get_currency(request)
 
     content = {
@@ -31,6 +32,7 @@ def content(request):
         'profile': profile,
         'wishlist': wishlist,
         'DEBUG': DEBUG,
+        'ENABLE_METRICS': ENABLE_METRICS,
         'currency': currency,
     }
     return content
