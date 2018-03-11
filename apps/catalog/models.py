@@ -467,9 +467,10 @@ class Product(MetatagModel):
         """
         For sitemap.xml lastmod purposes
         """
+        s = super(Product, self).save(*args, **kwargs)
         for cat in self.categories.all():
             cat.save()
-        return super(Product, self).save(*args, **kwargs)
+        return s
 
     # def save(self, *args, **kwargs):
     #     init_attributes = (True if (not self.id and getattr(self, 'category', None))
