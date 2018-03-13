@@ -5,7 +5,7 @@ from modeltranslation.translator import register, translator, TranslationOptions
 
 from ..core.translation import TitleTranslationOptions, MetatagTitleTranslationOptions
 from .models import (Attribute, AttributeOption, ExtraProduct, Category,
-                     AdditionalProduct, Certificate, Product, ProductOption,)
+                     AdditionalProduct, Certificate, Product, ProductOption, ProductExtraOption,)
 
 
 @register(Product)
@@ -26,3 +26,4 @@ translator.register(ExtraProduct, TitleTranslationOptions)
 translator.register(AdditionalProduct, TitleTranslationOptions)
 translator.register(Certificate, TitleTranslationOptions)
 translator.register(ProductOption, TitleTranslationOptions)
+translator.register(ProductExtraOption, TitleTranslationOptions)
