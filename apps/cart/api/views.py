@@ -283,5 +283,6 @@ class CartAjaxView(View):
                     data['item_count'] = item.count
                     data['item_price'] = to_price(item.price_int)
                     data['item_price_without_discount'] = to_price(item.total_price_without_discount)
+                    data['product_link'] = item.product.get_absolute_url()
 
         return JsonResponse(data)

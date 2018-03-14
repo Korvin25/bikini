@@ -57,8 +57,8 @@
                   <div class="bt_req_call">
                     <a href="/cart/" class="butt_border">{% trans 'Перейти к корзине' %}</a>
                   </div>
-                  <span class="js-call-close usual_link">{% trans 'Продолжить покупки' %}</span>
-                  {# <a href="{% url 'women' %}" class="usual_link">{% trans 'Продолжить покупки' %}</a> #}
+                  {# <span class="js-call-close usual_link">{% trans 'Продолжить покупки' %}</span> #}
+                  <a href="{{ request.path }}" class="js-product-continue-link usual_link">{% trans 'Продолжить покупки' %}</a>
                 </div>
             </div>
         </div>

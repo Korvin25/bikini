@@ -70,11 +70,13 @@ function submitProductForm($form, $button, option_id, _attrs, _extra_products, d
           errors = res['errors'],
           result = res['result'],
           cart_count = res['count'],
-          cart_summary = res['summary'];
+          cart_summary = res['summary'],
+          product_link = res['product_link'];
 
       if (result == 'ok') {
         if (cart_count) { $('.js-cart-count').text(cart_count); }
         if (cart_summary) { $('.js-cart-summary').text(cart_summary); }
+        if (product_link) { $('.js-product-continue-link').attr('href', product_link); }
         if ($wishlistInput && $wishlistInput.length && $wishlistInput.is(':checked')) {
           $wishlistInput.click();
         }
