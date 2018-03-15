@@ -2,7 +2,7 @@
 <h3>{{ subject }}</h3>
 
 <p>
-    {% trans 'Уважаемая(ый)' %} {{ obj.name }}! {% trans 'Рады сообщить, что Ваш заказ' %} № {{ obj.number }} от {{ obj.checkout_date|date:'d.m.Y' }} {% trans 'был оформлен' %}.
+    {% trans 'Уважаемая(ый)' %} {{ obj.name }}! {% trans 'Рады сообщить, что Ваш заказ' %} № {{ obj.number }} {% trans 'от' %} {{ obj.checkout_date|date:'d.m.Y' }} {% trans 'был оформлен' %}.
 </p>
 
 <p>

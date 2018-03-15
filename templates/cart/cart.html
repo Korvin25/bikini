@@ -176,7 +176,7 @@
 
                 <div class="table_cell td_summ">
                   <div class="tb_title">{% trans 'Стоимость' %}</div>
-                  <div class="product_price"><span class="item-summary-span" id="price_ID-{{ forloop.counter }}">{{ item.price|to_price }}</span><abbr title="{% trans 'руб' %}">р.</abbr></div>
+                  <div class="product_price">{% prefix_currency currency item.price|to_price %}<span class="item-summary-span" id="price_ID-{{ forloop.counter }}">{{ item.price|to_price }}</span>{% postfix_currency currency item.price|to_price %}</abbr></div>
                 </div>
                 
                 {% if cart_items %}<div class="table_cell td_put"></div>{% endif %}

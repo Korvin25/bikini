@@ -14,8 +14,8 @@ from django.utils.translation import ugettext_lazy as _
 from ..catalog.models import Certificate, Product, ProductOption, GiftWrapping
 from ..catalog.templatetags.catalog_tags import get_product_attrs_url
 from ..core.templatetags.core_tags import to_int_or_float
-from ..currency.templatetags.currency_tags import with_currency
-from ..currency.utils import price_with_currency
+from ..currency.templatetags.currency_tags import with_currency, currency_compact
+from ..currency.utils import get_currency, price_with_currency
 from ..geo.models import Country
 from .utils import make_hash_from_cartitem
 
@@ -443,7 +443,10 @@ class CertificateCartItem(models.Model):
 
     @property
     def title(self):
-        return self.certificate.__unicode__()
+        label = _('Сертификат на')
+        price = price_with_currency(self)
+        currency = get_currency()
+        return '{} {}'.format(label, currency_compact(price, currency))
 
     @property
     def count(self):
