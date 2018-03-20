@@ -565,7 +565,8 @@ class SpecialOfferAdmin(admin.ModelAdmin):
     form = SpecialOfferAdminForm
     raw_id_fields = ('product',)
 
-    def has_add_permission(self, request):
-        if SpecialOffer.objects.count():
-            return None
-        return super(SpecialOfferAdmin, self).has_add_permission(request)
+    #def has_add_permission(self, request):
+    #    if SpecialOffer.objects.count():
+    #        return None
+    #    return super(SpecialOfferAdmin, self).has_add_permission(request)
+

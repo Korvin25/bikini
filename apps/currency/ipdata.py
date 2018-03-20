@@ -43,7 +43,7 @@ def get_country_data(request):
                 url = '{}{}'.format(IPDATA_API_URL, ip)
                 data = _request(url)
             except RequestError as err:
-                redis.setex(self.IPDATA_UNAVAILABLE_REDIS_KEY, 1800, 'true')
+                redis.setex(IPDATA_UNAVAILABLE_REDIS_KEY, 1800, 'true')
                 # TODO: logging
             else:
                 country_data['country_code'] = data['country_code']

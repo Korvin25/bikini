@@ -9,18 +9,19 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-08 15:59+0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2018-03-10 23:28+0230\n"
+"Last-Translator: Anonymous User <admin@qq.qq>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Translated-Using: django-rosetta 0.7.13\n"
 
 #: .\apps\blog\models.py:46 .\templates\blog\category.html:18
 #: .\templates\blog\post.html:28
 msgid "Блог"
-msgstr ""
+msgstr "Blog"
 
 #: .\apps\cart\api\views.py:22
 msgid "Корзина пуста"
@@ -49,37 +50,37 @@ msgstr ""
 
 #: .\apps\cart\certificate\forms.py:11
 msgid "Сертификат"
-msgstr ""
+msgstr "Certificate"
 
 #: .\apps\cart\certificate\forms.py:12 .\templates\cart\certificate.html:111
 msgid "Имя получателя"
-msgstr ""
+msgstr "Receiver name"
 
 #: .\apps\cart\certificate\forms.py:13
 msgid "Email получателя"
-msgstr ""
+msgstr "Receiver Emai"
 
 #: .\apps\cart\certificate\forms.py:14 .\templates\cart\certificate.html:123
 msgid "Имя отправителя"
-msgstr ""
+msgstr "Sender`s name"
 
 #: .\apps\cart\certificate\forms.py:15 .\templates\cart\certificate.html:129
 msgid "Телефон отправителя"
-msgstr ""
+msgstr "Sender`s phone number"
 
 #: .\apps\cart\certificate\forms.py:16
 msgid "Email отправителя"
-msgstr ""
+msgstr "Sender`s Email"
 
 #: .\apps\cart\certificate\forms.py:17 .\templates\cart\certificate.html:141
 msgid "Сообщение получателю"
-msgstr ""
+msgstr "Message to the receiver"
 
 #: .\apps\cart\certificate\forms.py:18 .\templates\cart\certificate.html:147
 #: .\templates\email\include\order_items.html:23
 #: .\templates\email\include\order_items.txt:8
 msgid "Когда отправлять"
-msgstr ""
+msgstr "When to send"
 
 #: .\apps\cart\certificate\forms.py:19 .\templates\cart\certificate.html:165
 msgid "Дата отправки"
@@ -96,7 +97,7 @@ msgstr ""
 #: .\apps\cart\forms.py:15 .\apps\lk\auth\forms.py:14
 #: .\apps\lk\auth\forms.py:34 .\templates\profile\profile.html:228
 msgid "E-mail"
-msgstr ""
+msgstr "E-mail"
 
 #: .\apps\cart\forms.py:34 .\apps\lk\forms.py:32
 msgid "Такой email уже занят."
@@ -112,20 +113,20 @@ msgstr ""
 #: .\templates\cart\cart.html:429 .\templates\email\to_user\order.html:13
 #: .\templates\email\to_user\order.txt:9 .\templates\profile\profile.html:205
 msgid "Город"
-msgstr ""
+msgstr "City"
 
 #: .\apps\cart\models.py:90 .\apps\lk\models.py:71
 #: .\templates\cart\cart.html:437 .\templates\email\to_user\order.html:14
 #: .\templates\email\to_user\order.txt:10 .\templates\profile\profile.html:210
 msgid "Адрес"
-msgstr ""
+msgstr "Adress"
 
 #: .\apps\cart\models.py:91 .\apps\feedback\models.py:14
 #: .\apps\lk\models.py:72 .\templates\blocks\footer.html:60
 #: .\templates\email\to_user\order.html:15
 #: .\templates\email\to_user\order.txt:11
 msgid "Телефон"
-msgstr ""
+msgstr "Phone"
 
 #: .\apps\cart\models.py:92 .\apps\lk\models.py:73
 msgid "Полное имя"
@@ -173,7 +174,7 @@ msgstr ""
 
 #: .\apps\contests\models.py:115 .\apps\feedback\models.py:13
 msgid "Имя"
-msgstr ""
+msgstr "Name"
 
 #: .\apps\contests\models.py:116
 msgid "Описание"
@@ -182,7 +183,7 @@ msgstr ""
 #: .\apps\contests\models.py:117 .\apps\contests\views.py:20
 #: .\templates\cart\cart.html:38
 msgid "Фото"
-msgstr ""
+msgstr "Foto"
 
 #: .\apps\contests\views.py:20
 msgid "Обязательное поле"
@@ -203,7 +204,7 @@ msgstr ""
 #: .\apps\currency\templatetags\currency_tags.py:12
 #: .\templates\cart\cart.html:180
 msgid "руб"
-msgstr ""
+msgstr "rub"
 
 #: .\apps\feedback\views.py:15
 msgid "Спасибо! Мы обязательно вам перезвоним."
@@ -335,7 +336,7 @@ msgstr ""
 #: .\templates\blocks\header_menu.html:41 .\templates\cart\certificate.html:20
 #: .\templates\cart\certificate.html:26 .\templates\cart\certificate.html:43
 msgid "Подарочный сертификат"
-msgstr ""
+msgstr "Gift Certificate"
 
 #: .\templates\blocks\header_menu.html:42
 msgid "desinger"
@@ -673,27 +674,27 @@ msgstr ""
 
 #: .\templates\cart\certificate.html:93
 msgid "Выберите номинал"
-msgstr ""
+msgstr "Select value"
 
 #: .\templates\cart\certificate.html:117
 msgid "E-mail получателя"
-msgstr ""
+msgstr "Receiver`s e-mail"
 
 #: .\templates\cart\certificate.html:135
 msgid "E-mail отправителя"
-msgstr ""
+msgstr "Sender`s e-mail"
 
 #: .\templates\cart\certificate.html:153
 msgid "Сейчас"
-msgstr ""
+msgstr "Right now"
 
 #: .\templates\cart\certificate.html:160
 msgid "Выбрать дату"
-msgstr ""
+msgstr "Select the date"
 
 #: .\templates\cart\certificate.html:173
 msgid "Купить"
-msgstr ""
+msgstr "BUY"
 
 #: .\templates\catalog\include\product_attr.html:19
 msgid "Ещё цвета"
@@ -899,7 +900,7 @@ msgstr ""
 #: .\templates\email\include\order_items.html:20
 #: .\templates\email\include\order_items.txt:7
 msgid "имя отправителя"
-msgstr ""
+msgstr "Sender`s name"
 
 #: .\templates\email\include\order_items.html:20
 #: .\templates\email\include\order_items.txt:7
