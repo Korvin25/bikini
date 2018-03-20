@@ -10,8 +10,7 @@
   {% for post in posts %}
     <div class="row_blog">
       <div class="img_blog">
-        <img src="{{ post.cover_list_url }}" alt="{{ post.cover_alt }}" />
-        
+        <a href="{{ post.get_absolute_url }}"><img src="{{ post.cover_list_url }}" alt="{{ post.cover_alt }}" /></a>
         <a href="{{ post.category.get_absolute_url }}" class="bt_red">{{ post.category.title }}</a>
         <span class="bt_red _without_hover">{{ post.datetime|date:'d.m.Y' }}</span>
       </div>
