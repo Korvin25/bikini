@@ -58,6 +58,7 @@ INSTALLED_APPS = (
     'django_object_actions',
     'django_select2',
     'django_user_agents',
+    'djcelery_email',
     'easy_thumbnails',
     'el_pagination',
     'embed_video',
@@ -188,10 +189,10 @@ ANYMAIL = {
     'MANDRILL_SENDER_DOMAIN': 'mg.example.com',
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DUMMY_EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
-# EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
+EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 MANDRILL_EMAIL_BACKEND = 'anymail.backends.mandrill.MandrillBackend'
 ADMIN_EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 
@@ -319,6 +320,18 @@ CACHES = {
         'LOCATION': 'localhost:6379',
     },
 }
+
+
+BROKER_URL = 'redis://localhost:6379/0'
+CELERND_TASK_ERROR_EMAILS = True
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_EMAIL_TASK_CONFIG = {
+    'ignore_result': False,
+}
+# CELERY_IGNORE_RESULT = True
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['json']
 
 REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
