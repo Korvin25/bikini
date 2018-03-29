@@ -59,7 +59,7 @@ urlpatterns += i18n_patterns(
 
     # -- apps --
     url(r'^cart/$', CartView.as_view(), name='cart'),
-    url(r'^cart/get_discount/$', CartGetDiscountView.as_view(), name='cart_get_discount'),
+    url(r'^cart/get_discount/(?P<pk>\d+)/$', CartGetDiscountView.as_view(), name='cart_get_discount'),
     url(r'^certificate/$', CertificateView.as_view(), name='certificate'),
     url(r'^profile/$', ProfileHomeView.as_view(), name='profile'),
 

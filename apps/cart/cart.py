@@ -44,6 +44,18 @@ class Cart:
         Item = models.CartItem
         item = None
 
+        with_discount = bool(kwargs.get('discount', 0))
+        if with_discount:
+            items_with_discount = self.cart.cartitem_set.filter(discount__gt=0)
+            if items_with_discount.count():
+                keep_discount = False
+                for i in items_with_discount:
+                    if i.product_id == product_id and i.hash == hash:
+                        keep_discount = True
+                        break
+                if keep_discount is False:
+                    kwargs['discount'] = 0
+
         if product_id and option_id:
             try:
                 item = Item.objects.filter(

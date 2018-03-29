@@ -814,7 +814,7 @@ class SpecialOffer(models.Model):
         return cls.objects.filter(discount__gt=0, is_active=True)
 
     def get_discount_url(self):
-        return reverse('cart_get_discount')
+        return reverse('cart_get_discount', kwargs={'pk': self.id})
 
     def get_offer_url(self, discount_code):
         product_url = self.product.get_absolute_url()

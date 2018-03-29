@@ -83,6 +83,29 @@ function addErrors($form, errors, without_errors, without_names) {
   });
 }
 
+
+function rotateSpecialOffers() {
+  var $offers = $('.js-special-offer');
+
+  if ($offers.length && ($offers.length > 1)) {
+    var $visibleOffer = $('.js-special-offer:visible'),
+        $offerToShow;
+
+    if ($visibleOffer.length) {
+      $offerToShow = $visibleOffer.next();
+      if (!$offerToShow.hasClass('js-special-offer') || $offerToShow.is(':visible')) {
+        $offerToShow = $($offers[0]);
+      }
+      $offers.hide();
+      $offerToShow.show();
+      setTimeout(rotateSpecialOffers, 3000);
+    }
+  }
+  
+}
+
+
+
 // ----- Отправка форм на бекенд -----
 
 function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, $row_clear_div) {
@@ -151,6 +174,7 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
         if (popup) {
           showPopup(popup);
           $('html, body').animate({scrollTop: $(popup).offset().top-75}, 400);
+          if (popup == '#step5') { setTimeout(rotateSpecialOffers, 3000); }
         };
       }
       else {

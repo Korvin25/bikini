@@ -555,11 +555,10 @@
 
             {% for special in specials %}
               {% with special.product as sp %}
-                {% if forloop.first %}
-                <div class="pup_details_item">
+                <div class="pup_details_item js-special-offer"{% if not forloop.first %} style="display: none;"{% endif %}>
                   <div class="details_item_photo">
                     <div class="photo_list">
-                      <a href="{{ special.get_discount_url }}?code={{ random_str }}"><img src="{{ sp.special_offer_cover }}" alt="{{ sp.title }}"></a>
+                      <a href="{{ special.get_discount_url }}?code={{ random_str }}"><img style="width: 200px !important; height: 200px !important" src="{{ sp.special_offer_cover }}" alt="{{ sp.title }}"></a>
                     </div>
                     <abbr class="sale_details">-{{ special.discount }}%</abbr>
                   </div>
@@ -576,7 +575,6 @@
                     <a href="{{ special.get_discount_url }}?code={{ random_str }}" class="to_cart_list">В корзину</a>
                   </div>
                 </div>
-                {% endif %}
               {% endwith %}
             {% endfor %}
 

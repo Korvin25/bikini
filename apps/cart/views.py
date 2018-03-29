@@ -98,11 +98,15 @@ class CartGetDiscountView(View):
 
     def get(self, request, *args, **kwargs):
         profile = request.user
+        offer_id = kwargs.get('pk')
         redirect_url = reverse('cart')
 
         if not profile.is_anonymous() and profile.can_get_discount:
-            special_offer = SpecialOffer.get_offer()
-            if special_offer:
+            try:
+                special_offer = SpecialOffer.get_offers().get(id=offer_id)
+            except (ValueError, SpecialOffer.DoesNotExist) as e:
+                pass
+            else:
                 discount_code = profile.get_discount_code()
                 redirect_url = special_offer.get_offer_url(discount_code=discount_code)
 

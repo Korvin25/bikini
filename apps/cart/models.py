@@ -169,9 +169,14 @@ class Cart(models.Model):
         #     result = result + delivery_method.price
         # return result
 
-    def is_order_with_discount(self):
+    @property
+    def has_items_with_discount(self):
         discounts = self.cartitem_set.all().values_list('discount', flat=True)
         with_discount = bool(sum(discounts))
+        return with_discount
+
+    def is_order_with_discount(self):
+        with_discount = self.has_items_with_discount
         return ('<img src="/static/admin/img/icon-yes.svg" alt="Да">' if with_discount
                 else '<img src="/static/admin/img/icon-no.svg" alt="Нет">')
     is_order_with_discount.allow_tags = True

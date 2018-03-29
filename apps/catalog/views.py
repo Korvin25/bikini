@@ -433,10 +433,10 @@ class ProductWithDiscountView(ProductView):
     def get(self, request, *args, **kwargs):
         product = self.get_product()
         profile = request.user
-        special_offer = SpecialOffer.get_offer()
+        special_offer = SpecialOffer.get_offers().filter(product_id=product.id).first()
 
         if (profile.is_anonymous() or not profile.can_get_discount
-            or not special_offer or special_offer.product_id != product.id
+            or not special_offer
             or kwargs.get('code') != profile.discount_code):
             return HttpResponseRedirect(product.get_absolute_url())
 

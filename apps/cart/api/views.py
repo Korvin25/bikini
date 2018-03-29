@@ -179,6 +179,10 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
             summary = cart.show_summary()
             order_number = cart.number
 
+            if cart.has_items_with_discount:
+                profile.discount_used = True
+                profile.save()
+
             popup = '#step5' if profile.can_get_discount else '#step4'
             data = {'result': 'ok', 'popup': popup, 'count': count, 'summary': summary, 'order_number': order_number}
             return JsonResponse(data)
