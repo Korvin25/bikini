@@ -98,7 +98,7 @@ function rotateSpecialOffers() {
       }
       $offers.hide();
       $offerToShow.show();
-      setTimeout(rotateSpecialOffers, 3000);
+      setTimeout(rotateSpecialOffers, 6000);
     }
   }
   
@@ -174,7 +174,7 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
         if (popup) {
           showPopup(popup);
           $('html, body').animate({scrollTop: $(popup).offset().top-75}, 400);
-          if (popup == '#step5') { setTimeout(rotateSpecialOffers, 3000); }
+          if (popup == '#step5') { setTimeout(rotateSpecialOffers, 6000); }
         };
       }
       else {
