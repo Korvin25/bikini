@@ -54,7 +54,7 @@ class CartView(TemplateView):
             'gift_wrapping_price': to_int_or_float(GiftWrapping.get_price() or 0),
             'countries': Country.objects.values('id', 'title'),
             'shipping_data': shipping_data,
-            'special': SpecialOffer.get_offer(),
+            'specials': SpecialOffer.get_offers(),
             'random_str': str(uuid.uuid4()).replace('-', ''),
             'delivery_methods': DeliveryMethod.objects.filter(is_enabled=True),
             'payment_methods': PaymentMethod.objects.filter(is_enabled=True),

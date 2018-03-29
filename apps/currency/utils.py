@@ -11,14 +11,14 @@ def get_currency(request=None):
         request = CrequestMiddleware.get_request()
 
     currency = DEFAULT_CURRENCY
-    if request.session:
+    if request and request.session:
         currency = request.session.get(SESSION_CURRENCY_KEY, DEFAULT_CURRENCY)
 
     return currency
 
 
 def set_currency(request, currency):
-    if request.session and currency in VALID_CURRENCIES:
+    if request and request.session and currency in VALID_CURRENCIES:
         request.session[SESSION_CURRENCY_KEY] = currency
     return request
 
