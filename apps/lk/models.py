@@ -12,7 +12,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from ..cart.utils import make_hash_from_cartitem
-from ..currency.utils import price_with_currency
+from ..currency.utils import currency_price
 from ..geo.models import Country
 
 
@@ -182,7 +182,7 @@ class WishListItem(models.Model):
 
     @property
     def price(self):
-        return price_with_currency(self)
+        return currency_price(self)
 
     def get_price(self):
         option = self.option

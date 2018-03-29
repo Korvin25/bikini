@@ -19,7 +19,7 @@ from sortedm2m.fields import SortedManyToManyField
 
 from ..core.templatetags.core_tags import to_price
 from ..core.utils import with_watermark
-from ..currency.utils import price_with_currency
+from ..currency.utils import currency_price
 from ..settings.models import Setting, SEOSetting, MetatagModel
 
 
@@ -348,7 +348,7 @@ class AdditionalProduct(models.Model):
 
     @property
     def price(self):
-        return price_with_currency(self)
+        return currency_price(self)
 
 
 class Certificate(models.Model):
@@ -376,7 +376,7 @@ class Certificate(models.Model):
 
     @property
     def price(self):
-        return price_with_currency(self)
+        return currency_price(self)
 
     @property
     def cart_cover_thumb(self):
@@ -417,7 +417,7 @@ class GiftWrapping(models.Model):
     @classmethod
     def get_price(cls):
         obj = cls.objects.first()
-        return price_with_currency(obj) if obj else Decimal(0.0)
+        return currency_price(obj) if obj else Decimal(0.0)
 
 
 # === Товары + спец.предложения ===
@@ -523,7 +523,7 @@ class Product(MetatagModel):
 
     @property
     def price(self):
-        return price_with_currency(self)
+        return currency_price(self)
 
     @property
     def cover_thumb(self):
@@ -706,7 +706,7 @@ class ProductOption(models.Model):
 
     @property
     def price(self):
-        return price_with_currency(self)
+        return currency_price(self)
 
 
 class ProductExtraOption(models.Model):
@@ -739,7 +739,7 @@ class ProductExtraOption(models.Model):
 
     @property
     def price(self):
-        return price_with_currency(self)
+        return currency_price(self)
 
 
 class ProductPhoto(models.Model):
@@ -806,8 +806,8 @@ class SpecialOffer(models.Model):
         return self.product.__unicode__()
 
     @classmethod
-    def get_offer(cls):
-        return cls.objects.filter(discount__gt=0, is_active=True).first()
+    def get_offers(cls):
+        return cls.objects.filter(discount__gt=0, is_active=True)
 
     def get_discount_url(self):
         return reverse('cart_get_discount')

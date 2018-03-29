@@ -15,7 +15,7 @@ from ..catalog.models import Certificate, Product, ProductOption, GiftWrapping
 from ..catalog.templatetags.catalog_tags import get_product_attrs_url
 from ..core.templatetags.core_tags import to_int_or_float
 from ..currency.templatetags.currency_tags import with_currency, currency_compact
-from ..currency.utils import get_currency, price_with_currency
+from ..currency.utils import get_currency, currency_price
 from ..geo.models import Country
 from .utils import make_hash_from_cartitem
 
@@ -42,7 +42,7 @@ class DeliveryMethod(models.Model):
 
     @property
     def price(self):
-        return price_with_currency(self)
+        return currency_price(self)
 
 
 class PaymentMethod(models.Model):
@@ -115,7 +115,7 @@ class Cart(models.Model):
 
     @property
     def summary(self):
-        return price_with_currency(self, 'summary')
+        return currency_price(self, 'summary')
 
     def save(self, *args, **kwargs):
         if not self.checked_out:
@@ -192,8 +192,8 @@ class Cart(models.Model):
     show_profile.short_description = 'Клиент'
 
     def admin_show_summary(self):
-        # summary = getattr(self, 'summary_{}'.format(self.currency), self.summary)
-        summary_with_currency = with_currency(self.summary, self.currency, with_title=False)
+        summary = currency_price(self, 'summary', currency=self.currency)
+        summary_with_currency = with_currency(summary, self.currency, with_title=False)
         return mark_safe(summary_with_currency)
     admin_show_summary.allow_tags = True
     admin_show_summary.short_description = 'Сумма'
@@ -288,19 +288,19 @@ class CartItem(models.Model):
 
     @property
     def option_price(self):
-        return price_with_currency(self, 'option_price')
+        return currency_price(self, 'option_price')
 
     @property
     def extra_price(self):
-        return price_with_currency(self, 'extra_price')
+        return currency_price(self, 'extra_price')
 
     @property
     def wrapping_price(self):
-        return price_with_currency(self, 'wrapping_price')
+        return currency_price(self, 'wrapping_price')
 
     @property
     def price(self):
-        return price_with_currency(self)
+        return currency_price(self)
 
     @property
     def title(self):
@@ -350,8 +350,8 @@ class CartItem(models.Model):
 
     def get_base_price(self, with_discount=True, currency=None):
         if currency is None:
-            option_price = price_with_currency(self, 'option_price')
-            extra_price = price_with_currency(self, 'extra_price')
+            option_price = currency_price(self, 'option_price')
+            extra_price = currency_price(self, 'extra_price')
         else:
             option_price = getattr(self, 'option_price_{}'.format(currency))
             extra_price = getattr(self, 'extra_price_{}'.format(currency))
@@ -435,7 +435,7 @@ class CertificateCartItem(models.Model):
 
     @property
     def price(self):
-        return price_with_currency(self)
+        return currency_price(self)
 
     @property
     def url(self):
@@ -444,7 +444,7 @@ class CertificateCartItem(models.Model):
     @property
     def title(self):
         label = _('Сертификат на')
-        price = price_with_currency(self)
+        price = currency_price(self)
         currency = get_currency()
         return '{} {}'.format(label, currency_compact(price, currency))
 

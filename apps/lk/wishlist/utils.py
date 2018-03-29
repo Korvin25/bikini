@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from decimal import Decimal
 
 from apps.catalog.models import Product, ProductOption
-from apps.currency.utils import price_with_currency
+from apps.currency.utils import currency_price
 
 
 def get_wishlist_from_request(request):
@@ -12,7 +12,7 @@ def get_wishlist_from_request(request):
     wishlist = request.session.get('wishlist', []) if profile.is_anonymous() else profile.wishlist
     wishlist = [item for item in wishlist if item.get('option_id') and item.get('hash') and item.get('price_rub')]
     for item in wishlist:
-        item['price'] = price_with_currency(item, request=request)
+        item['price'] = currency_price(item, request=request)
     return wishlist
 
 

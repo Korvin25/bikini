@@ -23,8 +23,8 @@ def set_currency(request, currency):
     return request
 
 
-def price_with_currency(obj, field_name='price', request=None):
-    currency = get_currency(request=request)
+def currency_price(obj, field_name='price', request=None, currency=None):
+    currency = currency or get_currency(request=request)
     key = '{}_{}'.format(field_name, currency)
     price = (getattr(obj, key) if not isinstance(obj, dict)
              else obj.get(key))
