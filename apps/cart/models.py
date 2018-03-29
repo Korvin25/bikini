@@ -117,6 +117,14 @@ class Cart(models.Model):
     def summary(self):
         return currency_price(self, 'summary')
 
+    @property
+    def summary_c(self):
+        return currency_price(self, 'summary', currency=self.currency)
+
+    @property
+    def delivery_method_price_c(self):
+        return currency_price(self.delivery_method, currency=self.currency)
+
     def save(self, *args, **kwargs):
         if not self.checked_out:
             self.get_summary()
@@ -192,7 +200,7 @@ class Cart(models.Model):
     show_profile.short_description = 'Клиент'
 
     def admin_show_summary(self):
-        summary = currency_price(self, 'summary', currency=self.currency)
+        summary = self.summary_c
         summary_with_currency = with_currency(summary, self.currency, with_title=False)
         return mark_safe(summary_with_currency)
     admin_show_summary.allow_tags = True
@@ -216,6 +224,9 @@ class Cart(models.Model):
 
     def show_summary(self):
         return self._show_value(self.summary)
+
+    def show_summary_c(self):
+        return self._show_value(self.summary_c)
 
     def get_order_id(self):
         return '{0:06}'.format(self.id)
@@ -301,6 +312,22 @@ class CartItem(models.Model):
     @property
     def price(self):
         return currency_price(self)
+
+    @property
+    def option_price_c(self):
+        return currency_price(self, 'option_price', currency=self.cart.currency)
+
+    @property
+    def extra_price_c(self):
+        return currency_price(self, 'extra_price', currency=self.cart.currency)
+
+    @property
+    def wrapping_price_c(self):
+        return currency_price(self, 'wrapping_price', currency=self.cart.currency)
+
+    @property
+    def price_c(self):
+        return currency_price(self, currency=self.cart.currency)
 
     @property
     def title(self):
@@ -438,6 +465,10 @@ class CertificateCartItem(models.Model):
         return currency_price(self)
 
     @property
+    def price_c(self):
+        return currency_price(self, currency=self.cart.currency)
+
+    @property
     def url(self):
         return '{}?_certificate={}'.format(reverse('certificate'), self.certificate_id)
 
@@ -446,6 +477,13 @@ class CertificateCartItem(models.Model):
         label = _('Сертификат на')
         price = currency_price(self)
         currency = get_currency()
+        return '{} {}'.format(label, currency_compact(price, currency))
+
+    @property
+    def title_c(self):
+        label = _('Сертификат на')
+        currency = self.cart.currency
+        price = currency_price(self, currency=currency)
         return '{} {}'.format(label, currency_compact(price, currency))
 
     @property

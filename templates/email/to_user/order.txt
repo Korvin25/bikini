@@ -10,7 +10,7 @@
 {% trans 'Адрес' %}: {{ obj.address|safe }}
 {% trans 'Телефон' %}: {{ obj.phone }}
 
-{% trans 'Способ доставки' %}: {{ obj.delivery_method }}{% if obj.delivery_method.price %} ({{ obj.delivery_method.price|to_price|currency_light:obj.currency }}){% endif %}
+{% trans 'Способ доставки' %}: {{ obj.delivery_method }}{% if obj.delivery_method.price %} ({{ obj.delivery_method_price_c|to_price|currency_light:obj.currency }}){% endif %}
 {% trans 'Способ оплаты' %}: {{ obj.payment_method }}
 {% if obj.additional_info %}
 {% trans 'Дополнительная информация' %}: {{ obj.additional_info|safe }}{% endif %}
@@ -20,7 +20,7 @@
 -----------------
 {% include 'email/include/order_items.txt' with obj=obj for_admin=False %}
 
-{% trans 'Итого к оплате' %}: {{ obj.show_summary|currency_light:obj.currency }}
+{% trans 'Итого к оплате' %}: {{ obj.show_summary_c|currency_light:obj.currency }}
 
 
 {% trans 'Для подтверждения заказа ожидайте звонка от нашего оператора' %}.

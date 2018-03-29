@@ -12,7 +12,7 @@
 Телефон: {{ obj.phone }}{% if obj.profile and obj.profile.has_email %}
 Email: {{ obj.profile.email }}{% endif %}
 
-Способ доставки: {{ obj.delivery_method }}{% if obj.delivery_method.price %} ({{ obj.delivery_method.price|to_price|currency_light:obj.currency }}){% endif %}
+Способ доставки: {{ obj.delivery_method }}{% if obj.delivery_method.price %} ({{ obj.delivery_method_price_c|to_price|currency_light:obj.currency }}){% endif %}
 Способ оплаты: {{ obj.payment_method }}
 {% if obj.additional_info %}
 Дополнительная информация: {{ obj.additional_info|safe }}{% endif %}
@@ -22,7 +22,7 @@ Email: {{ obj.profile.email }}{% endif %}
 -----------------
 {% include 'email/include/order_items.txt' with obj=obj for_admin=True %}
 
-Итого к оплате: {{ obj.show_summary|currency_light:obj.currency }}
+Итого к оплате: {{ obj.show_summary_c|currency_light:obj.currency }}
 
 
 ----
