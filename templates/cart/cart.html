@@ -555,6 +555,7 @@
 
             {% for special in specials %}
               {% with special.product as sp %}
+                {% if forloop.first %}
                 <div class="pup_details_item">
                   <div class="details_item_photo">
                     <div class="photo_list">
@@ -575,6 +576,7 @@
                     <a href="{{ special.get_discount_url }}?code={{ random_str }}" class="to_cart_list">В корзину</a>
                   </div>
                 </div>
+                {% endif %}
               {% endwith %}
             {% endfor %}
 
