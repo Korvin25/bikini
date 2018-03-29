@@ -806,6 +806,10 @@ class SpecialOffer(models.Model):
         return self.product.__unicode__()
 
     @classmethod
+    def get_offer(cls):
+        return cls.objects.filter(discount__gt=0, is_active=True).first()
+
+    @classmethod
     def get_offers(cls):
         return cls.objects.filter(discount__gt=0, is_active=True)
 
