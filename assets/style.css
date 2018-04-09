@@ -30,7 +30,7 @@ abbr {text-decoration:none;}
     FONTS                           <<<< 
 */
 
-body {font-family: Helvetica, Verdana, sans-serif;background-color: #252526;}
+body {font-family: Helvetica, Verdana, sans-serif;background-color: #252526;overflow-x: hidden;}
 
 button {-webkit-appearance: none;background:transparent;cursor:pointer;}
 
