@@ -4,10 +4,10 @@ from __future__ import unicode_literals
 from django.utils import timezone
 from django.utils.html import strip_tags
 
-from openpyxl import Workbook
+from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Font, Alignment
 
-from .models import Product
+from .models import Product, ProductOption, ProductExtraOption
 
 
 def dump_catalog_products():
@@ -81,3 +81,54 @@ def dump_catalog_products():
     book.save(filename)
     book.close()
     print filename
+
+
+def load_catalog(filename='apps/catalog/tempo/catalog_en.xlsx'):
+    book = load_workbook(filename)
+
+    # заголовки
+    s1 = book.active
+    for row in s1:
+        _id = row[0].value
+        _title = row[2].value
+
+        try:
+            if _id.endswith('t'):
+                product_id = _id[:-1]
+                product = Product.objects.get(id=product_id)
+                product.title_en = _title
+                product.save()
+
+            elif _id.endswith('s'):
+                product_id = _id[:-1]
+                product = Product.objects.get(id=product_id)
+                product.subtitle_en = _title
+                product.save()
+
+            elif _id.endswith('o'):
+                o_id = _id[:-1]
+                product_id, option_id = o_id.split('_')
+                option = ProductOption.objects.get(id=option_id, product_id=product_id)
+                option.title_en = _title
+                option.save()
+
+            elif _id.endswith('e'):
+                e_id = _id[:-1]
+                product_id, option_id = e_id.split('_')
+                option = ProductExtraOption.objects.get(id=option_id, product_id=product_id)
+                option.title_en = _title
+                option.save()
+
+            else:
+                raise ValueError('Error in ID')
+
+        except (ValueError, Product.DoesNotExist, ProductOption.DoesNotExist, ProductExtraOption.DoesNotExist) as exc:
+            print '{} "{}" | {}'.format(_id, _title, exc)
+
+        else:
+            print '{} "{}" | DONE'.format(_id, _title)
+
+    # тексты
+    # TODO
+
+    print 'done'
