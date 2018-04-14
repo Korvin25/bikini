@@ -30,7 +30,7 @@
 
 
 function parsePrice(price) {
-  console.log(price, typeof(price));
+  // console.log(price, typeof(price));
   if (parseInt(price) == parseFloat(price)) { return price; }
   else { return price.toFixed(2); }
 }
@@ -120,6 +120,39 @@ function submitProductForm($form, $button, option_id, _attrs, _extra_products, d
 };
 
 
+function collectExtraProductsAttrs(errors, _id) {
+  var _extra_products = {},
+      errors = errors || [],
+      _id = _id || false,
+      _data;
+
+  $.each(data.extra_products, function(id, product){
+    var $product_trigger = $('.js-extra-product-trigger[data-extra-product-id="'+id+'"]'),
+        product_obj = {};
+
+    if (_id && (id == _id) || !_id && $product_trigger.is(':checked')) {
+      $.each(product.attrs, function(slug){
+        var $checkboxes = $('.js-attr-checkbox[data-attr-slug="'+slug+'"]').filter(':visible'),
+            checked_id = $checkboxes.filter(':checked').attr('data-option-id');
+
+        if ($checkboxes.length == 1) { checked_id = $($checkboxes[0]).attr('data-option-id'); };
+
+        if (checked_id) { product_obj[slug] = parseInt(checked_id); }
+        else { errors.push(product['title'] + ': ' + data.attrs[slug]['title']); }
+      });
+
+      _extra_products[id] = product_obj;
+    }
+  });
+
+  _data = {
+    'errors': errors,
+    '_extra_products': _extra_products,
+  };
+  return _data;
+}
+
+
 function collectAttrs(option) {
   // собираем чекнутые атрибуты в виде словариков (для передачи на бекенд)
   option = option || data['option'];
@@ -127,6 +160,7 @@ function collectAttrs(option) {
   var _attrs = {},
       _extra_products = {},
       errors = [],
+      _extra_data,
       _data;
 
   if (option.attrs) {
@@ -140,24 +174,9 @@ function collectAttrs(option) {
       else { errors.push(data.attrs[slug]['title']) }
     });
 
-    $.each(data.extra_products, function(id, product){
-      var $product_trigger = $('.js-extra-product-trigger[data-extra-product-id="'+id+'"]'),
-          product_obj = {};
-
-      if ($product_trigger.is(':checked')) {
-        $.each(product.attrs, function(slug){
-          var $checkboxes = $('.js-attr-checkbox[data-attr-slug="'+slug+'"]').filter(':visible'),
-              checked_id = $checkboxes.filter(':checked').attr('data-option-id');
-
-          if ($checkboxes.length == 1) { checked_id = $($checkboxes[0]).attr('data-option-id'); };
-
-          if (checked_id) { product_obj[slug] = parseInt(checked_id); }
-          else { errors.push(product['title'] + ': ' + data.attrs[slug]['title']); }
-        });
-
-        _extra_products[id] = product_obj;
-      }
-    });
+    _extra_data = collectExtraProductsAttrs(errors);
+    _extra_products = _extra_data['_extra_products'];
+    errors = _extra_data['errors'];
   }
 
   _data = {
@@ -390,7 +409,7 @@ function updateTotalPrice(update_cart_button) {
     chooseOption(false);  // на случай, что кол-во увеличилось - выбираем вариант с нужным кол-вом
   }
 
-  console.log(data);
+  // console.log(data);
 
   base_price = (p['option']+p['extra'])*p['count'] + p['wrapping'];
   data['prices']['base'] = total_price;
@@ -494,19 +513,35 @@ $('.js-not-checkbox').click(function(e) {
       // смена порядка фото при выборе цвета
       rebuildCarousel(attr_slug, color_id);
     }
-  }  // else { e.preventDefault(); }
+  }
 
-  // if (attr_type) {
-    if (attr_type == 'style') {
-      $('.js-expand-colors').click();
-      options = filterOptions(['style']);
-      updateShownCheckboxes(options, ['color', 'size']);
-    } else if (attr_type == 'color') {
-      options = filterOptions(['style', 'color']);
-      updateShownCheckboxes(options, ['size']);
-    };
-    chooseOption(true);
-  // }
+  if (attr_type == 'style') {
+    $('.js-expand-colors').click();
+    options = filterOptions(['style']);
+    updateShownCheckboxes(options, ['color', 'size']);
+  } else if (attr_type == 'color') {
+    options = filterOptions(['style', 'color']);
+    updateShownCheckboxes(options, ['size']);
+  };
+
+  if ($checkbox.hasClass('js-extra-product-attr')) {
+    var $extraParent = $checkbox.parents('.js-extra-product-parent');
+        extra_product_id = parseInt($extraParent.attr('data-extra-product-id')),
+        $extraProductTrigger = $extraParent.find('.js-extra-product-trigger')
+        extra_is_checked = $extraProductTrigger.is(':checked'),
+
+        _extra_data = collectExtraProductsAttrs([], extra_product_id),
+        _extra_product = _extra_data['_extra_products'][extra_product_id],
+        _extra_length = Object.keys(_extra_product).length,
+        _errors_length = _extra_data['errors'].length;
+
+    console.log('extra_length', _extra_length, 'errors_length', _errors_length);
+
+    if (is_checked && !extra_is_checked && !_errors_length) { console.log('check!'); $extraProductTrigger.click(); }
+    else if (!is_checked && extra_is_checked && !_extra_length) { console.log('uncheck!'); $extraProductTrigger.click(); }
+  }
+
+  chooseOption(true);
 });
 
 
@@ -595,6 +630,7 @@ function sortPhotosByColor($arr, attr_slug, color_id) {
 function movePhotos($container, $arr, set_active) {
   // перемещаем объекты-фотки в начало контейнера в нужном порядке:
   // клонируем их в нужном порядке без сохранения state, оригиналы удаляем
+
   $arr.each(function(i) {
     var $item = $(this);
 

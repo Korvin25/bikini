@@ -151,7 +151,7 @@
 
               {% if extra_products|length %}
                 {% for extra_p in extra_products %}
-                  <div style="margin: 10px 0 20px;">
+                  <div style="margin: 10px 0 20px;" class="js-extra-product-parent" data-extra-product-id="{{ extra_p.id }}">
                     <div style="border-top: 1px solid #f2f2f2; margin: 20px 0 30px;"></div>
                     <h2>{{ extra_p.title }}</h2>
 
