@@ -525,20 +525,30 @@ $('.js-not-checkbox').click(function(e) {
   };
 
   if ($checkbox.hasClass('js-extra-product-attr')) {
+    // добавляем доп.товар в корзину или убираем оттуда
+
     var $extraParent = $checkbox.parents('.js-extra-product-parent');
         extra_product_id = parseInt($extraParent.attr('data-extra-product-id')),
         $extraProductTrigger = $extraParent.find('.js-extra-product-trigger')
-        extra_is_checked = $extraProductTrigger.is(':checked'),
+        extra_is_checked = $extraProductTrigger.is(':checked');
 
-        _extra_data = collectExtraProductsAttrs([], extra_product_id),
-        _extra_product = _extra_data['_extra_products'][extra_product_id],
-        _extra_length = Object.keys(_extra_product).length,
-        _errors_length = _extra_data['errors'].length;
+    if (is_checked && !extra_is_checked) {
+      var _extra_data = collectExtraProductsAttrs([], extra_product_id),
+          _extra_product = _extra_data['_extra_products'][extra_product_id],
+          _extra_length = Object.keys(_extra_product).length,
+          _errors_length = _extra_data['errors'].length;
 
-    console.log('extra_length', _extra_length, 'errors_length', _errors_length);
-
-    if (is_checked && !extra_is_checked && !_errors_length) { console.log('check!'); $extraProductTrigger.click(); }
-    else if (!is_checked && extra_is_checked && !_extra_length) { console.log('uncheck!'); $extraProductTrigger.click(); }
+      if (!_errors_length) {
+        // check
+        $extraProductTrigger.click();
+      }
+    }
+    else if (!is_checked && extra_is_checked) {
+      if ($extraParent.find('.js-attr-checkbox').filter(':checked').length == 0) {
+        // uncheck
+        $extraProductTrigger.click();
+      }
+    }
   }
 
   chooseOption(true);
