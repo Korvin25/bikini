@@ -87,7 +87,7 @@ def load_catalog(filename='apps/catalog/tempo/catalog_en.xlsx'):
     book = load_workbook(filename)
 
     # заголовки
-    s1 = book.active
+    s1 = book.worksheets[0]
     for row in s1:
         _id = row[0].value
         _title = row[2].value
@@ -129,6 +129,25 @@ def load_catalog(filename='apps/catalog/tempo/catalog_en.xlsx'):
             print '{} "{}" | DONE'.format(_id, _title)
 
     # тексты
-    # TODO
+    s2 = book.worksheets[1]
+    for row in s2:
+        _id = row[0].value
+        _text = row[2].value
+
+        if _text:
+            try:
+                if _id.endswith('t'):
+                    product_id = _id[:-1]
+                    product = Product.objects.get(id=product_id)
+                    product.text_en = '<p>{}</p>'.format('</p>\n\n<p>'.join(_text.split('\n\n'))).replace('\n', '\r\n')
+                    product.save()
+                else:
+                    raise ValueError('Error in ID')
+
+            except (ValueError, Product.DoesNotExist) as exc:
+                print '{} | {}'.format(_id, exc)
+
+            else:
+                print '{} | DONE'.format(_id)
 
     print 'done'
