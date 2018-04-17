@@ -209,7 +209,7 @@
                   });
                 </script>
                 
-                <div class="filtr_title ch_title_item">Кол-во:</div>
+                <div class="filtr_title ch_title_item">{% trans 'Кол-во' %}:</div>
                 <div class="number js-hide-if-not-option"{% if not have_option %} style="display: none;"{% endif %}>
                   <span class="minus">-</span>
                   <input type="text" name="count_item" value="{{ count }}" maxlength="3" onkeyup="this.value = this.value.replace (/\D/, '')" id="cnt_item" />
