@@ -19,6 +19,7 @@ class CategoryAdmin(TabbedTranslationAdmin):
     suit_form_tabs = (
         ('default', 'Категория'),
         ('seo', 'SEO'),
+        ('seo-regions', 'SEO (регионы)'),
     )
     fieldsets = (
         ('Категория', {
@@ -28,6 +29,18 @@ class CategoryAdmin(TabbedTranslationAdmin):
         ('SEO', {
             'classes': ('suit-tab suit-tab-seo',),
             'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'h1', 'seo_text',),
+        }),
+        ('SEO: Санкт-Петербург', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_spb', 'meta_desc_spb', 'meta_keyw_spb', 'h1_spb', 'seo_text_spb',),
+        }),
+        ('SEO: Новосибирск', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_nsk', 'meta_desc_nsk', 'meta_keyw_nsk', 'h1_nsk', 'seo_text_nsk',),
+        }),
+        ('SEO: Самара', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_sam', 'meta_desc_sam', 'meta_keyw_sam', 'h1_sam', 'seo_text_sam',),
         }),
     )
     prepopulated_fields = {'slug': ('title',)}
@@ -75,6 +88,7 @@ class PostAdmin(TabbedTranslationAdmin):
     suit_form_tabs = (
         ('default', 'Пост'),
         ('seo', 'SEO'),
+        ('seo-regions', 'SEO (регионы)'),
         ('gallery', 'Галерея'),
         ('video', 'Видео'),
         ('comments', 'Комментарии'),
@@ -87,6 +101,18 @@ class PostAdmin(TabbedTranslationAdmin):
         ('SEO', {
             'classes': ('suit-tab suit-tab-seo',),
             'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'h1', 'seo_text',),
+        }),
+        ('SEO: Санкт-Петербург', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_spb', 'meta_desc_spb', 'meta_keyw_spb', 'h1_spb', 'seo_text_spb',),
+        }),
+        ('SEO: Новосибирск', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_nsk', 'meta_desc_nsk', 'meta_keyw_nsk', 'h1_nsk', 'seo_text_nsk',),
+        }),
+        ('SEO: Самара', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_sam', 'meta_desc_sam', 'meta_keyw_sam', 'h1_sam', 'seo_text_sam',),
         }),
     )
     prepopulated_fields = {'slug': ('title',)}

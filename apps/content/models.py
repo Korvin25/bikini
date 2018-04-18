@@ -64,6 +64,9 @@ class Video(MetatagModel):
     def get_title(self):
         return '{} — Видео'.format(self.title)
 
+    def get_h1_title(self):
+        return self.title
+
     def get_text(self):
         return self.seo_text or self.text
 

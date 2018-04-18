@@ -12,6 +12,7 @@ from easy_thumbnails.fields import ThumbnailerImageField
 from easy_thumbnails.files import get_thumbnailer
 from filer.fields.image import FilerImageField
 
+from ..core.regions_utils import region_field
 from ..lk.models import Profile
 from ..settings.models import Setting, SEOSetting, MetatagModel
 
@@ -41,8 +42,10 @@ class Category(MetatagModel):
         return reverse('blog:category', kwargs={'slug': self.slug})
 
     def get_meta_title(self):
-        if self.meta_title:
-            return self.meta_title
+        meta_title = region_field(self, 'meta_title')
+        if meta_title:
+            return meta_title
+
         blog_label = _('Блог')
         title_suffix = Setting.get_seo_title_suffix()
         return '{} — {} — {}'.format(self.title, blog_label, title_suffix)
@@ -84,7 +87,10 @@ class Post(MetatagModel):
                                             'pk': self.id})
 
     def get_meta_title(self):
-        return self.meta_title if self.meta_title else '{} — {}'.format(self.title, self.category.get_meta_title())
+        meta_title = region_field(self, 'meta_title')
+        if meta_title:
+            return meta_title
+        return '{} — {}'.format(self.title, self.category.get_meta_title())
 
     @property
     def cover_list_url(self):

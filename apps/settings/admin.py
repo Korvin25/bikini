@@ -15,7 +15,19 @@ def MetatagModelAdmin(cls=None):
         cls.fieldsets += (
             ('SEO', {
                 'classes': ('collapse',),
-                'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'h1',)
+                'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'h1', 'seo_text',)
+            }),
+            ('SEO: Санкт-Петербург', {
+                'classes': ('collapse',),
+                'fields': ('meta_title_spb', 'meta_desc_spb', 'meta_keyw_spb', 'h1_spb', 'seo_text_spb',)
+            }),
+            ('SEO: Новосибирск', {
+                'classes': ('collapse',),
+                'fields': ('meta_title_nsk', 'meta_desc_nsk', 'meta_keyw_nsk', 'h1_nsk', 'seo_text_nsk',)
+            }),
+            ('SEO: Самара', {
+                'classes': ('collapse',),
+                'fields': ('meta_title_sam', 'meta_desc_sam', 'meta_keyw_sam', 'h1_sam', 'seo_text_sam',)
             }),
         )
         cls.search_fields += ['meta_title', 'meta_desc', 'meta_keyw', 'h1', ]
@@ -71,9 +83,23 @@ class SEOSettingAdmin(TabbedTranslationAdmin):
                     'show_h1', 'has_seo_text',)
     list_display_links = ('key', 'description',)
     list_per_page = 50
+    suit_form_tabs = (('default', 'SEO-настройка'), ('regions', 'SEO по регионам'),)
     fieldsets = (
-        (None, {
+        ('SEO-настройка', {
+            'classes': ('suit-tab', 'suit-tab-default',),
             'fields': ('key', 'description', 'title', 'meta_desc', 'meta_keyw', 'h1', 'seo_text',)
+        }),
+        ('Санкт-Петербург', {
+            'classes': ('suit-tab', 'suit-tab-regions',),
+            'fields': ('title_spb', 'meta_desc_spb', 'meta_keyw_spb', 'h1_spb', 'seo_text_spb',)
+        }),
+        ('Новосибирск', {
+            'classes': ('suit-tab', 'suit-tab-regions',),
+            'fields': ('title_nsk', 'meta_desc_nsk', 'meta_keyw_nsk', 'h1_nsk', 'seo_text_nsk',)
+        }),
+        ('Самара', {
+            'classes': ('suit-tab', 'suit-tab-regions',),
+            'fields': ('title_sam', 'meta_desc_sam', 'meta_keyw_sam', 'h1_sam', 'seo_text_sam',)
         }),
     )
 

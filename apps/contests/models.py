@@ -10,6 +10,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from easy_thumbnails.fields import ThumbnailerImageField
 
 from ..catalog.models import Product
+from ..core.regions_utils import region_field
 from ..lk.models import Profile
 from ..settings.models import Setting, SEOSetting, MetatagModel
 
@@ -56,8 +57,9 @@ class Contest(MetatagModel):
         return reverse('contests:contest', kwargs={'slug': self.slug})
 
     def get_meta_title(self):
-        if self.meta_title:
-            return self.meta_title
+        meta_title = region_field(self, 'meta_title')
+        if meta_title:
+            return meta_title
         contests_label = _('Конкурсы')
         title_suffix = Setting.get_seo_title_suffix()
         return '{} — {} — {}'.format(self.title, contests_label, title_suffix)
@@ -149,9 +151,14 @@ class Participant(MetatagModel):
     def get_title(self):
         return self.name
 
+    def get_h1_title(self):
+        return self.name
+
     def get_meta_title(self):
-        return (self.meta_title if self.meta_title
-                else '{} — {}'.format(self.name, self.contest.get_meta_title()))
+        meta_title = region_field(self, 'meta_title')
+        if meta_title:
+            return meta_title
+        return '{} — {}'.format(self.name, self.contest.get_meta_title())
 
     def get_meta_keyw(self):
         return self.contest.get_meta_keyw()

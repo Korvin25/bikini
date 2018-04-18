@@ -18,6 +18,7 @@ from filer.fields.image import FilerImageField
 from sortedm2m.fields import SortedManyToManyField
 
 from ..core.templatetags.core_tags import to_price
+from ..core.regions_utils import region_field
 from ..core.utils import with_watermark
 from ..currency.utils import currency_price
 from ..settings.models import Setting, SEOSetting, MetatagModel
@@ -489,14 +490,15 @@ class Product(MetatagModel):
     #     return '{} — {}'.format(self.title, self.category.get_title())
 
     def get_meta_title(self, category=None):
-        title = self.title
-        if self.meta_title:
-            title = self.meta_title
-        else:
-            category = category or self.categories.first()
-            title_suffix = Setting.get_seo_title_suffix()
-            title = '{} — {} — {}'.format(self.title, category.get_title(), title_suffix)
-        return title
+        meta_title = region_field(self, 'meta_title')
+        if meta_title:
+            return meta_title
+        category = category or self.categories.first()
+        return '{} — {}'.format(self.title, category.get_meta_title())
+
+    def get_text(self):
+        # return self.seo_text or self.text
+        return self.text
 
     # def set_attributes_from_category(self, category):
     #     self.attributes = category.attributes.all()
@@ -678,9 +680,6 @@ class Product(MetatagModel):
     @property
     def attrs_json(self):
         return json.dumps(self.attrs)
-
-    def get_text(self):
-        return self.seo_text or self.text
 
 
 class ProductOption(models.Model):

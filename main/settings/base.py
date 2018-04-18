@@ -102,6 +102,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+    'apps.core.middleware.CurrentSiteAndRegionMiddleware',
+
     'apps.currency.middleware.CurrencyMiddleware',
     'crequest.middleware.CrequestMiddleware',
 ]
@@ -320,6 +322,12 @@ CACHES = {
         'LOCATION': 'localhost:6379',
     },
 }
+
+
+SESSION_COOKIE_DOMAIN = '.bikinimini.ru'
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
 
 
 BROKER_URL = 'redis://localhost:6379/0'

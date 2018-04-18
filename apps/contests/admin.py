@@ -41,7 +41,7 @@ class ContestAdmin(ImageThumbAdminMixin, TabbedTranslationAdmin):
                     'add_dt', 'published_dt', 'accepting_to',)
     list_display_links = ('title', 'slug',)
     suit_form_tabs = (('default', 'Конкурс'), ('title-lines', 'Строки в заголовке'),
-                      ('participants', 'Участники'), ('seo', 'SEO'),)
+                      ('participants', 'Участники'), ('seo', 'SEO'), ('seo-regions', 'SEO (регионы)'),)
     form = ContestAdminForm
     fieldsets = (
         ('Конкурс', {
@@ -59,6 +59,18 @@ class ContestAdmin(ImageThumbAdminMixin, TabbedTranslationAdmin):
         ('SEO', {
             'classes': ('suit-tab suit-tab-seo',),
             'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'h1', 'seo_text',),
+        }),
+        ('SEO: Санкт-Петербург', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_spb', 'meta_desc_spb', 'meta_keyw_spb', 'h1_spb', 'seo_text_spb',),
+        }),
+        ('SEO: Новосибирск', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_nsk', 'meta_desc_nsk', 'meta_keyw_nsk', 'h1_nsk', 'seo_text_nsk',),
+        }),
+        ('SEO: Самара', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_sam', 'meta_desc_sam', 'meta_keyw_sam', 'h1_sam', 'seo_text_sam',),
         }),
     )
     prepopulated_fields = {'slug': ('title',)}
@@ -83,7 +95,7 @@ class ParticipantAdmin(ImageThumbAdminMixin, TabbedTranslationAdmin):
     list_display = ('contest', 'name', 'profile', 'photo', 'likes_count', 'add_dt',)
     list_display_links = ('contest', 'name',)
     list_filter = ('contest',)
-    suit_form_tabs = (('default', 'Участник'), ('photos', 'Фото'), ('seo', 'SEO'),)
+    suit_form_tabs = (('default', 'Участник'), ('photos', 'Фото'), ('seo', 'SEO'), ('seo-regions', 'SEO (регионы)'),)
     fieldsets = (
         ('Участник', {
             'classes': ('suit-tab suit-tab-default',),
@@ -96,6 +108,18 @@ class ParticipantAdmin(ImageThumbAdminMixin, TabbedTranslationAdmin):
         ('SEO', {
             'classes': ('suit-tab suit-tab-seo',),
             'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'h1', 'seo_text',),
+        }),
+        ('SEO: Санкт-Петербург', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_spb', 'meta_desc_spb', 'meta_keyw_spb', 'h1_spb', 'seo_text_spb',),
+        }),
+        ('SEO: Новосибирск', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_nsk', 'meta_desc_nsk', 'meta_keyw_nsk', 'h1_nsk', 'seo_text_nsk',),
+        }),
+        ('SEO: Самара', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_sam', 'meta_desc_sam', 'meta_keyw_sam', 'h1_sam', 'seo_text_sam',),
         }),
     )
     raw_id_fields = ('profile', 'products',)

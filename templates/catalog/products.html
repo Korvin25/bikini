@@ -137,22 +137,22 @@
           {% if category %}
             <div class="text_preview_inner">
               <h2 class="title_block">{{ category.get_h1 }}</h2>
-              {% if category.seo_text %}
-                {{ category.seo_text|safe }}
+              {% if category.get_seo_text %}
+                {{ category.get_seo_text|safe }}
               {% endif %}
             </div>
           {% elif sex == 'female' %}
             <div class="text_preview_inner">
               <h2 class="title_block">{{ seo_settings.women.get_h1 }}</h2>
-              {% if seo_settings.women.seo_text %}
-                {{ seo_settings.women.seo_text|safe }}
+              {% if seo_settings.women.get_seo_text %}
+                {{ seo_settings.women.get_seo_text|safe }}
               {% endif %}
             </div>
           {% else %}
             <div class="text_preview_inner">
               <h2 class="title_block">{{ seo_settings.men.get_h1 }}</h2>
-              {% if seo_settings.men.seo_text %}
-                {{ seo_settings.men.seo_text|safe }}
+              {% if seo_settings.men.get_seo_text %}
+                {{ seo_settings.men.get_seo_text|safe }}
               {% endif %}
             </div>
           {% endif %}

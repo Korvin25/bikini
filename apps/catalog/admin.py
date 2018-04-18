@@ -164,6 +164,7 @@ class CategoryAdmin(TabbedTranslationAdmin):
     suit_form_tabs = (
         ('default', 'Категория'),
         ('seo', 'SEO'),
+        ('seo-regions', 'SEO (регионы)'),
     )
     fieldsets = (
         ('Категория', {
@@ -177,6 +178,18 @@ class CategoryAdmin(TabbedTranslationAdmin):
         ('SEO', {
             'classes': ('suit-tab suit-tab-seo',),
             'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'h1', 'seo_text',),
+        }),
+        ('SEO: Санкт-Петербург', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_spb', 'meta_desc_spb', 'meta_keyw_spb', 'h1_spb', 'seo_text_spb',),
+        }),
+        ('SEO: Новосибирск', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_nsk', 'meta_desc_nsk', 'meta_keyw_nsk', 'h1_nsk', 'seo_text_nsk',),
+        }),
+        ('SEO: Самара', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_sam', 'meta_desc_sam', 'meta_keyw_sam', 'h1_sam', 'seo_text_sam',),
         }),
     )
     prepopulated_fields = {'slug': ('title',)}
@@ -435,6 +448,7 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
         ('default', 'Товар'),
         ('also', 'Сопутствующие товары'),
         ('seo', 'SEO'),
+        ('seo-regions', 'SEO (регионы)'),
         ('options', 'Варианты товара'),
         ('photos', 'Фото'),
         ('video', 'Видео'),
@@ -472,6 +486,18 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
             'classes': ('suit-tab suit-tab-seo',),
             'fields': ('meta_title', 'meta_desc', 'meta_keyw', 'h1',),
         }),
+        ('SEO: Санкт-Петербург', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_spb', 'meta_desc_spb', 'meta_keyw_spb', 'h1_spb',),
+        }),
+        ('SEO: Новосибирск', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_nsk', 'meta_desc_nsk', 'meta_keyw_nsk', 'h1_nsk',),
+        }),
+        ('SEO: Самара', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_sam', 'meta_desc_sam', 'meta_keyw_sam', 'h1_sam',),
+        }),
         ('Варианты товара', {
             'classes': ('suit-tab suit-tab-options',),
             'fields': ('options_instruction',),
@@ -505,14 +531,15 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
         """
         fieldsets = list(super(ProductAdmin, self).get_fieldsets(request, obj))
         if obj and obj.id:
-            # fieldsets[0][1]['fields'][3] = 'show_categories'  # меняем 'categories' на 'show_categories'
-            fieldsets[0][1]['fields'][18] = 'show_categories'  # увеличиваем index из-за modeltranslation
-            del fieldsets[4]
-            del fieldsets[4]
+            fieldsets[0][1]['fields'][18] = 'show_categories'  # меняем 'categories' на 'show_categories'
+
+            # удаляем вкладки с инструкциями (вместо них будут вкладки с инлайнами)
+            del fieldsets[7] # варианты товара
+            del fieldsets[7] # фото
             if obj.extra_options.count():
-                del fieldsets[4]
+                del fieldsets[4] # дополнительные товары
         else:
-            fieldsets[0][1]['fields'][18] = 'categories'
+            fieldsets[0][1]['fields'][18] = 'categories'  # меняем 'show_categories' на 'categories'
         return fieldsets
 
     def get_inline_instances(self, request, obj=None):
