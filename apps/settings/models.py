@@ -117,9 +117,11 @@ class SEOSetting(models.Model):
         return SEOSetting.objects.get(key='global').meta_keyw
 
     def get_meta_title(self):
-        title = region_field(self, 'title')
+        title = region_field(self, 'title', add_suffix=True)
+        if title:
+            return title
         title_suffix = Setting.get_seo_title_suffix()
-        return title if title else '{} — {}'.format(self.description, title_suffix)
+        return '{} — {}'.format(self.description, title_suffix)
 
     def get_meta_desc(self):
         meta_desc = region_field(self, 'meta_desc')
@@ -214,9 +216,11 @@ class MetatagModel(models.Model):
         return self.get_title()
 
     def get_meta_title(self):
-        meta_title = region_field(self, 'meta_title')
+        meta_title = region_field(self, 'meta_title', add_suffix=True)
+        if meta_title:
+            return meta_title
         title_suffix = Setting.get_seo_title_suffix()
-        return meta_title if meta_title else '{} — {}'.format(self.get_title(), title_suffix)
+        return '{} — {}'.format(self.get_title(), title_suffix)
 
     def get_meta_desc(self):
         meta_desc = region_field(self, 'meta_desc')
