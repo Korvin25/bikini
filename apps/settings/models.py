@@ -5,7 +5,7 @@ from django.db import models
 
 from ckeditor_uploader.fields import RichTextUploadingField
 
-from ..core.regions_utils import region_field
+from ..core.regions_utils import region_field, get_region_seo_suffix
 
 
 class Setting(models.Model):
@@ -28,6 +28,11 @@ class Setting(models.Model):
         DEFAULT_PREFIX = 'Bikinimini.ru'
         setting = cls.objects.filter(key='title_suffix').first()
         title_suffix = setting.value if setting else DEFAULT_PREFIX
+
+        region_seo_suffix = get_region_seo_suffix()
+        if region_seo_suffix:
+            title_suffix = '{} {}'.format(title_suffix, region_seo_suffix)
+
         return title_suffix or DEFAULT_PREFIX
 
 
@@ -99,21 +104,30 @@ class SEOSetting(models.Model):
     def __unicode__(self):
         return self.key
 
+    @classmethod
+    def get_default_meta_desc(cls):
+        meta_desc = SEOSetting.objects.get(key='global').meta_desc
+        region_seo_suffix = get_region_seo_suffix
+        if region_seo_suffix:
+            meta_desc = '{} {}'.format(meta_desc, region_seo_suffix)
+        return meta_desc
+
+    @classmethod
+    def get_default_meta_keyw(cls):
+        return SEOSetting.objects.get(key='global').meta_keyw
+
     def get_meta_title(self):
         title = region_field(self, 'title')
         title_suffix = Setting.get_seo_title_suffix()
-        # return self.title if self.title else '{} — {}'.format(self.description, title_suffix)
         return title if title else '{} — {}'.format(self.description, title_suffix)
 
     def get_meta_desc(self):
-        # return self.meta_desc if self.meta_desc else self.description
         meta_desc = region_field(self, 'meta_desc')
         return meta_desc if meta_desc else self.description
 
     def get_meta_keyw(self):
-        # return self.meta_keyw if self.meta_keyw else SEOSetting.objects.get(key='global').meta_keyw
         meta_keyw = region_field(self, 'meta_keyw')
-        return meta_keyw if meta_keyw else self.description
+        return meta_keyw if meta_keyw else SEOSetting.get_default_meta_keyw()
 
     def get_h1(self):
         # return self.h1 if self.h1 else self.description
@@ -202,24 +216,17 @@ class MetatagModel(models.Model):
     def get_meta_title(self):
         meta_title = region_field(self, 'meta_title')
         title_suffix = Setting.get_seo_title_suffix()
-        # return self.meta_title if self.meta_title else '{} — {}'.format(self.get_title(), title_suffix)
         return meta_title if meta_title else '{} — {}'.format(self.get_title(), title_suffix)
 
     def get_meta_desc(self):
-        return self.meta_desc if self.meta_desc else self.get_title()
-
-    def get_meta_desc(self):
-        # return self.meta_desc if self.meta_desc else self.get_title()
         meta_desc = region_field(self, 'meta_desc')
         return meta_desc if meta_desc else self.get_title()
 
     def get_meta_keyw(self):
-        # return self.meta_keyw if self.meta_keyw else SEOSetting.objects.get(key='global').meta_keyw
         meta_keyw = region_field(self, 'meta_keyw')
-        return meta_keyw if meta_keyw else SEOSetting.objects.get(key='global').meta_keyw
+        return meta_keyw if meta_keyw else SEOSetting.get_default_meta_keyw()
 
     def get_h1(self):
-        # return self.h1 if self.h1 else self.get_h1_title()
         h1 = region_field(self, 'h1')
         return h1 if h1 else self.get_h1_title()
 

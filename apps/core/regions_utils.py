@@ -6,7 +6,7 @@ from crequest.middleware import CrequestMiddleware
 
 def get_region_code(request=None):
     request = request or CrequestMiddleware.get_request()
-    return request.region_code
+    return getattr(request, 'region_code', None)
 
 
 def region_field(obj, field_name='title', request=None, region_code=None):
@@ -18,3 +18,8 @@ def region_field(obj, field_name='title', request=None, region_code=None):
         _value = getattr(obj, region_field_name, field_name) or _value
 
     return _value
+
+
+def get_region_seo_suffix(request=None):
+    request = request or CrequestMiddleware.get_request()
+    return getattr(request, 'region_seo_suffix', '')

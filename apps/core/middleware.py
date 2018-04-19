@@ -12,6 +12,13 @@ class RedirectToMainDomain(BaseException):
     pass
 
 
+SEO_SUFFIXES = {
+    'spb': 'в Санкт-Петербурге',
+    'nsk': 'в Новосибирске',
+    'sam': 'в Самаре',
+    None: '',
+}
+
 class CurrentSiteAndRegionMiddleware(MiddlewareMixin):
 
     def process_request(self, request):
@@ -19,6 +26,7 @@ class CurrentSiteAndRegionMiddleware(MiddlewareMixin):
         try:
             site = Site.objects.get(domain=domain)
             request.region_code = domain.split('.')[0] if (site.id > 1) else None
+            request.region_seo_suffix = SEO_SUFFIXES.get(request.region_code, '')
 
             if request.region_code:
                 lang_prefix = request.path[1:].split('/')[0]
