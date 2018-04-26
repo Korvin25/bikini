@@ -7,7 +7,7 @@
   <div class="lang_head lng_header">
     <a href="#" onclick="return false;" class="lang_head_tit">{% trans 'Язык' %}: {{ LANGUAGES_DICT|get_value:CURRENT_LANGUAGE|slice:':3'|upper }}<img src="/static/i/blank.gif" onclick="nodeExpand(19860001,0)" id="img_19860001"></a>
     <ul id="tb_19860001" style="display: none;">
-      {% for lang_code, lang_name in LANGUAGES %}
+      {% for lang_code, lang_name in LANGUAGES|slice:":2" %}
         <form action="{% url 'set_language' %}" method="post" id="i18n_{{ lang_code }}1">
           {% csrf_token %}
           <input name="next" type="hidden" value="{% get_translated_path lang=lang_code %}" />
@@ -49,7 +49,7 @@
         <a href="#" onclick="return false;" class="lang_head_tit">{% trans 'Язык' %}: {{ LANGUAGES_DICT|get_value:CURRENT_LANGUAGE|slice:':3'|upper }}<img src="/static/i/blank.gif" onClick="nodeExpand(198600,0)"  id="img_198600"></a>
         
         <ul id="tb_198600" style="display:none">
-          {% for lang_code, lang_name in LANGUAGES %}
+          {% for lang_code, lang_name in LANGUAGES|slice:":2" %}
             <form action="{% url 'set_language' %}" method="post" id="i18n_{{ lang_code }}">
               {% csrf_token %}
               <input name="next" type="hidden" value="{% get_translated_path lang=lang_code %}" />
