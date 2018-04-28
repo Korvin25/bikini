@@ -31,13 +31,13 @@ urlpatterns = [
     # url(r'^robots\.txt/$', RedirectView.as_view(pattern_name='robots_txt', permanent=True)),
     url(r'^robots\.txt/$', RedirectView.as_view(pattern_name='robots_txt', permanent=False)),
 
-    # api
-    url(r'^api/cart/', include('apps.cart.api.urls', namespace='cart_api')),
-    url(r'^api/certificate/', include('apps.cart.certificate.urls', namespace='certificate_api')),
-    url(r'^api/auth/', include('apps.lk.auth.urls', namespace='auth')),
-    url(r'^api/profile/edit/', ProfileFormView.as_view(), name='profile-edit'),
-    url(r'^api/forms/', include('apps.feedback.urls', namespace='forms')),
-    url(r'^api/currency/set/', SetCurrencyView.as_view(), name='set_currency'),
+    # # api
+    # url(r'^api/cart/', include('apps.cart.api.urls', namespace='cart_api')),
+    # url(r'^api/certificate/', include('apps.cart.certificate.urls', namespace='certificate_api')),
+    # url(r'^api/auth/', include('apps.lk.auth.urls', namespace='auth')),
+    # url(r'^api/profile/edit/', ProfileFormView.as_view(), name='profile-edit'),
+    # url(r'^api/forms/', include('apps.feedback.urls', namespace='forms')),
+    # url(r'^api/currency/set/', SetCurrencyView.as_view(), name='set_currency'),
 
     # 3rd party apps
     # url(r'^jet/', include('jet.urls', 'jet')),
@@ -56,6 +56,14 @@ urlpatterns = [
 urlpatterns += i18n_patterns(
     # -- home --
     url(r'^$', HomepageView.as_view(), name='home'),
+
+    # -- api --
+    url(r'^api/cart/', include('apps.cart.api.urls', namespace='cart_api')),
+    url(r'^api/certificate/', include('apps.cart.certificate.urls', namespace='certificate_api')),
+    url(r'^api/auth/', include('apps.lk.auth.urls', namespace='auth')),
+    url(r'^api/profile/edit/', ProfileFormView.as_view(), name='profile-edit'),
+    url(r'^api/forms/', include('apps.feedback.urls', namespace='forms')),
+    url(r'^api/currency/set/', SetCurrencyView.as_view(), name='set_currency'),
 
     # -- apps --
     url(r'^cart/$', CartView.as_view(), name='cart'),
