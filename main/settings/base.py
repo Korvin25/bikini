@@ -69,6 +69,7 @@ INSTALLED_APPS = (
     'request',
     'rosetta',
     'salmonella',
+    'solo',
     'sortedm2m',
     'tinymce',
     'watermarker',
@@ -278,6 +279,12 @@ LOGGING = {
         },
     },
     'handlers': {
+        'currency_log_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/currencies.log'),
+            'formatter': 'normal',
+        },
         'email_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
@@ -303,6 +310,10 @@ LOGGING = {
         },
     },
     'loggers': {
+        'currency.tasks': {
+            'handlers': ['currency_log_file', 'console'],
+            'level': 'INFO',
+        },
         'emailz': {
             'handlers': ['email_log_file'],
             'level': 'INFO',
@@ -330,9 +341,9 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
 
-BROKER_URL = 'redis://localhost:6379/0'
+BROKER_URL = 'redis://localhost:6379/2'
 CELERND_TASK_ERROR_EMAILS = True
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/2'
 CELERY_EMAIL_TASK_CONFIG = {
     'ignore_result': False,
 }
@@ -343,7 +354,7 @@ CELERY_ACCEPT_CONTENT = ['json']
 
 REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
-REDIS_DB = 0
+REDIS_DB = 2
 
 
 ROSETTA_MESSAGES_PER_PAGE = 50

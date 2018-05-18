@@ -24,3 +24,20 @@ app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 @app.task(bind=True)
 def debug_task(self):
     print('Request: {0!r}'.format(self.request))
+
+
+# # celerybeat
+
+# from celery.schedules import crontab
+
+# app.conf.CELERYBEAT_SCHEDULE = {
+#     'feed-aggregation-every-day': {
+#         'task': 'ony_proj.tasks.feed_aggregation',
+#         'schedule': crontab(minute=0, hour=2),  # 05:00 msk
+#     },
+#     #'test-every-day': {
+#     #    'task': 'ony_proj.tasks.periodic_test',
+#     #    'schedule': crontab(minute=0, hour=1),
+#     #},
+# }
+# app.conf.CELERY_TIMEZONE = 'Europe/Moscow'

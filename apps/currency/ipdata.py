@@ -4,8 +4,8 @@ from __future__ import unicode_literals
 from ipware.ip import get_real_ip
 import requests
 
-from apps.core.redis_utils import redis
-from .conf import RU, EU, IPDATA_UNAVAILABLE_REDIS_KEY, IPDATA_API_URL
+from ..core.redis_utils import redis
+from .conf import RU_CODE, EU_CODE, IPDATA_UNAVAILABLE_REDIS_KEY, IPDATA_API_URL
 
 
 class RequestError(BaseException):
@@ -31,8 +31,8 @@ def _request(url, method='get', data=None, headers={'Accept': 'application/json'
 
 def get_country_data(request):
     country_data = {
-        'country_code': RU,
-        'for_currency': RU,
+        'country_code': RU_CODE,
+        'for_currency': RU_CODE,
         'is_eu': False,
     }
 
@@ -47,7 +47,7 @@ def get_country_data(request):
                 # TODO: logging
             else:
                 country_data['country_code'] = data['country_code']
-                country_data['for_currency'] = EU if data['is_eu'] else data['country_code']
+                country_data['for_currency'] = EU_CODE if data['is_eu'] else data['country_code']
                 country_data['is_eu'] = data['is_eu']
 
     return country_data
