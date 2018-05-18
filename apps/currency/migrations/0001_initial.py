@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             name='EUR',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('rate', models.DecimalField(decimal_places=2, default=Decimal('71.18'), help_text='\u043e\u0431\u043d\u043e\u0432\u043b\u044f\u0442\u044c \u043d\u0435 \u0447\u0430\u0449\u0435 \u0440\u0430\u0437\u0430 \u0432 \u0447\u0430\u0441', max_digits=4, verbose_name='\u041a\u0443\u0440\u0441 \u0435\u0432\u0440\u043e')),
+                ('rate', models.DecimalField(decimal_places=2, default=Decimal('71.18'), max_digits=4, verbose_name='\u041a\u0443\u0440\u0441 \u0435\u0432\u0440\u043e')),
                 ('update_dt', models.DateTimeField(auto_now=True, verbose_name='\u0414\u0430\u0442\u0430 \u043f\u043e\u0441\u043b\u0435\u0434\u043d\u0435\u0433\u043e \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u044f')),
             ],
             options={
@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
             name='USD',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('rate', models.DecimalField(decimal_places=2, default=Decimal('61.98'), help_text='\u043e\u0431\u043d\u043e\u0432\u043b\u044f\u0442\u044c \u043d\u0435 \u0447\u0430\u0449\u0435 \u0440\u0430\u0437\u0430 \u0432 \u0447\u0430\u0441', max_digits=4, verbose_name='\u041a\u0443\u0440\u0441 \u0434\u043e\u043b\u043b\u0430\u0440\u0430')),
+                ('rate', models.DecimalField(decimal_places=2, default=Decimal('61.98'), max_digits=4, verbose_name='\u041a\u0443\u0440\u0441 \u0434\u043e\u043b\u043b\u0430\u0440\u0430')),
                 ('update_dt', models.DateTimeField(auto_now=True, verbose_name='\u0414\u0430\u0442\u0430 \u043f\u043e\u0441\u043b\u0435\u0434\u043d\u0435\u0433\u043e \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u044f')),
             ],
             options={
