@@ -169,6 +169,14 @@ class Cart(models.Model):
         #     result = result + delivery_method.price
         # return result
 
+    def get_yandex_currency(self):
+        currency = {
+            'rub': 'RUB',
+            'eur': 'EUR',
+            'usd': 'USD',
+        }
+        return currency.get(self.currency, 'RUB')
+
     @property
     def has_items_with_discount(self):
         discounts = self.cartitem_set.all().values_list('discount', flat=True)

@@ -112,6 +112,12 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
   if ($to_disable) { $to_disable.addClass('_disabled'); };
   $(document.activeElement).blur();
 
+  var yametrics_enabled = typeof yaCounter26447493 !== 'undefined';
+
+  function yaGoalCallback() {
+      console.log('yandex metrics goal completed (' + send_type + ')');
+  };
+
   $.ajax({
     url: url,
     type: 'POST',
@@ -153,6 +159,11 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
           if (item_price != undefined) { $item_div.find('.item-summary-span').html(item_price); }
           if (item_base_price != undefined) { $item_div.find('.item-base-summary-span').html(item_base_price); }
         };
+        if (send_type == 'step0') {
+          if (yametrics_enabled) {
+            yaCounter26447493.reachGoal('button_zakaz', {}, yaGoalCallback);
+          };
+        }
         if (send_type == 'step1') {
           $('.js-auth-switch').toggle();
           if (shipping_data) {
@@ -163,6 +174,14 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
             });
           }
           {% include 'js/csrf.js' %}
+          if (yametrics_enabled) {
+            if ($form.hasClass('js-step1-login-form')) {
+              yaCounter26447493.reachGoal('zakaz_login', {}, yaGoalCallback);
+            }
+            else if ($form.hasClass('js-step1-registration-form')) {
+              yaCounter26447493.reachGoal('zakaz_registration', {}, yaGoalCallback);
+            }
+          };
         }
         if (send_type == 'step3') {
           showOrHide(0);
@@ -170,6 +189,14 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
           $('.js-cart-summary').text(0);
           $('#step4 .js-cart-summary').text(cart_summary);
           $('#step5 .js-cart-summary').text(cart_summary);
+          if (yametrics_enabled) {
+            var yaGoalParams = {
+              order_price: parseFloat(res['ya_summary'] || 0.0),
+              currency: res['ya_currency'] || 'RUB',
+              city: form_data['city'],
+            };
+            yaCounter26447493.reachGoal('zakaz_form', yaGoalParams, yaGoalCallback);
+          };
         }
         if (popup) {
           showPopup(popup);

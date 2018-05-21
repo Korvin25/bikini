@@ -18,7 +18,7 @@
     
     <ul class="menu_foot contacts_foot">
       <li class="bt_phone"><a href="tel:{{ settings.phone|to_phone }}">{{ settings.phone|safe }}</strong></a></li>
-      <li class="bt_req_call"><a rel="leanModal1" name="callback" href="#callback"><strong>{% trans 'Обратный звонок' %}</strong></a></li>
+      <li class="bt_req_call"><a rel="leanModal1" name="callback" href="#callback"{% if ENABLE_METRICS and settings.ym_code %} onclick="yaCounter26447493.reachGoal('button_callback'); return true;"{% endif %}><strong>{% trans 'Обратный звонок' %}</strong></a></li>
     </ul>
   </div>
 </footer>
