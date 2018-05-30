@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 from django.core.mail import EmailMessage, EmailMultiAlternatives, get_connection
+from django.core.urlresolvers import reverse
 from django.template import Context
 from django.template.loader import get_template
 from django.utils import translation
@@ -162,13 +163,14 @@ def email_user(subject, email_key, profile=None, obj=None, language_to=None, man
 #     email_user(subject, email_key, profile)
 
 
-# def send_reset_password_email(profile, passwd):
-#     subject = 'Bikinimini.ru: Сброс пароля'
-#     email_key = 'reset_password'
-#     email_user(subject, email_key, profile, passwd=passwd)
+def send_reset_password_email(profile, signature):
+    subject = 'Bikinimini.ru: Сброс пароля'
+    email_key = 'reset_password'
+    reset_password_link = reverse('profile_reset_password', kwargs={'signature': signature})
+    email_user(subject, email_key, profile, signature=signature, reset_password_link=reset_password_link)
 
 
 def send_order_email(profile, obj, **kwargs):
-    subject = 'Ваш заказ на Bikinimini.ru: № {}'.format(obj.number)
+    subject = 'Ваш заказ на Bikinimini.ru: № %d' % obj.number
     email_key = 'order'
     email_user(subject, email_key, profile, obj=obj, **kwargs)

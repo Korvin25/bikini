@@ -20,15 +20,27 @@ function showErrorPopup(title, text) {
 };
 
 
-function showPopup(popup_id) {
+function showPopup(popup_id, close_others) {
+  close_others = close_others || false;
+  console.log('showPopup');
+
   var $a = $('a[href="'+popup_id+'"]'),
       $popup = $(popup_id);
 
-  // $('.js-call-close').filter(':visible').click();
+  if (close_others) { $('.js-call-close').filter(':visible').click(); }
   $('a[rel*=leanModal1]').leanModal({ top : 200, closeButton: ".js-call-close" });
   $a.click();
   $('html, body').animate({scrollTop: $popup.offset().top-75}, 400);
 };
+
+
+$('body').on('click', '.js-show-popup', function(e) {
+  e.preventDefault();
+
+  var popup_id = $(this).attr('data-popup-id');
+  console.log(popup_id);
+  showPopup(popup_id, true);
+});
 
 
 function getFormData($form){
@@ -171,9 +183,9 @@ $('.js-auth-registration-form').on('submit', function(e) {
 });
 
 
-// ----- Форма обратного звонка -----
+// ----- Типичные формы (обратного звонка / сброса пароля) -----
 
-function sendCallbackForm(url, form_data, $to_disable, $form) {
+function sendUsualForm(url, form_data, $to_disable, $form) {
   if ($to_disable) { $to_disable.addClass('_disabled'); };
   $(document.activeElement).blur();
 
@@ -240,7 +252,7 @@ function sendCallbackForm(url, form_data, $to_disable, $form) {
 }
 
 
-$('.js-callback-form').on('submit', function(e) {
+$('.js-usual-form').on('submit', function(e) {
   e.preventDefault();
 
   var $form = $(this),
@@ -249,7 +261,7 @@ $('.js-callback-form').on('submit', function(e) {
 
   form_data = getFormData($form);
   removeErrors($form);
-  sendCallbackForm(url, form_data, $form, $form);
+  sendUsualForm(url, form_data, $form, $form);
 });
 
 

@@ -16,6 +16,9 @@ from ..currency.utils import currency_price
 from ..geo.models import Country
 
 
+email_subj_list = [_('Bikinimini.ru: Сброс пароля', 'Ваш заказ на Bikinimini.ru: № %d'), ]
+
+
 class UserManager(BaseUserManager):
 
     def create_user(self, email, password):
@@ -95,6 +98,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
 
     has_email = models.BooleanField(default=True)
     has_password = models.BooleanField(default=True)
+    signature = models.CharField('Login hash', max_length=50, null=True, blank=True, editable=False)
 
     objects = UserManager()
 
@@ -120,6 +124,11 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     @property
     def username(self):
         return self.email
+
+    def get_signature(self):
+        self.signature = Profile.objects.make_random_password(length=40)
+        self.save()
+        return self.signature
 
     @property
     def shipping_data(self):

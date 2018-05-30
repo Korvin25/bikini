@@ -5,15 +5,20 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse
 from django.http import JsonResponse, HttpResponseRedirect, Http404, HttpResponseForbidden
+from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as __
 from django.views.generic import View, FormView, CreateView, RedirectView
 
 from apps.cart.cart import Cart
 from apps.core.mixins import JSONFormMixin
-# from apps.lk.email import admin_send_registration_email, send_registration_email
+from apps.lk.email import send_reset_password_email
 from apps.lk.models import Profile, WishListItem
 from apps.lk.utils import get_error_message
-from .forms import LoginForm, RegistrationForm
+from .forms import LoginForm, RegistrationForm, ResetPasswordForm
 from .utils import update_wishlist
+
+
+translated_strings = (_('На ваш email отправлены дальнейшие инструкции по сбросу пароля'),)
 
 
 class LogoutView(View):
@@ -94,22 +99,22 @@ class RegistrationView(JSONFormMixin, CreateView):
         return JsonResponse(data)
 
 
-# class ResetPasswordView(FormView):
-#     """
-#     Обновляем пароль и отправляем юзеру
-#     """
-#     form_class = ResetPasswordForm
+class ResetPasswordView(JSONFormMixin, FormView):
+    """
+    Сброс пароля
+    """
+    form_class = ResetPasswordForm
+    mapping = {
+        'email': 'email',
+    }
 
-#     def form_invalid(self, form):
-#         errors = []
-#         for k in form.errors:
-#             errors.append({'name': k, 'error_message': form.errors[k][0]})
-#         return JsonResponse({'errors': errors}, status=400)
+    def form_valid(self, form):
+        email = form.cleaned_data.get('email')
+        profile = Profile.objects.get(email__iexact=email)
 
-#     def form_valid(self, form):
-#         email = form.cleaned_data.get('email')
-#         user = Profile.objects.get(email=email)
+        signature = profile.get_signature()
+        send_reset_password_email(profile, signature)
 
-#         user.reset_pass()
-#         response = {'result': 'ok'}
-#         return JsonResponse({'response': response})
+        success_message = __('На ваш email отправлены дальнейшие инструкции по сбросу пароля')
+        data = {'result': 'ok', 'success_message': success_message}
+        return JsonResponse(data)

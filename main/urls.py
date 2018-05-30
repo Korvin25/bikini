@@ -18,7 +18,8 @@ from apps.catalog.views import ProductsView, ProductView, ProductWithDiscountVie
 from apps.content.sitemap import sitemaps
 from apps.content.views import HomepageView, VideoListView, VideoDetailView, PageView, robots_txt
 from apps.currency.views import SetCurrencyView
-from apps.lk.views import ProfileHomeView, ProfileFormView
+from apps.lk.views import (ProfileHomeView, ProfileResetPasswordView, ProfileSetPasswordView,
+                           ProfileFormView, ProfileSetPasswordFormView,)
 from apps.views import PhotoUploadView
 
 
@@ -62,6 +63,7 @@ urlpatterns += i18n_patterns(
     url(r'^api/certificate/', include('apps.cart.certificate.urls', namespace='certificate_api')),
     url(r'^api/auth/', include('apps.lk.auth.urls', namespace='auth')),
     url(r'^api/profile/edit/', ProfileFormView.as_view(), name='profile-edit'),
+    url(r'^api/profile/set_password/', ProfileSetPasswordFormView.as_view(), name='profile-set-password-form'),
     url(r'^api/forms/', include('apps.feedback.urls', namespace='forms')),
     url(r'^api/currency/set/', SetCurrencyView.as_view(), name='set_currency'),
 
@@ -70,6 +72,8 @@ urlpatterns += i18n_patterns(
     url(r'^cart/get_discount/(?P<pk>\d+)/$', CartGetDiscountView.as_view(), name='cart_get_discount'),
     url(r'^certificate/$', CertificateView.as_view(), name='certificate'),
     url(r'^profile/$', ProfileHomeView.as_view(), name='profile'),
+    url(r'^profile/reset_password/(?P<signature>[^/]+)/$', ProfileResetPasswordView.as_view(), name='profile_reset_password'),
+    url(r'^profile/set_password/$', ProfileSetPasswordView.as_view(), name='profile_set_password'),
 
     url(r'^women/$', ProductsView.as_view(with_category=False, sex='female'), name='women'),
     url(r'^muzhskie-bikini/$', ProductsView.as_view(with_category=False, sex='male'), name='men'),

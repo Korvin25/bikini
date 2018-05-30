@@ -61,3 +61,49 @@ class ProfileForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+
+class ResetPasswordForm(forms.Form):
+    email = forms.EmailField()
+
+    def clean(self):
+        cleaned_data = super(ResetPasswordForm, self).clean()
+        if not self._errors:
+            email = cleaned_data.get('email')
+            try:
+                profile = Profile.objects.get(email__iexact=email)
+            except Profile.DoesNotExist:
+                raise forms.ValidationError(_('Пользователя с таким email не существует.'))
+        return cleaned_data
+
+
+class SetPasswordForm(forms.ModelForm):
+    new_password = forms.CharField(widget=forms.PasswordInput)
+    new_password_repeat = forms.CharField(widget=forms.PasswordInput)
+
+    class Meta:
+        model = Profile
+        fields = ('name',)
+
+    def clean(self):
+        cleaned_data = super(SetPasswordForm, self).clean()
+
+        if not self._errors:
+            new_password = cleaned_data.get('new_password')
+            new_password_repeat = cleaned_data.get('new_password_repeat')
+
+            if not new_password == new_password_repeat:
+                raise forms.ValidationError(_('Пароли не совпадают'))
+            else:
+                return cleaned_data
+
+    def save(self, commit=True):
+        profile = self.instance
+
+        profile.set_password(self.cleaned_data['new_password'])
+        profile.has_password = True
+        profile.signature = ''
+
+        if commit:
+            profile.save()
+        return profile
