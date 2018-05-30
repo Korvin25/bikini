@@ -180,7 +180,7 @@
         <div class="popap_row">
             <div class="popap_row_wrapp">
                 <h2>{% trans 'Восстановить пароль' %}</h2>
-                <p class="call_introtext">{% trans 'Введите свой email, через который вы регистрировались на сайте' %}.</p>
+                {% comment %}<p class="call_introtext">{% trans 'Введите свой email, через который вы регистрировались на сайте' %}.</p>{% endcomment %}
                 <div class="row_form_popup">
                     <form class="callBackForm js-usual-form" method="post" action="{% url 'auth:reset_password' %}">
                         {% csrf_token %}
