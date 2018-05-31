@@ -279,10 +279,10 @@
           </div>
         {% endif %}
 
-        {% if product.also_products.count %}
+        {% if product.shown_also_products.count %}
           <h2 class="title_block">{% trans 'С этим товаром также покупают' %}:</h2>
           <div class="item_list_wrapp" itemscope="" itemtype="http://schema.org/ItemList">
-            {% for also_p in product.also_products.all %}
+            {% for also_p in product.shown_also_products.all %}
               <div class="product_list">
                 <div class="photo_list"><a href="{{ also_p.get_absolute_url }}"><img src="{{ also_p.cover_thumb }}" alt="{{ also_p.title }}" /></a></div>
                 <h3><a href="{{ also_p.get_absolute_url }}">{{ also_p.title }}</a></h3>

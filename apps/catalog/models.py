@@ -504,6 +504,10 @@ class Product(MetatagModel):
     #     self.attributes = category.attributes.all()
     #     self.set_attrs()
 
+    @property
+    def shown_also_products(self):
+        return self.also_products.prefetch_related('categories').filter(show=True).exclude(id=self.id)
+
     def set_attributes_from_categories(self, categories_ids):
         self.attributes = Attribute.objects.filter(categories__id__in=categories_ids).distinct()
         self.set_attrs()
