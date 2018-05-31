@@ -171,6 +171,6 @@ def send_reset_password_email(profile, signature):
 
 
 def send_order_email(profile, obj, **kwargs):
-    subject = 'Ваш заказ на Bikinimini.ru: № %d' % obj.number
+    subject = 'Ваш заказ на Bikinimini.ru: № %s' % unicode(obj.number)
     email_key = 'order'
     email_user(subject, email_key, profile, obj=obj, **kwargs)
