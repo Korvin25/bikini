@@ -72,7 +72,7 @@
                 <div class="tab3" id="tabCont3" style="display: none;">
                   <div>
                     <!--FB-->
-                    <a href="https://www.facebook.com/wwwbikinimini/" target="_blank" title="{% trans 'Перейти к нам на страницу Facebook' %}"><img src="/static/images/facebook_photo.jpg" alt="{% trans 'Присоединяйтесь к Bikinimini на Facebook' %}"></a>
+                    <a rel="nofollow" href="https://www.facebook.com/wwwbikinimini/" target="_blank" title="{% trans 'Перейти к нам на страницу Facebook' %}"><img src="/static/images/facebook_photo.jpg" alt="{% trans 'Присоединяйтесь к Bikinimini на Facebook' %}"></a>
                     {% comment %}
                       <div id="fb-root"></div>
                       <script>(function(d, s, id) {
@@ -82,13 +82,13 @@
                         js.src = "//connect.facebook.net/ru_RU/sdk.js#xfbml=1&version=v2.3";
                         fjs.parentNode.insertBefore(js, fjs);
                       }(document, 'script', 'facebook-jssdk'));</script>
-                      <div class="fb-page" data-href="https://www.facebook.com/wwwbikinimini" data-width="235" data-height="365" data-hide-cover="false" data-show-facepile="true" data-show-posts="false" style="  margin-left: -17px !important;"><div class="fb-xfbml-parse-ignore"><blockquote cite="https://www.facebook.com/wwwbikinimini"><a href="https://www.facebook.com/wwwbikinimini">Bikinimini</a></blockquote></div></div>
+                      <div class="fb-page" data-href="https://www.facebook.com/wwwbikinimini" data-width="235" data-height="365" data-hide-cover="false" data-show-facepile="true" data-show-posts="false" style="  margin-left: -17px !important;"><div class="fb-xfbml-parse-ignore"><blockquote cite="https://www.facebook.com/wwwbikinimini"><a rel="nofollow" href="https://www.facebook.com/wwwbikinimini">Bikinimini</a></blockquote></div></div>
                     {% endcomment %}
                     <!--/FB-->
                   </div>
                 </div>
                 <div class="tab3" id="tabCont4" style="display: none;">
-                  <a class="twitter-timeline" href="https://twitter.com/wwwBikinimini" data-widget-id="592618967962877952">{% trans 'Твиты от @wwwBikinimini' %}</a>
+                  <a rel="nofollow" class="twitter-timeline" href="https://twitter.com/wwwBikinimini" data-widget-id="592618967962877952">{% trans 'Твиты от @wwwBikinimini' %}</a>
                   <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
                 </div>
               </div>
@@ -145,7 +145,7 @@
     {% if footer_banner %}
       {% with footer_banner as banner %}
         {% if not banner.has_button %}
-          <a href="{{ banner.url }}"{% if banner.target_blank %} target="_blank"{% endif %}>
+          <a rel="nofollow" href="{{ banner.url }}"{% if banner.target_blank %} target="_blank"{% endif %}>
         {% endif %}
           <div class="with_banner">
             <div class="with_banner_wrapp" style="background-image:url({{ banner.image_url }});">
@@ -154,7 +154,7 @@
                   {% for line in banner.lines.all %}
                     <div class="{% if line.big %}with_big_text{% else %}with_mini_text{% endif %}">{{ line.line }}</div>
                   {% endfor %}
-                  {% if banner.has_button %}<a href="{{ banner.url }}"{% if banner.target_blank %} target="_blank"{% endif %} class="butt_with">{{ banner.button_text }}</a>{% endif %}
+                  {% if banner.has_button %}<a rel="nofollow" href="{{ banner.url }}"{% if banner.target_blank %} target="_blank"{% endif %} class="butt_with">{{ banner.button_text }}</a>{% endif %}
                 </div>
               {% endif %}
             </div>

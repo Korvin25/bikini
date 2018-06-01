@@ -20,7 +20,7 @@
   {% if footer_banner %}
     {% with footer_banner as banner %}
       {% if not banner.has_button %}
-        <a href="{{ banner.url }}"{% if banner.target_blank %} target="_blank"{% endif %}>
+        <a rel="nofollow" href="{{ banner.url }}"{% if banner.target_blank %} target="_blank"{% endif %}>
       {% endif %}
         <div class="with_banner_page" style="background-image:url({{ banner.image_url }});">
           {% if banner.has_text or banner.has_button %}
@@ -28,7 +28,7 @@
               {% for line in banner.lines.all %}
                 <div class="{% if line.big %}with_big_text{% else %}with_mini_text{% endif %}">{{ line.line }}</div>
               {% endfor %}
-              {% if banner.has_button %}<a href="{{ banner.url }}"{% if banner.target_blank %} target="_blank"{% endif %} class="butt_with">{{ banner.button_text }}</a>{% endif %}
+              {% if banner.has_button %}<a rel="nofollow" href="{{ banner.url }}"{% if banner.target_blank %} target="_blank"{% endif %} class="butt_with">{{ banner.button_text }}</a>{% endif %}
             </div>
           {% endif %}
         </div>
