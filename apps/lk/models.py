@@ -153,8 +153,8 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     def can_get_discount(self):
         from ..cart.models import CartItem
         complete_orders = self.complete_orders.values_list('id', flat=True)
-        return (True if complete_orders.count() and not CartItem.had_discounts(cart_ids=complete_orders)
-                                                and not self.discount_used
+        return (True if complete_orders.count() # and not CartItem.had_discounts(cart_ids=complete_orders)
+                                                # and not self.discount_used
                 else False)
 
     def get_discount_code(self):
