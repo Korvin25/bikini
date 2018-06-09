@@ -3,6 +3,47 @@
 // ----- Отправка форм на бекенд: вспомогательные функции -----
 
 
+function checkCartMethods() {
+  var $deliveryMethods = $('[name="delivery_method_id"]'),
+      $paymentMethods = $('[name="payment_method_id"]');
+
+
+  // --- скрываем способы оплаты ---
+
+  var $deliveryMethod = $deliveryMethods.filter(':checked:visible');
+
+  if ($deliveryMethod.length) {
+    var ids = JSON.parse($deliveryMethod.attr('data-payment-ids')),
+        $labels = $('.js-payment-method-label');
+
+    if (ids && ids.length) {
+      $labels.hide();
+      $.each(ids, function(i, method_id){
+        // $labels.find('[data-payment-method-id="'+method_id+'"]').show();
+        $('[data-payment-method-id="'+method_id+'"]').show();
+      });
+    }
+  }
+
+  // // --- скрываем способы доставки ---
+
+  // var $paymentMethod = $paymentMethods.filter(':checked:visible');
+
+  // if ($paymentMethod.length) {
+  //   var ids = JSON.parse($paymentMethod.attr('data-delivery-ids')),
+  //       $labels = $('.js-delivery-method-label');
+
+  //   if (ids && ids.length) {
+  //     $labels.hide();
+  //     $.each(ids, function(i, method_id){
+  //       // $labels.find('[data-delivery-method-id="'+method_id+'"]').show();
+  //       $('[data-delivery-method-id="'+method_id+'"]').show();
+  //     });
+  //   }
+  // }
+}
+
+
 function showOrHide(cart_count) {
   if (cart_count) {
     $('.js-disabled-if-not-cart').removeClass('_disabled');
@@ -284,6 +325,7 @@ $('.js-choose-cart-method').change(function() {
       url = $cart_parent.attr('data-update-url'),
       form_data = {};
 
+  checkCartMethods();
   form_data[input_name] = input_val;
   sendSomeForm(url, form_data, 'choose_method', $parent);
 });
@@ -294,8 +336,10 @@ $('.js-step0-button').click(function() {
       $cart_parent = $('.js-cart-parent'),
       url = $cart_parent.attr('data-step0-url'),
       additional_info = $('[name="additional_info"]').val() || '',
-      delivery_method_id = $('[name="delivery_method_id"]:checked').val() || 0,
-      payment_method_id = $('[name="payment_method_id"]:checked').val() || 0,
+      delivery_method_id = $('[name="delivery_method_id"]:checked:visible').val() || 0,
+      payment_method_id = $('[name="payment_method_id"]:checked:visible').val() || 0,
+      // delivery_method_id = $('[name="delivery_method_id"]:checked:enabled').val() || 0,
+      // payment_method_id = $('[name="payment_method_id"]:checked:enabled').val() || 0,
       form_data;
 
   form_data = {

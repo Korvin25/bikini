@@ -85,13 +85,19 @@ class Step0View(CartStepBaseView):
             self.cart.update(**kw)
 
         basket = self.cart.cart
-        if not (basket.delivery_method or basket.payment_method):
-            data = {'result': 'error', 'error': __('Выберите способы оставки и оплаты')}
+
+        # delivery_method = basket.delivery_method
+        # payment_method = basket.payment_method
+        delivery_method = kw.get('delivery_method_id')
+        payment_method = kw.get('payment_method_id')
+
+        if not (delivery_method or payment_method):
+            data = {'result': 'error', 'error': __('Выберите способы доставки и оплаты')}
             status = 400
-        elif not basket.delivery_method:
+        elif not delivery_method:
             data = {'result': 'error', 'error': __('Выберите способ доставки')}
             status = 400
-        elif not basket.payment_method:
+        elif not payment_method:
             data = {'result': 'error', 'error': __('Выберите способ оплаты')}
             status = 400
         else:

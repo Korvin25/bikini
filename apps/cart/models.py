@@ -44,10 +44,21 @@ class DeliveryMethod(models.Model):
     def price(self):
         return currency_price(self)
 
+    def show_payment_methods(self):
+        return ', '.join(list(self.payment_methods.values_list('title', flat=True))) or '-'
+    show_payment_methods.allow_tags = True
+    show_payment_methods.short_description = 'Способы оплаты'
+
+    @property
+    def payment_ids(self):
+        return list(self.payment_methods.values_list('id', flat=True))
+
 
 class PaymentMethod(models.Model):
     title = models.CharField('Название', max_length=511)
     short_title = models.CharField('Краткое название', max_length=63, blank=True, help_text='для вывода в личном кабинете')
+    delivery_methods = models.ManyToManyField(DeliveryMethod, verbose_name='Способы доставки',
+                                              blank=True, related_name='payment_methods')
     is_paypal = models.BooleanField('Оплата через PayPal', default=False)
     is_enabled = models.BooleanField('Включен?', default=True)
     order = models.PositiveSmallIntegerField(default=0, blank=False, null=False, verbose_name=mark_safe('&nbsp;&nbsp;&nbsp;&nbsp;'))
@@ -62,6 +73,15 @@ class PaymentMethod(models.Model):
 
     def get_short_title(self):
         return self.short_title or self.title
+
+    def show_delivery_methods(self):
+        return ', '.join(list(self.delivery_methods.values_list('title', flat=True))) or '-'
+    show_delivery_methods.allow_tags = True
+    show_delivery_methods.short_description = 'Способы доставки'
+
+    @property
+    def delivery_ids(self):
+        return list(self.delivery_methods.values_list('id', flat=True))
 
 
 class Cart(models.Model):

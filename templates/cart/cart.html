@@ -199,9 +199,9 @@
                 <h2 class="title_block">{% trans 'Выбор способа доставки' %}</h2>
                 <div class="rows_radio_block js-method-inputs-parent">
                   {% for method in delivery_methods %}
-                    <label for="delivery_method_{{ method.id }}" class="radio_input">
+                    <label for="delivery_method_{{ method.id }}" class="radio_input js-delivery-method-label" data-delivery-method-id="{{ method.id }}">
                       <div class="shell_cell_row">
-                        <div class="input_cell"><input type="radio" name="delivery_method_id" value="{{ method.id }}" id="delivery_method_{{ method.id }}" class="check_radio js-choose-cart-method"{% if shipping_data.delivery_method_id == method.id or delivery_methods.count == 1 %} checked="checked"{% endif %}/></div>
+                        <div class="input_cell"><input type="radio" name="delivery_method_id" value="{{ method.id }}" id="delivery_method_{{ method.id }}" data-payment-ids="{{ method.payment_ids }}" class="check_radio js-choose-cart-method"{% if shipping_data.delivery_method_id == method.id or delivery_methods.count == 1 %} checked="checked"{% endif %}/></div>
                         <p class="dott_cell"><strong><span>{{ method.title }}</span></strong><span class="val_radio_row">Стоимость: {{ method.price|to_price|with_currency:currency|safe }}</span></p>
                       </div>
                     </label>
@@ -215,9 +215,9 @@
                 <h2 class="title_block">{% trans 'Выбор способа оплаты' %}</h2>
                 <div class="rows_radio_block js-method-inputs-parent">
                   {% for method in payment_methods %}
-                    <label for="payment_method_{{ method.id }}" class="radio_input">
+                    <label for="payment_method_{{ method.id }}" class="radio_input js-payment-method-label" data-payment-method-id="{{ method.id }}">
                       <div class="shell_cell_row">
-                        <div class="input_cell"><input type="radio" name="payment_method_id" value="{{ method.id }}" id="payment_method_{{ method.id }}" class="check_radio js-choose-cart-method"{% if shipping_data.payment_method_id == method.id or payment_methods.count == 1 %} checked="checked"{% endif %}/></div>
+                        <div class="input_cell"><input type="radio" name="payment_method_id" value="{{ method.id }}" id="payment_method_{{ method.id }}" data-delivery-ids="{{ method.delivery_ids }}" class="check_radio js-choose-cart-method"{% if shipping_data.payment_method_id == method.id or payment_methods.count == 1 %} checked="checked"{% endif %}/></div>
                         <p><strong class="no_dash"><span>{{ method.title }}</span></strong></p>
                       </div>
                     </label>
@@ -603,5 +603,11 @@
     // {% include 'js/product.js' %}
     // {% include 'js/wishlist.js' %}
     {% include 'js/cart.js' %}
+  </script>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      checkCartMethods();    
+    });
   </script>
 {% endblock %}

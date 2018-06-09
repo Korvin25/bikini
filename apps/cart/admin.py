@@ -12,14 +12,18 @@ from .translation import *
 
 @admin.register(DeliveryMethod)
 class DeliveryMethodAdmin(SortableAdminMixin, TabbedTranslationAdmin):
-    list_display = ('title', 'short_title', 'price_rub', 'price_eur', 'price_usd', 'is_enabled',)
+    list_display = ('title', 'short_title', 'price_rub', 'price_eur', 'price_usd',
+                    'is_enabled', 'show_payment_methods',)
     list_editable = ('short_title', 'price_rub', 'price_eur', 'price_usd',)
 
 
 @admin.register(PaymentMethod)
 class PaymentMethodAdmin(SortableAdminMixin, TabbedTranslationAdmin):
-    list_display = ('title', 'short_title', 'is_paypal', 'is_enabled',)
+    # list_display = ('title', 'short_title', 'is_paypal', 'is_enabled',)
+    list_display = ('title', 'short_title', 'is_enabled', 'show_delivery_methods',)
     list_editable = ('short_title',)
+    exclude = ('is_paypal',)
+    filter_horizontal = ['delivery_methods', ]
 
 
 @admin.register(Cart)

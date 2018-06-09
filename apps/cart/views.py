@@ -45,6 +45,13 @@ class CartView(TemplateView):
             if getattr(self.cart.cart, k, None):
                 shipping_data[k] = getattr(self.cart.cart, k)
 
+        delivery_methods = DeliveryMethod.objects.prefetch_related('payment_methods').filter(
+            is_enabled=True, payment_methods__isnull=False,
+        ).distinct()
+        payment_methods = PaymentMethod.objects.prefetch_related('delivery_methods').filter(
+            is_enabled=True, delivery_methods__isnull=False,
+        ).distinct()
+
         context = {
             'cart_items': cart_items,
             'certificate_items': certificate_items,
@@ -56,8 +63,8 @@ class CartView(TemplateView):
             'shipping_data': shipping_data,
             'specials': SpecialOffer.get_offers(),
             'random_str': str(uuid.uuid4()).replace('-', ''),
-            'delivery_methods': DeliveryMethod.objects.filter(is_enabled=True),
-            'payment_methods': PaymentMethod.objects.filter(is_enabled=True),
+            'delivery_methods': delivery_methods,
+            'payment_methods': payment_methods,
         }
         context.update(super(CartView, self).get_context_data(**kwargs))
         return context
