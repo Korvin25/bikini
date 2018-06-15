@@ -466,6 +466,7 @@ PAYPAL_TEST = False
 
 # django-filer
 FILER_PAGINATE_BY = 50
+FILER_ADMIN_ICON_SIZES = ('16', '32', '48', '64', '256')
 
 
 UWSGI_TOUCHME = ''
