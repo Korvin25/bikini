@@ -10,7 +10,7 @@ from openpyxl.styles import Font, Alignment
 from .models import Product, ProductOption, ProductExtraOption
 
 
-def dump_catalog_products():
+def dump_catalog_products(lang='en', lang_label='English'):
     book = Workbook()
 
     BOLD = Font(bold=True)
@@ -24,7 +24,7 @@ def dump_catalog_products():
 
     # заголовки столбцов
     for s in [s1, s2]:
-        s.append(('ID', 'Russian', 'English'))
+        s.append(('ID', 'Russian', lang_label))
         for id in ['A1', 'B1', 'C1']:
             s[id].font = BOLD
             s[id].alignment = CENTER
@@ -34,34 +34,35 @@ def dump_catalog_products():
     for p in products:
         _id = '{}t'.format(p.id)
         _ru = p.title_ru or ''
-        _en = p.title_en or ''
-        s1.append((_id, _ru, _en))
+        _xx = getattr(p, 'title_{}'.format(lang), '') or ''
+        s1.append((_id, _ru, _xx))
 
         if p.subtitle_ru:
             _id = '{}s'.format(p.id)
             _ru = p.subtitle_ru or ''
-            _en = p.subtitle_en or ''
-            s1.append((_id, _ru, _en))
+            _xx = getattr(p, 'subtitle_{}'.format(lang), '') or ''
+            s1.append((_id, _ru, _xx))
 
         for o in p.options.all():
             if o.title_ru:
                 _id = '{}_{}o'.format(p.id, o.id)
                 _ru = o.title_ru or ''
-                _en = o.title_en or ''
-                s1.append((_id, _ru, _en))
+                _xx = getattr(o, 'title_{}'.format(lang), '') or ''
+                s1.append((_id, _ru, _xx))
 
         for e in p.extra_options.all():
             if e.title_ru:
                 _id = '{}_{}e'.format(p.id, e.id)
                 _ru = e.title_ru or ''
-                _en = e.title_en or ''
-                s1.append((_id, _ru, _en))
+                _xx = getattr(e, 'title_{}'.format(lang), '') or ''
+                s1.append((_id, _ru, _xx))
 
         if p.text_ru:
             _id = '{}t'.format(p.id)
             _ru = strip_tags(p.text_ru or '').replace('&nbsp;', ' ')
-            _en = strip_tags(p.text_en or '').replace('&nbsp;', ' ')
-            s2.append((_id, _ru, _en))
+            _text = getattr(p, 'text_{}'.format(lang), '') or ''
+            _xx = strip_tags(_text).replace('&nbsp;', ' ')
+            s2.append((_id, _ru, _xx))
 
     # ширина столбцов
     s1.column_dimensions['B'].width = 60
@@ -77,13 +78,13 @@ def dump_catalog_products():
 
     # пишем в файл
     now_str = timezone.now().strftime('%Y%m%d_%H%M%S')
-    filename = 'static/temp/{}_catalog.xlsx'.format(now_str)
+    filename = 'static/temp/{}_catalog_{}.xlsx'.format(now_str, lang)
     book.save(filename)
     book.close()
     print filename
 
 
-def load_catalog(sheets=None, filename='apps/catalog/tempo/catalog_en.xlsx'):
+def load_catalog(sheets=None, filename='apps/catalog/tempo/catalog_en.xlsx', lang='en'):
     if sheets is None:
         sheets = [1, 2]
     book = load_workbook(filename)
@@ -99,27 +100,27 @@ def load_catalog(sheets=None, filename='apps/catalog/tempo/catalog_en.xlsx'):
                 if _id.endswith('t'):
                     product_id = _id[:-1]
                     product = Product.objects.get(id=product_id)
-                    product.title_en = _title
+                    setattr(product, 'title_{}'.format(lang), _title)
                     product.save()
 
                 elif _id.endswith('s'):
                     product_id = _id[:-1]
                     product = Product.objects.get(id=product_id)
-                    product.subtitle_en = _title
+                    setattr(product, 'subtitle_{}'.format(lang), _title)
                     product.save()
 
                 elif _id.endswith('o'):
                     o_id = _id[:-1]
                     product_id, option_id = o_id.split('_')
                     option = ProductOption.objects.get(id=option_id, product_id=product_id)
-                    option.title_en = _title
+                    setattr(option, 'title_{}'.format(lang), _title)
                     option.save()
 
                 elif _id.endswith('e'):
                     e_id = _id[:-1]
                     product_id, option_id = e_id.split('_')
                     option = ProductExtraOption.objects.get(id=option_id, product_id=product_id)
-                    option.title_en = _title
+                    setattr(option, 'title_{}'.format(lang), _title)
                     option.save()
 
                 else:
@@ -145,7 +146,8 @@ def load_catalog(sheets=None, filename='apps/catalog/tempo/catalog_en.xlsx'):
                     if _id.endswith('t'):
                         product_id = _id[:-1]
                         product = Product.objects.get(id=product_id)
-                        product.text_en = '<p>{}</p>'.format('</p>\n\n<p>'.join(_text.split('\n\n'))).replace('\n', '\r\n')
+                        _text = '<p>{}</p>'.format('</p>\n\n<p>'.join(_text.split('\n\n'))).replace('\n', '\r\n')
+                        setattr(product, 'text_{}'.format(lang), _text)
                         product.save()
                     else:
                         raise ValueError('Error in ID')
