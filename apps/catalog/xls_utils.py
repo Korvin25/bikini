@@ -84,9 +84,14 @@ def dump_catalog_products(lang='en', lang_label='English'):
     print filename
 
 
-def load_catalog(sheets=None, filename='apps/catalog/tempo/catalog_en.xlsx', lang='en'):
+def load_catalog(lang='en', sheets=None, filename=None, absolute_filename=None):
     if sheets is None:
         sheets = [1, 2]
+
+    filename = filename or 'catalog_{}.xlsx'.format(lang)
+    filename = 'apps/catalog/tempo/{}'.format(filename)
+    filename = absolute_filename or filename
+
     book = load_workbook(filename)
 
     if 1 in sheets:
