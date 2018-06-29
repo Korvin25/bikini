@@ -14,6 +14,24 @@ from crequest.middleware import CrequestMiddleware
 
 register = template.Library()
 
+DEFAULT_SITENAME = settings.DEFAULT_SITENAME
+
+
+@register.filter
+def add_subdomain(url):
+    """
+    Меняем основной домен на субдомен, если:
+        - основной домен найден в урле
+        - мы находимся на субдомене
+    (используется для разных баннерах, урлы для которых задаются в админке)
+    """
+    request = CrequestMiddleware.get_request()
+    default_url = '{}://{}'.format(request.scheme, DEFAULT_SITENAME)
+
+    if url.startswith(default_url) and request.region_code:
+        url = url.replace(DEFAULT_SITENAME, request.get_host(), 1)
+    return url
+
 
 @register.filter
 def full_url(url):
@@ -23,7 +41,7 @@ def full_url(url):
     """
     request = CrequestMiddleware.get_request()
     current_site = get_current_site(request)
-    return 'https://{}{}'.format(current_site.domain, url)
+    return '{}://{}{}'.format(request.scheme, current_site.domain, url)
 
 
 @register.simple_tag(takes_context=True)
