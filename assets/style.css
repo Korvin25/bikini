@@ -137,7 +137,9 @@ header,main,nav,footer {display:block;}
     
     .logo {float:left;}
         .logo a {display:block;text-decoration:none;}
-        .logo a img, #logo_mini a img {width: 229px !important;height: 88px !important;}
+        /*.logo a img, #logo_mini a img {width: 229px !important;height: 88px !important;}*/
+        .logo a img, #logo_mini a img, .logo_foot {width: 229px !important;height: 88px !important;max-width: unset !important;max-height: none !important;}
+
         
     .cat_row_top {float:left;padding-top:24px;}
         .cat_row_top li {display:block;float:left;color:#fff;text-transform:uppercase;white-space:nowrap;margin-left:9px;}
@@ -323,6 +325,7 @@ header,main,nav,footer {display:block;}
             .menu_foot li a:hover {color:#e1312f;}
             .menu_foot li:last-child {/* margin-right:0; */}
             .menu_foot li.bt_req_call {margin-right:0;}
+            .menu_foot li.logo_foot img {width: 229px !important;height: 88px !important;max-width: unset !important;}
         
         #foot_menu {float:left;}
             #foot_menu li {float:left;display:block;margin-right:27px;padding-top: 32px;color:#fff;font-size: 15px;}
