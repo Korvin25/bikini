@@ -436,26 +436,15 @@ INSTAGRAM_ACCESS_TOKEN_URL = 'https://api.instagram.com/oauth/access_token'
 INSTAGRAM_AUTHORIZE_URL = 'https://api.instagram.com/oauth/authorize'
 
 
-# django-request
-
-REQUEST_IGNORE_AJAX = True
-REQUEST_IGNORE_PATHS = (
-    r'^admin/',
-)
-
-
 # django-el-pagination
-
 EL_PAGINATION_PER_PAGE = 15
 
 
 # django-watermarker
-
 WATERMARK_QUALITY = 100
 
 
 # для редактирования стран на странице со списком в админке
-
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 1500
 
 
@@ -469,4 +458,32 @@ FILER_PAGINATE_BY = 50
 FILER_ADMIN_ICON_SIZES = ('16', '32', '48', '64', '256')
 
 
+# for rosetta purposes
 UWSGI_TOUCHME = ''
+
+
+# django-request
+REQUEST_IGNORE_AJAX = True
+REQUEST_IGNORE_PATHS = (
+    r'^admin/',
+)
+# REQUEST_TRAFFIC_MODULES = (
+#     'request.traffic.UniqueVisitor',
+#     'request.traffic.UniqueVisit',
+#     'request.traffic.Hit',
+#     #
+#     'request.traffic.Search',
+#     'request.traffic.User',
+#     'request.traffic.UniqueUser',
+# )
+# REQUEST_PLUGINS = (
+#     'request.plugins.TrafficInformation',
+#     'request.plugins.LatestRequests',
+#     'request.plugins.TopPaths',
+#     'request.plugins.TopErrorPaths',
+#     'request.plugins.TopReferrers',
+#     'request.plugins.TopSearchPhrases',
+#     'request.plugins.TopBrowsers',
+#     #
+#     'request.plugins.ActiveUsers',
+# )
