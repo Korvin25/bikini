@@ -11,6 +11,9 @@
     -------------------<br/>
     {% trans 'Страна' %}: {{ obj.country }}<br/>
     {% trans 'Город' %}: {{ obj.city }}<br/>
+    {% if obj.postal_code %}
+        {% trans 'Почтовый индекс' %}: {{ obj.postal_code }}<br/>
+    {% endif %}
     {% trans 'Адрес' %}: {{ obj.address }}<br/>
     {% trans 'Телефон' %}: {{ obj.phone }}<br/>
     <br/>

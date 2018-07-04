@@ -14,6 +14,9 @@
     -------------------<br/>
     Страна: {{ obj.country }}<br/>
     Город: {{ obj.city }}<br/>
+    {% if obj.postal_code %}
+        Почтовый индекс: {{ obj.postal_code }}<br/>
+    {% endif %}
     Адрес: {{ obj.address }}<br/>
     Телефон: {{ obj.phone }}<br/>
     {% if obj.profile.has_email %}

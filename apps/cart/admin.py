@@ -39,7 +39,7 @@ class CartAdmin(admin.ModelAdmin):
             'fields': ('id', 'profile_with_link', 'status',)
         }),
         ('Данные из формы', {
-            'fields': ('country', 'city', 'address', 'phone', 'name',
+            'fields': ('country', 'city', 'postal_code', 'address', 'phone', 'name',
                        'delivery_method', 'payment_method', 'additional_info',)
         }),
         ('Список позиций', {
@@ -47,7 +47,7 @@ class CartAdmin(admin.ModelAdmin):
         }),
     )
     readonly_fields = ['id', 'profile_with_link', 'show_items',]
-    readonly_fields += ['country', 'city', 'address', 'phone', 'name',
+    readonly_fields += ['country', 'city', 'postal_code', 'address', 'phone', 'name',
                        # 'delivery_method', 'payment_method',
                        'additional_info',]
 

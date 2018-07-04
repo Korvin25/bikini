@@ -104,9 +104,9 @@ class Cart(models.Model):
     checkout_date = models.DateTimeField('Дата оформления', null=True, blank=True)
     currency = models.CharField('Валюта', max_length=3, default='rub', choices=CURRENCY_CHOICES)
 
-    # postal_code = models.CharField('Почтовый код', max_length=255, null=True, blank=True)
     country = models.ForeignKey(Country, verbose_name=_('Страна'), null=True, blank=True)
     city = models.CharField(_('Город'), max_length=225, null=True, blank=True)
+    postal_code = models.CharField(_('Почтовый индекс'), max_length=63, null=True, blank=True)
     address = models.TextField(_('Адрес'), null=True, blank=True)
     phone = models.CharField(_('Телефон'), max_length=30, null=True, blank=True)
     name = models.CharField(_('Полное имя'), max_length=511, null=True, blank=True)

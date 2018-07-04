@@ -57,7 +57,7 @@ class ProfileAdmin(UserAdmin):
         }),
         ('Данные для доставки', {
             'classes': ('suit-tab', 'suit-tab-default',),
-            'fields': ('country', 'city', 'address', 'phone', 'delivery_method', 'payment_method',)
+            'fields': ('country', 'city', 'postal_code', 'address', 'phone', 'delivery_method', 'payment_method',)
         }),
         ('Управление доступами', {
             'classes': ('suit-tab', 'suit-tab-default',),

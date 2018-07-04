@@ -430,10 +430,20 @@
             </div>
 
             <div class="rows_popup_input">
-              <label class="lbl_box">
-                  <p class="popup_form_label">{% trans 'Адрес' %}:<span class="orange_text">*</span></p>
-                  <textarea required name="address" class="input_text no_hover_border" style="padding: 12px 2.25% 0; width: 95.45%; height: 135px;">{{ shipping_data.address }}</textarea>
+              <div class="row_form_popup">
+                <label class="lbl_box">
+                  <p>{% trans 'Почтовый индекс' %}:</p>
+                  <input type="text" value="{{ shipping_data.postal_code }}" name="postal_code" class="input_text" />
                 </label>
+              </div>
+              <div class="row_form_popup"></div>
+            </div>
+
+            <div class="rows_popup_input">
+              <label class="lbl_box">
+                <p class="popup_form_label">{% trans 'Адрес' %}:<span class="orange_text">*</span></p>
+                <textarea required name="address" class="input_text no_hover_border" style="padding: 12px 2.25% 0; width: 95.45%; height: 135px;">{{ shipping_data.address }}</textarea>
+              </label>
             </div>            
             
             <div class="rows_popup_input">

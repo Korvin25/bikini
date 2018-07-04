@@ -16,12 +16,13 @@ class CartCheckoutForm(forms.ModelForm):
 
     class Meta:
         model = Cart
-        fields = ('country', 'city', 'address', 'phone', 'name',)
+        fields = ('country', 'city', 'postal_code', 'address', 'phone', 'name',)
 
     def __init__(self, *args, **kwargs):
         super(CartCheckoutForm, self).__init__(*args, **kwargs)
         self.fields['country'].required = True
         self.fields['city'].required = True
+        self.fields['postal_code'].required = False
         self.fields['address'].required = True
         self.fields['phone'].required = True
         self.fields['name'].required = True

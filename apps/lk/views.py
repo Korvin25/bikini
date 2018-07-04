@@ -35,6 +35,7 @@ class ProfileHomeView(ProfileMixin, TemplateView):
         shipping_data = {
             'country': 132,  # Россия
             'city': '',
+            'postal_code': '',
             'address': '',
             'phone': '',
             'name': '',
@@ -85,6 +86,7 @@ class ProfileFormView(ProfileMixin, JSONFormMixin, UpdateView):
         'name': 'name',
         'country': 'country',
         'city': 'city',
+        'postal_code': 'postal_code',
         'address': 'address',
         'phone': 'phone',
         'email': 'email',

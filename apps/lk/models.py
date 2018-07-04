@@ -4,11 +4,10 @@ from __future__ import unicode_literals
 from decimal import Decimal
 import uuid
 
-from django.core.urlresolvers import reverse
+# from django.core.urlresolvers import reverse
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.contrib.postgres.fields import JSONField
 from django.db import models
-from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from ..cart.utils import make_hash_from_cartitem
@@ -71,6 +70,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     # --- данные из формы в профиле ---
     country = models.ForeignKey(Country, verbose_name=_('Страна'), null=True, blank=True)
     city = models.CharField(_('Город'), max_length=225, null=True, blank=True)
+    postal_code = models.CharField(_('Почтовый индекс'), max_length=63, null=True, blank=True)
     address = models.TextField(_('Адрес'), null=True, blank=True)
     phone = models.CharField(_('Телефон'), max_length=30, null=True, blank=True)
     name = models.CharField(_('Полное имя'), max_length=511, null=True, blank=True)
@@ -135,6 +135,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
         data = {
             'country': self.country_id,
             'city': self.city or '',
+            'postal_code': self.postal_code or '',
             'address': self.address or '',
             'phone': self.phone or '',
             'name': self.name or '',
@@ -151,7 +152,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
 
     @property
     def can_get_discount(self):
-        from ..cart.models import CartItem
+        # from ..cart.models import CartItem
         complete_orders = self.complete_orders.values_list('id', flat=True)
         return (True if complete_orders.count() # and not CartItem.had_discounts(cart_ids=complete_orders)
                                                 # and not self.discount_used

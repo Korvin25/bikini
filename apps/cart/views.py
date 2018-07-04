@@ -31,6 +31,7 @@ class CartView(TemplateView):
         shipping_data = {
             'country': 132,  # Россия
             'city': '',
+            'postal_code': '',
             'address': '',
             'phone': '',
             'name': '',

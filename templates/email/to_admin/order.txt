@@ -7,7 +7,8 @@
 Данные для доставки
 -------------------
 Страна: {{ obj.country }}
-Город: {{ obj.city }}
+Город: {{ obj.city }}{% if obj.postal_code %}
+Почтовый индекс: {{ obj.postal_code }}{% endif %}
 Адрес: {{ obj.address|safe }}
 Телефон: {{ obj.phone }}{% if obj.profile and obj.profile.has_email %}
 Email: {{ obj.profile.email }}{% endif %}

@@ -6,7 +6,8 @@
 {% trans 'Данные для доставки' %}
 -------------------
 {% trans 'Страна' %}: {{ obj.country }}
-{% trans 'Город' %}: {{ obj.city }}
+{% trans 'Город' %}: {{ obj.city }}{% if obj.postal_code %}
+{% trans 'Почтовый индекс' %}: {{ obj.postal_code }}{% endif %}
 {% trans 'Адрес' %}: {{ obj.address|safe }}
 {% trans 'Телефон' %}: {{ obj.phone }}
 

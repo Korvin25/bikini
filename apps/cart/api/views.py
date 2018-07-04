@@ -127,6 +127,7 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
     mapping = {
         'country': 'country',
         'city': 'city',
+        'postal_code': 'postal_code',
         'address': 'address',
         'phone': 'phone',
         'name': 'name',
