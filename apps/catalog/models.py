@@ -715,7 +715,7 @@ class ProductOption(models.Model):
     price_eur = models.DecimalField('Цена, eur.', max_digits=9, decimal_places=2, default=0)
     price_usd = models.DecimalField('Цена, usd.', max_digits=9, decimal_places=2, default=0,
                                     help_text='оставьте цены пустыми, чтобы использовать цену родительского товара')
-    in_stock = models.SmallIntegerField('Количество на складе', default=5)
+    in_stock = models.SmallIntegerField('Количество на складе', default=100)
 
     attrs = JSONField(default=dict)
 
@@ -741,7 +741,7 @@ class ProductExtraOption(models.Model):
     price_rub = models.DecimalField('Цена, руб.', max_digits=9, decimal_places=2, default=0)
     price_eur = models.DecimalField('Цена, eur.', max_digits=9, decimal_places=2, default=0)
     price_usd = models.DecimalField('Цена, usd.', max_digits=9, decimal_places=2, default=0)
-    in_stock = models.SmallIntegerField('Количество на складе', default=5)
+    in_stock = models.SmallIntegerField('Количество на складе', default=100)
 
     attrs = JSONField(default=dict)
 
