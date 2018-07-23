@@ -9,14 +9,13 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext as __
 
-from apps.catalog.models import Product
 from apps.cart.cart import Cart
 from apps.cart.forms import CartCheckoutForm
 from apps.cart.utils import make_hash_from_cartitem
 from apps.core.mixins import JSONFormMixin
 from apps.core.templatetags.core_tags import to_price
 from apps.currency.utils import get_currency
-from apps.lk.email import admin_send_order_email, send_order_email
+from apps.lk.email import admin_send_order_email, admin_send_low_in_stock_email, send_order_email
 
 
 translated_strings = (_('Корзина пуста'), _('Неправильный формат запроса'), _('Неправильный id товара'),
@@ -84,7 +83,7 @@ class Step0View(CartStepBaseView):
         if len(kw):
             self.cart.update(**kw)
 
-        basket = self.cart.cart
+        # basket = self.cart.cart
 
         # delivery_method = basket.delivery_method
         # payment_method = basket.payment_method
@@ -195,6 +194,39 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
             profile.discount_used = False
             profile.save()
 
+            _options = []
+            _extra_products = []
+
+            items = cart.cartitem_set.all()
+            for item in items:
+                count = item.count
+
+                option = item.option
+                in_stock = option.in_stock - count
+                in_stock = 0 if in_stock < 0 else in_stock
+                option.in_stock = in_stock
+                option.save()
+                if in_stock < 5:
+                    _options.append({'option': option, 'product': item.product, 'in_stock': in_stock})
+
+                extra_p_ids = item.extra_products.keys()
+                if extra_p_ids:
+                    try:
+                        extra_products = item.product.extra_options.filter(extra_product_id__in=extra_p_ids)
+                    except ValueError:
+                        pass
+                    else:
+                        for extra_p in extra_products:
+                            in_stock = extra_p.in_stock - count
+                            in_stock = 0 if in_stock < 0 else in_stock
+                            extra_p.in_stock = in_stock
+                            extra_p.save()
+                            if in_stock < 5:
+                                _extra_products.append({'extra_p': extra_p, 'product': item.product, 'in_stock': in_stock})
+
+            if _options or _extra_products:
+                admin_send_low_in_stock_email(_options, _extra_products)
+
             popup = '#step5' if profile.can_get_discount else '#step4'
             data = {'result': 'ok', 'popup': popup, 'count': count, 'summary': summary, 'ya_summary': ya_summary, 'ya_currency': ya_currency, 'order_number': order_number}
             return JsonResponse(data)
@@ -236,7 +268,6 @@ class CartAjaxView(View):
             raise Http404
 
         data = {}
-        error = None
         DATA = {}
         cart = Cart(request)
 

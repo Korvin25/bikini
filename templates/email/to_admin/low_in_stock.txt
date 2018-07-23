@@ -1,0 +1,12 @@
+{{ subject }}
+
+Дата и время: {% now 'd.m.Y H:i:s' %}
+
+{% if options %}
+Вариант{% if options|length > 1 %}ы{% endif %} товара:{% for item in options %}
+   {{ forloop.counter }}) Артикул {{ item.product.vendor_code }}{% if item.option.vendor_code and item.product.vendor_code != item.option.vendor_code %} (дочерний артикул - {{ item.option.vendor_code }}){% endif %} / {{ item.option }} / Осталось {{ item.in_stock }} шт.{% endfor %}
+{% endif %}
+{% if extra_products %}
+Дополнительны{% if extra_products|length > 1 %}е{% else %}й{% endif %} товар{% if extra_products|length > 1 %}ы{% endif %}:{% for item in extra_products %}
+   {{ forloop.counter }}) Артикул {{ item.product.vendor_code }}{% if item.extra_p.vendor_code and item.product.vendor_code != item.extra_p.vendor_code %} (дочерний артикул - {{ item.extra_p.vendor_code }}){% endif %} / {{ item.extra_p.extra_product }} ({{ item.product }}) / Осталось {{ item.in_stock }} шт.{% endfor %}
+{% endif %}

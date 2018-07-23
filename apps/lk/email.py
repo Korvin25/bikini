@@ -78,6 +78,12 @@ def admin_send_blog_comment_email(obj, post, **kwargs):
     email_admin(subject, email_key, obj, admin_slug=admin_slug, post=post, **kwargs)
 
 
+def admin_send_low_in_stock_email(options, extra_products, **kwargs):
+    subject = 'Bikinimini.ru: Некоторые товары заканчиваются на складе'
+    email_key = 'low_in_stock'
+    email_admin(subject, email_key, options=options, extra_products=extra_products, **kwargs)
+
+
 def email_user(subject, email_key, profile=None, obj=None, language_to=None, mandrill=False, dummy=False, **kwargs):
     request = CrequestMiddleware.get_request()
 

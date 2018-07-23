@@ -4,7 +4,7 @@
 {% block breadcrumbs %}
   <div class="breadcrumbs">
     <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
-    &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">Каталог</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">Каталог товаров</a>
     &rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
     &rsaquo; Обновить данные у {{ count }} {{ count_label }}
   </div>
@@ -152,7 +152,7 @@
             {% else %}
               <span style="color: #888">Показать на сайте</a>
             {% endif %}
-            <button type="submit" class="product_button">Сохранить товар</button>
+            <button type="submit" class="product_button">Сохранить изменения</button>
           </div>
         </form>
       </div>

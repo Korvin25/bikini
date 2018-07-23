@@ -1,0 +1,27 @@
+<h3>{{ subject }}</h3>
+
+<p>
+    <strong>Дата и время:</strong> {% now 'd.m.Y H:i:s' %}
+</p>
+<hr/>
+{% if options %}
+<p>
+    <strong>Вариант{% if options|length > 1 %}ы{% endif %} товара:</strong><br/>
+    <ol>
+        {% for item in options %}
+            <li>Артикул <strong>{{ item.product.vendor_code }}</strong>{% if item.option.vendor_code and item.product.vendor_code != item.option.vendor_code %} (дочерний артикул - <strong>{{ item.option.vendor_code }}</strong>){% endif %} / <a href="/admin/catalog/product/{{ item.option.product_id }}/change/#options">{{ item.option }}</a> / Осталось {{ item.in_stock }} шт.</li>
+        {% endfor %}
+    </ol>
+</p>
+{% endif %}
+
+{% if extra_products %}
+<p>
+    <strong>Дополнительны{% if extra_products|length > 1 %}е{% else %}й{% endif %} товар{% if extra_products|length > 1 %}ы{% endif %}:</strong><br/>
+    <ol>
+        {% for item in extra_products %}
+            <li>Артикул <strong>{{ item.product.vendor_code }}</strong>{% if item.extra_p.vendor_code and item.product.vendor_code != item.extra_p.vendor_code %} (дочерний артикул - <strong>{{ item.extra_p.vendor_code }}</strong>){% endif %} / <a href="/admin/catalog/product/{{ item.extra_p.product_id }}/change/#extra">{{ item.extra_p.extra_product }} ({{ item.product }})</a> / Осталось {{ item.in_stock }} шт.</li>
+        {% endfor %}
+    </ol>
+</p>
+{% endif %}
