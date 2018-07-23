@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db.utils import OperationalError, DataError, IntegrityError
+from django.db.utils import IntegrityError
 
-from apps.catalog.models import Product
-from apps.lk.models import Profile, WishListItem
+from apps.lk.models import WishListItem
 
 
 def update_wishlist(request, profile):
@@ -16,5 +15,5 @@ def update_wishlist(request, profile):
                                             product_id=item.get('product_id', 0),
                                             price=item.get('price', 0.0),
                                             attrs=item.get('attrs', {}))
-            except IntegrityError as e:
+            except IntegrityError:
                 pass

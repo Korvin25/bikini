@@ -15,6 +15,7 @@ from apps.blog.views import PostListView, PostDetailView
 from apps.cart.views import CartView, CartGetDiscountView
 from apps.cart.certificate.views import CertificateView
 from apps.catalog.views import ProductsView, ProductView, ProductWithDiscountView
+from apps.catalog.api_views import IncreaseInStockView, ChangeProductView
 from apps.content.sitemap import sitemaps
 from apps.content.views import HomepageView, VideoListView, VideoDetailView, PageView, robots_txt
 from apps.currency.views import SetCurrencyView
@@ -66,6 +67,9 @@ urlpatterns += i18n_patterns(
     url(r'^api/profile/set_password/', ProfileSetPasswordFormView.as_view(), name='profile-set-password-form'),
     url(r'^api/forms/', include('apps.feedback.urls', namespace='forms')),
     url(r'^api/currency/set/', SetCurrencyView.as_view(), name='set_currency'),
+    # admin
+    url(r'^api/products/increase_in_stock/', IncreaseInStockView.as_view(), name='admin_increase_in_stock'),
+    url(r'^api/products/change/', ChangeProductView.as_view(), name='admin_change_product'),
 
     # -- apps --
     url(r'^cart/$', CartView.as_view(), name='cart'),

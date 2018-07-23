@@ -127,7 +127,7 @@ def to_str(something):
     Переводим что-либо в строку
     (используется для Decimal, которые должны быть представлены в виде "123.00", а не "123,00")
     """
-    return str(something)
+    return unicode(something)
 
 
 @register.filter

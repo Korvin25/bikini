@@ -7,6 +7,17 @@ from multiselectfield.forms.fields import MultiSelectFormField
 from .models import Attribute, AttributeOption, ExtraProduct, Category, Product, SpecialOffer
 
 
+class UpdateProductsDataForm(forms.Form):
+    # delivery_price = forms.IntegerField()
+    _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
+
+    # def clean_delivery_price(self):
+    #     delivery_price = self.cleaned_data.get('delivery_price')
+    #     if delivery_price < 0:
+    #         raise forms.ValidationError('Ensure this value is greater than or equal to 0.')
+    #     return delivery_price
+
+
 class AttributeOptionInlineFormset(forms.BaseInlineFormSet):
     """
     Переопределяем формсет, чтобы передать значения в формы

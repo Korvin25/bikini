@@ -7,12 +7,14 @@ from django.contrib import admin, messages
 from django.contrib.admin.templatetags.admin_urls import add_preserved_filters
 from django.contrib.admin.filters import SimpleListFilter
 from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
+from django.template.context_processors import csrf
 from django.utils.safestring import mark_safe
 
 from adminsortable2.admin import SortableAdminMixin
 # from jet.admin import CompactInline
 from modeltranslation.admin import TabbedTranslationAdmin, TranslationInlineModelAdmin
+from pytils.numeral import choose_plural
 from salmonella.admin import SalmonellaMixin
 from suit import apps
 
@@ -20,11 +22,13 @@ from ..content.models import Video
 from .admin_dynamic import (ProductOptionInlineFormset, ProductPhotoInlineFormset,
                             ProductOptionInlineForm, ProductPhotoInlineForm, ProductExtraOptionInlineForm,
                             ProductOptionAdmin, ProductPhotoAdmin, ProductExtraOptionAdmin,)
-from .admin_forms import (AttributeOptionInlineFormset, AttributeOptionAdminForm,
+from .admin_forms import (UpdateProductsDataForm,
+                          AttributeOptionInlineFormset, AttributeOptionAdminForm,
                           ProductAdminForm, ChangeCategoriesForm, ChangeAttributesForm,
                           SpecialOfferAdminForm,)
 from .models import (Attribute, AttributeOption, ExtraProduct, Category,
-                     AdditionalProduct, Certificate, GiftWrapping,
+                     # AdditionalProduct,
+                     Certificate, GiftWrapping,
                      Product, ProductOption, ProductExtraOption, ProductPhoto,
                      SpecialOffer,)
 from .translation import *
@@ -251,6 +255,20 @@ class GiftWrappingAdmin(admin.ModelAdmin):
 
 # === Товары + спец.предложения ===
 
+class InStockFilter(SimpleListFilter):
+    title = 'Кол-во товара на складе'
+    parameter_name = 'in_stock'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('less_than_five', 'Меньше 5-ти'),
+        )
+
+    def queryset(self, request, queryset):
+        return (queryset.filter(options__in_stock__lt=5).distinct() if self.value() == 'less_than_five'
+                else queryset)
+
+
 class HasAttrsFilter(SimpleListFilter):
     title = 'Есть атрибуты?'
     parameter_name = 'has_attrs'
@@ -328,15 +346,54 @@ class ProductVideoInline(TranslationInlineModelAdmin, admin.StackedInline):  # C
 
 @admin.register(Product)
 class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
-    # change_category_template = 'admin/catalog/product/change_category.html'
     change_categories_template = 'admin/catalog/product/change_categories.html'
     change_attributes_template = 'admin/catalog/product/change_attributes.html'
+
+    def update_data(self, request, queryset):
+        opts = Product._meta
+        form = None
+        count = queryset.count()
+        count_label = choose_plural(count, ('товара', 'товаров', 'товаров'))
+
+        queryset = queryset.select_related('photo_f').prefetch_related('options', 'extra_options', 'extra_options__extra_product')
+
+        if 'apply' in request.POST:
+            pass
+            # form = UpdateProductsDataForm(request.POST)
+
+            # if form.is_valid():
+            #     delivery_price = form.cleaned_data['delivery_price']
+            #     queryset.update(delivery_price=delivery_price)
+            #     self.message_user(request, 'Delivery price of {0} {1} updated.'.format(count, count_label), messages.SUCCESS)
+            #     return
+
+        if not form:
+            # prices = list(set(queryset.values_list('delivery_price', flat=True)))
+            # initial_price = prices[0] if len(prices) == 1 else 0
+            form = UpdateProductsDataForm(
+                initial={
+                    '_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME),
+                    # 'delivery_price': initial_price,
+                }
+            )
+
+        data = {
+            'products': queryset, 'form': form, 
+            'count': count, 'count_label': count_label, 
+            'opts': opts, 'app_label': opts.app_label,
+            'request': request,
+        }
+        data.update(csrf(request))
+        return render_to_response('admin/catalog/product/update_data.html', data)
+
+    update_data.short_description = 'Изменить товары массово'
 
     def change_categories_view(self, request, id, form_url='', extra_context=None):
         opts = Product._meta
         try:
             obj = Product.objects.get(pk=id)
         except (Product.DoesNotExist, ValueError) as e:
+            print e
             raise Http404
         form = ChangeCategoriesForm(request.POST, instance=obj) if request.POST else ChangeCategoriesForm(instance=obj)
 
@@ -349,8 +406,6 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
         if form.is_valid():
             new_categories = set([int(cat_id) for cat_id in form.cleaned_data['categories']])
             form.save()
-
-            # import ipdb; ipdb.set_trace()
 
             if new_categories != old_categories:
                 obj.set_attributes_from_categories(new_categories)
@@ -384,6 +439,7 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
         try:
             obj = Product.objects.get(pk=id)
         except (Product.DoesNotExist, ValueError) as e:
+            print e
             raise Http404
         form = ChangeAttributesForm(request.POST, instance=obj) if request.POST else ChangeAttributesForm(instance=obj)
 
@@ -424,9 +480,6 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
 
         info = self.model._meta.app_label, self.model._meta.model_name
         urls = [
-            # url(r'^(.+)/change_category/$',
-            #     wrap(self.change_category_view),
-            #     name='%s_%s_change_category' % info),
             url(r'^(.+)/change_categories/$',
                 wrap(self.change_categories_view),
                 name='%s_%s_change_categories' % info),
@@ -437,11 +490,12 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
         super_urls = super(ProductAdmin, self).get_urls()
         return urls + super_urls
 
+    actions = ['update_data', ]
     list_display = ('id', 'title', 'slug', 'list_categories', 'show', 'has_attrs', 'show_at_homepage',
-                    'order_at_homepage', 'add_dt', 'in_stock', 'vendor_code')
+                    'order_at_homepage', 'add_dt', 'vendor_code', 'get_in_stock')
     list_display_links = ('id', 'title',)
-    list_editable = ('order_at_homepage', 'in_stock', 'vendor_code')
-    list_filter = ('show', HasAttrsFilter, 'show_at_homepage', 'add_dt', 'categories',)
+    list_editable = ('order_at_homepage', 'vendor_code')
+    list_filter = ('show', HasAttrsFilter, InStockFilter, 'show_at_homepage', 'add_dt', 'categories',)
     suit_list_filter_horizontal = ('show', 'show_at_homepage', 'categories',)
     list_per_page = 400
     suit_form_tabs = (
@@ -471,7 +525,7 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
             'fields': ('title', 'subtitle', 'slug', 'categories', 'vendor_code',
                        # 'photo', 'photo_f',
                        'photo_f',
-                       ('price_rub', 'price_eur', 'price_usd',), 'text', 'in_stock',),
+                       ('price_rub', 'price_eur', 'price_usd',), 'text',),
         }),
         ('Настройки показа на сайте', {
             'classes': ('suit-tab suit-tab-default',),
@@ -521,7 +575,7 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
 
     def get_queryset(self, *args, **kwargs):
         qs = super(ProductAdmin, self).get_queryset(*args, **kwargs)
-        qs = qs.prefetch_related('categories')
+        qs = qs.prefetch_related('categories', 'options')
         return qs
 
     def get_fieldsets(self, request, obj=None):
@@ -591,9 +645,3 @@ class SpecialOfferAdmin(admin.ModelAdmin):
     list_editable = ('discount', 'is_active',)
     form = SpecialOfferAdminForm
     raw_id_fields = ('product',)
-
-    #def has_add_permission(self, request):
-    #    if SpecialOffer.objects.count():
-    #        return None
-    #    return super(SpecialOfferAdmin, self).has_add_permission(request)
-

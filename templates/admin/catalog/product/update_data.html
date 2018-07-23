@@ -1,0 +1,225 @@
+{% extends "admin/base_site.html" %}
+{% load admin_urls admin_static admin_modify i18n admin_tags core_tags %}
+
+{% block breadcrumbs %}
+  <div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">Каталог</a>
+    &rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+    &rsaquo; Обновить данные у {{ count }} {{ count_label }}
+  </div>
+{% endblock %}
+
+{% block content %}
+  <link rel="stylesheet" type="text/css" href="/static/admin/css/forms.css" />
+  <style>
+    {% include 'admin/catalog/product/css/update_data.css' %}
+  </style>
+
+  {% csrf_token %}
+
+  <div class="parent_div">
+    <h2 class="section_title">Массово изменить количество товара</h2>
+    <hr/>
+    <div class="mass_change submit-row">
+      <form class="mass_change_form js-usual-form js-show-success-label" method="post" action="{% url 'admin_increase_in_stock' %}">
+        <div class="error-messages"></div>
+        <input type="hidden" name="products" value="{% for value in form|get_values:'_selected_action' %}{{ value }}{% if not forloop.last %},{% endif %}{% endfor %}">
+        <input type="number" value="0" name="increase_to">
+        <button type="submit">Применить</button>
+      </form>
+    </div>
+
+    <h2 class="section_title">Изменить товары по одному</h2>
+    <hr style="margin: 0 0 10px;"/>
+
+    <div class="fast_links">
+      {% for product in products %}
+        <a class="fast_link" href="#product{{ product.id }}" title="Быстрый переход к товару">{{ product.id }})&nbsp;{{ product.title }}</a>{% if not forloop.last %}&nbsp;&nbsp;/&nbsp;&nbsp;{% endif %}
+      {% endfor %}
+    </div>
+
+    {% for product in products %}
+      <div class="product_parent_div">
+        <form class="change_product_form js-usual-form js-show-success-label" method="post" action="{% url 'admin_change_product' %}">
+          <input type="hidden" name="product" value="{{ product.id }}">
+
+          <table class="big_table" id="product{{ product.id }}">
+            <tr class="header_row big_table_header">
+              <th>&nbsp;</th>
+              <th>фото</th>
+              <th colspan="5">товар</th>
+              <th>артикул</th>
+              <th>цена</th>
+            </tr>
+            <tr class="header_row">
+              <td>#{{ product.id }}</td>
+              {# <td><img class="product_img" src="https://picsum.photos/150/150/?random"></td> #}
+              <td><img class="product_img" src="{{ product.admin_photo_url }}"></td>
+              <td colspan="5"><h2><a title="Страница в админке" href="/admin/catalog/product/{{ product.id }}/">{{ product.title }}</a></h2></td>
+              <td><input type="text" value="{{ product.vendor_code }}" name="product_vendor_code"></td>
+              <td>
+                <input class="price_input" step="0.000001" type="number" value="{{ product.price_rub|to_str }}" name="product_price_rub"> руб.<br/>
+                <input class="price_input" step="0.000001" type="number" value="{{ product.price_eur|to_str }}" name="product_price_eur"> eur.<br/>
+                <input class="price_input" step="0.000001" type="number" value="{{ product.price_usd|to_str }}" name="product_price_usd"> usd.<br/>
+              </td>
+            </tr>
+
+            <tr class="nested_row">
+              <td colspan="9">
+                <h3>Варианты ({{ product.options.count }})</h3>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="9">
+                <table class="nested_table">
+                  <tr class="header_row">
+                    <th>название</th>
+                    <th>артикул</th>
+                    <th>цена</th>
+                    {% comment %}
+                      <th>цвет</th>
+                      <th>размер верх</th>
+                      <th>размер низ</th>
+                    {% endcomment %}
+                    <th>остаток на складе</th>
+                  </tr>
+                  {% for option in product.options.all %}
+                    <tr>
+                      <td>{{ option }}</td>
+                      <td><input type="text" value="{{ option.vendor_code }}" name="option_vendor_code_{{ option.id }}"></td>
+                      <td>
+                        <input class="price_input" step="0.000001" type="number" value="{{ option.price_rub|to_str }}" name="option_price_rub_{{ option.id }}"> руб.<br/>
+                        <input class="price_input" step="0.000001" type="number" value="{{ option.price_eur|to_str }}" name="option_price_eur_{{ option.id }}"> eur.<br/>
+                        <input class="price_input" step="0.000001" type="number" value="{{ option.price_usd|to_str }}" name="option_price_usd_{{ option.id }}"> usd.<br/>
+                      </td>
+                      {% comment %}
+                        <td><img class="color_img" src="http://via.placeholder.com/15/ffffff/ffffff">&nbsp;<img class="color_img" src="http://via.placeholder.com/15/dddddd/dddddd"></td>
+                        <td>SM, M</td>
+                        <td>M</td>
+                      {% endcomment %}
+                      <td><input type="number" value="{{ option.in_stock }}" name="option_in_stock_{{ option.id }}"></td>
+                    </tr>
+                  {% endfor %}
+                </table>
+              </td>
+            </tr>
+
+            {% for extra_p in product.extra_products_f %}
+              <tr class="nested_row">
+                <td colspan="9">
+                  <h3>{{ extra_p.extra_product }}</h3>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="9">
+                  <table class="nested_table">
+                    <tr class="header_row">
+                      <th>&nbsp;</th>
+                      <th>артикул</th>
+                      <th>цена</th>
+                      {% comment %}
+                        <th>цвет</th>
+                        <th>размер</th>
+                      {% endcomment %}
+                      <th>остаток на складе</th>
+                    </tr>
+                    <tr>
+                      <td>{{ extra_p.extra_product }}</td>
+                      <td><input type="text" value="{{ extra_p.vendor_code }}" name="extra_p_vendor_code_{{ extra_p.id }}"></td>
+                      <td>
+                        <input class="price_input" step="0.000001" type="number" value="{{ extra_p.price_rub|to_str }}" name="extra_p_price_rub_{{ extra_p.id }}"> руб.<br/>
+                        <input class="price_input" step="0.000001" type="number" value="{{ extra_p.price_eur|to_str }}" name="extra_p_price_eur_{{ extra_p.id }}"> eur.<br/>
+                        <input class="price_input" step="0.000001" type="number" value="{{ extra_p.price_usd|to_str }}" name="extra_p_price_usd_{{ extra_p.id }}"> usd.<br/>
+                      </td>
+                      {% comment %}
+                        <td><img class="color_img" src="http://via.placeholder.com/15/330000/330000">&nbsp;<img class="color_img" src="http://via.placeholder.com/15/aaffff/aaffff"></td>
+                        <td>SM, M</td>
+                      {% endcomment %}
+                      <td><input type="number" value="{{ extra_p.in_stock }}" name="extra_p_in_stock_{{ extra_p.id }}"></td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            {% endfor %}
+
+          </table>
+
+          <div class="product_footer submit-row">
+            <div class="error-messages"></div>
+            {% if product.show %}
+              <a class="product_href" href="{{ product.get_absolute_url }}">Показать на сайте</a>
+            {% else %}
+              <span style="color: #888">Показать на сайте</a>
+            {% endif %}
+            <button type="submit" class="product_button">Сохранить товар</button>
+          </div>
+        </form>
+      </div>
+    {% endfor %}
+  </div>
+
+
+  {% comment %}
+  <style>
+    ._input { float: left; margin-right: 3px; }
+    ._label { width: auto; }
+    ._label:after { height: auto !important; content: none; }
+  </style>
+
+  <div>
+    <form action="{{ request.path }}" method="post">
+      {% csrf_token %}
+
+      {% if form.errors %}
+        <p class="errornote">Пожалуйста, исправьте ошибки ниже.</p>
+      {% endif %}
+
+      <fieldset class="module aligned">
+        <h2>Обновить данные товаров</h2>
+
+        <div class="form-row field-delivery-price">
+          <div class="field-box field-delivery-price">
+            {% if form.delivery_price.errors %}<ul class="errorlist">{{ form.delivery_price.errors|unordered_list }}</ul>{% endif %}
+            <label for="id_delivery_price">Новая цена:</label>
+            <div style="display: inline-block; padding-top: 8px;">
+              <input id="id_delivery_price" name="delivery_price" step="any" type="number" value="{{ form.delivery_price.value }}">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row field-delivery-price">
+          <p>Next products will be updated:</p>
+          <ol style="margin-left: 1.5em; padding-left: 0;">
+            {% for country in products %}
+              <li>{{ country.title }} ({% if forloop.first %}current price: {% endif %}{{ country.delivery_price }})</li>
+            {% endfor %}
+          </ol>
+        </div>
+
+      </fieldset>
+
+      <div class="submit-row">
+        {% for value in form|get_values:'_selected_action' %}
+          <input type="hidden" name="_selected_action" value="{{ value }}">
+        {% endfor %}
+        <input type="hidden" name="action" value="update_data" />
+        <input type="submit" name="apply" class="default" value="Применить">
+      </div>
+
+    </form>
+  </div>
+  {% endcomment %}
+
+
+  <script src="/static/js/jquery-1.9.0.min.js"></script>
+  <script src="/static/js/jquery.cookie.js"></script>
+  <script type="text/javascript">
+    // ----- CSRF -------
+    {% include 'js/csrf.js' %}
+    // ----- Forms, etc -------
+    {% include 'js/global.js' %}
+    // {% include 'js/product.js' %}
+    // {% include 'js/wishlist.js' %}
+  </script>
+{% endblock %}

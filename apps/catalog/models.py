@@ -7,8 +7,8 @@ import json
 from django.contrib.postgres.fields import JSONField
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models import Min, Max
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
 
 from ckeditor_uploader.fields import RichTextUploadingField
 from colorfield.fields import ColorField
@@ -21,7 +21,7 @@ from ..core.templatetags.core_tags import to_price
 from ..core.regions_utils import region_field
 from ..core.utils import with_watermark
 from ..currency.utils import currency_price
-from ..settings.models import Setting, SEOSetting, MetatagModel
+from ..settings.models import SEOSetting, MetatagModel
 
 
 # === Атрибуты (справочники) ===
@@ -435,7 +435,6 @@ class Product(MetatagModel):
     price_eur = models.DecimalField('Цена, eur.', max_digits=9, decimal_places=2, default=0)
     price_usd = models.DecimalField('Цена, usd.', max_digits=9, decimal_places=2, default=0)
     text = RichTextUploadingField('Текст', blank=True, null=True)
-    in_stock = models.SmallIntegerField('Количество на складе', default=5)
 
     order = models.PositiveSmallIntegerField(default=0, blank=False, null=False, verbose_name=mark_safe('&nbsp;&nbsp;&nbsp;&nbsp;'))
     show = models.BooleanField('Показывать на сайте', default=True)
@@ -664,9 +663,10 @@ class Product(MetatagModel):
                        style="height: {1}px; width: {1}px; {2}"
                        title="{3}">'''.format(image_src, dimension, style, self.title)
 
-    # @property
-    # def admin_photo_url(self):
-    #     return self.photo['admin_product_photo'].url if self.photo else ''
+    @property
+    def admin_photo_url(self):
+        # return self.photo['admin_product_photo'].url if self.photo else ''
+        return get_thumbnailer(self.photo_f)['admin_product_photo'].url
 
     # @mark_safe
     # def admin_show_photo(self):
@@ -682,8 +682,28 @@ class Product(MetatagModel):
         return extra_products.filter(attrs__gt={})
 
     @property
+    def extra_products_f(self):
+        extra_products = self.extra_options.all()
+        return extra_products.filter(attrs__gt={})
+
+    @property
     def attrs_json(self):
         return json.dumps(self.attrs)
+
+    @property
+    def in_stock_counts(self):
+        return self.options.all().aggregate(Min('in_stock'), Max('in_stock'))
+
+    @mark_safe
+    def get_in_stock(self):
+
+        def _get(x):
+            return x if x is not None else '-'
+
+        in_stock_counts = self.in_stock_counts
+        return '{} / {}'.format(_get(in_stock_counts['in_stock__min']), _get(in_stock_counts['in_stock__max']))
+    get_in_stock.allow_tags = True
+    get_in_stock.short_description = 'Кол-во товара (min/max)'
 
 
 class ProductOption(models.Model):

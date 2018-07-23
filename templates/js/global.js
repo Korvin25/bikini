@@ -189,6 +189,8 @@ function sendUsualForm(url, form_data, $to_disable, $form) {
   if ($to_disable) { $to_disable.addClass('_disabled'); };
   $(document.activeElement).blur();
 
+  var $error_messages = $form.find('.error-messages');
+
   $.ajax({
     url: url,
     type: 'POST',
@@ -201,19 +203,27 @@ function sendUsualForm(url, form_data, $to_disable, $form) {
       var errors = res['errors'],
           result = res['result'],
           next = res['next'],
+          error_message = res['error_message'],
           success_message = res['success_message'];
 
       if ($to_disable) { $to_disable.removeClass('_disabled'); };
 
       if (result == 'ok') {
         if (next) { window.location = next; }
-        else if (success_message) { $form.html('<p style="color: green;">'+success_message+'</p>'); }
+        else if (success_message) {
+          if ($form.hasClass('js-show-success-label')) {
+            $error_messages.append('<div class="err-message" style="color: green !important;">' + success_message + '<br/></div>');
+          } else { $form.html('<p style="color: green;">'+success_message+'</p>'); }
+        }
         else { window.location.reload(); }
       }
       else {
         if (error) { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', error); }
         else if (errors) { 
           addErrors($form, errors);
+        }
+        else if (error_message) { 
+            $error_messages.append('<div class="err-message">' + error_message + '<br/></div>');
         }
         else { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', res.status + ' ' + res.statusText); }
       };
@@ -230,12 +240,16 @@ function sendUsualForm(url, form_data, $to_disable, $form) {
               popup = response['popup'],
               error = response['error'],
               errors = response['errors'],
+              error_message = response['error_message'],
               alert_message = response['alert_message'];
 
           if (error) { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', error); }
           else if (errors) { 
             if ($form) { addErrors($form, errors); }
             else { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', errors); }
+          }
+          else if (error_message) { 
+            $error_messages.append('<div class="err-message">' + error_message + '<br/></div>');
           };
           if (click_to) { $(click_to).click(); };
           if (popup) { showPopup(popup); };
