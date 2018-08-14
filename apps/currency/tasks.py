@@ -3,8 +3,6 @@ from __future__ import unicode_literals
 
 from decimal import Decimal
 import logging
-import os
-import traceback
 
 from celery import shared_task
 
@@ -26,7 +24,7 @@ def update_prices(currency_name, rate, from_admin=True):
     try:
         update_all_prices(currency_name, rate)
     except Exception as exc:
-        l.error('updating prices task error ({}, {}): {}'.format(currency_name, rate, unicode(exc.__class__)))
+        l.error('updating prices task error ({}, {}): {}: {}'.format(currency_name, rate, unicode(exc.__class__), unicode(exc.message)))
     else:
         l.info('updating prices task done ({}, {})'.format(currency_name, rate))
 
