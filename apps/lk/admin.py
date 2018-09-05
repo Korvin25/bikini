@@ -44,7 +44,8 @@ class ProfileAdmin(UserAdmin):
     list_display = ('id', 'email', 'name', 'country', 'city', 'show_traffic_source', 'subscription', 'is_active', 'is_staff', 'is_superuser',)
     list_editable = ('subscription', 'is_active',)
     list_display_links = ('email',)
-    list_filter = (CountryFilter, 'city', TrafficSourceFilter, 'is_active', 'is_staff', 'is_superuser',)
+    list_filter = ('is_active', 'is_staff', 'is_superuser',
+                   CountryFilter, 'city', TrafficSourceFilter,)
     list_per_page = 200
     suit_form_tabs = (
         ('default', 'Профиль'),

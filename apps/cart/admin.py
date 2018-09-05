@@ -34,7 +34,8 @@ class CartAdmin(admin.ModelAdmin):
                     'admin_show_summary', 'count', 'country', 'city', 'show_traffic_source',
                     'show_delivery_method', 'show_payment_method', 'status',)
     list_display_links = ('__unicode__', 'profile',)
-    list_filter = ('status', 'delivery_method', 'payment_method', CountryFilter, 'city', TrafficSourceFilter)
+    list_filter = ('status', 'delivery_method', 'payment_method', 'checkout_date',
+                   CountryFilter, 'city', TrafficSourceFilter)
     list_per_page = 200
     fieldsets = (
         ('Общее', {

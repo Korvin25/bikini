@@ -141,7 +141,7 @@ class Cart(models.Model):
     class Meta:
         verbose_name = 'заказ'
         verbose_name_plural = 'заказы'
-        ordering = ('-creation_date',)
+        ordering = ('-checkout_date',)
 
     def __unicode__(self):
         # return unicode(self.creation_date)
