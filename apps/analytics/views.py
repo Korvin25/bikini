@@ -2,9 +2,10 @@
 from __future__ import unicode_literals
 
 from django.http import JsonResponse
+from django.utils import timezone
 from django.views.generic import View
 
-from .conf import SESSION_YM_CLIENT_ID_KEY
+from .conf import SESSION_YM_CLIENT_ID_KEY, SESSION_YM_CLIENT_DT_KEY
 
 
 class SetYMClientIDView(View):
@@ -13,4 +14,5 @@ class SetYMClientIDView(View):
         client_id = request.POST.get('client_id')
         if client_id:
             request.session[SESSION_YM_CLIENT_ID_KEY] = client_id
+            request.session[SESSION_YM_CLIENT_DT_KEY] = timezone.now()
         return JsonResponse({'result': 'ok'})

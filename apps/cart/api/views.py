@@ -177,6 +177,7 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
                 if not profile.has_email and form.cleaned_data.get('email'):
                     profile.email = form.cleaned_data['email']
                     profile.has_email = True
+            profile.orders_num = profile.orders_num + 1
             profile.save()
 
             admin_send_order_email(cart)
@@ -184,9 +185,10 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
                 send_order_email(profile, cart)
 
             # -- аналитика --
-            for key in ['ym_client_id', 'ym_source', 'ym_source_detailed']:
-                setattr(cart, key, getattr(profile, key, None))
-            cart.ym_client_id = cart.ym_client_id or self.request.session.get(SESSION_YM_CLIENT_ID_KEY)
+            cart.ym_client_id = self.request.session.get(SESSION_YM_CLIENT_ID_KEY)
+            if not cart.ym_client_id:
+                for key in ['ym_client_id', 'ym_source', 'ym_source_detailed']:
+                    setattr(cart, key, getattr(profile, key, None))
             cart.save()
 
             if cart.ym_client_id and not cart.ym_source:

@@ -2,10 +2,12 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
+# from django.db.models import Count, Q
+# from django.db.models import CharField, Case, Value, When
+from django.utils.safestring import mark_safe
 
 from adminsortable2.admin import SortableAdminMixin
 from modeltranslation.admin import TabbedTranslationAdmin
-from django.utils.safestring import mark_safe
 
 from ..analytics.admin_utils import CountryFilter, TrafficSourceFilter, traffic_source_to_str
 from .models import DeliveryMethod, PaymentMethod, Cart
@@ -31,7 +33,7 @@ class PaymentMethodAdmin(SortableAdminMixin, TabbedTranslationAdmin):
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'profile', 'checked_out', 'is_order_with_discount', 'checkout_date',
-                    'admin_show_summary', 'count', 'country', 'city', 'show_traffic_source',
+                    'admin_show_summary', 'count', 'country', 'city', 'show_traffic_source', 'show_num_orders',
                     'show_delivery_method', 'show_payment_method', 'status',)
     list_display_links = ('__unicode__', 'profile',)
     list_filter = ('status', 'delivery_method', 'payment_method', 'checkout_date',
@@ -67,8 +69,17 @@ class CartAdmin(admin.ModelAdmin):
     def get_queryset(self, *args, **kwargs):
         qs = super(CartAdmin, self).get_queryset(*args, **kwargs)
         qs = qs.prefetch_related('profile', 'cartitem_set', 'certificatecartitem_set').filter(checked_out=True)
+        # qs = qs.annotate(Count('profile__cart', 'dawawd', Case(When(checked_out='True', then=1))))
+        # print qs[0].profile__cart__count
+        # print qs[1].profile__cart__count
+        # # import ipdb; ipdb.set_trace()
         return qs
 
     def show_traffic_source(self, obj):
         return traffic_source_to_str(obj)
     show_traffic_source.short_description = mark_safe('Источник&nbsp;трафика')
+
+    def show_num_orders(self, obj):
+        # return obj.profile__cart__count
+        return obj.profile.orders_num if obj.profile else '-'
+    show_num_orders.short_description = 'Количество заказов'

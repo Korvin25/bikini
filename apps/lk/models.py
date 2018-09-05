@@ -113,6 +113,7 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     has_email = models.BooleanField(default=True)
     has_password = models.BooleanField(default=True)
     signature = models.CharField('Login hash', max_length=50, null=True, blank=True, editable=False)
+    orders_num = models.PositiveSmallIntegerField(default=0)
 
     objects = UserManager()
 
