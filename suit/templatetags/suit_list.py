@@ -188,9 +188,19 @@ def suit_admin_list_filter(cl, spec):
     })
 
 
+def _get_filter_horizontal(cl):
+    # FIX
+    # filter_horizontal = getattr(cl.model_admin, 'suit_list_filter_horizontal', [])
+    filter_horizontal = list(getattr(cl.model_admin, 'suit_list_filter_horizontal', []))
+    filter_horizontal.extend([get_filter_id(f) for f in filter_horizontal])
+    return filter_horizontal
+
 @register.filter
 def suit_list_filter_vertical(filters, cl):
-    filter_horizontal = getattr(cl.model_admin, 'suit_list_filter_horizontal', [])
+    # FIXED
+    # filter_horizontal = getattr(cl.model_admin, 'suit_list_filter_horizontal', [])
+    filter_horizontal = _get_filter_horizontal(cl)
+    # /FIXED
     return [f for f in filters if get_filter_id(f) not in filter_horizontal]
 
 
@@ -198,8 +208,7 @@ def suit_list_filter_vertical(filters, cl):
 def suit_list_filter_horizontal(filters, cl):
     # FIXED
     # filter_horizontal = getattr(cl.model_admin, 'suit_list_filter_horizontal', [])
-    filter_horizontal = list(getattr(cl.model_admin, 'suit_list_filter_horizontal', []))
-    filter_horizontal.extend([get_filter_id(f) for f in filter_horizontal])
+    filter_horizontal = _get_filter_horizontal(cl)
     # /FIXED
     return [f for f in filters if get_filter_id(f) in filter_horizontal]
 
