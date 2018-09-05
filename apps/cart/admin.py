@@ -8,7 +8,7 @@ from django.utils.safestring import mark_safe
 
 from adminsortable2.admin import SortableAdminMixin
 from modeltranslation.admin import TabbedTranslationAdmin
-from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
+from rangefilter.filter import DateTimeRangeFilter
 
 from ..analytics.admin_utils import CountryFilter, TrafficSourceFilter, traffic_source_to_str
 from .models import DeliveryMethod, PaymentMethod, Cart
@@ -39,7 +39,8 @@ class CartAdmin(admin.ModelAdmin):
     list_display_links = ('__unicode__', 'profile',)
     list_filter = ('status', 'delivery_method', 'payment_method',
                    ('checkout_date', DateTimeRangeFilter),
-                   CountryFilter, 'city', TrafficSourceFilter)
+                   CountryFilter, 'city', TrafficSourceFilter,)
+    suit_list_filter_horizontal = (CountryFilter, 'city', TrafficSourceFilter,)
     list_per_page = 200
     fieldsets = (
         ('Общее', {
@@ -61,6 +62,8 @@ class CartAdmin(admin.ModelAdmin):
                        # 'delivery_method', 'payment_method',
                        'ym_client_id', 'ym_source', 'ym_source_detailed',
                        'additional_info',]
+    search_fields = ['id', 'country', 'city', 'profile__name',
+                     'ym_source', 'ym_source_detailed', 'ym_client_id', ]
 
     def has_add_permission(self, request):
         return None

@@ -46,6 +46,7 @@ class ProfileAdmin(UserAdmin):
     list_display_links = ('email',)
     list_filter = ('is_active', 'is_staff', 'is_superuser',
                    CountryFilter, 'city', TrafficSourceFilter,)
+    suit_list_filter_horizontal = (CountryFilter, 'city', TrafficSourceFilter,)
     list_per_page = 200
     suit_form_tabs = (
         ('default', 'Профиль'),

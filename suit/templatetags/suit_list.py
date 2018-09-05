@@ -196,7 +196,11 @@ def suit_list_filter_vertical(filters, cl):
 
 @register.filter
 def suit_list_filter_horizontal(filters, cl):
-    filter_horizontal = getattr(cl.model_admin, 'suit_list_filter_horizontal', [])
+    # FIXED
+    # filter_horizontal = getattr(cl.model_admin, 'suit_list_filter_horizontal', [])
+    filter_horizontal = list(getattr(cl.model_admin, 'suit_list_filter_horizontal', []))
+    filter_horizontal.extend([get_filter_id(f) for f in filter_horizontal])
+    # /FIXED
     return [f for f in filters if get_filter_id(f) in filter_horizontal]
 
 
