@@ -66,6 +66,7 @@ INSTALLED_APPS = (
     'modeltranslation',
     'mptt',
     'paypal.standard.ipn',
+    'rangefilter',
     'request',
     'rosetta',
     'salmonella',
