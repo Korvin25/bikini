@@ -10,9 +10,9 @@ from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from ..cart.utils import make_hash_from_cartitem
 from ..currency.utils import currency_price
 from ..geo.models import Country
+from ..hash_utils import make_hash_from_cartitem
 
 
 email_subj_list = [_('Bikinimini.ru: Сброс пароля', 'Ваш заказ на Bikinimini.ru: № %d'), ]

@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 from django.db import migrations
 
-from apps.cart.utils import make_hash_from_cartitem
+from apps.hash_utils import make_hash_from_cartitem
 
 
 def set_hashes(apps, schema_editor):

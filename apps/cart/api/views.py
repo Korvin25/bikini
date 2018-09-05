@@ -11,10 +11,10 @@ from django.utils.translation import ugettext as __
 
 from apps.cart.cart import Cart
 from apps.cart.forms import CartCheckoutForm
-from apps.cart.utils import make_hash_from_cartitem
 from apps.core.mixins import JSONFormMixin
 from apps.core.templatetags.core_tags import to_price
 from apps.currency.utils import get_currency
+from apps.hash_utils import make_hash_from_cartitem
 from apps.lk.email import admin_send_order_email, admin_send_low_in_stock_email, send_order_email
 
 

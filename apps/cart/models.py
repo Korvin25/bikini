@@ -17,7 +17,7 @@ from ..core.templatetags.core_tags import to_int_or_float
 from ..currency.templatetags.currency_tags import with_currency, currency_compact
 from ..currency.utils import get_currency, currency_price
 from ..geo.models import Country
-from .utils import make_hash_from_cartitem
+from ..hash_utils import make_hash_from_cartitem
 
 
 class DeliveryMethod(models.Model):

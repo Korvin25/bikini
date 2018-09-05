@@ -1,5 +1,6 @@
 # coding: utf-8
 import copy
+import json
 
 
 def make_hash(o):

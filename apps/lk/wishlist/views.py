@@ -10,9 +10,9 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext as __
 
-from apps.cart.utils import make_hash_from_cartitem
 from apps.catalog.models import AttributeOption, Product, ProductOption
 from apps.core.mixins import JSONViewMixin
+from apps.hash_utils import make_hash_from_cartitem
 from apps.lk.models import WishListItem
 from .utils import get_wishlist_from_request, get_wishlist_item_prices
 
