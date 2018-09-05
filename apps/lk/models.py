@@ -92,6 +92,20 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     ig_name = models.CharField('Instagram name', max_length=255, null=True, blank=True)
     ig_link = models.CharField('Instagram link', max_length=255, null=True, blank=True)
 
+    # --- яндекс.метрика ---
+    TRAFFIC_SOURCE_CHOICES = (
+        ('organic', 'Переходы из поисковых систем'),
+        ('social', 'Переходы из социальных сетей'),
+        ('ad', 'Переходы по рекламе'),
+        ('direct', 'Прямые заходы'),
+        ('internal', 'Внутренние переходы'),
+        ('referral', 'Переходы по ссылкам на сайтах'),
+        ('saved', 'Переходы с сохранённых страниц'),
+    )
+    ym_client_id = models.CharField('Идентификатор посетителя', max_length=63, null=True, blank=True)
+    ym_source = models.CharField('Источник трафика', max_length=15, choices=TRAFFIC_SOURCE_CHOICES, null=True, blank=True)
+    ym_source_detailed = models.CharField('Источник трафика (детально)', max_length=127, null=True, blank=True)
+
     # --- покупки со скидкой ---
     discount_code = models.CharField('Код скидки', max_length=127, null=True, blank=True)
     discount_used = models.BooleanField('Скидка использована?', default=False)

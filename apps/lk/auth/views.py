@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse
-from django.http import JsonResponse, HttpResponseRedirect, Http404, HttpResponseForbidden
+from django.http import JsonResponse, HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext as __
-from django.views.generic import View, FormView, CreateView, RedirectView
+from django.views.generic import View, FormView, CreateView
 
+from apps.analytics.conf import SESSION_YM_CLIENT_ID_KEY
+from apps.analytics.utils import update_traffic_source
 from apps.cart.cart import Cart
 from apps.core.mixins import JSONFormMixin
 from apps.lk.email import send_reset_password_email
-from apps.lk.models import Profile, WishListItem
-from apps.lk.utils import get_error_message
+from apps.lk.models import Profile
 from .forms import LoginForm, RegistrationForm, ResetPasswordForm
 from .utils import update_wishlist
 
@@ -26,7 +26,6 @@ class LogoutView(View):
     Разлогиниваем юзера и перебрасываем на главную
     """
     def get(self, request, *args, **kwargs):
-        profile = request.user
         logout(request)
         return HttpResponseRedirect(redirect_to=reverse('home'))
 
@@ -83,8 +82,13 @@ class RegistrationView(JSONFormMixin, CreateView):
         super(RegistrationView, self).form_valid(form)
         profile = form.instance
 
+        ym_client_id = self.request.session.get(SESSION_YM_CLIENT_ID_KEY)
+
         profile.backend = 'django.contrib.auth.backends.ModelBackend'
         login(self.request, profile)
+
+        if ym_client_id:
+            update_traffic_source(profile, ym_client_id)
 
         cart = Cart(self.request).cart
         cart.profile = profile

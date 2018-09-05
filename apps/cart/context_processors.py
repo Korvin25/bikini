@@ -5,6 +5,9 @@ from .cart import Cart
 
 
 def cart(request):
+    if request.path.startswith('/admin/'):
+        return {}
+
     cart = Cart(request)
     basket = cart.cart
     # basket_data = cart.get_basket()

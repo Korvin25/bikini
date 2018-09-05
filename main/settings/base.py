@@ -104,8 +104,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'apps.core.middleware.CurrentSiteAndRegionMiddleware',
-
     'apps.currency.middleware.CurrencyMiddleware',
+    'apps.analytics.middleware.IsYMClientIDSetMiddleware',
+
     'crequest.middleware.CrequestMiddleware',
 ]
 
@@ -487,3 +488,8 @@ REQUEST_IGNORE_PATHS = (
 #     #
 #     'request.plugins.ActiveUsers',
 # )
+
+
+# Яндекс.Метрика
+YM_COUNTER = 'xxxxxxxxxx'
+YANDEX_OAUTH_TOKEN = 'xxxxxx'

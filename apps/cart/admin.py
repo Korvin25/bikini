@@ -5,7 +5,9 @@ from django.contrib import admin
 
 from adminsortable2.admin import SortableAdminMixin
 from modeltranslation.admin import TabbedTranslationAdmin
+from django.utils.safestring import mark_safe
 
+from ..analytics.admin_utils import CountryFilter, TrafficSourceFilter, traffic_source_to_str
 from .models import DeliveryMethod, PaymentMethod, Cart
 from .translation import *
 
@@ -29,10 +31,10 @@ class PaymentMethodAdmin(SortableAdminMixin, TabbedTranslationAdmin):
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'profile', 'checked_out', 'is_order_with_discount', 'checkout_date',
-                    'admin_show_summary', 'count', 'country', 'city',
+                    'admin_show_summary', 'count', 'country', 'city', 'show_traffic_source',
                     'show_delivery_method', 'show_payment_method', 'status',)
     list_display_links = ('__unicode__', 'profile',)
-    list_filter = ('status', 'delivery_method', 'payment_method',)
+    list_filter = ('status', 'delivery_method', 'payment_method', CountryFilter, 'city', TrafficSourceFilter)
     list_per_page = 200
     fieldsets = (
         ('Общее', {
@@ -42,6 +44,9 @@ class CartAdmin(admin.ModelAdmin):
             'fields': ('country', 'city', 'postal_code', 'address', 'phone', 'name',
                        'delivery_method', 'payment_method', 'additional_info',)
         }),
+        ('Яндекс.Метрика', {
+            'fields': ('ym_client_id', 'ym_source', 'ym_source_detailed',)
+        }),
         ('Список позиций', {
             'fields': ('show_items',)
         }),
@@ -49,6 +54,7 @@ class CartAdmin(admin.ModelAdmin):
     readonly_fields = ['id', 'profile_with_link', 'show_items',]
     readonly_fields += ['country', 'city', 'postal_code', 'address', 'phone', 'name',
                        # 'delivery_method', 'payment_method',
+                       'ym_client_id', 'ym_source', 'ym_source_detailed',
                        'additional_info',]
 
     def has_add_permission(self, request):
@@ -59,5 +65,9 @@ class CartAdmin(admin.ModelAdmin):
 
     def get_queryset(self, *args, **kwargs):
         qs = super(CartAdmin, self).get_queryset(*args, **kwargs)
-        qs = qs.prefetch_related('cartitem_set', 'certificatecartitem_set').filter(checked_out=True)
+        qs = qs.prefetch_related('profile', 'cartitem_set', 'certificatecartitem_set').filter(checked_out=True)
         return qs
+
+    def show_traffic_source(self, obj):
+        return traffic_source_to_str(obj)
+    show_traffic_source.short_description = mark_safe('Источник&nbsp;трафика')

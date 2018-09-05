@@ -153,7 +153,7 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
   if ($to_disable) { $to_disable.addClass('_disabled'); };
   $(document.activeElement).blur();
 
-  var yametrics_enabled = typeof yaCounter26447493 !== 'undefined';
+  var yametrics_enabled = typeof yaCounter{{ YM_COUNTER }} !== 'undefined';
 
   function yaGoalCallback() {
       console.log('yandex metrics goal completed (' + send_type + ')');
@@ -202,7 +202,7 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
         };
         if (send_type == 'step0') {
           if (yametrics_enabled) {
-            yaCounter26447493.reachGoal('button_zakaz', {}, yaGoalCallback);
+            yaCounter{{ YM_COUNTER }}.reachGoal('button_zakaz', {}, yaGoalCallback);
           };
         }
         if (send_type == 'step1') {
@@ -217,10 +217,10 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
           {% include 'js/csrf.js' %}
           if (yametrics_enabled) {
             if ($form.hasClass('js-step1-login-form')) {
-              yaCounter26447493.reachGoal('zakaz_login', {}, yaGoalCallback);
+              yaCounter{{ YM_COUNTER }}.reachGoal('zakaz_login', {}, yaGoalCallback);
             }
             else if ($form.hasClass('js-step1-registration-form')) {
-              yaCounter26447493.reachGoal('zakaz_registration', {}, yaGoalCallback);
+              yaCounter{{ YM_COUNTER }}.reachGoal('zakaz_registration', {}, yaGoalCallback);
             }
           };
         }
@@ -236,7 +236,7 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
               currency: res['ya_currency'] || 'RUB',
               city: form_data['city'],
             };
-            yaCounter26447493.reachGoal('zakaz_form', yaGoalParams, yaGoalCallback);
+            yaCounter{{ YM_COUNTER }}.reachGoal('zakaz_form', yaGoalParams, yaGoalCallback);
           };
         }
         if (popup) {

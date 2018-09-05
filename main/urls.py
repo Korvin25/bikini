@@ -11,6 +11,7 @@ from django.views.generic import TemplateView, RedirectView
 
 # from solid_i18n.urls import solid_i18n_patterns
 
+from apps.analytics.views import SetYMClientIDView
 from apps.blog.views import PostListView, PostDetailView
 from apps.cart.views import CartView, CartGetDiscountView
 from apps.cart.certificate.views import CertificateView
@@ -67,7 +68,8 @@ urlpatterns += i18n_patterns(
     url(r'^api/profile/set_password/', ProfileSetPasswordFormView.as_view(), name='profile-set-password-form'),
     url(r'^api/forms/', include('apps.feedback.urls', namespace='forms')),
     url(r'^api/currency/set/', SetCurrencyView.as_view(), name='set_currency'),
-    # admin
+    url(r'^api/analytics/client_id/', SetYMClientIDView.as_view(), name='set_ym_client_id'),
+    # (admin api)
     url(r'^api/products/increase_in_stock/', IncreaseInStockView.as_view(), name='admin_increase_in_stock'),
     url(r'^api/products/change/', ChangeProductView.as_view(), name='admin_change_product'),
 

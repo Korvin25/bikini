@@ -9,6 +9,8 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext as __
 
+from apps.analytics.conf import SESSION_YM_CLIENT_ID_KEY
+from apps.analytics.utils import update_traffic_source
 from apps.cart.cart import Cart
 from apps.cart.forms import CartCheckoutForm
 from apps.core.mixins import JSONFormMixin
@@ -181,12 +183,23 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
             if profile and profile.has_email:
                 send_order_email(profile, cart)
 
+            # -- аналитика --
+            for key in ['ym_client_id', 'ym_source', 'ym_source_detailed']:
+                setattr(cart, key, getattr(profile, key, None))
+            cart.ym_client_id = cart.ym_client_id or self.request.session.get(SESSION_YM_CLIENT_ID_KEY)
+            cart.save()
+
+            if cart.ym_client_id and not cart.ym_source:
+                update_traffic_source(cart)
+
+            # -- ответ на фронт --
             count = cart.count()
             summary = cart.show_summary()
             ya_summary = cart.summary_c
             ya_currency = cart.get_yandex_currency()
             order_number = cart.number
 
+            # -- скидки --
             # if cart.has_items_with_discount:
             #     profile.discount_used = True
             #     profile.save()
@@ -194,6 +207,7 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
             profile.discount_used = False
             profile.save()
 
+            # -- остатки на складе --
             _options = []
             _extra_products = []
 

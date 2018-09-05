@@ -110,6 +110,9 @@
       {% include 'js/global.js' %}
       {% include 'js/product.js' %}
       {% include 'js/wishlist.js' %}
+      {% if ENABLE_METRICS and request.we_need_ym_client_id %}
+        {% include 'js/ym_client_id.js' %}
+      {% endif %}
     </script>
 
     {% block extra_js %}{% endblock %}

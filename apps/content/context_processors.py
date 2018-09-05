@@ -10,6 +10,9 @@ from .models import Menu
 
 
 def content(request):
+    if request.path.startswith('/admin/'):
+        return {}
+
     menu = {m.slug: m.items.all() for m in Menu.objects.prefetch_related('items').all()}
     left_banners = Banner.active_objects.filter(location='left').order_by('?')[:3]
     footer_banner = Banner.active_objects.filter(location='bottom').order_by('?').first()
@@ -20,6 +23,7 @@ def content(request):
     wishlist = get_wishlist_from_request(request)
     DEBUG = settings.DEBUG
     ENABLE_METRICS = getattr(settings, 'ENABLE_METRICS', False)
+    YM_COUNTER = getattr(settings, 'YM_COUNTER', 'xxx')
     currency = get_currency(request)
 
     content = {
@@ -33,6 +37,7 @@ def content(request):
         'wishlist': wishlist,
         'DEBUG': DEBUG,
         'ENABLE_METRICS': ENABLE_METRICS,
+        'YM_COUNTER': YM_COUNTER,
         'currency': currency,
     }
     return content

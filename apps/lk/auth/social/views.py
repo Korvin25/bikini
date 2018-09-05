@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import urlparse
+# import urlparse
 import uuid
 
-from django.contrib.auth import authenticate, login, logout
-from django.core.files import File
-from django.core.files.temp import NamedTemporaryFile
+from django.contrib.auth import login
+# from django.core.files import File
+# from django.core.files.temp import NamedTemporaryFile
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 
-import requests
+# import requests
 
+from apps.analytics.conf import SESSION_YM_CLIENT_ID_KEY
+from apps.analytics.utils import update_traffic_source
 from apps.cart.cart import Cart
 # from apps.lk.email import admin_send_registration_email, send_registration_email
 from apps.lk.models import Profile
@@ -77,8 +79,14 @@ class SocialLoginView(BaseSocialView):
 
                 # создаем чела
                 profile = Profile.objects.create(email=email, has_email=has_email, has_password=False)
+
+                ym_client_id = request.session.get(SESSION_YM_CLIENT_ID_KEY)
                 profile.backend = 'django.contrib.auth.backends.ModelBackend'
                 login(request, profile)
+
+                # аналитика
+                if ym_client_id:
+                    update_traffic_source(profile, ym_client_id)
 
                 # переносим текущую корзину и вишлист
                 cart = Cart(request).cart

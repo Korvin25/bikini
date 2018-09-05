@@ -124,6 +124,20 @@ class Cart(models.Model):
     summary_eur = models.DecimalField('Сумма, eur.', max_digits=9, decimal_places=2, default=0)
     summary_usd = models.DecimalField('Сумма, usd.', max_digits=9, decimal_places=2, default=0)
 
+    # --- яндекс.метрика ---
+    TRAFFIC_SOURCE_CHOICES = (
+        ('organic', 'Переходы из поисковых систем'),
+        ('social', 'Переходы из социальных сетей'),
+        ('ad', 'Переходы по рекламе'),
+        ('direct', 'Прямые заходы'),
+        ('internal', 'Внутренние переходы'),
+        ('referral', 'Переходы по ссылкам на сайтах'),
+        ('saved', 'Переходы с сохранённых страниц'),
+    )
+    ym_client_id = models.CharField('Идентификатор посетителя', max_length=63, null=True, blank=True)
+    ym_source = models.CharField('Источник трафика', max_length=15, choices=TRAFFIC_SOURCE_CHOICES, null=True, blank=True)
+    ym_source_detailed = models.CharField('Источник трафика (детально)', max_length=127, null=True, blank=True)
+
     class Meta:
         verbose_name = 'заказ'
         verbose_name_plural = 'заказы'

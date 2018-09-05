@@ -5,6 +5,9 @@ from .models import Setting, VisualSetting, SEOSetting
 
 
 def settings(request):
+    if request.path.startswith('/admin/'):
+        return {}
+
     settings = {key: value for key, value in Setting.objects.values_list('key', 'value')}
     visual_settings = {key: value for key, value in VisualSetting.objects.values_list('key', 'value')}
     settings.update(visual_settings)

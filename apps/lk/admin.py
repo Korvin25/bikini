@@ -4,7 +4,9 @@ from __future__ import unicode_literals
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
+from django.utils.safestring import mark_safe
 
+from ..analytics.admin_utils import CountryFilter, TrafficSourceFilter, traffic_source_to_str
 from ..cart.models import Cart
 from .admin_forms import UserCreationForm, UserChangeForm
 from .models import Profile
@@ -39,14 +41,15 @@ class CartInline(admin.TabularInline):
 class ProfileAdmin(UserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
-    list_display = ('id', 'email', 'name', 'country', 'city', 'subscription', 'is_active', 'is_staff', 'is_superuser',)
+    list_display = ('id', 'email', 'name', 'country', 'city', 'show_traffic_source', 'subscription', 'is_active', 'is_staff', 'is_superuser',)
     list_editable = ('subscription', 'is_active',)
     list_display_links = ('email',)
-    list_filter = ('is_active', 'is_staff', 'is_superuser',)
+    list_filter = (CountryFilter, 'city', TrafficSourceFilter, 'is_active', 'is_staff', 'is_superuser',)
     list_per_page = 200
     suit_form_tabs = (
         ('default', 'Профиль'),
         ('socials', 'Социальные сети'),
+        ('analytics', 'Аналитика'),
         ('orders', 'Заказы'),
     )
     fieldsets = (
@@ -83,6 +86,10 @@ class ProfileAdmin(UserAdmin):
             'classes': ('suit-tab', 'suit-tab-socials',),
             'fields': ('ig_id', 'ig_name', 'ig_link',)
         }),
+        ('Яндекс.Метрика', {
+            'classes': ('suit-tab', 'suit-tab-analytics',),
+            'fields': ('ym_client_id', 'ym_source', 'ym_source_detailed',)
+        }),
     )
     add_fieldsets = (
         (None, {
@@ -92,4 +99,14 @@ class ProfileAdmin(UserAdmin):
     inlines = [CartInline, ]
     search_fields = ['email', ]
     readonly_fields = ['date_joined', ]
+    readonly_fields += ['ym_client_id', 'ym_source', 'ym_source_detailed', ]
     ordering = ('-id',)
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super(ProfileAdmin, self).get_queryset(*args, **kwargs)
+        qs = qs.prefetch_related('country')
+        return qs
+
+    def show_traffic_source(self, obj):
+        return traffic_source_to_str(obj)
+    show_traffic_source.short_description = mark_safe('Источник&nbsp;трафика')

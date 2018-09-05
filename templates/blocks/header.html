@@ -14,7 +14,7 @@
       <li class="bt_soc"><a href="whatsapp://send?phone={{ settings.phone|to_phone }}"><img src="/static/i/soc_whatsapp.png" alt="{% trans 'Whatsapp' %}" />{% trans 'Whatsapp' %}</a></li>
       <li class="clr_butt_head clr_butt_head0"></li>
       
-      <li class="bt_req_call"><a rel="leanModal1" name="callback" href="#callback"{% if ENABLE_METRICS and settings.ym_code %} onclick="yaCounter26447493.reachGoal('button_callback'); return true;"{% endif %}><strong>{% trans 'Заказать звонок' %}</strong></a></li>
+      <li class="bt_req_call"><a rel="leanModal1" name="callback" href="#callback"{% if ENABLE_METRICS and settings.ym_code %} onclick="yaCounter{{ YM_COUNTER }}.reachGoal('button_callback'); return true;"{% endif %}><strong>{% trans 'Заказать звонок' %}</strong></a></li>
       <li class="clr_butt_head"></li>
       <li class="butt_categories_head">
         <ul class="cat_row_top">
