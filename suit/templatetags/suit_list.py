@@ -189,7 +189,9 @@ def suit_admin_list_filter(cl, spec):
 
 
 def _get_filter_horizontal(cl):
-    # FIX
+    """
+    FIX
+    """
     # filter_horizontal = getattr(cl.model_admin, 'suit_list_filter_horizontal', [])
     filter_horizontal = list(getattr(cl.model_admin, 'suit_list_filter_horizontal', []))
     filter_horizontal.extend([get_filter_id(f) for f in filter_horizontal])
