@@ -7,7 +7,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 
 ADMINS = (
-    ('Valentin Glinskiy', 'v.valych@gmail.com'),
+    ('Valentin Glinskiy', 'v.valych@yandex.ru'),
 )
 
 MANAGERS = ADMINS

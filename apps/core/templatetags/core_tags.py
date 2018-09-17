@@ -41,7 +41,8 @@ def full_url(url):
     """
     request = CrequestMiddleware.get_request()
     current_site = get_current_site(request)
-    return '{}://{}{}'.format(request.scheme, current_site.domain, url)
+    scheme = request.scheme if request else 'https'
+    return '{}://{}{}'.format(scheme, current_site.domain, url)
 
 
 @register.simple_tag(takes_context=True)
