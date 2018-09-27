@@ -37,7 +37,7 @@ def add_subdomain(url):
 def full_url(url):
     """
     Получаем полный URL текущей страницы, включая домен и языковые префиксы
-    (используется для расшаривания в соц.сетях)
+    (используется для расшаривания в соц.сетях и для отправки ссылок на товары в email)
     """
     request = CrequestMiddleware.get_request()
     current_site = get_current_site(request)
