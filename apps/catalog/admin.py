@@ -324,9 +324,7 @@ class ProductPhotoInline(ProductPhotoAdmin):
     model = ProductPhoto
     form = ProductPhotoInlineForm
     formset = ProductPhotoInlineFormset
-    fields = ('title', 'photo_f',)
-    # fields = ('title', 'photo', 'photo_f',)
-    # fields = ('title', 'photo',)
+    fields = ('title', 'photo_f', 'order',)
     suit_classes = 'suit-tab suit-tab-photos'
 
     def get_extra(self, request, obj=None, **kwargs):

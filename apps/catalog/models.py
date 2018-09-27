@@ -771,9 +771,10 @@ class ProductPhoto(models.Model):
     # photo = ThumbnailerImageField('Фото', upload_to='catalog/products/')
     photo_f = FilerImageField(verbose_name='Фото')
     attrs = JSONField(default=dict)
+    order = models.IntegerField('Порядок', default=10)
 
     class Meta:
-        ordering = ['id', ]
+        ordering = ['order', 'id', ]
         verbose_name = 'фото'
         verbose_name_plural = 'фото'
 

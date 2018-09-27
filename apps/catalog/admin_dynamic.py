@@ -86,10 +86,8 @@ class ProductPhotoInlineForm(AttrsBasedInlineFormMixin, forms.ModelForm):
 
     class Meta:
         model = ProductPhoto
-        # fields = ('title', 'photo', 'photo_f',)
-        # default_fields = ('title', 'photo', 'photo_f',)
-        fields = ('title', 'photo_f',)
-        default_fields = ('title', 'photo_f',)
+        fields = ('title', 'photo_f', 'order',)
+        default_fields = ('title', 'photo_f', 'order',)
 
 
 class ProductExtraOptionInlineForm(forms.ModelForm):
