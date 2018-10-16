@@ -23,6 +23,7 @@ function changeWishlistInputData(option_id, price, attrs, extra_products) {
 
 
 function sendWishlistItemData($input, dontShowPopup) {
+  if (!areCookiesEnabled) { alertCookiesDisabled(); return false; }
   dontShowPopup = dontShowPopup || false;
 
   var add_url = $input.attr('data-add-url'),
@@ -148,7 +149,7 @@ function checkWishlistAndClick(show_errors, just_change) {
       }
     };
   } else {
-    console.log('error: no input near');
+    // console.log('error: no input near');
   }
 }
 

@@ -14,7 +14,7 @@ from filer.fields.image import FilerImageField
 
 from ..core.regions_utils import region_field
 from ..lk.models import Profile
-from ..settings.models import Setting, SEOSetting, MetatagModel
+from ..settings.models import Settings, SEOSetting, MetatagModel
 
 
 class Category(MetatagModel):
@@ -47,7 +47,7 @@ class Category(MetatagModel):
             return meta_title
 
         blog_label = _('Блог')
-        title_suffix = Setting.get_seo_title_suffix()
+        title_suffix = Settings.get_seo_title_suffix()
         return '{} — {} — {}'.format(self.title, blog_label, title_suffix)
 
 

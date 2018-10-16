@@ -12,7 +12,7 @@ from easy_thumbnails.fields import ThumbnailerImageField
 from ..catalog.models import Product
 from ..core.regions_utils import region_field
 from ..lk.models import Profile
-from ..settings.models import Setting, SEOSetting, MetatagModel
+from ..settings.models import Settings, SEOSetting, MetatagModel
 
 
 class Contest(MetatagModel):
@@ -61,7 +61,7 @@ class Contest(MetatagModel):
         if meta_title:
             return meta_title
         contests_label = _('Конкурсы')
-        title_suffix = Setting.get_seo_title_suffix()
+        title_suffix = Settings.get_seo_title_suffix()
         return '{} — {} — {}'.format(self.title, contests_label, title_suffix)
 
     @property

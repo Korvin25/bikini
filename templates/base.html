@@ -101,8 +101,9 @@
     </script>
 
     <script type="text/javascript">
-      // ----- CSRF -------
-      {% include 'js/csrf.js' %}
+      // ----- AJAX setup -------
+      {% include 'js/cookie_check.js' %}
+      {% include 'js/ajax_setup.js' %}
     </script>
 
     <script type="text/javascript">
@@ -116,6 +117,10 @@
     </script>
 
     {% block extra_js %}{% endblock %}
-    
+
+    {% include 'blocks/cookie_notice.html' %}
+    <script type="text/javascript">
+      {% include 'js/cookie_notice.js' %}
+    </script>
   </body>
 </html>

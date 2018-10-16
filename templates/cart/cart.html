@@ -191,7 +191,10 @@
                       
           </div>
 
-          <h3 class="js-show-if-not-cart" style="margin-bottom: 250px;{% if cart.count %} display: none;{% endif %}">{% trans 'Товаров в корзине нет' %}. <a href="{% url 'women' %}">{% trans 'Вернуться в каталог' %}</a></h3>
+          <div class="js-show-if-not-cart" style="margin-bottom: 250px;{% if cart.count %} display: none;{% endif %}">
+            <h3>{% trans 'Товаров в корзине нет' %}. <a href="{% url 'women' %}">{% trans 'Вернуться в каталог' %}</a></h3>
+            {% if settings.cookies_cart %}<br/><p class="js-show-if-not-cart">{{ settings.cookies_cart|linebreaksbr }}</p>{% endif %}
+          </div>
 
           <div class="rows_block_info js-hide-if-not-cart"{% if not cart.count %} style="display: none;"{% endif %}>
             {% if delivery_methods.count %}

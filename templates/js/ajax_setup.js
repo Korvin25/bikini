@@ -1,4 +1,4 @@
-// ----- CSRF -------
+// ----- AJAX setup: check cookies, set CSRF  -------
 
 var csrftoken = $.cookie('csrftoken');
 
@@ -10,7 +10,12 @@ function csrfSafeMethod(method) {
 $.ajaxSetup({
     beforeSend: function(xhr, settings) {
         if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            if (!areCookiesEnabled) {
+                alertCookiesDisabled();
+                return false;
+            } else {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            };
         }
     }
 });

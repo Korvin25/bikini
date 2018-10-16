@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.core.mail import EmailMessage, EmailMultiAlternatives, get_connection
 from django.core.urlresolvers import reverse
-from django.template import Context
 from django.template.loader import get_template
 from django.utils import translation
 from django.utils.translation import ugettext as _
@@ -12,7 +11,7 @@ from django.utils.translation import ugettext as _
 from anymail.exceptions import AnymailError
 from crequest.middleware import CrequestMiddleware
 
-from ..settings.models import Setting
+from ..settings.models import Settings
 
 
 DEFAULT_SITENAME = settings.DEFAULT_SITENAME
@@ -22,10 +21,10 @@ def email_admin(subject, email_key, obj=None, settings_key='feedback_email', **k
     request = CrequestMiddleware.get_request()
 
     from_email = settings.DEFAULT_FROM_EMAIL
-    try:
-        to = [s.strip() for s in Setting.objects.get(key=settings_key).value.split('\r\n')]
-    except Setting.DoesNotExist:
-        to = [settings.ADMINS[0][1]]
+    to = (Settings.get_feedback_emails() if settings_key=='feedback_email'
+          else Settings.get_orders_emails() if settings_key=='orders_email'
+          else [])
+    to = to or [admin[1] for admin in settings.ADMINS]
 
     site = ''
     try:

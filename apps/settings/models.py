@@ -4,8 +4,57 @@ from __future__ import unicode_literals
 from django.db import models
 
 from ckeditor_uploader.fields import RichTextUploadingField
+from solo.models import SingletonModel
 
 from ..core.regions_utils import region_field, get_region_seo_suffix
+
+
+class Settings(SingletonModel):
+    feedback_email = models.TextField('Email для отправки уведомлений с сайта',
+                                      default='v.valych@yandex.ru\r\nBikinimini@inbox.ru\r\nalen-rybakova@yandex.ru',
+                                      help_text='можно несколько; каждый на новой строке')
+    orders_email = models.TextField('Email для отправки писем о новых заказах',
+                                    default='v.valych@gmail.com\r\nBikinimini@inbox.ru\r\nalen-rybakova@yandex.ru',
+                                    help_text='можно несколько; каждый на новой строке')
+    title_suffix = models.CharField('Хвост title у страниц', max_length=255, default='интернет магазин мини и микро бикини от Анастасии Ивановской')
+    phone = RichTextUploadingField('Номер телефона (в шапке и футере)', default='<p>+7 (916) <strong>445-65-55</strong></p>')
+    telegram_login = models.CharField('Логин в телеграме', max_length=255, default='@ivanovskaya_anastasia')
+    robots_txt = models.TextField('Содержимое файла /robots.txt', default='User-agent: *\r\nDisallow: \r\nHost: bikinimini.ru\r\nSitemap: https://bikinimini.ru/sitemap.xml')
+    ym_code = models.TextField('Код Яндекс.Метрики', default='<!-- Yandex.Metrika counter --> <script type="text/javascript" > (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter26447493 = new Ya.Metrika({ id:26447493, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks"); </script> <noscript><div><img src="https://mc.yandex.ru/watch/26447493" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->')
+    ga_code = models.TextField('Код Google Analytics', default="""<!-- Global site tag (gtag.js) - Google Analytics -->\r\n<script async src="https://www.googletagmanager.com/gtag/js?id=UA-55369667-1"></script>\r\n<script>\r\n  window.dataLayer = window.dataLayer || [];\r\n  function gtag(){dataLayer.push(arguments);}\r\n  gtag('js', new Date());\r\n \r\n  gtag('config', 'UA-55369667-1');\r\n</script>""")
+    cookies_notify = models.TextField('Cookies: текст плашки внизу сайта', default='Наш сайт использует файлы cookies, чтобы улучшить работу и повысить эффективность сайта. Отключение файлов cookies может привести к неполадкам при работе с сайтом и невозможности положить товар в корзину. Продолжая использование сайта, вы соглашаетесь c использованием нами файлов cookies')
+    cookies_alert = models.TextField('Cookies: текст всплывающего окна', default='Включите cookies в Вашем браузере!')
+    cookies_cart = models.TextField('Cookies: текст на странице /cart/', null=True, blank=True, default='Если выбранный Вами товар не добавился в корзину, в Вашем браузере отключены cookies.')
+
+    class Meta:
+        verbose_name = 'Настройки'
+
+    def __unicode__(self):
+        return 'Настройки'
+
+    @classmethod
+    def get_feedback_emails(cls):
+        obj = cls.get_solo()
+        return [e.strip() for e in (obj.feedback_email or '').split('\r\n')]
+
+    @classmethod
+    def get_orders_emails(cls):
+        obj = cls.get_solo()
+        return [e.strip() for e in (obj.orders_email or '').split('\r\n')]
+
+    @classmethod
+    def get_seo_title_suffix(cls):
+        DEFAULT_PREFIX = 'Bikinimini.ru'
+        obj = cls.get_solo()
+        return obj.title_suffix or DEFAULT_PREFIX
+
+    @classmethod
+    def get_robots_txt(cls):
+        obj = cls.get_solo()
+        return obj.robots_txt
+
+    def get_cookies_alert(self):
+        return self.cookies_alert.replace('\r\n', ' ').replace('  ', ' ')
 
 
 class Setting(models.Model):
@@ -120,7 +169,7 @@ class SEOSetting(models.Model):
         title = region_field(self, 'title', add_suffix=True)
         if title:
             return title
-        title_suffix = Setting.get_seo_title_suffix()
+        title_suffix = Settings.get_seo_title_suffix()
         return '{} — {}'.format(self.description, title_suffix)
 
     def get_meta_desc(self):
@@ -219,7 +268,7 @@ class MetatagModel(models.Model):
         meta_title = region_field(self, 'meta_title', add_suffix=True)
         if meta_title:
             return meta_title
-        title_suffix = Setting.get_seo_title_suffix()
+        title_suffix = Settings.get_seo_title_suffix()
         return '{} — {}'.format(self.get_title(), title_suffix)
 
     def get_meta_desc(self):

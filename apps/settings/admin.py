@@ -4,8 +4,9 @@ from __future__ import unicode_literals
 from django.contrib import admin
 
 from modeltranslation.admin import TabbedTranslationAdmin
+from solo.admin import SingletonModelAdmin
 
-from .models import Setting, VisualSetting, SEOSetting
+from .models import Settings, SEOSetting  # , Setting, VisualSetting
 from .translation import *
 
 
@@ -39,42 +40,54 @@ def MetatagModelAdmin(cls=None):
         return decorator(cls)
 
 
-@admin.register(Setting)
-class SettingAdmin(TabbedTranslationAdmin):
-    list_display = ('key', 'value', 'description',)
+@admin.register(Settings)
+class SettingsAdmin(SingletonModelAdmin, TabbedTranslationAdmin):
     fieldsets = (
-        (None, {
-            'fields': ('key', 'value', 'description',)
+        ('Настройки сайта', {
+            'fields': ('feedback_email', 'orders_email',
+                       'title_suffix', 'phone', 'telegram_login',
+                       'robots_txt', 'ym_code', 'ga_code',
+                       'cookies_notify', 'cookies_alert', 'cookies_cart',)
         }),
     )
 
-    def get_readonly_fields(self, request, obj=None):
-        fields = list(super(SettingAdmin, self).get_readonly_fields(request, obj))
-        if obj:
-            fields.append('key')
-        return fields
 
-    def has_delete_permission(self, request, obj=None):
-        return None
+# @admin.register(Setting)
+# class SettingAdmin(TabbedTranslationAdmin):
+#     list_display = ('key', 'value', 'description',)
+#     fieldsets = (
+#         (None, {
+#             'fields': ('key', 'value', 'description',)
+#         }),
+#     )
+
+#     def get_readonly_fields(self, request, obj=None):
+#         fields = list(super(SettingAdmin, self).get_readonly_fields(request, obj))
+#         if obj:
+#             fields.append('key')
+#         return fields
+
+#     def has_delete_permission(self, request, obj=None):
+#         return None
 
 
-@admin.register(VisualSetting)
-class VisualSettingAdmin(TabbedTranslationAdmin):
-    list_display = ('key', 'description',)
-    fieldsets = (
-        (None, {
-            'fields': ('key', 'value', 'description',)
-        }),
-    )
+# @admin.register(VisualSetting)
+# class VisualSettingAdmin(TabbedTranslationAdmin):
+#     list_display = ('key', 'description',)
+#     fieldsets = (
+#         (None, {
+#             'fields': ('key', 'value', 'description',)
+#         }),
+#     )
 
-    def get_readonly_fields(self, request, obj=None):
-        fields = list(super(VisualSettingAdmin, self).get_readonly_fields(request, obj))
-        if obj:
-            fields.append('key')
-        return fields
+#     def get_readonly_fields(self, request, obj=None):
+#         fields = list(super(VisualSettingAdmin, self).get_readonly_fields(request, obj))
+#         if obj:
+#             fields.append('key')
+#         return fields
 
-    def has_delete_permission(self, request, obj=None):
-        return None
+#     def has_delete_permission(self, request, obj=None):
+#         return None
 
 
 @admin.register(SEOSetting)

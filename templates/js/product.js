@@ -37,6 +37,8 @@ function parsePrice(price) {
 
 
 function submitProductForm($form, $button, option_id, _attrs, _extra_products, data, count, prices, $wishlistInput) {
+  if (!areCookiesEnabled) { alertCookiesDisabled(); return false; }
+
   var data = data || {'prices': {}},
       url = $form.attr('action'),
       product_id = parseInt($form.find('input[name="product_id"]').val()),

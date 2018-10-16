@@ -10,7 +10,7 @@ from el_pagination.views import AjaxListView
 from ..banners.models import PromoBanner
 from ..catalog.models import Product
 from ..core.http_utils import get_object_from_slug_and_kwargs
-from ..settings.models import Setting
+from ..settings.models import Settings
 from .models import Video, Page
 
 
@@ -60,11 +60,9 @@ class PageView(DetailView):
 
 
 def robots_txt(request):
-    try:
-        txt = Setting.objects.get(key='robots_txt').value
-    except Setting.DoesNotExist:
-        txt = '\r\n'.join(['User-agent: *',
-                           'Disallow: ',
-                           'Host: bikinimini.ru',
-                           'Sitemap: http://bikinimini.ru/sitemap.xml',])
+    txt = Settings.get_robots_txt()
+    txt = txt or '\r\n'.join(['User-agent: *',
+                              'Disallow: ',
+                              'Host: bikinimini.ru',
+                              'Sitemap: https://bikinimini.ru/sitemap.xml',])
     return HttpResponse(txt, content_type='text/plain; charset=utf-8')

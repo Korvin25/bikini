@@ -150,13 +150,14 @@ function rotateSpecialOffers() {
 // ----- Отправка форм на бекенд -----
 
 function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, $row_clear_div) {
+  if (!areCookiesEnabled) { alertCookiesDisabled(); return false; }
   if ($to_disable) { $to_disable.addClass('_disabled'); };
   $(document.activeElement).blur();
 
   var yametrics_enabled = typeof yaCounter{{ YM_COUNTER }} !== 'undefined';
 
   function yaGoalCallback() {
-      console.log('yandex metrics goal completed (' + send_type + ')');
+      // console.log('yandex metrics goal completed (' + send_type + ')');
   };
 
   $.ajax({
@@ -214,7 +215,7 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
               if (slug == 'email') { $('.js-email-cart-input').remove(); };
             });
           }
-          {% include 'js/csrf.js' %}
+          {% include 'js/ajax_setup.js' %}
           if (yametrics_enabled) {
             if ($form.hasClass('js-step1-login-form')) {
               yaCounter{{ YM_COUNTER }}.reachGoal('zakaz_login', {}, yaGoalCallback);

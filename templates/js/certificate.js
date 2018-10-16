@@ -36,6 +36,7 @@ function addErrors($form, errors, without_errors, without_names) {
 // ----- Отправка форм на бекенд -----
 
 function sendCertificateForm(url, form_data, $to_disable, $form) {
+  if (!areCookiesEnabled) { alertCookiesDisabled(); return false; }
   if ($to_disable) { $to_disable.addClass('_disabled'); };
   $(document.activeElement).blur();
 

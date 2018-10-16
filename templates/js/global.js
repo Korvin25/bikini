@@ -22,7 +22,7 @@ function showErrorPopup(title, text) {
 
 function showPopup(popup_id, close_others) {
   close_others = close_others || false;
-  console.log('showPopup');
+  // console.log('showPopup');
 
   var $a = $('a[href="'+popup_id+'"]'),
       $popup = $(popup_id);
@@ -38,7 +38,7 @@ $('body').on('click', '.js-show-popup', function(e) {
   e.preventDefault();
 
   var popup_id = $(this).attr('data-popup-id');
-  console.log(popup_id);
+  // console.log(popup_id);
   showPopup(popup_id, true);
 });
 
@@ -84,6 +84,7 @@ function addErrors($form, errors, without_errors, without_names) {
 // ----- Формы логина/регистрации на бекенд -----
 
 function sendHeaderAuthForm(url, form_data, $to_disable, $form) {
+  if (!areCookiesEnabled) { alertCookiesDisabled(); return false; }
   if ($to_disable) { $to_disable.addClass('_disabled'); };
   $(document.activeElement).blur();
 
@@ -186,6 +187,7 @@ $('.js-auth-registration-form').on('submit', function(e) {
 // ----- Типичные формы (обратного звонка / сброса пароля) -----
 
 function sendUsualForm(url, form_data, $to_disable, $form) {
+  if (!areCookiesEnabled) { alertCookiesDisabled(); return false; }
   if ($to_disable) { $to_disable.addClass('_disabled'); };
   $(document.activeElement).blur();
 

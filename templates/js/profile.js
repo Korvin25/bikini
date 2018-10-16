@@ -76,6 +76,7 @@ function addErrors($form, errors, without_errors, without_names) {
 // ----- Отправка форм на бекенд -----
 
 function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, $row_clear_div) {
+  if (!areCookiesEnabled) { alertCookiesDisabled(); return false; }
   if ($to_disable) { $to_disable.addClass('_disabled'); };
   $(document.activeElement).blur();
 
