@@ -43,13 +43,13 @@ class CartInline(admin.TabularInline):
 class ProfileAdmin(UserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
-    list_display = ('id', 'email', 'name', 'country', 'city', 'show_traffic_source',
+    list_display = ('id', 'email', 'name', 'lang', 'country', 'city', 'show_traffic_source',
                     'subscription', 'is_active', 'is_staff', 'is_superuser', 'date_joined',)
     list_editable = ('subscription', 'is_active',)
     list_display_links = ('email',)
     list_filter = ('is_active', 'is_staff', 'is_superuser',
                    ('date_joined', DateTimeRangeFilter),
-                   CountryFilter, 'city', TrafficSourceFilter,)
+                   'lang', CountryFilter, 'city', TrafficSourceFilter,)
     suit_list_filter_horizontal = (CountryFilter, 'city', TrafficSourceFilter,)
     list_per_page = 200
     suit_form_tabs = (
@@ -62,7 +62,7 @@ class ProfileAdmin(UserAdmin):
         # Настройки юзера
         ('Основные данные', {
             'classes': ('suit-tab', 'suit-tab-default',),
-            'fields': ('email', 'name', 'date_joined', 'subscription',)
+            'fields': ('email', 'name', 'date_joined', 'subscription', 'lang',)
         }),
         ('Данные для доставки', {
             'classes': ('suit-tab', 'suit-tab-default',),

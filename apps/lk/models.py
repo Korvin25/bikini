@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from decimal import Decimal
 import uuid
 
-# from django.core.urlresolvers import reverse
+from django.conf import settings
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.contrib.postgres.fields import JSONField
 from django.db import models
@@ -12,6 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ..currency.utils import currency_price
 from ..geo.models import Country
+from ..lang.utils import get_current_lang
 from ..hash_utils import make_hash_from_cartitem
 
 
@@ -59,10 +60,14 @@ class UserManager(BaseUserManager):
         return self.get(email__iexact=username)
 
 
+LANGUAGE_CHOICES = [(lang[0], lang[0]) for lang in settings.LANGUAGES]
+
+
 class Profile(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('Email'), unique=True)
     date_joined = models.DateTimeField('Дата и время регистрации', auto_now_add=True)
     subscription = models.BooleanField('Подписан на рассылку', default=True)
+    lang = models.CharField('Язык', max_length=3, default='ru', choices=LANGUAGE_CHOICES)
 
     is_active = models.BooleanField('Активен?', default=True, help_text='снимите галку, чтобы заблокировать юзера')
     is_staff = models.BooleanField('Имеет доступ к админ-панели', default=False)
@@ -129,6 +134,11 @@ class Profile(AbstractBaseUser, PermissionsMixin):
                 else '{} (id #{})'.format(self.name, self.id) if self.name
                 else '{} (id #{})'.format(self.email, self.id) if self.has_email
                 else 'id #{}'.format(self.id))
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.lang = get_current_lang()
+        return super(Profile, self).save(force_insert=False)
 
     def get_short_name(self):
         return self.name or self.email
