@@ -8,12 +8,15 @@ from django.conf import settings
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.contrib.postgres.fields import JSONField
 from django.db import models
+from django.db.models.signals import post_save, pre_delete
+from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
 from ..currency.utils import currency_price
 from ..geo.models import Country
-from ..lang.utils import get_current_lang
 from ..hash_utils import make_hash_from_cartitem
+from ..lang.utils import get_current_lang
+from .mailchimp import m_add, m_update_fields, m_resubscribe, m_unsubscribe, m_remove
 
 
 email_subj_list = [_('Bikinimini.ru: Сброс пароля', 'Ваш заказ на Bikinimini.ru: № %d'), ]
@@ -61,12 +64,14 @@ class UserManager(BaseUserManager):
 
 
 LANGUAGE_CHOICES = [(lang[0], lang[0]) for lang in settings.LANGUAGES]
+MAILCHIMP_KEYS = ['name', 'address', 'phone', 'country_title', 'city', 'lang']
 
 
 class Profile(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('Email'), unique=True)
     date_joined = models.DateTimeField('Дата и время регистрации', auto_now_add=True)
     subscription = models.BooleanField('Подписан на рассылку', default=True)
+    old_subscription = models.BooleanField('Previous Подписан на рассылку', default=False)
     lang = models.CharField('Язык', max_length=3, default='ru', choices=LANGUAGE_CHOICES)
 
     is_active = models.BooleanField('Активен?', default=True, help_text='снимите галку, чтобы заблокировать юзера')
@@ -111,6 +116,18 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     ym_source = models.CharField('Источник трафика', max_length=15, choices=TRAFFIC_SOURCE_CHOICES, null=True, blank=True)
     ym_source_detailed = models.CharField('Источник трафика (детально)', max_length=127, null=True, blank=True)
 
+    # --- Mailchimp ---
+    mailchimp_all_hash = models.CharField(max_length=100, null=True, blank=True, editable=False, default='')
+    mailchimp_tried_to_subscribe = models.BooleanField(default=False)
+    mailchimp_subscribed_hash = models.CharField(max_length=100, null=True, blank=True, editable=False, default='')
+    mailchimp_unsubscribed_hash = models.CharField(max_length=100, null=True, blank=True, editable=False, default='')
+    mailchimp_name = models.CharField(max_length=511, null=True, blank=True, editable=False)
+    mailchimp_address = models.TextField(null=True, blank=True, editable=False)
+    mailchimp_phone = models.CharField(max_length=30, null=True, blank=True, editable=False)
+    mailchimp_country_title = models.CharField(max_length=225, null=True, blank=True, editable=False)
+    mailchimp_city = models.CharField(max_length=225, null=True, blank=True, editable=False)
+    mailchimp_lang = models.CharField(max_length=3, null=True, blank=True, editable=False)
+
     # --- покупки со скидкой ---
     discount_code = models.CharField('Код скидки', max_length=127, null=True, blank=True)
     discount_used = models.BooleanField('Скидка использована?', default=False)
@@ -135,10 +152,69 @@ class Profile(AbstractBaseUser, PermissionsMixin):
                 else '{} (id #{})'.format(self.email, self.id) if self.has_email
                 else 'id #{}'.format(self.id))
 
+    @property
+    def country_title(self):
+        return self.country.title if self.country else ''
+
+    @property
+    def fields_changed(self):
+        _changed = False
+        for key in MAILCHIMP_KEYS:
+            _self = getattr(self, key)
+            _mailchimp = getattr(self, 'mailchimp_{}'.format(key))
+            _changed = _changed or (_self and _self != _mailchimp)
+            if _changed is True:
+                break
+        return _changed
+
+    @property
+    def merge_tags(self):
+        return {
+            'NAME': self.name,
+            'ADDRESS': self.address,
+            'PHONE': self.phone,
+            'CITY': self.city,
+            'COUNTRY': self.country_title,
+            'LANGUAGE': self.lang,
+        }
+
+    def clean_merge_tags(self, merge_tags=None):
+        merge_tags = merge_tags or self.merge_tags
+        return {tag: value for tag, value in self.merge_tags.items() if value}
+
+    def update_mailchimp_fields(self):
+        for key in MAILCHIMP_KEYS:
+            setattr(self, 'mailchimp_{}'.format(key), getattr(self, key))
+
     def save(self, *args, **kwargs):
         if not self.id:
             self.lang = get_current_lang()
+
+        if self.fields_changed:
+            merge_tags = self.merge_tags
+            if self.mailchimp_all_hash:
+                m_update_fields(self.mailchimp_all_hash, 'all', **merge_tags)
+            if self.mailchimp_subscribed_hash:
+                m_update_fields(self.mailchimp_subscribed_hash, 'subscribe', **merge_tags)
+            if self.mailchimp_unsubscribed_hash:
+                m_update_fields(self.mailchimp_unsubscribed_hash, 'unsubscribe', **merge_tags)
+            self.update_mailchimp_fields()
+
         return super(Profile, self).save(force_insert=False)
+
+    def clear_mailchimp_fields(self):
+        self.old_subscription = False
+        self.mailchimp_all_hash = ''
+        self.mailchimp_tried_to_subscribe = False
+        self.mailchimp_subscribed_hash = ''
+        self.mailchimp_unsubscribed_hash = ''
+        self.mailchimp_name = None
+        self.mailchimp_address = None
+        self.mailchimp_phone = None
+        self.mailchimp_country_title = None
+        self.mailchimp_city = None
+        self.mailchimp_lang = None
+        self.save()
 
     def get_short_name(self):
         return self.name or self.email
@@ -194,6 +270,63 @@ class Profile(AbstractBaseUser, PermissionsMixin):
     def wishlist(self):
         return list(self.wishlist_items.all().values('product_id', 'option_id', 'price_rub', 'price_eur', 'price_usd',
                                                      'attrs', 'extra_products', 'hash',))
+
+
+@receiver(post_save, sender=Profile, dispatch_uid='update_mailchimp_lists')
+def update_mailchimp_lists(sender, instance, **kwargs):
+    profile = instance; save = False
+    clean_merge_tags = None
+
+    if not profile.mailchimp_all_hash and profile.mailchimp_tried_to_subscribe is False:
+        # первоначальная подписка на mailchimp
+        clean_merge_tags = clean_merge_tags or profile.clean_merge_tags()
+        profile.mailchimp_all_hash = m_add(profile.email, 'all', **clean_merge_tags)
+        profile.mailchimp_tried_to_subscribe = True
+        profile.update_mailchimp_fields()
+        save = True
+
+    if profile.subscription != profile.old_subscription:
+
+        # чувак включил подписку
+        if profile.subscription is True:
+            if profile.mailchimp_subscribed_hash:
+                m_resubscribe(profile.mailchimp_subscribed_hash, 'subscribe')
+            else:
+                clean_merge_tags = clean_merge_tags or profile.clean_merge_tags()
+                profile.mailchimp_subscribed_hash = m_add(profile.email, 'subscribe', **clean_merge_tags)
+                profile.update_mailchimp_fields()
+            if profile.mailchimp_unsubscribed_hash:
+                m_unsubscribe(profile.mailchimp_unsubscribed_hash, 'unsubscribe')
+            profile.old_subscription = True
+
+        # чувак выключил подписку
+        else:
+            if profile.mailchimp_unsubscribed_hash:
+                m_resubscribe(profile.mailchimp_unsubscribed_hash, 'unsubscribe')
+            else:
+                clean_merge_tags = clean_merge_tags or profile.clean_merge_tags()
+                profile.mailchimp_unsubscribed_hash = m_add(profile.email, 'unsubscribe', **clean_merge_tags)
+                profile.update_mailchimp_fields()
+            if profile.mailchimp_subscribed_hash:
+                m_unsubscribe(profile.mailchimp_subscribed_hash, 'subscribe')
+            profile.old_subscription = False
+
+        save = True
+
+    if save:
+        profile.save()
+
+
+@receiver(pre_delete, sender=Profile, dispatch_uid='remove_mailchimp_subscriptions')
+def remove_mailchimp_subscriptions(sender, instance, using, **kwargs):
+    # удаляем чувака из списков mailchimp перед удалением с сайта
+    profile = instance
+    if profile.mailchimp_all_hash:
+        m_remove(profile.mailchimp_all_hash, 'all')
+    if profile.mailchimp_subscribed_hash:
+        m_remove(profile.mailchimp_subscribed_hash, 'subscribe')
+    if profile.mailchimp_unsubscribed_hash:
+        m_remove(profile.mailchimp_unsubscribed_hash, 'unsubscribe')
 
 
 class WishListItem(models.Model):

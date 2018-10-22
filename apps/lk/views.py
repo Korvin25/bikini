@@ -83,6 +83,7 @@ class ProfileSetPasswordView(ProfileMixin, TemplateView):
 class ProfileFormView(ProfileMixin, JSONFormMixin, UpdateView):
     form_class = ProfileForm
     mapping = {
+        'subscription': 'subscription',
         'name': 'name',
         'country': 'country',
         'city': 'city',

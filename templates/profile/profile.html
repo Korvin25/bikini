@@ -245,7 +245,7 @@
                       
                       <div class="row_form_popup">
                         <label class="lbl_box check_popap_row">
-                          <input class="check_form" type="checkbox" value="" name="save_vhod">
+                          <input class="check_form" type="checkbox"{% if profile.subscription %} checked="checked"{% endif %} name="subscription">
                           <p>{% trans 'Я хочу получать информацию о скидках и новинках' %} <a href="#">{% trans 'Изменить' %}</a></p>
                         </label>
                       </div>

@@ -299,6 +299,12 @@ LOGGING = {
             'filename': os.path.join(BASE_DIR, 'logs/requests.log'),
             'formatter': 'verbose',
         },
+        'mailchimp_errors_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/mailchimp_errors.log'),
+            'formatter': 'normal',
+        },
         'console': {
             'class': 'logging.StreamHandler',
             'filters': ['require_debug_true'],
@@ -318,6 +324,11 @@ LOGGING = {
         },
         'emailz': {
             'handlers': ['email_log_file'],
+            'level': 'INFO',
+        },
+        'mailchimp.errors': {
+            # 'handlers': ['mailchimp_errors_file', 'mail_admins'],
+            'handlers': ['mailchimp_errors_file'],
             'level': 'INFO',
         },
         'django.request': {
@@ -494,3 +505,14 @@ REQUEST_IGNORE_PATHS = (
 # Яндекс.Метрика
 YM_COUNTER = 'xxxxxxxxxx'
 YANDEX_OAUTH_TOKEN = 'xxxxxx'
+
+
+# Mailchimp
+MAILCHIMP_ENABLED = True
+MAILCHIMP_USERNAME = '....'
+MAILCHIMP_API_KEY = '......-....'
+MAILCHIMP_LIST_IDS = {
+    'all': '...',
+    'subscribe': '...',
+    'unsubscribe': '...',
+}

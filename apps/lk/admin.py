@@ -45,7 +45,7 @@ class ProfileAdmin(UserAdmin):
     add_form = UserCreationForm
     list_display = ('id', 'email', 'name', 'lang', 'country', 'city', 'show_traffic_source',
                     'subscription', 'is_active', 'is_staff', 'is_superuser', 'date_joined',)
-    list_editable = ('subscription', 'is_active',)
+    list_editable = ('is_active',)
     list_display_links = ('email',)
     list_filter = ('is_active', 'is_staff', 'is_superuser',
                    ('date_joined', DateTimeRangeFilter),

@@ -8,21 +8,15 @@ from .models import Profile
 
 
 class ProfileForm(forms.ModelForm):
-    # password = forms.CharField(widget=forms.PasswordInput, required=False)
     old_password = forms.CharField(widget=forms.PasswordInput, required=False)
     new_password = forms.CharField(widget=forms.PasswordInput, required=False)
 
     class Meta:
         model = Profile
-        fields = ('name', 'country', 'city', 'postal_code', 'address', 'phone', 'email',)
+        fields = ('subscription', 'name', 'country', 'city', 'postal_code', 'address', 'phone', 'email',)
 
     def __init__(self, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
-        # self.fields['name'].required = True
-        # self.fields['country'].required = True
-        # self.fields['city'].required = True
-        # self.fields['address'].required = True
-        # self.fields['phone'].required = True
         self.fields['email'].required = True
 
     def clean_email(self):
@@ -71,7 +65,7 @@ class ResetPasswordForm(forms.Form):
         if not self._errors:
             email = cleaned_data.get('email')
             try:
-                profile = Profile.objects.get(email__iexact=email)
+                Profile.objects.get(email__iexact=email)
             except Profile.DoesNotExist:
                 raise forms.ValidationError(_('Пользователя с таким email не существует.'))
         return cleaned_data

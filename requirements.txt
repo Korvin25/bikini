@@ -34,13 +34,14 @@ django-uuslug==1.1.8
 django-watermark==0.1.8
 ipdb==0.10.3
 ipython==2.0.0
-# uWSGI
+mailchimp3==3.0.6
 openpyxl==2.5.1
 psycopg2==2.7.3.2
 pytils==0.3
 rauth==0.7.3
 redis==2.10.6
 requests==2.18.4
+# uWSGI
 
 pyyaml==3.12
 django-user-agents==0.3.2
