@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n core_tags %}
+{% load i18n core_tags embed_video_tags %}
 
 {% block meta_title %}{{ post.get_meta_title }}{% endblock %}
 {% block meta_desc %}{{ post.get_meta_desc }}{% endblock %}
@@ -40,15 +40,14 @@
               <h2>{% trans 'Видео' %}</h2>
               
               <div class="list_mini_video">
-                {% for video in post.videos.all %}
+                {% for v in post.videos.all %}
                   <div class="row_movie">
-                    <div class="object_movie">
-                      <img src="{{ video.get_cover_url }}" />
-                      <div class="play_movie"></div>
+                    <div class="object_movie js-movie-cover">
+                      <img src="{{ v.get_cover_url }}" />
+                      <div class="play_movie js-play-movie"></div>
                     </div>
-                    <div class="object_movie">
-                      <img src="{{ video.get_cover_url }}" />
-                      <div class="play_movie"></div>
+                    <div class="js-hidden-movie" style="display: none;">
+                      {% video v.video '324x149' %}
                     </div>
                   </div>
                 {% endfor %}
@@ -56,6 +55,17 @@
             </div>
           </div>
         {% endif %}
+
+        <script type="text/javascript">
+            $('.js-play-movie').click(function(e){
+                var $button = $(this),
+                    $parent = $button.parents('.js-movie-cover'),
+                    $hiddenMovie = $parent.siblings('.js-hidden-movie');
+
+                $parent.hide();
+                $hiddenMovie.show();
+            });
+        </script>
 
         {% if post.gallery.count %}
           {% comment %}
