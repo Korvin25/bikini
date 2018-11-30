@@ -41,8 +41,8 @@ class Migration(migrations.Migration):
             name='price_usd',
             field=models.DecimalField(decimal_places=2, default=0, max_digits=9, verbose_name='\u0421\u0442\u043e\u0438\u043c\u043e\u0441\u0442\u044c \u043e\u0442, usd.'),
         ),
-        migrations.AlterUniqueTogether(
-            name='specialoffer',
-            unique_together=set([('category', 'product')]),
-        ),
+        #migrations.AlterUniqueTogether(
+        #    name='specialoffer',
+        #    unique_together=set([('category', 'product')]),
+        #),
     ]
