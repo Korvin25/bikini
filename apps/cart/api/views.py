@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 import json
 
 from django.http import Http404, JsonResponse
+from django.template.loader import get_template
 from django.views.generic import View, UpdateView
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -13,6 +14,7 @@ from apps.analytics.conf import SESSION_YM_CLIENT_ID_KEY
 from apps.analytics.utils import update_traffic_source
 from apps.cart.cart import Cart
 from apps.cart.forms import CartCheckoutForm
+from apps.catalog.models import SpecialOffer
 from apps.core.mixins import JSONFormMixin
 from apps.core.templatetags.core_tags import to_price
 from apps.currency.utils import get_currency
@@ -243,8 +245,19 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
             if _options or _extra_products:
                 admin_send_low_in_stock_email(_options, _extra_products)
 
-            popup = '#step5' if profile.can_get_discount else '#step4'
-            data = {'result': 'ok', 'popup': popup, 'count': count, 'summary': summary, 'ya_summary': ya_summary, 'ya_currency': ya_currency, 'order_number': order_number}
+            specials_html = ''
+            specials = (SpecialOffer.get_offers(summary=cart.summary_rub) if profile.can_get_discount
+                        else SpecialOffer.objects.none())
+            if specials.count():
+                specials_template = get_template('cart/step5_specials.html')
+                currency = get_currency(self.request)
+                context = {'specials': specials, 'currency': currency}
+                specials_html = specials_template.render(context)
+
+            popup = '#step5' if specials else '#step4'
+            data = {'result': 'ok', 'popup': popup, 'count': count, 'summary': summary,
+                    'ya_summary': ya_summary, 'ya_currency': ya_currency,
+                    'order_number': order_number, 'specials_html': specials_html}
             return JsonResponse(data)
 
         else:

@@ -20,6 +20,7 @@ from sortedm2m.fields import SortedManyToManyField
 from ..core.templatetags.core_tags import to_price
 from ..core.regions_utils import region_field
 from ..core.utils import with_watermark
+from ..currency.models import EUR, USD
 from ..currency.utils import currency_price
 from ..settings.models import SEOSetting, MetatagModel
 
@@ -421,7 +422,7 @@ class GiftWrapping(models.Model):
         return currency_price(obj) if obj else Decimal(0.0)
 
 
-# === Товары + спец.предложения ===
+# === Товары ===
 
 class Product(MetatagModel):
     categories = models.ManyToManyField(Category, verbose_name='Категории', related_name='products')
@@ -817,29 +818,84 @@ class ProductPhoto(models.Model):
     # admin_show_photo.short_description = 'Превью'
 
 
+# === Спец.предложения ===
+
+class SpecialOfferCategory(models.Model):
+    title = models.CharField('Название', max_length=255, help_text='для использования в админке')
+    price_rub = models.DecimalField('Стоимость от, руб.', max_digits=9, decimal_places=2, default=0,
+                                   unique=True)
+    price_eur = models.DecimalField('Стоимость от, eur.', max_digits=9, decimal_places=2, default=0)
+    price_usd = models.DecimalField('Стоимость от, usd.', max_digits=9, decimal_places=2, default=0)
+    is_active = models.BooleanField('Активна?', default=True)
+
+    class Meta:
+        ordering = ['-is_active', 'price_rub', ]
+        verbose_name = 'категория'
+        verbose_name_plural = 'спец.предложения: категории'
+
+    def __unicode__(self):
+        title = '{}{} (от {} руб.)'.format(('[откл.] ' if not self.is_active else ''),
+                                            self.title,
+                                            to_price(self.price_rub))
+        return title
+
+    def save(self, *args, **kwargs):
+        eur_rate = EUR.get_rate()
+        usd_rate = USD.get_rate()
+        self.price_eur = self.price_rub*eur_rate
+        self.price_usd = self.price_rub*usd_rate
+        return super(SpecialOfferCategory, self).save(*args, **kwargs)
+
+    def show_title(self):
+        return self.title
+    show_title.allow_tags = True
+    show_title.short_description = 'Категория'
+
+    @classmethod
+    def get_category_by_summary(cls, summary=0):
+        cat = None
+        for category in cls.objects.filter(is_active=True).order_by('-price_rub'):
+            if summary >= category.price_rub:
+                cat = category
+                break
+        print cat.id, cat.price_rub
+        return cat
+
+
 class SpecialOffer(models.Model):
+    category = models.ForeignKey(SpecialOfferCategory, verbose_name='Категория', related_name='offers',
+                                 default=1)
     product = models.ForeignKey(Product, verbose_name='Товар', related_name='special_offers')
     discount = models.PositiveSmallIntegerField('Скидка, %', default=50)
     is_active = models.BooleanField('Скидка активна?', default=True)
 
     class Meta:
-        verbose_name = 'спец.предложение'
-        verbose_name_plural = 'спец.предложения'
+        unique_together = ('category', 'product')
+        ordering = ['-is_active', 'category', 'id', ]
+        verbose_name = 'спец.товар'
+        verbose_name_plural = 'спец.предложения: товары'
 
     def __unicode__(self):
         return self.product.__unicode__()
 
     @classmethod
     def get_offer(cls):
-        return cls.objects.filter(discount__gt=0, is_active=True).first()
+        return cls.get_offers().first()
 
     @classmethod
-    def get_offers(cls):
-        return cls.objects.filter(discount__gt=0, is_active=True)
+    def get_offers(cls, summary=None):
+        offers = cls.objects.select_related('category').filter(discount__gt=0,
+                                                               is_active=True,
+                                                               category__is_active=True)
+        if summary is not None:
+            category = SpecialOfferCategory.get_category_by_summary(summary)
+            offers = (offers.none() if not category
+                      else offers.filter(category=category))
+        return offers
 
     def get_discount_url(self):
         return reverse('cart_get_discount', kwargs={'pk': self.id})
 
     def get_offer_url(self, discount_code):
         product_url = self.product.get_absolute_url()
-        return '{}discount/{}/'.format(product_url, discount_code)
+        return '{}discount/{}/{}/'.format(product_url, self.category_id, discount_code)

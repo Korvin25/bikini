@@ -75,9 +75,6 @@ class CartAdmin(admin.ModelAdmin):
         qs = super(CartAdmin, self).get_queryset(*args, **kwargs)
         qs = qs.prefetch_related('profile', 'cartitem_set', 'certificatecartitem_set').filter(checked_out=True)
         # qs = qs.annotate(Count('profile__cart', 'dawawd', Case(When(checked_out='True', then=1))))
-        # print qs[0].profile__cart__count
-        # print qs[1].profile__cart__count
-        # # import ipdb; ipdb.set_trace()
         return qs
 
     def show_traffic_source(self, obj):

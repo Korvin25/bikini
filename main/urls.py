@@ -87,9 +87,9 @@ urlpatterns += i18n_patterns(
     url(r'^muzhskie-bikini/(?P<slug>[^/]+)/$', ProductsView.as_view(with_category=True, sex='male'), name='men_category'),
     url(r'^women/(?P<category_slug>[^/]+)/(?P<slug>[^/]+)-(?P<pk>\d+)/$', ProductView.as_view(sex='female'), name='women_product'),
     url(r'^muzhskie-bikini/(?P<category_slug>[^/]+)/(?P<slug>[^/]+)-(?P<pk>\d+)/$', ProductView.as_view(sex='male'), name='men_product'),
-    url(r'^women/(?P<category_slug>[^/]+)/(?P<slug>[^/]+)-(?P<pk>\d+)/discount/(?P<code>[^/]+)/$',
+    url(r'^women/(?P<category_slug>[^/]+)/(?P<slug>[^/]+)-(?P<pk>\d+)/discount/(?P<category_id>\d+)/(?P<code>[^/]+)/$',
         ProductWithDiscountView.as_view(sex='female'), name='women_product_with_discount'),
-    url(r'^muzhskie-bikini/(?P<category_slug>[^/]+)/(?P<slug>[^/]+)-(?P<pk>\d+)/discount/(?P<code>[^/]+)/$',
+    url(r'^muzhskie-bikini/(?P<category_slug>[^/]+)/(?P<slug>[^/]+)-(?P<pk>\d+)/discount/(?P<category_id>\d+)/(?P<code>[^/]+)/$',
         ProductWithDiscountView.as_view(sex='male'), name='men_product_with_discount'),
 
     url(r'^video/$', VideoListView.as_view(), name='videos'),

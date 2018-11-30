@@ -125,26 +125,58 @@ function addErrors($form, errors, without_errors, without_names) {
 }
 
 
-function rotateSpecialOffers() {
-  var $offers = $('.js-special-offer');
+function addSpecialOffersDots() {
+  var $offers = $('.js-special-offer'),
+      offers_length = $offers.length,
+      $navigation = $('.slides_navigation');
 
-  if ($offers.length && ($offers.length > 1)) {
-    var $visibleOffer = $('.js-special-offer:visible'),
-        $offerToShow;
-
-    if ($visibleOffer.length) {
-      $offerToShow = $visibleOffer.next();
-      if (!$offerToShow.hasClass('js-special-offer') || $offerToShow.is(':visible')) {
-        $offerToShow = $($offers[0]);
+  if (offers_length && (offers_length > 1)) {
+    for (j=0; j < offers_length; j++) {
+      if (j==0) {
+        $navigation.append('<div data-slide-id="'+j+'" class="dot js-navigation-dot active"></div>');
       }
-      $offers.hide();
-      $offerToShow.show();
-      setTimeout(rotateSpecialOffers, 6000);
+      else {
+        $navigation.append('<div data-slide-id="'+j+'" class="dot js-navigation-dot"></div>');
+      }
     }
   }
-  
 }
 
+
+function showSpecialOffer(pos_id, from_click) {
+  pos_id = pos_id || 0;
+  from_click = from_click || false;
+
+  var $offers = $('.js-special-offer'),
+      offers_length = $offers.length;
+
+  if (offers_length && (offers_length > 1)) {
+
+    var current_pos = parseInt($('.js-navigation-dot.active').attr('data-slide-id'));
+    if (!from_click && pos_id != (current_pos+1)) { console.log('return'); return; }
+
+    if (pos_id >= offers_length) { pos_id = 0; }
+
+    var $offerToShow = $($offers[pos_id]),
+        $dots = $('.js-navigation-dot');
+        $dotActive = $($dots[pos_id]);
+
+    $offers.hide();
+    $offerToShow.show();
+    $dots.removeClass('active');
+    $dotActive.addClass('active');
+    setTimeout(showSpecialOffer, 6000, pos_id+1);
+  }
+}
+
+
+$('body').on('click', '.js-navigation-dot', function(e) {
+  var $dot = $(this),
+      pos_id = $dot.attr('data-slide-id');
+
+  pos_id = parseInt(pos_id);
+  showSpecialOffer(pos_id, true);
+})
 
 
 // ----- Отправка форм на бекенд -----
@@ -178,7 +210,8 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
           item_price = res['item_price'],
           item_base_price = res['item_price_without_discount'],
           popup = res['popup'],
-          shipping_data = res['profile_shipping_data'];
+          shipping_data = res['profile_shipping_data'],
+          specials_html = res['specials_html'];
 
       if ($to_disable) { $to_disable.removeClass('_disabled'); };
       if (send_type == 'remove') {
@@ -243,7 +276,11 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
         if (popup) {
           showPopup(popup);
           $('html, body').animate({scrollTop: $(popup).offset().top-75}, 400);
-          if (popup == '#step5') { setTimeout(rotateSpecialOffers, 6000); }
+          if (popup == '#step5') {
+            if (specials_html) { $('.js-step5-specials').html(specials_html); };
+            addSpecialOffersDots();
+            setTimeout(showSpecialOffer, 6000, 1);
+          }
         };
       }
       else {

@@ -5,7 +5,8 @@ import logging
 
 from ..cart.models import DeliveryMethod
 from ..catalog.models import (AdditionalProduct, Certificate, GiftWrapping,
-                              Product, ProductOption, ProductExtraOption,)
+                              Product, ProductOption, ProductExtraOption,
+                              SpecialOfferCategory,)
 
 
 l = logging.getLogger('currency.tasks')
@@ -19,7 +20,8 @@ def _get_price(price_rub, rate):
 def update_all_prices(currency_name, rate):
     for model in [DeliveryMethod,
                   AdditionalProduct, Certificate, GiftWrapping,
-                  Product, ProductOption, ProductExtraOption]:
+                  Product, ProductOption, ProductExtraOption,
+                  SpecialOfferCategory]:
 
         qs = model.objects.all()
         model_name = model.__name__

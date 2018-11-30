@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django import forms
 from django.contrib import messages
-from django.utils import timezone
+# from django.utils import timezone
 
 from crequest.middleware import CrequestMiddleware
 

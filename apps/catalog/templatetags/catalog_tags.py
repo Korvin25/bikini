@@ -39,7 +39,6 @@ def get_photo_url(option, product):
     slug = option.attribute.slug
     q = {'attrs__{}__contains'.format(slug): option.id}
     photo = product.photos.filter(**q).first()
-    # import ipdb; ipdb.set_trace()
     return (photo.style_photo_url if photo
             else option.style_photo_url)
 

@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import uuid
-
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView, View
 from django.http import HttpResponseRedirect
@@ -62,8 +60,6 @@ class CartView(TemplateView):
             'gift_wrapping_price': to_int_or_float(GiftWrapping.get_price() or 0),
             'countries': Country.objects.values('id', 'title'),
             'shipping_data': shipping_data,
-            'specials': SpecialOffer.get_offers(),
-            'random_str': str(uuid.uuid4()).replace('-', ''),
             'delivery_methods': delivery_methods,
             'payment_methods': payment_methods,
         }

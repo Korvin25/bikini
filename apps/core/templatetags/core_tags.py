@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from decimal import Decimal
 from itertools import chain
+import uuid
 
 from django import template
 from django.conf import settings
@@ -200,10 +201,16 @@ def to_int_or_float(value):
 @register.filter
 def with_discount(price, discount):
     discount_price = price*discount // 100
-    # return to_int_plus(price - discount_price)
+    if discount == 100:
+        return 0
     return to_int_or_float(price - discount_price)
 
 
 @register.filter
 def with_br(title):
     return title.replace(' ', '<br>')
+
+
+@register.simple_tag
+def get_random_str():
+    return str(uuid.uuid4()).replace('-', '')

@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.http import Http404, HttpResponse
-from django.shortcuts import get_object_or_404
-from django.views.generic import TemplateView, ListView, DetailView
+from django.http import HttpResponse
+from django.views.generic import TemplateView, DetailView
 
 from el_pagination.views import AjaxListView
 

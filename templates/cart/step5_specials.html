@@ -1,0 +1,45 @@
+{% load i18n core_tags currency_tags %}
+
+{% get_random_str as random_str %}
+
+{% if specials.count %}
+  <div class="popap_row_wrapp">
+    <h2 class="title_string">{% trans 'Специальное предложение <br />Только для Вас' %}!</h2>
+    <h3 class="h3_pup">{% trans 'Добавьте еще одну модель' %}</h3>
+
+    <div class="slides">
+      {% for special in specials %}
+        {% with special.product as sp %}
+          <div class="pup_details_item js-special-offer"{% if not forloop.first %} style="display: none;"{% endif %} data-slide-id="{{ forloop.counter0 }}">
+            <div class="details_item_photo">
+              <div class="photo_list">
+                <a href="{{ special.get_discount_url }}?code={{ random_str }}"><img style="width: 200px !important; height: 200px !important" src="{{ sp.special_offer_cover }}" alt="{{ sp.title }}"></a>
+              </div>
+              <abbr class="sale_details">-{{ special.discount }}%</abbr>
+            </div>
+            
+            <div class="details_item_content">
+              <h3><a href="{{ special.get_discount_url }}?code={{ random_str }}"> {{ sp.title }}</a></h3>
+              <h4>{{ sp.subtitle }}</h4>
+              <div class="txt_price_to">{% trans 'Цена для вас' %}:</div>
+              
+              <div class="product_price sale_price">{% prefix_currency currency sp.price|to_price %}<s>{{ sp.price|to_price }}</s>{% postfix_currency currency sp.price|to_price %}</div>
+              <div class="product_price">{{ sp.price|with_discount:special.discount|to_price|with_currency:currency|safe }}</div>
+              
+              <div class="clr"></div>
+              <a href="{{ special.get_discount_url }}?code={{ random_str }}" class="to_cart_list">В корзину</a>
+            </div>
+          </div>
+        {% endwith %}
+      {% endfor %}
+      <div class="slides_navigation"></div>
+    </div>
+
+    <div class="pup_details_txt slides_details">
+      <strong>Примечание:</strong> Скидкой можете воспользоватся только вы, 
+      перейдя по ссылке с данной страницы в течение следующих двух часов.
+      Если вы покинете данную страницу, скидка более не распространяется.
+    </div>
+    
+  </div>
+{% endif %}

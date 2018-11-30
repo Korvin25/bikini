@@ -30,7 +30,7 @@ from .models import (Attribute, AttributeOption, ExtraProduct, Category,
                      # AdditionalProduct,
                      Certificate, GiftWrapping,
                      Product, ProductOption, ProductExtraOption, ProductPhoto,
-                     SpecialOffer,)
+                     SpecialOfferCategory, SpecialOffer,)
 from .translation import *
 
 
@@ -253,7 +253,7 @@ class GiftWrappingAdmin(admin.ModelAdmin):
         return None
 
 
-# === Товары + спец.предложения ===
+# === Товары ===
 
 class InStockFilter(SimpleListFilter):
     title = 'Кол-во товара на складе'
@@ -637,9 +637,29 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
         return s
 
 
+# === Спец.предложения ===
+
+@admin.register(SpecialOfferCategory)
+class SpecialOfferCategoryAdmin(admin.ModelAdmin):
+    list_display = ('show_title', 'is_active', 'price_rub', 'price_eur', 'price_usd',)
+    readonly_fields = ('price_eur', 'price_usd',)
+    fields = ('title', 'price_rub', 'price_eur', 'price_usd', 'is_active',)
+
+    def has_delete_permission(self, request, obj=None):
+        if obj and obj.id == 1:
+            return None
+        return (None if (obj and obj.id == 1)
+                else super(SpecialOfferCategoryAdmin, self).has_delete_permission(request, obj))
+
+
 @admin.register(SpecialOffer)
 class SpecialOfferAdmin(admin.ModelAdmin):
-    list_display = ('product', 'discount', 'is_active',)
+    list_display = ('product', 'category', 'discount', 'is_active',)
     list_editable = ('discount', 'is_active',)
+    list_filter = ('category',)
     form = SpecialOfferAdminForm
     raw_id_fields = ('product',)
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super(SpecialOfferAdmin, self).get_queryset(*args, **kwargs)
+        return qs.select_related('product', 'category')

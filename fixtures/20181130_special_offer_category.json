@@ -1,0 +1,13 @@
+[
+{
+    "model": "catalog.specialoffercategory",
+    "pk": 1,
+    "fields": {
+        "title": "\u041a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f \u043f\u043e \u0443\u043c\u043e\u043b\u0447\u0430\u043d\u0438\u044e",
+        "price_rub": "0.00",
+        "price_eur": "0.00",
+        "price_usd": "0.00",
+        "is_active": true
+    }
+}
+]
