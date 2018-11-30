@@ -34,6 +34,14 @@
           <li>{{ product.title }}</li>
         </ul>
 
+        {% if settings.catalog_special_text %}
+          <div class="text_preview_page">
+            <div class="text_preview_inner catalog_special_text" style="margin-top: 30px;">
+              {{ settings.get_catalog_special_text|safe }}
+            </div>
+          </div>
+        {% endif %}
+
         <style>
           .ch_title_item._custom:after { content: none; }
         </style>

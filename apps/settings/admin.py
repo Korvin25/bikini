@@ -47,7 +47,8 @@ class SettingsAdmin(SingletonModelAdmin, TabbedTranslationAdmin):
             'fields': ('feedback_email', 'orders_email',
                        'title_suffix', 'phone', 'telegram_login',
                        'robots_txt', 'ym_code', 'ga_code',
-                       'cookies_notify', 'cookies_alert', 'cookies_cart',)
+                       'cookies_notify', 'cookies_alert', 'cookies_cart',
+                       'catalog_special_text',)
         }),
     )
 

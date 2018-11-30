@@ -25,6 +25,7 @@ class Settings(SingletonModel):
     cookies_notify = models.TextField('Cookies: текст плашки внизу сайта', default='Наш сайт использует файлы cookies, чтобы улучшить работу и повысить эффективность сайта. Отключение файлов cookies может привести к неполадкам при работе с сайтом и невозможности положить товар в корзину. Продолжая использование сайта, вы соглашаетесь c использованием нами файлов cookies')
     cookies_alert = models.TextField('Cookies: текст всплывающего окна', default='Включите cookies в Вашем браузере!')
     cookies_cart = models.TextField('Cookies: текст на странице /cart/', null=True, blank=True, default='Если выбранный Вами товар не добавился в корзину, в Вашем браузере отключены cookies.')
+    catalog_special_text = RichTextUploadingField('Текст с акциями в каталоге', default='', null=True, blank=True)
 
     class Meta:
         verbose_name = 'Настройки'
@@ -55,6 +56,9 @@ class Settings(SingletonModel):
 
     def get_cookies_alert(self):
         return self.cookies_alert.replace('\r\n', ' ').replace('  ', ' ')
+
+    def get_catalog_special_text(self):
+        return self.catalog_special_text.replace('<h2>', '<h2 class="title_block">')
 
 
 class Setting(models.Model):
