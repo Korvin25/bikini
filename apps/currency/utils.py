@@ -29,3 +29,8 @@ def currency_price(obj, field_name='price', request=None, currency=None):
     price = (getattr(obj, key) if not isinstance(obj, dict)
              else obj.get(key))
     return price
+
+
+def get_price_from_rub(price_rub, rate):
+    price = price_rub / rate
+    return round(price)

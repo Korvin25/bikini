@@ -21,7 +21,7 @@ from ..core.templatetags.core_tags import to_price
 from ..core.regions_utils import region_field
 from ..core.utils import with_watermark
 from ..currency.models import EUR, USD
-from ..currency.utils import currency_price
+from ..currency.utils import currency_price, get_price_from_rub
 from ..settings.models import SEOSetting, MetatagModel
 
 
@@ -842,8 +842,8 @@ class SpecialOfferCategory(models.Model):
     def save(self, *args, **kwargs):
         eur_rate = EUR.get_rate()
         usd_rate = USD.get_rate()
-        self.price_eur = self.price_rub*eur_rate
-        self.price_usd = self.price_rub*usd_rate
+        self.price_eur = get_price_from_rub(self.price_rub, eur_rate)
+        self.price_usd = get_price_from_rub(self.price_rub, usd_rate)
         return super(SpecialOfferCategory, self).save(*args, **kwargs)
 
     def show_title(self):

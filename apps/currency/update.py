@@ -7,14 +7,10 @@ from ..cart.models import DeliveryMethod
 from ..catalog.models import (AdditionalProduct, Certificate, GiftWrapping,
                               Product, ProductOption, ProductExtraOption,
                               SpecialOfferCategory,)
+from .utils import get_price_from_rub
 
 
 l = logging.getLogger('currency.tasks')
-
-
-def _get_price(price_rub, rate):
-    price = price_rub / rate
-    return round(price)
 
 
 def update_all_prices(currency_name, rate):
@@ -30,7 +26,7 @@ def update_all_prices(currency_name, rate):
 
         for obj in qs:
             price_rub = obj.price_rub
-            new_price = _get_price(price_rub, rate)
+            new_price = get_price_from_rub(price_rub, rate)
             setattr(obj, 'price_{}'.format(currency_name), new_price)
             obj.save()
 
