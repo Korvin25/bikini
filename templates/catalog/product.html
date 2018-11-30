@@ -34,6 +34,11 @@
           <li>{{ product.title }}</li>
         </ul>
 
+        <style>
+          .ch_title_item._custom:after { content: none; }
+          .catalog_special_text h2 { text-align: center; }
+        </style>
+
         {% if settings.catalog_special_text %}
           <div class="text_preview_page">
             <div class="text_preview_inner catalog_special_text" style="margin-top: 30px;">
@@ -41,10 +46,6 @@
             </div>
           </div>
         {% endif %}
-
-        <style>
-          .ch_title_item._custom:after { content: none; }
-        </style>
 
         <h1 class="title_block">{{ product.get_h1 }}</h1>
         {% if product.vendor_code %}
