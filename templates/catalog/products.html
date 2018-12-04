@@ -129,13 +129,14 @@
           </ul>
         {% endblock %}
 
-        <style>
-          .catalog_special_text h2 { text-align: center !important; }
-        </style>
-
         {% if settings.catalog_special_text %}
-          <div class="text_preview_page">
-            <div class="text_preview_inner catalog_special_text" style="margin-top: 30px;">
+          <style>
+            .text_preview_page.catalog_special_text { display: block !important; }
+            .catalog_special_text h2 { text-align: center !important; }
+            .text_preview_page.catalog_special_text p { max-width: 100% !important; }
+          </style>
+          <div class="text_preview_page catalog_special_text">
+            <div class="text_preview_inner" style="margin-top: 30px;">
               {{ settings.get_catalog_special_text|safe }}
             </div>
           </div>

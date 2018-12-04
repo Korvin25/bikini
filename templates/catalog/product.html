@@ -34,19 +34,6 @@
           <li>{{ product.title }}</li>
         </ul>
 
-        <style>
-          .ch_title_item._custom:after { content: none; }
-          .catalog_special_text h2 { text-align: center !important; }
-        </style>
-
-        {% if settings.catalog_special_text %}
-          <div class="text_preview_page">
-            <div class="text_preview_inner catalog_special_text" style="margin-top: 30px;">
-              {{ settings.get_catalog_special_text|safe }}
-            </div>
-          </div>
-        {% endif %}
-
         <h1 class="title_block">{{ product.get_h1 }}</h1>
         {% if product.vendor_code %}
           <div style="margin: -20px 0 20px;"><span class="ch_title_item _custom">{% trans 'Артикул' %}: </span>{{ product.vendor_code }}</div> 
