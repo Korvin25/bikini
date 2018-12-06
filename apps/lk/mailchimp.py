@@ -18,7 +18,8 @@ client = (MailChimp(mc_api=settings.MAILCHIMP_API_KEY, mc_user=settings.MAILCHIM
 
 
 def get_list_id(list_type='all'):
-    if list_type not in ['all', 'subscribe', 'unsubscribe']:
+    # if list_type not in ['all', 'subscribe', 'unsubscribe']:
+    if list_type not in ['all']:
         list_type = 'all'
     list_id = settings.MAILCHIMP_LIST_IDS[list_type]
     return list_id
