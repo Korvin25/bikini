@@ -67,6 +67,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='profile',
             name='subscription',
-            field=models.BooleanField(default=True, verbose_name='\u041f\u043e\u0434\u043f\u0438\u0441\u0430\u043d \u043d\u0430 \u0440\u0430\u0441\u0441\u044b\u043b\u043a\u0443'),
+            field=models.BooleanField(default=False, verbose_name='\u041f\u043e\u0434\u043f\u0438\u0441\u0430\u043d \u043d\u0430 \u0440\u0430\u0441\u0441\u044b\u043b\u043a\u0443'),
         ),
     ]

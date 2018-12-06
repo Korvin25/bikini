@@ -69,6 +69,7 @@ class RegistrationView(JSONFormMixin, CreateView):
         'email': 'email',
         'password': 'password',
         'name': 'name',
+        'subscription': 'subscription',
     }
 
     def get_success_url(self):

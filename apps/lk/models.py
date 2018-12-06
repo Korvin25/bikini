@@ -70,7 +70,7 @@ MAILCHIMP_KEYS = ['name', 'address', 'phone', 'country_title', 'city', 'lang']
 class Profile(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('Email'), unique=True)
     date_joined = models.DateTimeField('Дата и время регистрации', auto_now_add=True)
-    subscription = models.BooleanField('Подписан на рассылку', default=True)
+    subscription = models.BooleanField('Подписан на рассылку', default=False)
     old_subscription = models.BooleanField('Previous Подписан на рассылку', default=False)
     lang = models.CharField('Язык', max_length=3, default='ru', choices=LANGUAGE_CHOICES)
 
@@ -194,10 +194,6 @@ class Profile(AbstractBaseUser, PermissionsMixin):
             merge_tags = self.merge_tags
             if self.mailchimp_all_hash:
                 m_update_fields(self.mailchimp_all_hash, 'all', **merge_tags)
-            # if self.mailchimp_subscribed_hash:
-            #     m_update_fields(self.mailchimp_subscribed_hash, 'subscribe', **merge_tags)
-            # if self.mailchimp_unsubscribed_hash:
-            #     m_update_fields(self.mailchimp_unsubscribed_hash, 'unsubscribe', **merge_tags)
             self.update_mailchimp_fields()
 
         return super(Profile, self).save(force_insert=False)
@@ -282,41 +278,27 @@ def update_mailchimp_lists(sender, instance, **kwargs):
         profile.mailchimp_all_hash = m_add(profile.email, 'all', **clean_merge_tags)
         profile.mailchimp_tried_to_subscribe = True
         profile.update_mailchimp_fields()
+
+        if not profile.subscription:
+            m_unsubscribe(profile.mailchimp_all_hash, 'all')
         save = True
 
-    if profile.subscription != profile.old_subscription:
+    elif profile.subscription != profile.old_subscription:
 
         # чувак включил подписку
         if profile.subscription is True:
             if profile.mailchimp_all_hash:
                 m_resubscribe(profile.mailchimp_all_hash, 'subscribe')
-            # if profile.mailchimp_subscribed_hash:
-            #     m_resubscribe(profile.mailchimp_subscribed_hash, 'subscribe')
-            # else:
-            #     clean_merge_tags = clean_merge_tags or profile.clean_merge_tags()
-            #     profile.mailchimp_subscribed_hash = m_add(profile.email, 'subscribe', **clean_merge_tags)
-            #     profile.update_mailchimp_fields()
-            # if profile.mailchimp_unsubscribed_hash:
-            #     m_unsubscribe(profile.mailchimp_unsubscribed_hash, 'unsubscribe')
-            profile.old_subscription = True
 
         # чувак выключил подписку
         else:
             if profile.mailchimp_all_hash:
                 m_unsubscribe(profile.mailchimp_all_hash, 'all')
-            # if profile.mailchimp_unsubscribed_hash:
-            #     m_resubscribe(profile.mailchimp_unsubscribed_hash, 'unsubscribe')
-            # else:
-            #     clean_merge_tags = clean_merge_tags or profile.clean_merge_tags()
-            #     profile.mailchimp_unsubscribed_hash = m_add(profile.email, 'unsubscribe', **clean_merge_tags)
-            #     profile.update_mailchimp_fields()
-            # if profile.mailchimp_subscribed_hash:
-            #     m_unsubscribe(profile.mailchimp_subscribed_hash, 'subscribe')
-            profile.old_subscription = False
 
         save = True
 
     if save:
+        profile.old_subscription = profile.subscription
         profile.save()
 
 
@@ -326,10 +308,6 @@ def remove_mailchimp_subscriptions(sender, instance, using, **kwargs):
     profile = instance
     if profile.mailchimp_all_hash:
         m_remove(profile.mailchimp_all_hash, 'all')
-    # if profile.mailchimp_subscribed_hash:
-    #     m_remove(profile.mailchimp_subscribed_hash, 'subscribe')
-    # if profile.mailchimp_unsubscribed_hash:
-    #     m_remove(profile.mailchimp_unsubscribed_hash, 'unsubscribe')
 
 
 class WishListItem(models.Model):
