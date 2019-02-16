@@ -129,15 +129,30 @@
           </ul>
         {% endblock %}
 
-        {% if settings.catalog_special_text %}
+        {% if settings.has_catalog_special %}
           <style>
             .text_preview_page.catalog_special_text { display: block !important; }
             .catalog_special_text h2 { text-align: center !important; }
             .text_preview_page.catalog_special_text p { max-width: 100% !important; }
+            .catalog_special_text .catalog_special_b { display: block; margin: auto; }
+            .catalog_special_text .catalog_special_b._margin_top { margin-top: 20px; }
+            .catalog_special_text .catalog_special_b._margin_bottom { margin-bottom: 40px; }
           </style>
           <div class="text_preview_page catalog_special_text">
             <div class="text_preview_inner" style="margin-top: 30px;">
-              {{ settings.get_catalog_special_text|safe }}
+              {% if settings.catalog_special_banner and settings.catalog_special_text %}
+                {% if settings.catalog_special_order == 'banner_first' %}
+                  <img class="catalog_special_b _margin_bottom" src="{{ settings.catalog_special_banner_url }}"/>
+                  {{ settings.get_catalog_special_text|safe }}
+                {% else %}
+                  {{ settings.get_catalog_special_text|safe }}
+                  <img class="catalog_special_b _margin_top" src="{{ settings.catalog_special_banner_url }}"/>
+                {% endif %}
+              {% elif settings.catalog_special_banner %}
+                <img src="{{ settings.catalog_special_banner_url }}" class="catalog_special_b" />
+              {% elif settings.get_catalog_special_text %}
+                {{ settings.get_catalog_special_text|safe }}
+              {% endif %}
             </div>
           </div>
         {% endif %}

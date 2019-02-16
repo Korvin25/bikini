@@ -6,6 +6,7 @@ from django.contrib import admin
 from modeltranslation.admin import TabbedTranslationAdmin
 from solo.admin import SingletonModelAdmin
 
+from ..core.admin import ImageThumbAdminMixin
 from .models import Settings, SEOSetting  # , Setting, VisualSetting
 from .translation import *
 
@@ -41,14 +42,22 @@ def MetatagModelAdmin(cls=None):
 
 
 @admin.register(Settings)
-class SettingsAdmin(SingletonModelAdmin, TabbedTranslationAdmin):
+class SettingsAdmin(ImageThumbAdminMixin, SingletonModelAdmin, TabbedTranslationAdmin):
     fieldsets = (
-        ('Настройки сайта', {
-            'fields': ('feedback_email', 'orders_email',
-                       'title_suffix', 'phone', 'telegram_login',
-                       'robots_txt', 'ym_code', 'ga_code',
-                       'cookies_notify', 'cookies_alert', 'cookies_cart',
-                       'catalog_special_text',)
+        ('Email для обратной связи', {
+            'fields': ('feedback_email', 'orders_email',)
+        }),
+        ('Контент на страницах', {
+            'fields': ('title_suffix', 'phone', 'telegram_login',)
+        }),
+        ('Robots.txt и метрика', {
+            'fields': ('robots_txt', 'ym_code', 'ga_code',)
+        }),
+        ('Cookies-предупреждения', {
+            'fields': ('cookies_notify', 'cookies_alert', 'cookies_cart',)
+        }),
+        ('Акции в каталоге', {
+            'fields': ('catalog_special_banner', 'catalog_special_text', 'catalog_special_order',)
         }),
     )
 

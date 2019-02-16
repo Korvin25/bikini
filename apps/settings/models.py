@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.db import models
 
 from ckeditor_uploader.fields import RichTextUploadingField
+from easy_thumbnails.fields import ThumbnailerImageField
 from solo.models import SingletonModel
 
 from ..core.regions_utils import region_field, get_region_seo_suffix
@@ -16,16 +17,26 @@ class Settings(SingletonModel):
     orders_email = models.TextField('Email для отправки писем о новых заказах',
                                     default='v.valych@gmail.com\r\nBikinimini@inbox.ru\r\nalen-rybakova@yandex.ru',
                                     help_text='можно несколько; каждый на новой строке')
+
     title_suffix = models.CharField('Хвост title у страниц', max_length=255, default='интернет магазин мини и микро бикини от Анастасии Ивановской')
     phone = RichTextUploadingField('Номер телефона (в шапке и футере)', default='<p>+7 (916) <strong>445-65-55</strong></p>')
     telegram_login = models.CharField('Логин в телеграме', max_length=255, default='@ivanovskaya_anastasia')
+
     robots_txt = models.TextField('Содержимое файла /robots.txt', default='User-agent: *\r\nDisallow: \r\nHost: bikinimini.ru\r\nSitemap: https://bikinimini.ru/sitemap.xml')
     ym_code = models.TextField('Код Яндекс.Метрики', default='<!-- Yandex.Metrika counter --> <script type="text/javascript" > (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter26447493 = new Ya.Metrika({ id:26447493, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks"); </script> <noscript><div><img src="https://mc.yandex.ru/watch/26447493" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->')
     ga_code = models.TextField('Код Google Analytics', default="""<!-- Global site tag (gtag.js) - Google Analytics -->\r\n<script async src="https://www.googletagmanager.com/gtag/js?id=UA-55369667-1"></script>\r\n<script>\r\n  window.dataLayer = window.dataLayer || [];\r\n  function gtag(){dataLayer.push(arguments);}\r\n  gtag('js', new Date());\r\n \r\n  gtag('config', 'UA-55369667-1');\r\n</script>""")
+
     cookies_notify = models.TextField('Cookies: текст плашки внизу сайта', default='Наш сайт использует файлы cookies, чтобы улучшить работу и повысить эффективность сайта. Отключение файлов cookies может привести к неполадкам при работе с сайтом и невозможности положить товар в корзину. Продолжая использование сайта, вы соглашаетесь c использованием нами файлов cookies')
     cookies_alert = models.TextField('Cookies: текст всплывающего окна', default='Включите cookies в Вашем браузере!')
     cookies_cart = models.TextField('Cookies: текст на странице /cart/', null=True, blank=True, default='Если выбранный Вами товар не добавился в корзину, в Вашем браузере отключены cookies.')
-    catalog_special_text = RichTextUploadingField('Текст с акциями в каталоге', default='', null=True, blank=True)
+
+    CATALOG_SPECIAL_ORDER_CHOICES = (
+        ('banner_first', 'Баннер, текст'),
+        ('text_first', 'Текст, баннер'),
+    )
+    catalog_special_banner = ThumbnailerImageField('Баннер с акциями', null=True, blank=True, upload_to='b/catalog/', help_text='Будет выводиться в размере 851x315 px')
+    catalog_special_text = RichTextUploadingField('Текст с акциями', default='', null=True, blank=True)
+    catalog_special_order = models.CharField('Порядок отображения', choices=CATALOG_SPECIAL_ORDER_CHOICES, max_length=15, default='banner_first',)
 
     class Meta:
         verbose_name = 'Настройки'
@@ -56,6 +67,15 @@ class Settings(SingletonModel):
 
     def get_cookies_alert(self):
         return self.cookies_alert.replace('\r\n', ' ').replace('  ', ' ')
+
+    @property
+    def has_catalog_special(self):
+        return self.catalog_special_banner or self.catalog_special_text
+
+    @property
+    def catalog_special_banner_url(self):
+        banner = self.catalog_special_banner
+        return banner['catalog_special_banner'].url if banner else ''
 
     def get_catalog_special_text(self):
         return self.catalog_special_text.replace('<h2>', '<h2 class="title_block">')
