@@ -12,7 +12,6 @@ from django.views.generic import TemplateView, RedirectView
 # from solid_i18n.urls import solid_i18n_patterns
 
 from apps.analytics.views import SetYMClientIDView
-from apps.blog.views import PostListView, PostDetailView
 from apps.cart.views import CartView, CartGetDiscountView
 from apps.cart.certificate.views import CertificateView
 from apps.catalog.views import ProductsView, ProductView, ProductWithDiscountView
@@ -33,6 +32,8 @@ urlpatterns = [
     url(r'^robots\.txt$', robots_txt, name='robots_txt'),
     # url(r'^robots\.txt/$', RedirectView.as_view(pattern_name='robots_txt', permanent=True)),
     url(r'^robots\.txt/$', RedirectView.as_view(pattern_name='robots_txt', permanent=False)),
+
+    url(r'^yandex_32b44e0eb9e4fa78\.html$', TemplateView.as_view(template_name='ya_verification.html')),
 
     # # api
     # url(r'^api/cart/', include('apps.cart.api.urls', namespace='cart_api')),
