@@ -149,7 +149,7 @@
                   <img class="catalog_special_b _margin_top" src="{{ settings.catalog_special_banner_url }}"/>
                 {% endif %}
               {% elif settings.catalog_special_banner %}
-                <img src="{{ settings.catalog_special_banner_url }}" class="catalog_special_b" />
+                <img class="catalog_special_b" src="{{ settings.catalog_special_banner_url }}"/>
               {% elif settings.get_catalog_special_text %}
                 {{ settings.get_catalog_special_text|safe }}
               {% endif %}
