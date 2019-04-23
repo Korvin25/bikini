@@ -19,7 +19,7 @@ class IsYMClientIDSetMiddleware(MiddlewareMixin):
                 if session_client_id and session_client_dt and (timezone.now()-session_client_dt).seconds < 3600:
                     client_id = session_client_id
 
-            print '---', client_id, '---'
+            # print '---', client_id, '---'
             we_have_client_id = bool(client_id)
             request.we_need_ym_client_id = not we_have_client_id
         return None
