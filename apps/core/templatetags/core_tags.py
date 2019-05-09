@@ -182,6 +182,15 @@ def to_price(value):
 
 
 @register.filter
+def to_sale_price(value, discount):
+    if type(value) not in [int, float, Decimal]:
+        return unicode(value)
+
+    value = (float(value)*float(100-discount))/100.
+    return to_price(value)
+
+
+@register.filter
 def with_delimeter(value):
     return '{0:,}'.format(value).replace(',', ' ')
 

@@ -446,6 +446,13 @@ class Product(MetatagModel):
 
     attrs = JSONField(default=dict)
 
+    is_on_sale = models.BooleanField('Есть скидка?', default=False)
+    sale_percent = models.PositiveSmallIntegerField('Скидка, %', default=0)
+    show_only_on_sale = models.BooleanField('Отображать только в категории SALE', default=False)
+    sale_price_rub = models.DecimalField('Цена со скидкой, руб.', max_digits=9, decimal_places=2, null=True, blank=True)
+    sale_price_eur = models.DecimalField('Цена со скидкой, eur.', max_digits=9, decimal_places=2, null=True, blank=True)
+    sale_price_usd = models.DecimalField('Цена со скидкой, usd.', max_digits=9, decimal_places=2, null=True, blank=True)
+
     additional_products = models.ManyToManyField(AdditionalProduct, blank=True,
                                                  verbose_name='Дополнительные товары', related_name='from_additional')
     associated_products = models.ManyToManyField('self', symmetrical=False, blank=True,
@@ -464,10 +471,21 @@ class Product(MetatagModel):
     def __unicode__(self):
         return self.title
 
+    def _get_sale_price(self, currency):
+        price = None
+        if self.is_on_sale:
+            price = float(getattr(self, 'price_{}'.format(currency)))
+            price = price*(100.-self.sale_percent)/100.
+            price = round(price*100)/100
+        return price
+
     def save(self, *args, **kwargs):
         """
         For sitemap.xml lastmod purposes
         """
+        self.is_on_sale = not (self.sale_percent == 0)
+        for c in ['rub', 'eur', 'usd']:
+            setattr(self, 'sale_price_{}'.format(c), self._get_sale_price(c))
         s = super(Product, self).save(*args, **kwargs)
         for cat in self.categories.all():
             cat.save()
@@ -532,6 +550,10 @@ class Product(MetatagModel):
         return currency_price(self)
 
     @property
+    def sale_price(self):
+        return currency_price(self, 'sale_price')
+
+    @property
     def cover_thumb(self):
         # return self.photo['product_cover'].url
         return get_thumbnailer(self.photo_f)['product_cover'].url
@@ -561,6 +583,16 @@ class Product(MetatagModel):
 
     def get_price(self):
         return to_price(self.price)
+
+    def get_sale_price(self):
+        return to_price(self.sale_price)
+
+    @mark_safe
+    def show_sale_percent(self):
+        percent = self.sale_percent
+        return '{}%'.format(percent) if percent else '-'
+    show_sale_percent.allow_tags = True
+    show_sale_percent.short_description = 'Скидка'
 
     @mark_safe
     def options_instruction(self):

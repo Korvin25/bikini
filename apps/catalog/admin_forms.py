@@ -78,6 +78,12 @@ class ProductAdminForm(forms.ModelForm):
                                                              required=True,
                                                              min_choices=1)
 
+    def clean_sale_percent(self):
+        sale_percent = self.cleaned_data.get('sale_percent')
+        if not (0 <= sale_percent <= 100):
+            raise forms.ValidationError('Скидка должна быть числом от 0 до 100.')
+        return sale_percent
+
 
 class ChangeCategoriesForm(forms.ModelForm):
 

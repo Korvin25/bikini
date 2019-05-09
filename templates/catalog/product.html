@@ -280,10 +280,22 @@
           <div class="item_list_wrapp" itemscope="" itemtype="http://schema.org/ItemList">
             {% for also_p in product.shown_also_products.all %}
               <div class="product_list">
-                <div class="photo_list"><a href="{{ also_p.get_absolute_url }}"><img src="{{ also_p.cover_thumb }}" alt="{{ also_p.title }}" /></a></div>
+                <div class="photo_list">
+                  <a href="{{ also_p.get_absolute_url }}">
+                    <img src="{{ also_p.cover_thumb }}" alt="{{ also_p.title }}" />
+                  </a>
+                  {% if also_p.is_on_sale %}<span class="product-label product-label_discount" title="">-{{ also_p.sale_percent }}%</span>{% endif %}
+                </div>
                 <h3><a href="{{ also_p.get_absolute_url }}">{{ also_p.title }}</a></h3>
                 <h4>{{ also_p.subtitle }}</h4>
-                <div class="product_price">{{ also_p.get_price|with_currency:currency|safe }}</div>
+                <div class="product_price{% if product.is_on_sale %} product_price_sale{% endif %}">
+                  {% if also_p.is_on_sale %}
+                    <s title="Старая цена">{{ also_p.get_price|with_currency:currency|abbr_to_span|safe }}</s>
+                    {{ also_p.get_sale_price|with_currency:currency|abbr_to_span|safe }}
+                  {% else %}
+                    {{ also_p.get_price|with_currency:currency|abbr_to_span|safe }}
+                  {% endif %}
+                </div>
                 <a href="{{ also_p.get_absolute_url }}" class="to_cart_list">{% trans 'В корзину' %}</a>
               </div>
             {% endfor %}

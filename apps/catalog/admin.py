@@ -490,17 +490,19 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
 
     actions = ['update_data', ]
     list_display = ('id', 'title', 'slug', 'list_categories', 'show', 'has_attrs', 'show_at_homepage',
-                    'order_at_homepage', 'add_dt', 'vendor_code', 'get_in_stock')
+                    'order_at_homepage', 'add_dt', 'vendor_code', 'get_in_stock', 'show_sale_percent',)
     list_display_links = ('id', 'title',)
     list_editable = ('order_at_homepage', 'vendor_code')
-    list_filter = ('show', HasAttrsFilter, InStockFilter, 'show_at_homepage', 'add_dt', 'categories',)
-    suit_list_filter_horizontal = ('show', 'show_at_homepage', 'categories',)
+    list_filter = ('show', HasAttrsFilter, InStockFilter, 'show_at_homepage', 'add_dt', 'categories',
+                   'is_on_sale', 'show_only_on_sale',)
+    suit_list_filter_horizontal = ('show', 'show_at_homepage', 'categories', 'is_on_sale',)
     list_per_page = 400
     suit_form_tabs = (
         ('default', 'Товар'),
         ('also', 'Сопутствующие товары'),
         ('seo', 'SEO'),
         ('seo-regions', 'SEO (регионы)'),
+        ('sale', 'Скидки'),
         ('options', 'Варианты товара'),
         ('photos', 'Фото'),
         ('video', 'Видео'),
@@ -550,6 +552,11 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
             'classes': ('suit-tab suit-tab-seo-regions',),
             'fields': ('meta_title_sam', 'meta_desc_sam', 'meta_keyw_sam', 'h1_sam',),
         }),
+        ('Скидки', {
+            'classes': ('suit-tab suit-tab-sale',),
+            'fields': ('is_on_sale', 'sale_percent', 'show_only_on_sale',
+                       'sale_price_rub', 'sale_price_eur', 'sale_price_usd',),
+        }),
         ('Варианты товара', {
             'classes': ('suit-tab suit-tab-options',),
             'fields': ('options_instruction',),
@@ -564,8 +571,10 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
         }),
     )
     prepopulated_fields = {'slug': ('title',)}
-    readonly_fields = ('id', 'add_dt', 'options_instruction', 'extra_options_instruction', 'photos_instruction',
-                       'show_categories', 'show_attributes',)
+    readonly_fields = ('id', 'add_dt',
+                       'options_instruction', 'extra_options_instruction', 'photos_instruction',
+                       'show_categories', 'show_attributes',
+                       'is_on_sale', 'sale_price_rub', 'sale_price_eur', 'sale_price_usd',)
     filter_vertical = ['categories', ]
     inlines = [ProductOptionInline, ProductPhotoInline, ProductVideoInline, ProductExtraOptionInline, ]
     raw_id_fields = ('associated_products', 'also_products',)
@@ -586,10 +595,10 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
             fieldsets[0][1]['fields'][18] = 'show_categories'  # меняем 'categories' на 'show_categories'
 
             # удаляем вкладки с инструкциями (вместо них будут вкладки с инлайнами)
-            del fieldsets[7] # варианты товара
-            del fieldsets[7] # фото
+            del fieldsets[8] # варианты товара
+            del fieldsets[8] # фото
             if obj.extra_options.count():
-                del fieldsets[4] # дополнительные товары
+                del fieldsets[8] # дополнительные товары
         else:
             fieldsets[0][1]['fields'][18] = 'categories'  # меняем 'show_categories' на 'categories'
         return fieldsets

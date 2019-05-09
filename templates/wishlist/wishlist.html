@@ -36,7 +36,12 @@
                   {% csrf_token %}
                   <input type="hidden" name="product_id" value="{{ product.id }}">
                   <div class="product_list product_list_all" style="height: auto; overflow: visible;">
-                    <div class="photo_list"><a href="{{ product_url }}"><img src="{{ product.cover_thumb }}" alt="{{ product.title }}"></a></div>
+                    <div class="photo_list">
+                      <a href="{{ product_url }}">
+                        <img src="{{ product.cover_thumb }}" alt="{{ product.title }}">
+                      </a>
+                      {% if product.is_on_sale %}<span class="product-label product-label_discount" title="">-{{ product.sale_percent }}%</span>{% endif %}
+                    </div>
                     <h3>
                       <a href="{{ product_url }}">{{ product.title }}</a>
                       <div class="sec_block_item">
@@ -76,7 +81,14 @@
                     </ul>
 
                     {% if item.price is not None %}
-                      <div class="product_price">{{ item.price|to_price|with_currency:currency|safe }}</div>
+                      <div class="product_price{% if product.is_on_sale %} product_price_sale{% endif %}">
+                        {% if product.is_on_sale %}
+                          <s title="Старая цена">{{ item.price|to_price|with_currency:currency|abbr_to_span|safe }}</s>
+                          {{ item.price|to_sale_price:product.sale_percent|with_currency:currency|abbr_to_span|safe }}
+                        {% else %}
+                          {{ item.price|to_price|with_currency:currency|abbr_to_span|safe }}
+                        {% endif %}
+                      </div>
                     {% endif %}
                     {% if product_option.in_stock %}
                       <button class="js-wishlist-cart-button to_cart_list" data-type="add" type="submit">В корзину</button>

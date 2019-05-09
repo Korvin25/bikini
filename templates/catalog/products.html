@@ -30,6 +30,9 @@
         <div class="sec_menu">
           <ul>
             <li class="title_sec_block">{% trans 'Категории' %}</li>
+            {% if show_sale_category %}
+              <li{% if is_sale_category %} class="title_sec_block"{% endif %}><a href="{% if sex == 'female' %}{% url 'women_sale' %}{% else %}{% url 'men_sale' %}{% endif %}"><strong>{% trans 'SALE' %}</strong></a></li>
+            {% endif %}
             {% for cat in categories %}
               <li{% if cat == category %} class="title_sec_block"{% endif %}><a href="{{ cat.get_absolute_url }}"><strong>{{ cat.title }}</strong></a></li>
             {% endfor %}
@@ -162,34 +165,10 @@
         </div>
         
         <div class="text_preview_page">
-          {% if category %}
-            <div class="text_preview_inner">
-              <h1 class="title_block">{{ category.get_h1 }}</h1>
-              {% if category.get_seo_text %}
-                {{ category.get_seo_text|safe }}
-              {% endif %}
-            </div>
-          {% elif sex == 'female' %}
-            <div class="text_preview_inner">
-              <h1 class="title_block">{{ seo_settings.women.get_h1 }}</h1>
-              {% if seo_settings.women.get_seo_text %}
-                {{ seo_settings.women.get_seo_text|safe }}
-              {% endif %}
-            </div>
-          {% else %}
-            <div class="text_preview_inner">
-              <h1 class="title_block">{{ seo_settings.men.get_h1 }}</h1>
-              {% if seo_settings.men.get_seo_text %}
-                {{ seo_settings.men.get_seo_text|safe }}
-              {% endif %}
-            </div>
-          {% endif %}
-            {% comment %}
-              <p><strong>Наш интернет магазин предлагает вам большой ассортимент купальников</strong>, а также мини и микро одежды. Благодаря этому каждая девушка сможет подобрать для себя идеальную пляжную одежду, выгодно подчеркивающую все прелести фигуры. К тому же, на Bikinimini представлено экстремальное бикини разных размеров, стилей и цветов.</p>
-              <p><strong>На нашем сайте вы найдете более сотни моделей купальников</strong>, нижнего белья и верхней мини и микро одежды. Не разочарует также выбор цветов и материалов. Среди многочисленных шортиков, трусиков, топов и боди вы сможете найти действительно идеальную для себя модель. Экстрим бикини купить на сайте Bikinimini не составит никакого труда, поскольку у нас найдётся достаточное многообразие одежды такого фасона. Благодаря нашим купальникам вы сможете создать уникальный пляжный образ на всех курортах. К тому же можно не бояться, что вы неожиданного встретите купальник-двойник.</p>
-              <p><strong>При желании вы можете выбрать полноценный купальник</strong>, а также сочетать его с топом, шортами и юбкой на свое усмотрение. Экстрим бикини магазин представляет только высшего качества, поэтому в нашей микро одежде вы можете отправиться не только на купание, но и престижную пляжную вечеринку. К тому же нашу верхнюю одежду вы можете использовать и для гоу-гоу. Стоит отметить, что столь качественные экстрим бикини интернет магазин предлагает по доступным ценам.</p>
-              <p><strong>Мы предлагаем своим клиентам обслуживание на должном уровне</strong> и обращаем внимание на обсуждения наших моделей. При желании наши клиенты могут принять участие в многочисленных конкурсах, которые мы регулярно проводим на нашем сайте.</p>
-            {% endcomment %}
+          <div class="text_preview_inner">
+            <h1 class="title_block">{{ h1 }}</h1>
+            {% if seo_text %}{{ seo_text|safe }}{% endif %}
+          </div>
         </div>
       </div>
       

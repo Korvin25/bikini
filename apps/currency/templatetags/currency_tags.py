@@ -61,6 +61,11 @@ def with_currency(value, currency, pure_value=None, full=False, with_dot=True, l
 
 
 @register.filter
+def abbr_to_span(value):
+    return unicode(value).replace('abbr', 'span')
+
+
+@register.filter
 def currency_light(value, currency):
     return with_currency(value, currency, light=True)
 

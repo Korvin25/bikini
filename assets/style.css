@@ -280,8 +280,19 @@ header,main,nav,footer {display:block;}
                     .settings_item span {display:inline-block;margin-right:5px;}
                     .settings_item li.last_color {white-space:nowrap;line-height:30px;position: relative;margin-top: -4px;}
                         .last_color .td_color_box {width:30px;height:30px;vertical-align: middle;}
-            
-            
+
+        .product-label {display:inline-block;position: absolute;left: 0;top: 4%;font-size: 17px;line-height: 1;color: #000;text-align: left;z-index: 8;cursor:default;font-family:inherit;display: block;vertical-align: middle;background-color: #FFFFFF;padding-right: 6px;padding-top: 4px;padding-bottom: 4px;padding-left: 5px;min-width: 41px;text-align: center;}
+        .product-label_new {color: #ffffff;}
+        .product-label+.product-label {margin-top:25px}
+        .product-label+.product-label+.product-label {margin-top:50px}
+        .product-label+.product-label+.product-label+.product-label {margin-top:75px}
+        .product-label_discount {color: white;background-color: #e1312f;}
+        .product-label_discount ~ .price_item {color: #e1312f;white-space: nowrap;}
+        .product-label_discount ~ .price_item s {color:#000000;margin-left: 8px;opacity:.6;}
+
+        .product_price_sale {color:#e1312f !important;}
+        .product_price s {opacity:.3;color:#000 !important;}
+
     /* <<< CATALOG */
     
     

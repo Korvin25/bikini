@@ -7,10 +7,22 @@
     {% for product in products %}
       <div class="product_list">
         {% with product|get_product_url:category_or_sex as product_url %}
-          <div class="photo_list"><a href="{{ product_url }}"><img src="{{ product.cover_thumb }}" alt="{{ product.title }}" /></a></div>
+          <div class="photo_list">
+            <a href="{{ product_url }}">
+              <img src="{{ product.cover_thumb }}" alt="{{ product.title }}" />
+            </a>
+            {% if product.is_on_sale %}<span class="product-label product-label_discount" title="">-{{ product.sale_percent }}%</span>{% endif %}
+          </div>
           <h3><a href="{{ product_url }}">{{ product.title }}</a></h3>
           <h4>{{ product.subtitle }}</h4>
-          <div class="product_price">{{ product.get_price|with_currency:currency|safe }}</div>
+          <div class="product_price{% if product.is_on_sale %} product_price_sale{% endif %}">
+            {% if product.is_on_sale %}
+              <s title="Старая цена">{{ product.get_price|with_currency:currency|abbr_to_span|safe }}</s>
+              {{ product.get_sale_price|with_currency:currency|abbr_to_span|safe }}
+            {% else %}
+              {{ product.get_price|with_currency:currency|abbr_to_span|safe }}
+            {% endif %}
+          </div>
           <a href="{{ product_url }}" class="to_cart_list">{% trans 'В корзину' %}</a>
         {% endwith %}
       </div>

@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from collections import OrderedDict
+from decimal import Decimal
 import json
 
 from django.db.models import Q, Max, Min
@@ -13,28 +14,37 @@ from ..core.templatetags.core_tags import to_int_or_float
 from ..core.http_utils import get_object_from_slug_and_kwargs
 from ..currency.utils import get_currency
 from ..lk.wishlist.utils import get_wishlist_from_request
+from ..settings.models import SEOSetting
 from .models import Attribute, Category, GiftWrapping, Product, ProductOption, SpecialOffer
 
 
 class ProductsView(TemplateView):
     with_category = False
+    sale_category = False
     sex = 'female'
     TEMPLATES = {
         'default': 'catalog/products.html',
-        'men': 'catalog/products_men.html',
         'women': 'catalog/products_women.html',
+        'men': 'catalog/products_men.html',
+        'women_sale': 'catalog/products_women_sale.html',
+        'men_sale': 'catalog/products_men_sale.html',
         'ajax': 'catalog/include/products.html',
     }
+    PRICE_QUERY = 'COALESCE(sale_price_{0}, price_{0})'
 
     def get_template_names(self):
         TEMPLATES = self.TEMPLATES
         is_ajax = self.request.is_ajax()
         with_category = self.with_category
+        sale_category = self.sale_category
+        catalog_home = not (with_category or sale_category)
         return {
             is_ajax: TEMPLATES['ajax'],
             (not is_ajax and with_category): TEMPLATES['default'],
-            (not is_ajax and not with_category and self.sex == 'female'): TEMPLATES['women'],
-            (not is_ajax and not with_category and self.sex == 'male'): TEMPLATES['men'],
+            (not is_ajax and sale_category and self.sex == 'female'): TEMPLATES['women_sale'],
+            (not is_ajax and sale_category and self.sex == 'male'): TEMPLATES['men_sale'],
+            (not is_ajax and catalog_home and self.sex == 'female'): TEMPLATES['women'],
+            (not is_ajax and catalog_home and self.sex == 'male'): TEMPLATES['men'],
         }.get(True)
 
     def get_category(self):
@@ -91,12 +101,19 @@ class ProductsView(TemplateView):
 
     def get_filter(self):
         f = {}
-        if self.f.get('price_from'):
-            f['price_{}__gte'.format(self.currency)] = self.f['price_from']
-        if self.f.get('price_to'):
-            f['price_{}__lte'.format(self.currency)] = self.f['price_to']
+        # if self.f.get('price_from'):
+        #     f['price_{}__gte'.format(self.currency)] = self.f['price_from']
+        # if self.f.get('price_to'):
+        #     f['price_{}__lte'.format(self.currency)] = self.f['price_to']
         self.filter = f
         return f
+
+    def get_price_minimax(self, qs):
+        prices = qs.values_list('p_{}'.format(self.currency), flat=True)
+        max_price = max(prices) if len(prices) else 1
+        price_min = int(min(prices)) if len(prices) > 1 else 0
+        price_max = int(max_price) if int(max_price) == max_price else int(max(prices)) + 1
+        return {'price__min': Decimal(price_min), 'price__max': Decimal(price_max)}
 
     def get_queryset(self, **kwargs):
         GET = self.request.GET
@@ -109,14 +126,23 @@ class ProductsView(TemplateView):
         else:
             qs = qs.filter(categories__sex=self.sex)
 
+        if self.sale_category:
+            qs = qs.filter(is_on_sale=True)
+        else:
+            qs = qs.filter(Q(is_on_sale=True, show_only_on_sale=False) | Q(is_on_sale=False))
+
+        qs = qs.extra(select={'p_{}'.format(c): self.PRICE_QUERY.format(c) for c in ['rub', 'eur', 'usd']})
+
         self.base_qs = qs
-        self.price_min_max = qs.aggregate(Min('price_{}'.format(self.currency)), Max('price_{}'.format(self.currency)))
-        self.price_min_max['price__min'] = self.price_min_max['price_{}__min'.format(self.currency)]
-        self.price_min_max['price__max'] = self.price_min_max['price_{}__max'.format(self.currency)]
+        # self.price_min_max = qs.aggregate(Min('price_{}'.format(self.currency)), Max('price_{}'.format(self.currency)))
+        # self.price_min_max['price__min'] = self.price_min_max['price_{}__min'.format(self.currency)]
+        # self.price_min_max['price__max'] = self.price_min_max['price_{}__max'.format(self.currency)]
+        self.price_min_max = self.get_price_minimax(qs)
         self.get_attributes()
 
         price_from = GET.get('price_from')
         price_to = GET.get('price_to')
+
         if price_from:
             try:
                 self.f['price_from'] = int(price_from)
@@ -147,6 +173,17 @@ class ProductsView(TemplateView):
 
         qs = qs.filter(*self.get_attrs_filter())
         qs = qs.filter(**self.get_filter()).distinct()
+        if price_from:
+            qs = qs.extra(
+                where=['{0} >= %s'.format(self.PRICE_QUERY.format(self.currency))],
+                params=[price_from]
+            )
+        if price_to:
+            qs = qs.extra(
+                where=['{0} <= %s'.format(self.PRICE_QUERY.format(self.currency))],
+                params=[price_to]
+            )
+
         if self.category:
             qs = qs.order_by('order', '-id')
             qs = list(qs)
@@ -157,20 +194,50 @@ class ProductsView(TemplateView):
         self.qs = qs
         return qs
 
+    def get_seo_data(self):
+        h1 = seo_text = ''
+
+        if self.category:
+            h1 = self.category.get_h1()
+            seo_text = self.category.get_seo_text()
+
+        else:
+            setting_key = ('women_sale' if self.sale_category and self.sex == 'female'
+                           else 'men_sale' if self.sale_category and self.sex == 'male'
+                           else 'women' if self.sex == 'female'
+                           else 'men')
+            setting = SEOSetting.objects.filter(key=setting_key).first()
+            if setting:
+                h1 = setting.get_h1()
+                seo_text = setting.get_seo_text()
+
+        h1 = h1 or 'Каталог товаров'
+        return h1, seo_text
+
     def get_context_data(self, **kwargs):
         category = self.get_category()
         products = self.get_queryset()
+        categories = Category.objects.filter(sex=self.sex)
+        show_sale_category = (
+            True if self.sale_category
+            else bool(Product.objects.filter(show=True,is_on_sale=True, categories__in=categories))
+        )
+        h1, seo_text = self.get_seo_data()
         context = {
             'category': category,
             'sex': self.sex,
             'category_or_sex': category or self.sex,
-            'categories': Category.objects.filter(sex=self.sex),
+            'categories': categories,
+            'show_sale_category': show_sale_category,
+            'is_sale_category': self.sale_category,
             'products': products,
             'attrs': self.attrs,
             'attrs_options': self.a_values,
             'price_min_max': self.price_min_max,
             'f': self.f,
             'filter': self.filter,
+            'h1': h1,
+            'seo_text': seo_text,
         }
         context.update(super(ProductsView, self).get_context_data(**kwargs))
         return context
@@ -188,6 +255,10 @@ class ProductView(TemplateView):
         kw = {'pk': self.kwargs.get('pk'), 'categories': self.category, 'show': True}
         self.product = get_object_from_slug_and_kwargs(self.request, model=Product, slug=self.kwargs.get('slug'), **kw)
         return self.product
+
+    def get_discount(self):
+        self.discount = self.product.sale_percent
+        return self.discount
 
     def get_attributes(self):
         _attrs = self.product.attributes.select_related('neighbor').prefetch_related('options').filter(display_type__gte=1)
@@ -363,7 +434,7 @@ class ProductView(TemplateView):
         self.count = data['prices']['count']
         self.maximum_in_stock = data['prices']['maximum_in_stock']
 
-        data['prices']['discount'] = self.discount
+        data['prices']['discount'] = self.get_discount()
         self.data = data
         self.data_json = json.dumps(data)
 
@@ -433,12 +504,15 @@ class ProductWithDiscountView(ProductView):
     def get(self, request, *args, **kwargs):
         product = self.get_product()
         profile = request.user
-        special_offer = SpecialOffer.get_offers().filter(product_id=product.id, category_id=kwargs.get('category_id')).first()
+        self.special_offer = SpecialOffer.get_offers().filter(product_id=product.id, category_id=kwargs.get('category_id')).first()
 
         if (profile.is_anonymous() or not profile.can_get_discount
-            or not special_offer
+            or not self.special_offer
             or kwargs.get('code') != profile.discount_code):
             return HttpResponseRedirect(product.get_absolute_url())
 
-        self.discount = special_offer.discount
         return super(ProductWithDiscountView, self).get(request, *args, **kwargs)
+
+    def get_discount(self):
+        self.discount = self.special_offer.discount
+        return self.discount
