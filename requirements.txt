@@ -19,7 +19,7 @@ django-modeltranslation==0.12.1
 django-multiselectfield==0.1.8
 django-object-actions==0.10.0
 django-paypal==0.4.1
-django-redis-cache==1.7.1
+django-redis-cache==2.0.0
 django-request==1.5.3
 django-rosetta==0.7.13
 django-salmonella==1.1
