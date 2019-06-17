@@ -340,12 +340,12 @@ LOGGING = {
 }
 
 
-#CACHES = {
-#    'default': {
-#        'BACKEND': 'redis_cache.RedisCache',
-#        'LOCATION': 'localhost:6379',
-#    },
-#}
+CACHES = {
+    'default': {
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': 'localhost:6379',
+    },
+}
 
 
 SESSION_COOKIE_DOMAIN = '.bikinimini.ru'
