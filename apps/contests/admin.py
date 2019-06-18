@@ -72,6 +72,18 @@ class ContestAdmin(ImageThumbAdminMixin, TabbedTranslationAdmin):
             'classes': ('suit-tab suit-tab-seo-regions',),
             'fields': ('meta_title_sam', 'meta_desc_sam', 'meta_keyw_sam', 'h1_sam', 'seo_text_sam',),
         }),
+        ('SEO: Сочи', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_sch', 'meta_desc_sch', 'meta_keyw_sch', 'h1_sch', 'seo_text_sch',),
+        }),
+        ('SEO: Симферополь', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_smf', 'meta_desc_smf', 'meta_keyw_smf', 'h1_smf', 'seo_text_smf',),
+        }),
+        ('SEO: Севастополь', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_svs', 'meta_desc_svs', 'meta_keyw_svs', 'h1_svs', 'seo_text_svs',),
+        }),
     )
     prepopulated_fields = {'slug': ('title',)}
     readonly_fields = ('add_dt',)
@@ -120,6 +132,18 @@ class ParticipantAdmin(ImageThumbAdminMixin, TabbedTranslationAdmin):
         ('SEO: Самара', {
             'classes': ('suit-tab suit-tab-seo-regions',),
             'fields': ('meta_title_sam', 'meta_desc_sam', 'meta_keyw_sam', 'h1_sam', 'seo_text_sam',),
+        }),
+        ('SEO: Сочи', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_sch', 'meta_desc_sch', 'meta_keyw_sch', 'h1_sch', 'seo_text_sch',),
+        }),
+        ('SEO: Симферополь', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_smf', 'meta_desc_smf', 'meta_keyw_smf', 'h1_smf', 'seo_text_smf',),
+        }),
+        ('SEO: Севастополь', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_svs', 'meta_desc_svs', 'meta_keyw_svs', 'h1_svs', 'seo_text_svs',),
         }),
     )
     raw_id_fields = ('profile', 'products',)

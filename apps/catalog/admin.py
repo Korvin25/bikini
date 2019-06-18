@@ -195,6 +195,18 @@ class CategoryAdmin(TabbedTranslationAdmin):
             'classes': ('suit-tab suit-tab-seo-regions',),
             'fields': ('meta_title_sam', 'meta_desc_sam', 'meta_keyw_sam', 'h1_sam', 'seo_text_sam',),
         }),
+        ('SEO: Сочи', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_sch', 'meta_desc_sch', 'meta_keyw_sch', 'h1_sch', 'seo_text_sch',),
+        }),
+        ('SEO: Симферополь', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_smf', 'meta_desc_smf', 'meta_keyw_smf', 'h1_smf', 'seo_text_smf',),
+        }),
+        ('SEO: Севастополь', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_svs', 'meta_desc_svs', 'meta_keyw_svs', 'h1_svs', 'seo_text_svs',),
+        }),
     )
     prepopulated_fields = {'slug': ('title',)}
     search_fields = ['title', ]
@@ -552,6 +564,18 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
             'classes': ('suit-tab suit-tab-seo-regions',),
             'fields': ('meta_title_sam', 'meta_desc_sam', 'meta_keyw_sam', 'h1_sam',),
         }),
+        ('SEO: Сочи', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_sch', 'meta_desc_sch', 'meta_keyw_sch', 'h1_sch',),
+        }),
+        ('SEO: Симферополь', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_smf', 'meta_desc_smf', 'meta_keyw_smf', 'h1_smf',),
+        }),
+        ('SEO: Севастополь', {
+            'classes': ('suit-tab suit-tab-seo-regions',),
+            'fields': ('meta_title_svs', 'meta_desc_svs', 'meta_keyw_svs', 'h1_svs',),
+        }),
         ('Скидки', {
             'classes': ('suit-tab suit-tab-sale',),
             'fields': ('is_on_sale', 'sale_percent', 'show_only_on_sale',
@@ -595,10 +619,10 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
             fieldsets[0][1]['fields'][18] = 'show_categories'  # меняем 'categories' на 'show_categories'
 
             # удаляем вкладки с инструкциями (вместо них будут вкладки с инлайнами)
-            del fieldsets[8] # варианты товара
-            del fieldsets[8] # фото
+            del fieldsets[11] # варианты товара
+            del fieldsets[11] # фото
             if obj.extra_options.count():
-                del fieldsets[8] # дополнительные товары
+                del fieldsets[11] # дополнительные товары
         else:
             fieldsets[0][1]['fields'][18] = 'categories'  # меняем 'show_categories' на 'categories'
         return fieldsets

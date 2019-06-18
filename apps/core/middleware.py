@@ -16,6 +16,9 @@ SEO_SUFFIXES = {
     'spb': 'в Санкт-Петербурге',
     'nsk': 'в Новосибирске',
     'sam': 'в Самаре',
+    'sch': 'в Сочи',
+    'smf': 'в Симферополе',
+    'svs': 'в Севастополе',
     None: '',
 }
 
@@ -25,7 +28,16 @@ class CurrentSiteAndRegionMiddleware(MiddlewareMixin):
         domain = request.get_host()
         try:
             site = Site.objects.get(domain=domain)
-            request.region_code = domain.split('.')[0] if (site.id > 1) else None
+
+            region_code = domain.split('.')[0] if (site.id > 1) else None
+            request.region_code = {
+                'spb': 'spb',
+                'nsk': 'nsk',
+                'sam': 'sam',
+                'sochi': 'sch',
+                'simferopol': 'smf',
+                'sevastopol': 'svs',
+            }.get(region_code, region_code)
             request.region_seo_suffix = SEO_SUFFIXES.get(request.region_code, '')
 
             if request.region_code:

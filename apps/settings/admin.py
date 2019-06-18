@@ -31,6 +31,18 @@ def MetatagModelAdmin(cls=None):
                 'classes': ('collapse',),
                 'fields': ('meta_title_sam', 'meta_desc_sam', 'meta_keyw_sam', 'h1_sam', 'seo_text_sam',)
             }),
+            ('SEO: Сочи', {
+                'classes': ('collapse',),
+                'fields': ('meta_title_sch', 'meta_desc_sch', 'meta_keyw_sch', 'h1_sch', 'seo_text_sch',)
+            }),
+            ('SEO: Симферополь', {
+                'classes': ('collapse',),
+                'fields': ('meta_title_smf', 'meta_desc_smf', 'meta_keyw_smf', 'h1_smf', 'seo_text_smf',)
+            }),
+            ('SEO: Севастополь', {
+                'classes': ('collapse',),
+                'fields': ('meta_title_svs', 'meta_desc_svs', 'meta_keyw_svs', 'h1_svs', 'seo_text_svs',)
+            }),
         )
         cls.search_fields += ['meta_title', 'meta_desc', 'meta_keyw', 'h1', ]
         return cls
@@ -123,6 +135,18 @@ class SEOSettingAdmin(TabbedTranslationAdmin):
         ('Самара', {
             'classes': ('suit-tab', 'suit-tab-regions',),
             'fields': ('title_sam', 'meta_desc_sam', 'meta_keyw_sam', 'h1_sam', 'seo_text_sam',)
+        }),
+        ('Сочи', {
+            'classes': ('suit-tab', 'suit-tab-regions',),
+            'fields': ('title_sch', 'meta_desc_sch', 'meta_keyw_sch', 'h1_sch', 'seo_text_sch',),
+        }),
+        ('Симферополь', {
+            'classes': ('suit-tab', 'suit-tab-regions',),
+            'fields': ('title_smf', 'meta_desc_smf', 'meta_keyw_smf', 'h1_smf', 'seo_text_smf',),
+        }),
+        ('Севастополь', {
+            'classes': ('suit-tab', 'suit-tab-regions',),
+            'fields': ('title_svs', 'meta_desc_svs', 'meta_keyw_svs', 'h1_svs', 'seo_text_svs',),
         }),
     )
 
