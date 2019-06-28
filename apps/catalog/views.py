@@ -385,9 +385,11 @@ class ProductView(TemplateView):
                 }
 
         for i, option in enumerate(self.product.options.all()):
+            option_attrs = option.attrs
+            option_attrs = {k:v for k,v in option_attrs.iteritems() if k in self.product.attrs}
             option_dict = {
                 'id': option.id,
-                'attrs': option.attrs,
+                'attrs': option_attrs,
                 'price': float(option.price or self.product.price or 0),
                 'in_stock': option.in_stock,
             }

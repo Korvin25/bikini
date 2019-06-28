@@ -146,9 +146,9 @@ class PostAdmin(TabbedTranslationAdmin):
 
 @admin.register(PostComment)
 class PostCommentAdmin(admin.ModelAdmin):
-    list_display = ('datetime', 'post', 'lang', 'name', 'profile', 'show',)
+    list_display = ('datetime', 'name', 'comment', 'post', 'lang', 'profile', 'show',)
     list_editable = ('show',)
-    list_filter = ('lang', 'show',)
+    list_filter = ('lang', 'show', 'post',)
     list_per_page = 200
     fieldsets = (
         (None, {
