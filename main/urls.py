@@ -35,6 +35,9 @@ urlpatterns = [
 
     url(r'^yandex_32b44e0eb9e4fa78\.html$', TemplateView.as_view(template_name='ya_verification.html')),
 
+    url(r'^404/$', TemplateView.as_view(template_name='404.html')),
+
+
     # # api
     # url(r'^api/cart/', include('apps.cart.api.urls', namespace='cart_api')),
     # url(r'^api/certificate/', include('apps.cart.certificate.urls', namespace='certificate_api')),
