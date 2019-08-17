@@ -73,17 +73,31 @@
           
             <div class="{% if photos %}js-with-photos {% endif %}nom_img_med_wrap highslide-gallery">
               <ul class="nom_img_list js-photo-big-container">
-                {% for photo in photos %}
-                  <li class="js-photo-big" data-attrs="{{ photo.attrs_json }}" data-order="{{ forloop.counter }}">
-                    <a href="{{ photo.big_url }}" target="_blank" class="highslide" onclick="return hs.expand(this)" title="">
-                    <img src="{{ photo.preview_url }}" /></a>
-                  </li>
-                {% empty %}
+                {% if photos %}
+                  {% for photo in photos %}
+                    <li class="js-photo-big" data-attrs="{{ photo.attrs_json }}" data-order="{{ forloop.counter }}">
+                      <a href="{{ photo.big_url }}" target="_blank" class="highslide" onclick="return hs.expand(this)" title="">
+                      <img src="{{ photo.preview_url }}" /></a>
+                    </li>
+                  {% endfor %}
+                  {% for video in videos %}
+                    <li class="js-photo-big" data-attrs="{{ video.attrs_json }}" data-order="{{ forloop.counter|add:photos.count }}">
+                      {% comment %}
+                        <a href="{{ video.video }}" target="_blank" class="highslide" onclick="return openYouTube(this)" title="">
+                          <div style="background-image:url({{ video.get_video_cover }}); background-size: cover; width:500px; height:512px;"/>
+                            <div class="play play_thumb"></div>
+                          </div>
+                        </a>
+                      {% endcomment %}
+                      {% video video.video '100%x100%' %}
+                    </li>
+                  {% endfor %}
+                {% else %}
                   <li>
                     <a href="{{ product.big_url }}" target="_blank" class="highslide" onclick="return hs.expand(this)" title="">
                     <img src="{{ product.preview_url }}" /></a>
                   </li>
-                {% endfor %}
+                {% endif %}
               </ul>
             </div>
             <div class="C_navigation">
@@ -93,15 +107,25 @@
               </div>
               <div class="carousel-navigation">
                 <ul class="jcarousel js-photo-thumb-container">
-                  {% for photo in photos %}
-                    <li class="js-photo-thumb" data-attrs="{{ photo.attrs_json }}" data-order="{{ forloop.counter }}">
-                      <img src="{{ photo.thumb_url }}" />
-                    </li>
-                  {% empty %}
+                  {% if photos %}
+                    {% for photo in photos %}
+                      <li class="js-photo-thumb" data-attrs="{{ photo.attrs_json }}" data-order="{{ forloop.counter }}">
+                        <img src="{{ photo.thumb_url }}" />
+                      </li>
+                    {% endfor %}
+                    {% for video in videos %}
+                      <li class="js-photo-thumb" data-attrs="{{ video.attrs_json }}" data-order="{{ forloop.counter|add:photos.count }}">
+                        {# <img src="{{ video.get_video_cover }}"/> #}
+                        <div style="background-image:url({{ video.get_video_cover }}); background-size: cover; width:70px; height:70px;"/>
+                          <div class="play play_thumb"></div>
+                        </div>
+                      </li>
+                    {% endfor %}
+                  {% else %}
                     <li class="">
                       <img src="{{ product.thumb_url }}" />
                     </li>
-                  {% endfor %}
+                  {% endif %}
                 </ul>
               </div>
             </div>

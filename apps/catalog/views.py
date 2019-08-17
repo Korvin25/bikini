@@ -468,6 +468,15 @@ class ProductView(TemplateView):
         self.in_wishlist = in_wishlist
         self.wishlist_data = wishlist_data
 
+    def get_videos_with_attrs(self):
+        product = self.product
+        videos = [v for v in product.videos.all()]
+        attrs = {k: [] for k in product.attrs.keys()}
+        attrs_json = json.dumps(attrs)
+        for v in videos:
+            v.attrs_json = attrs_json
+        self.videos = videos
+
     def get_context_data(self, **kwargs):
         product = self.get_product()
         category = self.category
@@ -476,6 +485,7 @@ class ProductView(TemplateView):
         self.get_wrapping_price()
         self.get_data_json()
         self.get_from_wishlist()
+        self.get_videos_with_attrs()
         context = {
             'product': product,
             'category': category,
@@ -485,6 +495,7 @@ class ProductView(TemplateView):
             'attrs_ids': self.attrs_ids,
             'extra_products': self.extra_products,
             'photos': product.photos.all(),
+            'videos': self.videos,
             'gift_wrapping_price': self.wrapping_price,
             'have_option': self.have_option,
             'price': self.price,

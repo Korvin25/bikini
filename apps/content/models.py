@@ -55,10 +55,12 @@ class Video(MetatagModel):
         return (self.cover['video_preview'].url if self.cover
                 else self.get_video_cover())
 
-    def get_video_cover(self):
-        url = self.video
+    def get_backend(self):
         backend = detect_backend(self.video)
-        code = backend.get_code()
+        return backend
+
+    def get_video_cover(self):
+        backend = self.get_backend()
         return backend.thumbnail
 
     def get_title(self):
