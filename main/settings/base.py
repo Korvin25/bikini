@@ -305,9 +305,21 @@ LOGGING = {
             'filename': os.path.join(BASE_DIR, 'logs/mailchimp_errors.log'),
             'formatter': 'normal',
         },
+        'debug_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/debug.log'),
+            'formatter': 'normal',
+        },
+        'errors_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/errors.log'),
+            'formatter': 'verbose',
+        },
         'console': {
             'class': 'logging.StreamHandler',
-            'filters': ['require_debug_true'],
+            #'filters': ['require_debug_true'],
             'formatter': 'simple',
         },
         'mail_admins': {
@@ -332,10 +344,15 @@ LOGGING = {
             'level': 'INFO',
         },
         'django.request': {
-            'handlers': ['mail_admins', 'console'],
+            'handlers': ['mail_admins', 'console', 'errors_file'],
             'level': 'ERROR',
             'propagate': True,
         },
+        #'django': {
+        #    'handlers': ['debug_file',],
+        #    'level': 'DEBUG',
+        #    'propagate': True,
+        #},
     }
 }
 
