@@ -26,8 +26,7 @@
         </div>
         <div id="main_content" class="content_video list_push cnt_left">
           <div class="text_preview_left text_light_page" style="margin-top: 40px;">
-            <p>{% trans 'Возможно, вы ввели неправильный адрес, или зашли на товар, который распродан.' %}</p>
-            <p><a href="{% url 'women' %}" target="_blank" style="cursor: pointer;">{% trans 'Вернуться в каталог' %}</a></p>
+            {{ seo_settings.404.seo_text|safe }}
           </div>
         </div>
     </div>
