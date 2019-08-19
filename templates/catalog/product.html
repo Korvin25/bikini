@@ -11,6 +11,14 @@
 {% block twitter_title %}{{ product|get_product_meta_title:category }}{% endblock %}
 {% block twitter_desc %}{{ product.get_meta_desc }}{% endblock %}
 
+{% block extra_css %}
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.css">
+{% endblock %}
+
+{% block head_js %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+{% endblock %}
+
 {% block content %}
   <main>
     <div class="main_content">
@@ -76,20 +84,23 @@
                 {% if photos %}
                   {% for photo in photos %}
                     <li class="js-photo-big" data-attrs="{{ photo.attrs_json }}" data-order="{{ forloop.counter }}">
-                      <a href="{{ photo.big_url }}" target="_blank" class="highslide" onclick="return hs.expand(this)" title="">
+                      {# <a href="{{ photo.big_url }}" target="_blank" class="highslide" onclick="return hs.expand(this)" title=""> #}
+                      <a href="{{ photo.big_url }}" target="_blank" data-fancybox="gallery" data-caption="{{ product.title }} / {% trans 'Фото' %} №{{ forloop.counter }}" title="">
                       <img src="{{ photo.preview_url }}" /></a>
                     </li>
                   {% endfor %}
                   {% for video in videos %}
                     <li class="js-photo-big" data-attrs="{{ video.attrs_json }}" data-order="{{ forloop.counter|add:photos.count }}">
-                      {% comment %}
-                        <a href="{{ video.video }}" target="_blank" class="highslide" onclick="return openYouTube(this)" title="">
+                        
+                        {# <a href="{{ video.video }}" target="_blank" class="highslide" onclick="return hs.openYouTube(this)" title=""> #}
+                        <a href="{{ video.video }}" data-fancybox="gallery" data-caption="{{ product.title }} / {% trans 'Видео' %} №{{ forloop.counter }}">
                           <div style="background-image:url({{ video.get_video_cover }}); background-size: cover; width:500px; height:512px;"/>
                             <div class="play play_thumb"></div>
                           </div>
                         </a>
-                      {% endcomment %}
-                      {% video video.video '100%x100%' %}
+                        
+                      
+                      {# {% video video.video '100%x100%' %} #}
                     </li>
                   {% endfor %}
                 {% else %}
