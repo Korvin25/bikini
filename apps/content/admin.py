@@ -39,7 +39,7 @@ class VideoAdmin(AdminVideoMixin, TabbedTranslationAdmin):
     fieldsets = (
         ('Видео', {
             'classes': ('suit-tab suit-tab-default',),
-            'fields': ('title', 'slug', 'video', 'video_cover', 'cover', 'text', 'product', 'post', 'show_at_list', 'order', 'add_dt',),
+            'fields': ('title', 'slug', 'video', 'cover', 'text', 'product', 'post', 'show_at_list', 'order', 'add_dt',),
         }),
         ('SEO', {
             'classes': ('suit-tab suit-tab-seo',),
