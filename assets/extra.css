@@ -46,3 +46,12 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
     top: auto; 
     margin-top: 15px;
 }
+.play_preview { 
+    width: 200px;
+    height: 200px;
+    line-height: 200px;
+    left: auto; 
+    margin-left: 150px;
+    top: auto; 
+    margin-top: 150px;
+}

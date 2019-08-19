@@ -39,7 +39,7 @@ class VideoAdmin(AdminVideoMixin, TabbedTranslationAdmin):
     fieldsets = (
         ('Видео', {
             'classes': ('suit-tab suit-tab-default',),
-            'fields': ('title', 'slug', 'video', 'cover', 'text', 'product', 'post', 'show_at_list', 'order', 'add_dt',),
+            'fields': ('title', 'slug', 'video', 'video_cover', 'cover', 'text', 'product', 'post', 'show_at_list', 'order', 'add_dt',),
         }),
         ('SEO', {
             'classes': ('suit-tab suit-tab-seo',),
@@ -74,6 +74,11 @@ class VideoAdmin(AdminVideoMixin, TabbedTranslationAdmin):
     readonly_fields = ('add_dt',)
     raw_id_fields = ('product', 'post',)
     search_fields = ['title', 'text', 'video', ]
+
+    def save_model(self, request, obj, form, change):
+        s = super(VideoAdmin, self).save_model(request, obj, form, change)
+        obj.update_video_cover()
+        return s
 
 
 @admin.register(Page)

@@ -1,17 +1,21 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import urlparse
+
+from django.core.files import File
+from django.core.files.temp import NamedTemporaryFile
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 
-from ckeditor.fields import RichTextField
+# from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
 from easy_thumbnails.fields import ThumbnailerImageField
 from embed_video.fields import EmbedVideoField
 from embed_video.backends import detect_backend
-from tinymce.models import HTMLField
+import requests
+# from tinymce.models import HTMLField
 
 from ..blog.models import Post
 from ..catalog.models import Product
@@ -22,6 +26,8 @@ class Video(MetatagModel):
     title = models.CharField('Название', max_length=255)
     slug = models.SlugField('В URL', max_length=127)
     video = EmbedVideoField('Ссылка на видео')
+    video_cover = ThumbnailerImageField('Обложка с YouTube', upload_to='videos/yt/covers/',
+                                        null=True, blank=True)
     cover = ThumbnailerImageField('Обложка', upload_to='videos/covers/', null=True, blank=True)
     text = RichTextUploadingField('Текст', blank=True, null=True)
     # text = RichTextField('Текст', blank=True, null=True)
@@ -44,6 +50,7 @@ class Video(MetatagModel):
     def save(self, *args, **kwargs):
         """
         For sitemap.xml lastmod purposes
+        (and for updating cover from youtube)
         """
         SEOSetting.objects.get(key='video').save()
         return super(Video, self).save(*args, **kwargs)
@@ -59,6 +66,13 @@ class Video(MetatagModel):
         backend = detect_backend(self.video)
         return backend
 
+    def get_video_code(self):
+        backend = self.get_backend()
+        return backend.code
+
+    def get_video_id(self):
+        return self.get_video_code()
+
     def get_video_cover(self):
         backend = self.get_backend()
         return backend.thumbnail
@@ -71,6 +85,37 @@ class Video(MetatagModel):
 
     def get_text(self):
         return self.seo_text or self.text
+
+    def update_video_cover(self, save=True):
+        cover_url = self.get_video_cover()
+        r = requests.get(cover_url)
+
+        if r.status_code == requests.codes.ok:
+            try:
+                img_temp = NamedTemporaryFile()
+                img_temp.write(r.content)
+                img_temp.flush()
+
+                img_filename = urlparse.urlsplit(cover_url).path[1:]
+                img_filename = img_filename.split('/')[-1]
+                img_filename = '{}/{}'.format(self.get_video_id(), img_filename)
+                if not img_filename.count('.'):
+                    img_filename = '{}.jpg'.format(img_filename)
+
+                self.video_cover.save(img_filename, File(img_temp), save=True)
+
+            except Exception as e:
+                print 'udpate video cover exception: ', e.__class__
+
+    @property
+    def thumb_url(self):
+        photo = self.video_cover or self.cover
+        return photo['product_photo_thumb'].url if photo else self.get_video_cover()
+
+    @property
+    def preview_url(self):
+        photo = self.video_cover or self.cover
+        return photo['product_photo_preview'].url if photo else self.get_video_cover()
 
 
 class Page(MetatagModel):
