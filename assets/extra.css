@@ -55,3 +55,5 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
     top: auto; 
     margin-top: 150px;
 }
+.h3_title_block { margin-bottom: 3px; font-size: 20px; }
+.align_left { text-align: left !important; }

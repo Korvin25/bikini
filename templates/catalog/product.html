@@ -79,9 +79,9 @@
             </script>
             <!-- УВЕЛИЧЕНИЕ КАРТИНКИ <<< -->
           
-            <div class="{% if photos %}js-with-photos {% endif %}nom_img_med_wrap highslide-gallery">
+            <div class="{% if show_gallery %}js-with-photos {% endif %}nom_img_med_wrap highslide-gallery">
               <ul class="nom_img_list js-photo-big-container">
-                {% if photos %}
+                {% if show_gallery %}
                   {% for photo in photos %}
                     <li class="js-photo-big" data-attrs="{{ photo.attrs_json }}" data-order="{{ forloop.counter }}">
                       {# <a href="{{ photo.big_url }}" target="_blank" class="highslide" onclick="return hs.expand(this)" title=""> #}
@@ -89,9 +89,15 @@
                         <img src="{{ photo.preview_url }}" />
                       </a>
                     </li>
+                  {% empty %}
+                    <li class="js-photo-big" data-attrs="{{ product.empty_attrs_json }}" data-order="0">
+                      <a href="{{ product.big_url }}" target="_blank" data-fancybox="gallery" data-caption="{{ product.title }} / {% trans 'Фото' %} №1" title="">
+                        <img src="{{ product.preview_url }}" />
+                      </a>
+                    </li>
                   {% endfor %}
                   {% for video in videos %}
-                    <li class="js-photo-big" data-attrs="{{ video.attrs_json }}" data-order="{{ forloop.counter|add:photos.count }}">
+                    <li class="js-photo-big" data-attrs="{{ product.empty_attrs_json }}" data-order="{{ forloop.counter|add:photos_count }}">
                         
                       {# <a href="{{ video.video }}" target="_blank" class="highslide" onclick="return hs.openYouTube(this)" title=""> #}
                       <a href="{{ video.video }}" data-fancybox="gallery" data-caption="{{ product.title }} / {% trans 'Видео' %} №{{ forloop.counter }}">
@@ -118,14 +124,18 @@
               </div>
               <div class="carousel-navigation">
                 <ul class="jcarousel js-photo-thumb-container">
-                  {% if photos %}
+                  {% if show_gallery %}
                     {% for photo in photos %}
                       <li class="js-photo-thumb" data-attrs="{{ photo.attrs_json }}" data-order="{{ forloop.counter }}">
                         <img src="{{ photo.thumb_url }}" />
                       </li>
+                    {% empty %}
+                      <li class="js-photo-thumb" data-attrs="{{ product.empty_attrs_json }}" data-order="0">
+                        <img src="{{ product.thumb_url }}" />
+                      </li>
                     {% endfor %}
                     {% for video in videos %}
-                      <li class="js-photo-thumb" data-attrs="{{ video.attrs_json }}" data-order="{{ forloop.counter|add:photos.count }}">
+                      <li class="js-photo-thumb" data-attrs="{{ product.empty_attrs_json }}" data-order="{{ forloop.counter|add:photos_count }}">
                         {# <img src="{{ video.get_video_cover }}"/> #}
                         {# <div style="background-image:url({{ video.get_video_cover }}); background-size: cover; width:70px; height:70px;"/> #}
                         <div style="background-image:url({{ video.thumb_url }}); background-size: cover; width:70px; height:70px;"/>
@@ -287,7 +297,7 @@
 
         {% get_product_text product as product_text %}
 
-        {% if product_text or product.videos.count %}
+        {% if product_text or videos_count %}
           <div class="text_preview_page text_item">
             <div class="text_preview_inner">
               {% if product_text %}
@@ -295,7 +305,7 @@
               {% endif %}
               
               <div id="player_item">
-                {% for v in product.videos.all %}
+                {% for v in videos %}
                   <div class="wrapp_player_item js-video-item" style="display: {% if forloop.counter > 1 %}none{% else %}block{% endif %}">
                     {% video v.video '100%x453' %}
                     {# <div class="inner_player_item" style="background-image:url(/static/images/picture_video2.jpg);"> #}
@@ -303,7 +313,7 @@
                     {# <a href="#" onclick="return false" class="play">play</a> #}
                   </div>
                 {% endfor %}
-                {% if product.videos.count > 1 %}
+                {% if videos_count > 1 %}
                   <div class="bt_req_call"><a href="#" class="js-expand-videos">{% trans 'Смотреть всё видео' %}</a></div>
                 {% endif %}
               </div>

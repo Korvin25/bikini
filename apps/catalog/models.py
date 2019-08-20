@@ -724,6 +724,10 @@ class Product(MetatagModel):
         return json.dumps(self.attrs)
 
     @property
+    def empty_attrs_json(self):
+        return {k: [] for k,v in self.attrs.iteritems()}
+
+    @property
     def in_stock_counts(self):
         return self.options.all().aggregate(Min('in_stock'), Max('in_stock'))
 

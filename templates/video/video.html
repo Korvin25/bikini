@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load embed_video_tags catalog_tags %}
+{% load embed_video_tags catalog_tags currency_tags %}
 {% load i18n %}
 
 {% block meta_title %}{{ video.get_meta_title }}{% endblock %}
@@ -42,9 +42,33 @@
                 {{ video_text|safe }}
               </div>
             {% endif %}
-            {% with video.product as product %}
-              {% if product %}
-                <a href="{{ product.get_absolute_url }}" class="red_button">{% trans 'Купить товар из этого видео' %}</a>
+            {% with video.products.all as products %}
+              {% if products %}
+                {# <a href="{{ product.get_absolute_url }}" class="red_button">{% trans 'Купить товар из этого видео' %}</a> #}
+                <h3 class="title_block h3_title_block">{% if products.count == 1 %}{% trans 'Купить товар из этого видео' %}{% else %}{% trans 'Купить товары из этого видео' %}{% endif %}</h3>
+                <div class="item_list_wrapp align_left" itemscope="" itemtype="http://schema.org/ItemList">
+                  {% for p in products %}
+                    <div class="product_list">
+                      <div class="photo_list">
+                        <a href="{{ p.get_absolute_url }}">
+                          <img src="{{ p.cover_thumb }}" alt="{{ p.title }}" />
+                        </a>
+                        {% if p.is_on_sale %}<span class="product-label product-label_discount" title="">-{{ p.sale_percent }}%</span>{% endif %}
+                      </div>
+                      <h3><a href="{{ p.get_absolute_url }}">{{ p.title }}</a></h3>
+                      <h4>{{ p.subtitle }}</h4>
+                      <div class="product_price{% if product.is_on_sale %} product_price_sale{% endif %}">
+                        {% if p.is_on_sale %}
+                          <s title="Старая цена">{{ p.get_price|with_currency:currency|abbr_to_span|safe }}</s>
+                          {{ p.get_sale_price|with_currency:currency|abbr_to_span|safe }}
+                        {% else %}
+                          {{ p.get_price|with_currency:currency|abbr_to_span|safe }}
+                        {% endif %}
+                      </div>
+                      <a href="{{ p.get_absolute_url }}" class="to_cart_list">{% trans 'В корзину' %}</a>
+                    </div>
+                  {% endfor %}
+                </div>
               {% endif %}
             {% endwith %}
           </div>

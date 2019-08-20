@@ -32,7 +32,8 @@ class Video(MetatagModel):
     text = RichTextUploadingField('Текст', blank=True, null=True)
     # text = RichTextField('Текст', blank=True, null=True)
     # text = HTMLField('Текст', blank=True, null=True)
-    product = models.ForeignKey(Product, verbose_name='Товар', related_name='videos', null=True, blank=True)
+    # product = models.ForeignKey(Product, verbose_name='Товар', related_name='videos', null=True, blank=True)
+    products = models.ManyToManyField(Product, verbose_name='Товары', related_name='video_set', blank=True)
     post = models.ForeignKey(Post, verbose_name='Пост в блоге', related_name='videos', null=True, blank=True)
     add_dt = models.DateTimeField('Дата добавления', auto_now_add=True)
     show_at_list = models.BooleanField('Показывать в списке на странице "видео"', default=True)
@@ -116,6 +117,11 @@ class Video(MetatagModel):
     def preview_url(self):
         photo = self.video_cover or self.cover
         return photo['product_photo_preview'].url if photo else self.get_video_cover()
+
+    def show_products(self):
+        return ', '.join(list(self.products.all().values_list('title', flat=True))) or ''
+    show_products.allow_tags = True
+    show_products.short_description = 'Товары'
 
 
 class Page(MetatagModel):

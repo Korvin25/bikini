@@ -28,7 +28,7 @@ admin.site.register(Image, CustomImageAdmin)
 
 @admin.register(Video)
 class VideoAdmin(AdminVideoMixin, TabbedTranslationAdmin):
-    list_display = ('title', 'slug', 'video', 'order', 'cover', 'product', 'post', 'add_dt',)
+    list_display = ('title', 'slug', 'video', 'order', 'cover', 'show_products', 'post', 'add_dt',)
     list_editable = ('order',)
     list_filter = ('show_at_list', 'add_dt',)
     suit_form_tabs = (
@@ -39,7 +39,7 @@ class VideoAdmin(AdminVideoMixin, TabbedTranslationAdmin):
     fieldsets = (
         ('Видео', {
             'classes': ('suit-tab suit-tab-default',),
-            'fields': ('title', 'slug', 'video', 'cover', 'text', 'product', 'post', 'show_at_list', 'order', 'add_dt',),
+            'fields': ('title', 'slug', 'video', 'cover', 'text', 'products', 'post', 'show_at_list', 'order', 'add_dt',),
         }),
         ('SEO', {
             'classes': ('suit-tab suit-tab-seo',),
@@ -72,13 +72,17 @@ class VideoAdmin(AdminVideoMixin, TabbedTranslationAdmin):
     )
     prepopulated_fields = {'slug': ('title',)}
     readonly_fields = ('add_dt',)
-    raw_id_fields = ('product', 'post',)
+    raw_id_fields = ('products', 'post',)
     search_fields = ['title', 'text', 'video', ]
 
     def save_model(self, request, obj, form, change):
         s = super(VideoAdmin, self).save_model(request, obj, form, change)
         obj.update_video_cover()
         return s
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super(VideoAdmin, self).get_queryset(*args, **kwargs)
+        return qs.prefetch_related('products')
 
 
 @admin.register(Page)

@@ -345,13 +345,13 @@ class ProductPhotoInline(ProductPhotoAdmin):
         return extra
 
 
-class ProductVideoInline(TranslationInlineModelAdmin, admin.StackedInline):  # CompactInline
-    model = Video
-    fields = ('title', 'slug', 'video', 'cover', 'text', 'show_at_list')
-    prepopulated_fields = {'slug': ('title',)}
-    suit_classes = 'suit-tab suit-tab-video'
-    min_num = 0
-    extra = 1
+# class ProductVideoInline(TranslationInlineModelAdmin, admin.StackedInline):  # CompactInline
+#     model = Video
+#     fields = ('title', 'slug', 'video', 'cover', 'text', 'show_at_list')
+#     prepopulated_fields = {'slug': ('title',)}
+#     suit_classes = 'suit-tab suit-tab-video'
+#     min_num = 0
+#     extra = 1
 
 
 @admin.register(Product)
@@ -517,7 +517,7 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
         ('sale', 'Скидки'),
         ('options', 'Варианты товара'),
         ('photos', 'Фото'),
-        ('video', 'Видео'),
+        # ('video', 'Видео'),
         ('extra', 'Дополнительные товары'),
     )
     suit_form_size = {
@@ -600,7 +600,9 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
                        'show_categories', 'show_attributes',
                        'is_on_sale', 'sale_price_rub', 'sale_price_eur', 'sale_price_usd',)
     filter_vertical = ['categories', ]
-    inlines = [ProductOptionInline, ProductPhotoInline, ProductVideoInline, ProductExtraOptionInline, ]
+    inlines = [ProductOptionInline, ProductPhotoInline,
+               # ProductVideoInline,
+               ProductExtraOptionInline, ]
     raw_id_fields = ('associated_products', 'also_products',)
     search_fields = ['title', 'vendor_code', 'subtitle', ]
 
@@ -633,9 +635,11 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
         """
         s = super(ProductAdmin, self).get_inline_instances(request, obj)
         if not obj:
-            s = s[2:3]
+            # s = s[2:3]
+            s = []
         elif not obj.extra_options.count():
-            s = s[:3]
+            # s = s[:3]
+            s = s[:2]
         return s
 
     def get_readonly_fields(self, request, obj=None):
