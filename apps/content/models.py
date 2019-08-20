@@ -32,7 +32,7 @@ class Video(MetatagModel):
     text = RichTextUploadingField('Текст', blank=True, null=True)
     # text = RichTextField('Текст', blank=True, null=True)
     # text = HTMLField('Текст', blank=True, null=True)
-    # product = models.ForeignKey(Product, verbose_name='Товар', related_name='videos', null=True, blank=True)
+    product = models.ForeignKey(Product, verbose_name='Товар', related_name='videos', null=True, blank=True)
     products = models.ManyToManyField(Product, verbose_name='Товары', related_name='video_set', blank=True)
     post = models.ForeignKey(Post, verbose_name='Пост в блоге', related_name='videos', null=True, blank=True)
     add_dt = models.DateTimeField('Дата добавления', auto_now_add=True)

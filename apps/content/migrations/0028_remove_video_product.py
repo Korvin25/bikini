@@ -11,8 +11,8 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='video',
-            name='product',
-        ),
+        # migrations.RemoveField(
+        #     model_name='video',
+        #     name='product',
+        # ),
     ]
