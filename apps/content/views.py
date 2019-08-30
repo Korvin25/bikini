@@ -62,6 +62,7 @@ def robots_txt(request):
     txt = Settings.get_robots_txt()
     txt = txt or '\r\n'.join(['User-agent: *',
                               'Disallow: ',
-                              'Host: bikinimini.ru',
-                              'Sitemap: https://bikinimini.ru/sitemap.xml',])
+                              'Host: {host}',
+                              'Sitemap: {scheme}://{host}/sitemap.xml',])
+    txt = txt.format(host=request.get_host(), scheme=request.scheme)
     return HttpResponse(txt, content_type='text/plain; charset=utf-8')
