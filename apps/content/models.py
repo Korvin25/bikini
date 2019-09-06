@@ -11,6 +11,7 @@ from django.db import models
 
 # from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
+from crequest.middleware import CrequestMiddleware
 from easy_thumbnails.fields import ThumbnailerImageField
 from embed_video.fields import EmbedVideoField
 from embed_video.backends import detect_backend
@@ -60,8 +61,14 @@ class Video(MetatagModel):
         return reverse('video', kwargs={'slug': self.slug, 'pk': self.pk})
 
     def get_cover_url(self):
-        return (self.cover['video_preview'].url if self.cover
-                else self.get_video_cover())
+        cover_url = (self.cover['video_preview'].url if self.cover
+                     else self.get_video_cover())
+        request = CrequestMiddleware.get_request()
+        print request
+        print request.scheme
+        if cover_url and request and request.scheme == 'https':
+            cover_url = cover_url.replace('http://', 'https://', 1)
+        return cover_url
 
     def get_backend(self):
         backend = detect_backend(self.video)
