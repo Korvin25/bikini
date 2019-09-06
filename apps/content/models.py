@@ -64,8 +64,6 @@ class Video(MetatagModel):
         cover_url = (self.cover['video_preview'].url if self.cover
                      else self.get_video_cover())
         request = CrequestMiddleware.get_request()
-        print request
-        print request.scheme
         if cover_url and request and request.scheme == 'https':
             cover_url = cover_url.replace('http://', 'https://', 1)
         return cover_url
