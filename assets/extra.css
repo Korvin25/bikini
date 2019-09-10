@@ -57,3 +57,17 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
 }
 .h3_title_block { margin-bottom: 3px; font-size: 20px; }
 .align_left { text-align: left !important; }
+
+.product_video_image { width:500px; height:512px; }
+@media screen and (max-width: 1030px) {
+    .product_video_image { width: 295px; height: 300px; }
+    .play_preview { 
+        width: 120px;
+        height: 120px;
+        line-height: 120px;
+        left: auto; 
+        margin-left: 90px;
+        top: auto; 
+        margin-top: 90px;
+    }
+}

@@ -725,7 +725,7 @@ class Product(MetatagModel):
 
     @property
     def empty_attrs_json(self):
-        return {k: [] for k,v in self.attrs.iteritems()}
+        return json.dumps({k: [] for k,v in self.attrs.iteritems()})
 
     @property
     def in_stock_counts(self):

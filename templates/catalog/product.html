@@ -79,35 +79,36 @@
             </script>
             <!-- УВЕЛИЧЕНИЕ КАРТИНКИ <<< -->
           
-            <div class="{% if show_gallery %}js-with-photos {% endif %}nom_img_med_wrap highslide-gallery">
+            <div class="{% if show_gallery %}js-with-photos {% endif %}nom_img_med_wrap highslide-gallery" data-first-color-photos="{{ first_color_photos }}">
               <ul class="nom_img_list js-photo-big-container">
                 {% if show_gallery %}
-                  {% for photo in photos %}
-                    <li class="js-photo-big" data-attrs="{{ photo.attrs_json }}" data-order="{{ forloop.counter }}">
-                      {# <a href="{{ photo.big_url }}" target="_blank" class="highslide" onclick="return hs.expand(this)" title=""> #}
-                      <a href="{{ photo.big_url }}" target="_blank" data-fancybox="gallery" data-caption="{{ product.title }} / {% trans 'Фото' %} №{{ forloop.counter }}" title="">
-                        <img src="{{ photo.preview_url }}" />
-                      </a>
-                    </li>
-                  {% empty %}
-                    <li class="js-photo-big" data-attrs="{{ product.empty_attrs_json }}" data-order="0">
-                      <a href="{{ product.big_url }}" target="_blank" data-fancybox="gallery" data-caption="{{ product.title }} / {% trans 'Фото' %} №1" title="">
-                        <img src="{{ product.preview_url }}" />
-                      </a>
-                    </li>
-                  {% endfor %}
-                  {% for video in videos %}
-                    <li class="js-photo-big" data-attrs="{{ product.empty_attrs_json }}" data-order="{{ forloop.counter|add:photos_count }}">
-                        
-                      {# <a href="{{ video.video }}" target="_blank" class="highslide" onclick="return hs.openYouTube(this)" title=""> #}
-                      <a href="{{ video.video }}" data-fancybox="gallery" data-caption="{{ product.title }} / {% trans 'Видео' %} №{{ forloop.counter }}">
-                        <div style="background-image:url({{ video.preview_url }}); background-size: cover; width:500px; height:512px;"/>
-                          <div class="play play_preview"></div>
-                        </div>
-                      </a>
-                      
-                      {# {% video video.video '100%x100%' %} #}
-                    </li>
+                  {% for obj in gallery %}
+                    {% if obj.item_type == 'photo' %}
+                    {% with obj as photo %}
+                      <li class="js-photo-big" data-attrs="{{ photo.attrs_json }}" data-order="{{ forloop.counter }}" data-photo-id="{{ photo.id }}">
+                        {# <a href="{{ photo.big_url }}" target="_blank" class="highslide" onclick="return hs.expand(this)" title=""> #}
+                        <a href="{{ photo.big_url }}" target="_blank" data-fancybox="gallery" data-caption="{{ product.title }} / {% trans 'Фото' %} №{{ forloop.counter }}" title="">
+                          <img src="{{ photo.preview_url }}" />
+                        </a>
+                      </li>
+                    {% endwith %}
+                    {% elif obj.item_type == 'main_photo' %}
+                      <li class="js-photo-big" data-attrs="{{ product.empty_attrs_json }}" data-order="0" data-main-photo="true">
+                        <a href="{{ product.big_url }}" target="_blank" data-fancybox="gallery" data-caption="{{ product.title }} / {% trans 'Фото' %} №1" title="">
+                          <img src="{{ product.preview_url }}" />
+                        </a>
+                      </li>
+                    {% elif obj.item_type == 'video' %}
+                    {% with obj as video %}
+                      <li class="js-photo-big" data-attrs="{{ product.empty_attrs_json }}" data-order="{{ forloop.counter }}" data-video="true">
+                        <a href="{{ video.video }}" data-fancybox="gallery" data-caption="{{ product.title }} / {% trans 'Видео' %} №{{ forloop.counter }}">
+                          <div class="product_video_image" style="background-image:url({{ video.preview_url }}); background-size: cover;"/>
+                            <div class="play play_preview"></div>
+                          </div>
+                        </a>
+                      </li>
+                    {% endwith %}
+                    {% endif %}
                   {% endfor %}
                 {% else %}
                   <li>
@@ -125,23 +126,26 @@
               <div class="carousel-navigation">
                 <ul class="jcarousel js-photo-thumb-container">
                   {% if show_gallery %}
-                    {% for photo in photos %}
-                      <li class="js-photo-thumb" data-attrs="{{ photo.attrs_json }}" data-order="{{ forloop.counter }}">
-                        <img src="{{ photo.thumb_url }}" />
-                      </li>
-                    {% empty %}
-                      <li class="js-photo-thumb" data-attrs="{{ product.empty_attrs_json }}" data-order="0">
-                        <img src="{{ product.thumb_url }}" />
-                      </li>
-                    {% endfor %}
-                    {% for video in videos %}
-                      <li class="js-photo-thumb" data-attrs="{{ product.empty_attrs_json }}" data-order="{{ forloop.counter|add:photos_count }}">
-                        {# <img src="{{ video.get_video_cover }}"/> #}
-                        {# <div style="background-image:url({{ video.get_video_cover }}); background-size: cover; width:70px; height:70px;"/> #}
-                        <div style="background-image:url({{ video.thumb_url }}); background-size: cover; width:70px; height:70px;"/>
-                          <div class="play play_thumb"></div>
-                        </div>
-                      </li>
+                    {% for obj in gallery %}
+                      {% if obj.item_type == 'photo' %}
+                      {% with obj as photo %}
+                        <li class="js-photo-thumb" data-attrs="{{ photo.attrs_json }}" data-order="{{ forloop.counter }}" data-photo-id="{{ photo.id }}">
+                          <img src="{{ photo.thumb_url }}" />
+                        </li>
+                      {% endwith %}
+                      {% elif obj.item_type == 'main_photo' %}
+                        <li class="js-photo-thumb" data-attrs="{{ product.empty_attrs_json }}" data-order="0" data-main-photo="true">
+                          <img src="{{ product.thumb_url }}" />
+                        </li>
+                      {% elif obj.item_type == 'video' %}
+                      {% with obj as video %}
+                        <li class="js-photo-thumb" data-attrs="{{ product.empty_attrs_json }}" data-order="{{ forloop.counter }}" data-video="true">
+                          <div style="background-image:url({{ video.thumb_url }}); background-size: cover; width:70px; height:70px;"/>
+                            <div class="play play_thumb"></div>
+                          </div>
+                        </li>
+                      {% endwith %}
+                      {% endif %}
                     {% endfor %}
                   {% else %}
                     <li class="">

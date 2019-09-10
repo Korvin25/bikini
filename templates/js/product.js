@@ -582,7 +582,6 @@ $('.js-expand-videos').click(function(e) {
 
 function rebuildCarousel(attr_slug, color_id) {
   // меняем порядок фоток в главом слайдере при выборе цвета
-
   var $carousel = $('.nom_img_med_wrap');
 
   if ($carousel.hasClass('js-with-photos')) {
@@ -592,11 +591,13 @@ function rebuildCarousel(attr_slug, color_id) {
         $buttons = $('.js-navigation-button'),
         $container1 = $('.js-photo-thumb-container'),
         $container2 = $('.js-photo-big-container'),
-        $container3 = $('.js-navigation-buttons');
+        $container3 = $('.js-navigation-buttons'),
+        first_color_photos = JSON.parse($carousel.attr('data-first-color-photos')),
+        first_photo_id = first_color_photos[attr_slug][color_id] || 0;
 
     // сортируем список объектов-фоток
-    $photos1 = sortPhotosByColor($photos1, attr_slug, color_id);
-    $photos2 = sortPhotosByColor($photos2, attr_slug, color_id);
+    $photos1 = sortPhotosByColor($photos1, attr_slug, color_id, first_photo_id);
+    $photos2 = sortPhotosByColor($photos2, attr_slug, color_id, first_photo_id);
 
     // перемещаем фотки и сбасываем state у фоток и кнопок навигации
     movePhotos($container1, $photos1, true);
@@ -615,7 +616,7 @@ function rebuildCarousel(attr_slug, color_id) {
 }
 
 
-function sortPhotosByColor($arr, attr_slug, color_id) {
+function sortPhotosByColor($arr, attr_slug, color_id, first_photo_id) {
   // сортируем список объектов-фоток
   // первый приоритет - наличие нужного цвета (data-attrs[attr_slug][color_id]),
   // второй - первоначальный порядок (data-order)
@@ -628,8 +629,30 @@ function sortPhotosByColor($arr, attr_slug, color_id) {
         a_attrs = JSON.parse($a.attr('data-attrs')),
         b_attrs = JSON.parse($b.attr('data-attrs')),
         a_has_color = (a_attrs[attr_slug].indexOf(color_id)>-1),
-        b_has_color = (b_attrs[attr_slug].indexOf(color_id)>-1);
+        b_has_color = (b_attrs[attr_slug].indexOf(color_id)>-1),
+        a_is_main = $a.attr('data-main-photo'),
+        b_is_main = $b.attr('data-main-photo'),
+        a_is_first = $a.attr('data-photo-id')==first_photo_id.toString(),
+        b_is_first = $b.attr('data-photo-id')==first_photo_id.toString(),
+        a_is_video = $a.attr('data-video'),
+        b_is_video = $b.attr('data-video');
 
+    // если data-main-photo: фото первое
+    if (a_is_main) { return -5 }
+    else if (b_is_main) { return 5 };
+
+    // если data-photo-id == первому фото, оно первое
+    if (a_is_first) { return -5 }
+    else if (b_is_first) { return 5 };
+
+    // если a - видео и б - фото, а первое, и наоборот
+    if (a_is_video && !b_is_video) { return -5 }
+    else if (b_is_video && !a_is_video) { return 5 };
+
+    // если оба видео - смотрим на порядок
+    if (a_is_video && b_is_video) { return a_order - b_order; }
+
+    // иначе (если оба фото) - смотрим на совпадение цвета и на порядок
     if (a_has_color && b_has_color || !a_has_color && !b_has_color) { return a_order - b_order; }
     else if (a_has_color) { return -5 }
     else { return 5 }

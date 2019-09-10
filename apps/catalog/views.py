@@ -477,11 +477,45 @@ class ProductView(TemplateView):
         videos_count = videos.count()
         show_gallery = photos_count or videos_count
 
+        first_photos = {}
+        photos_list = list(photos)
+
+        for color in self.attrs.get('color', []):
+            _slug = color['slug']
+            first_photos[_slug] = {}
+            if photos_count:
+                for option_id in color['options_ids']:
+                    photo_id = None
+                    for photo in photos_list:
+                        if option_id in photo.attrs.get(_slug, []):
+                            photo_id = photo.id
+                            break
+                    photo_id = photo_id or photos_list[0].id
+                    first_photos[_slug][option_id] = photo_id
+
+        gallery = []
+        if show_gallery:
+            if photos_count:
+                p = photos_list[0]
+                p.item_type = 'photo'
+                gallery.append(p)
+            else:
+                main_p = {'item_type': 'main_photo'}
+                gallery.append(main_p)
+            for v in list(videos):
+                v.item_type = 'video'
+                gallery.append(v)
+            for p in photos_list[1:]:
+                p.item_type = 'photo'
+                gallery.append(p)
+
         self.photos = photos
         self.videos = videos
         self.photos_count = photos_count
         self.videos_count = videos_count
+        self.first_color_photos = json.dumps(first_photos)
         self.show_gallery = show_gallery
+        self.gallery = gallery
 
     def get_context_data(self, **kwargs):
         product = self.get_product()
@@ -504,7 +538,9 @@ class ProductView(TemplateView):
             'videos': self.videos,
             'photos_count': self.photos_count,
             'videos_count': self.videos_count,
+            'first_color_photos': self.first_color_photos,
             'show_gallery': self.show_gallery,
+            'gallery': self.gallery,
             'gift_wrapping_price': self.wrapping_price,
             'have_option': self.have_option,
             'price': self.price,
