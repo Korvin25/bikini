@@ -121,6 +121,7 @@ function sendHeaderAuthForm(url, form_data, $to_disable, $form) {
       if (res.status == 400) {
         var response;
         if (res.responseJSON == undefined) { response = JSON.parse(res.responseText); }
+        else { response = res.responseJSON; }
 
         if (response != undefined) {
           var click_to = response['click_to'],
@@ -236,6 +237,7 @@ function sendUsualForm(url, form_data, $to_disable, $form) {
       if (res.status == 400) {
         var response;
         if (res.responseJSON == undefined) { response = JSON.parse(res.responseText); }
+        else { response = res.responseJSON; }
 
         if (response != undefined) {
           var click_to = response['click_to'],
@@ -325,6 +327,7 @@ function showWishlistPopup($button, disable) {
       if (res.status == 400) {
         var response;
         if (res.responseJSON == undefined) { response = JSON.parse(res.responseText); }
+        else { response = res.responseJSON; }
 
         if (response != undefined) {
           var click_to = response['click_to'],
