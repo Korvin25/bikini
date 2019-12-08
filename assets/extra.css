@@ -71,3 +71,92 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
         margin-top: 90px;
     }
 }
+
+
+/* кнопки*/
+.window_popup_but{
+    position: absolute;
+    opacity: 1;
+    z-index: 11000;
+    left: 50%;
+    margin-left: -324px;
+    top: 200px;
+    height: 100px;
+        -webkit-border-radius: 15px;
+    width: 640px;
+    overflow: hidden;
+}        
+.window_popup_but .wrap_window_popup{
+    display: table;
+}     
+.popup_row_but{
+    border-color: #fff;
+    background: #A82A33;
+    border-radius: 57px;
+    text-align: center;
+    border: 2px solid;
+    margin: 20px 0;
+    color: #fff;
+    text-transform: uppercase;
+    width: 300px;
+        margin: 0 10px;
+}      
+ .popup_row_but .popup_row_wrapp{
+    padding: 22px 27px 5px 27px;
+}
+  .popup_row_but:hover{
+    background: #8c2c34;
+    border-radius: 100px;
+         cursor: pointer;
+}
+@media screen and (max-width: 720px) {
+     .window_popup_but .wrap_window_popup{
+    display: block;
+}  
+.popup_row_but{
+    margin: 10px 0;
+}
+  }
+    
+@media screen and (max-width: 580px) {
+        .window_popup_but, .window_popup_reg {margin-left:0;left:0;width:100%;}
+        }
+    
+@media screen and (max-width: 460px) {
+        .window_popup_but, .window_popup_reg {top:100px;}
+        .popup_row_but {float:none;width:100%;}
+    }
+  
+    
+ /*Формы регистрации\авторизации*/
+ .popup_back_wrap{
+     margin-bottom: 15px;
+     
+ }
+ .popup_back{
+    color: #3d697a;
+    font-size: 16px;
+ }
+ .popup_row_reg {
+    width: 100%;
+    position: relative;
+    z-index: 2;
+}
+.window_popup_reg{
+      position: absolute;
+    z-index: 3300;
+    top: 170px;
+    left: 50%;
+    margin-left: -143px;
+    background-color: #fff;
+    border-radius: 15px;
+    -webkit-border-radius: 15px;
+    width: 300px;
+    overflow: hidden;
+} 
+
+.popup_row_reg .row_form_popup{
+    margin-top: 18px;
+}
+        
+ /**/

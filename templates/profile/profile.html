@@ -244,7 +244,7 @@
                       </div>
                       
                       <div class="row_form_popup">
-                        <label class="lbl_box check_popap_row">
+                        <label class="lbl_box check_popup_row">
                           <input class="check_form" type="checkbox"{% if profile.subscription %} checked="checked"{% endif %} name="subscription">
                           <p>{% trans 'Я хочу получать информацию о скидках и новинках' %} <a href="#">{% trans 'Изменить' %}</a></p>
                         </label>
@@ -382,11 +382,11 @@
     <a rel="leanModal1" href="#error-popup"></a>
   </div>
 
-  <div class="window_popap no_float mini_window_popup callback_form" id="error-popup" style="display:none;">
-      <div class="close_popap call_close js-call-close"><img src="/static/i/close_white_45.png" alt="{% trans 'Закрыть' %}"></div>
-      <div class="wrap_window_popap bg_wrapp_window">
-          <div class="popap_row">
-              <div class="popap_row_wrapp">
+  <div class="window_popup no_float mini_window_popup callback_form" id="error-popup" style="display:none;">
+      <div class="close_popup call_close js-call-close"><img src="/static/i/close_white_45.png" alt="{% trans 'Закрыть' %}"></div>
+      <div class="wrap_window_popup bg_wrapp_window">
+          <div class="popup_row">
+              <div class="popup_row_wrapp">
                   <h3 class="popup_title" style="margin-bottom: 10px;">{% trans 'При отправке формы произошла ошибка' %}:</h3>
                   <p class="call_introtext popup_text"></p>
                   {% comment %}

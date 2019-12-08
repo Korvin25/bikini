@@ -11,7 +11,7 @@ function showErrorPopup(title, text) {
       $popup_title = $popup.find('.popup_title'),
       $popup_text = $popup.find('.popup_text');
 
-  $('.window_popap').hide();
+  $('.window_popup').hide();
   $('a[rel*=leanModal1]').leanModal({ top : 200, closeButton: ".js-call-close" });
 
   if (title) { $popup_title.text(title); };
@@ -25,7 +25,7 @@ function showPopup(popup_id, old_popup_id) {
       $popup = $(popup_id),
       $closeButtons = $('.js-call-close').filter(':visible');
 
-  $('.window_popap').hide();
+  $('.window_popup').hide();
   $('a[rel*=leanModal1]').leanModal({ top : 200, closeButton: ".js-call-close" });
   $a.click();
   $('html, body').animate({scrollTop: $popup.offset().top-75}, 400);

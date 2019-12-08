@@ -288,11 +288,11 @@
     <a rel="leanModal1" href="#step5"></a>
   </div>
 
-  <div class="window_popap no_float mini_window_popup callback_form" id="error-popup" style="display:none;">
-      <div class="close_popap call_close js-call-close"><img src="/static/i/close_white_45.png" alt="{% trans 'Закрыть' %}"></div>
-      <div class="wrap_window_popap bg_wrapp_window">
-          <div class="popap_row">
-              <div class="popap_row_wrapp">
+  <div class="window_popup no_float mini_window_popup callback_form" id="error-popup" style="display:none;">
+      <div class="close_popup call_close js-call-close"><img src="/static/i/close_white_45.png" alt="{% trans 'Закрыть' %}"></div>
+      <div class="wrap_window_popup bg_wrapp_window">
+          <div class="popup_row">
+              <div class="popup_row_wrapp">
                   <h3 class="popup_title" style="margin-bottom: 10px;">{% trans 'При отправке формы произошла ошибка' %}:</h3>
                   <p class="call_introtext popup_text"></p>
                   {% comment %}
@@ -308,12 +308,12 @@
       </div>
   </div>
 
-  <div class="window_popap" id="step1" style="display: none;">
-    <div class="close_popap js-call-close"><img src="/static/i/close_icon.png" alt="{% trans 'Закрыть' %}"></div>
-    <div class="wrap_window_popap bg_wrapp_window">
-      <div class="popap_row">
-        <div class="popap_row_wrapp">
-          <h2 class="title_popap">{% trans 'Я уже являюсь <br>клиентом BIKINIMINI' %}</h2>
+  <div class="window_popup" id="step1" style="display: none;">
+    <div class="close_popup js-call-close"><img src="/static/i/close_icon.png" alt="{% trans 'Закрыть' %}"></div>
+    <div class="wrap_window_popup bg_wrapp_window">
+      <div class="popup_row">
+        <div class="popup_row_wrapp">
+          <h2 class="title_popup">{% trans 'Я уже являюсь <br>клиентом BIKINIMINI' %}</h2>
 
           <form class="js-step1-form js-step1-login-form" action="{% url 'auth:login' %}" method="post">
             <div class="error-messages"></div>
@@ -333,7 +333,7 @@
             </div>
             
             <div class="row_form_popup">
-              <label class="lbl_box check_popap_row">
+              <label class="lbl_box check_popup_row">
                 <input class="check_form" type="checkbox" name="remember_me">
                 <p>{% trans 'Запомнить меня на сайте' %}</p>
               </label>
@@ -361,9 +361,9 @@
       
       <div class="or_block">{% trans 'или' %}</div>
       
-      <div class="popap_row bg_popap">
-        <div class="popap_row_wrapp">
-          <h2 class="title_popap">{% trans 'Я новый <br>клиент BIKINIMINI' %}</h2>
+      <div class="popup_row bg_popup">
+        <div class="popup_row_wrapp">
+          <h2 class="title_popup">{% trans 'Я новый <br>клиент BIKINIMINI' %}</h2>
 
           <form class="js-step1-form js-step1-registration-form" action="{% url 'auth:registration' %}" method="post">
             <div class="error-messages"></div>
@@ -397,7 +397,7 @@
             </div>
 
             <div class="row_form_popup">
-              <label class="lbl_box check_popap_row">
+              <label class="lbl_box check_popup_row">
                 <input class="check_form" type="checkbox" name="subscription" style="margin-right: 5px;">
                 <p style="float: none;">{% trans 'Я хочу получать информацию о скидках и новинках' %}</p>
               </label>
@@ -415,11 +415,11 @@
   </div>
 
   {% comment %}
-  <div class="window_popap no_float mini_window_popup callback_form" id="step2" style="display:none;">
-      <div class="close_popap call_close js-call-close"><img src="/static/i/close_white_45.png" alt="{% trans 'Закрыть' %}"></div>
-      <div class="wrap_window_popap bg_wrapp_window">
-          <div class="popap_row">
-              <div class="popap_row_wrapp">
+  <div class="window_popup no_float mini_window_popup callback_form" id="step2" style="display:none;">
+      <div class="close_popup call_close js-call-close"><img src="/static/i/close_white_45.png" alt="{% trans 'Закрыть' %}"></div>
+      <div class="wrap_window_popup bg_wrapp_window">
+          <div class="popup_row">
+              <div class="popup_row_wrapp">
                   <h3 class="popup_title" style="margin-bottom: 10px;">Шаг 2!</h3>
                   <p class="call_introtext popup_text"></p>
                   <div class="bt_req_call red_bor_butt js-call-close">
@@ -431,12 +431,12 @@
   </div>
   {% endcomment %}
 
-  <div class="window_popap no_float" id="step3" style="display:none;">
-    <div class="close_popap js-call-close"><img src="/static/i/close_icon.png" alt="{% trans 'Закрыть' %}" /></div>
-    <div class="wrap_window_popap bg_wrapp_window">
-      <div class="popap_row">
-        <div class="popap_row_wrapp">
-          <h2 class="title_popap">{% trans 'Данные для доставки' %}</h2>
+  <div class="window_popup no_float" id="step3" style="display:none;">
+    <div class="close_popup js-call-close"><img src="/static/i/close_icon.png" alt="{% trans 'Закрыть' %}" /></div>
+    <div class="wrap_window_popup bg_wrapp_window">
+      <div class="popup_row">
+        <div class="popup_row_wrapp">
+          <h2 class="title_popup">{% trans 'Данные для доставки' %}</h2>
           <form class="js-step3-form" action="{% url 'cart_api:step3' %}" method="post">
             <div class="error-messages"></div>
 
@@ -514,12 +514,12 @@
     </div>
   </div>
 
-  <div class="window_popap no_float mini_window_popup" id="step4" style="display:none;">
-    <div class="close_popap js-call-close"><img src="/static/i/close_icon.png" alt="{% trans 'Закрыть' %}" /></div>
-    <div class="wrap_window_popap bg_wrapp_window">
-      <div class="popap_row">
-        <div class="popap_row_wrapp">
-          <h2 class="title_popap">{% trans 'Заказ успешно <br />оформлен' %}</h2>
+  <div class="window_popup no_float mini_window_popup" id="step4" style="display:none;">
+    <div class="close_popup js-call-close"><img src="/static/i/close_icon.png" alt="{% trans 'Закрыть' %}" /></div>
+    <div class="wrap_window_popup bg_wrapp_window">
+      <div class="popup_row">
+        <div class="popup_row_wrapp">
+          <h2 class="title_popup">{% trans 'Заказ успешно <br />оформлен' %}</h2>
           <div class="row_form_popup">
             <p><strong>{% trans 'Заказ №' %}:</strong><span class="js-order-number">111 111</span></p>
             <p><strong >{% trans 'На сумму' %}:</strong>{{ '11 111'|with_js_cart_summary:currency|safe }}</p>
@@ -552,11 +552,11 @@
     </div>
   </div>
 
-  <div class="window_popap after_popap" id="step5" style="display:none;">
-    <div class="close_popap js-call-close"><img src="/static/i/close_icon.png" alt="{% trans 'Закрыть' %}" /></div>
-    <div class="wrap_window_popap bg_wrapp_window">
-      <div class="popap_row">
-        <div class="popap_row_wrapp">
+  <div class="window_popup after_popup" id="step5" style="display:none;">
+    <div class="close_popup js-call-close"><img src="/static/i/close_icon.png" alt="{% trans 'Закрыть' %}" /></div>
+    <div class="wrap_window_popup bg_wrapp_window">
+      <div class="popup_row">
+        <div class="popup_row_wrapp">
           <h2 class="title_string">{% trans 'Ваш заказ принят' %}!</h2>
           <div>№ заказа: </strong><span class="js-order-number">111 111</span><br/></div>
           <div class="content_pup">
@@ -578,7 +578,7 @@
         </div>
       </div>
 
-      <div class="popap_row bg_popap js-step5-specials"></div>
+      <div class="popup_row bg_popup js-step5-specials"></div>
 
     </div>
   </div>

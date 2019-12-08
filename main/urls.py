@@ -36,6 +36,7 @@ urlpatterns = [
     url(r'^yandex_32b44e0eb9e4fa78\.html$', TemplateView.as_view(template_name='ya_verification.html')),
 
     url(r'^404/$', TemplateView.as_view(template_name='404.html')),
+    url(r'^_test_popup/$', TemplateView.as_view(template_name='_test_popup.html')),
 
 
     # # api
