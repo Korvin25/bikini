@@ -298,6 +298,7 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
       if (res.status == 400) {
         var response;
         if (res.responseJSON == undefined) { response = JSON.parse(res.responseText); }
+        else { response = res.responseJSON; }
 
         if (response != undefined) {
           var click_to = response['click_to'],
