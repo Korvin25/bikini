@@ -140,12 +140,15 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
 
     
 @media screen and (max-width: 460px) {
-        .window_popup_but, .window_popup_reg {top:100px;}
-        .popup_row_but {float:none; max-width: 298px;}
-        .popup_row_but .popup_row_wrapp {
-            padding: 0;
-        }
+    .window_popup_but, .window_popup_reg {top:100px;}
+    .popup_row_but {float:none; max-width: 298px;}
+    .popup_row_but .popup_row_wrapp {
+        padding: 0;
     }
+    .window_popup_but .close_popup {
+        margin-right: 30px;
+    }
+}
   
     
  .window_popup_but .close_popup{
