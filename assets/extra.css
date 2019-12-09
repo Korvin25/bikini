@@ -75,7 +75,7 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
 .callBackForm label span { top: -7px !important; }
 
 
-/* кнопки*/
+   /* кнопки*/
 .window_popup_but{
     position: absolute;
     opacity: 1;
@@ -83,7 +83,6 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
     left: 50%;
     margin-left: -326px !important;
     top: 200px;
-    height: 100px;
         -webkit-border-radius: 15px;
     overflow: hidden;
     padding-top: 30px;
@@ -102,15 +101,16 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
     text-transform: uppercase;
     width: 300px;
     margin: 0px 9px;
-}      
- .popup_row_but .popup_row_wrapp{
+}   
+.popup_row_but .popup_row_wrapp    {
     padding: 0 !important;
 }
-.popup_row_wrapp span{
+.popup_row_but .popup_row_wrapp span{
         padding: 20px 0px 17px 0px;
     display: block;
 }
-.popup_row_wrapp span:active{
+
+.popup_row_but .popup_row_wrapp span:active{
      color: #fff;
 }
   .popup_row_but:hover{
@@ -124,7 +124,7 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
     font-size: 18px;
 }
 @media screen and (max-width: 720px) {
-     .window_popap_but .wrap_window_popap, .popup_row_but{
+     .window_popup_but .wrap_window_popup, .popup_row_but{
     display: block;
 }  
 .popup_row_but{
@@ -132,19 +132,22 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
 }
 .window_popup_but{
     height: 100%;
-    margin: -150px;
+    margin: -150px !important;
 }
 
   }
+    
 
+    
 @media screen and (max-width: 460px) {
         .window_popup_but, .window_popup_reg {top:100px;}
-        .popap_row_but {float:none; max-width: 298px;}
-        .popup_row_wrapp {
+        .popup_row_but {float:none; max-width: 298px;}
+        .popup_row_but .popup_row_wrapp {
             padding: 0;
         }
     }
-
+  
+    
  .window_popup_but .close_popup{
     margin-top: -20px;
     margin-left: 17px;
@@ -159,11 +162,9 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
     border-radius: 100px;
     padding: 10px;
  }
-  
-    
  /*Формы регистрации\авторизации*/
  .popup_back_wrap{
-     margin-bottom: 15px;
+    margin-bottom: 15px;
      
  }
  .popup_back{
@@ -195,5 +196,5 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
 .popup_row_reg .row_form_popup{
     margin-top: 18px;
 }
-
+        
  /**/
