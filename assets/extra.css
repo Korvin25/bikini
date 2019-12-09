@@ -71,6 +71,7 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
         margin-top: 90px;
     }
 }
+.js-show-popup { cursor: pointer; }
 
 
 /* кнопки*/

@@ -22,14 +22,16 @@ function showErrorPopup(title, text) {
 
 function showPopup(popup_id, close_others) {
   close_others = close_others || false;
-  // console.log('showPopup');
+  console.log('showPopup');
 
   var $a = $('a[href="'+popup_id+'"]'),
       $popup = $(popup_id);
 
+  console.log($popup);
   if (close_others) { $('.js-call-close').filter(':visible').click(); }
-  $('a[rel*=leanModal1]').leanModal({ top : 200, closeButton: ".js-call-close" });
   $a.click();
+  $('a[rel*=leanModal1]').leanModal({ top : 200, closeButton: ".js-call-close" });
+  // $popup.show();
   $('html, body').animate({scrollTop: $popup.offset().top-75}, 400);
 };
 
@@ -38,7 +40,7 @@ $('body').on('click', '.js-show-popup', function(e) {
   e.preventDefault();
 
   var popup_id = $(this).attr('data-popup-id');
-  // console.log(popup_id);
+  console.log(popup_id);
   showPopup(popup_id, true);
 });
 

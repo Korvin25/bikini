@@ -78,22 +78,24 @@
 <!-- кнопки определения пользователя -->
 
 <div class="window_popup_but" id="auth-test" style="display: none;">
+  <div class="close_popup js-call-close"><img src="/static/i/close_icon.png" alt="Закрыть"></div>
   <div class="wrap_window_popup">
-    <div class="popup_row_but">
+    <div class="popup_row_but js-show-popup" data-popup-id="#login">
       <div class="popup_row_wrapp">
-        <a rel="leanModal1" class="title_popup_but" href="#">Я уже покупал на сайте</a>
+        <span class="title_popup_but">{% trans 'Я уже покупал на сайте' %}</span>
       </div>
     </div>
-    <div class="popup_row_but">
+    <div class="popup_row_but js-show-popup" data-popup-id="#registration">
       <div class="popup_row_wrapp">
-        <a rel="leanModal1" class="title_popup_but" href="#">Я покупаю в первый раз</a>
+        <span class="title_popup_but">{% trans 'Я покупаю в первый раз' %}</span>
       </div>
     </div>
   </div>
+  <a rel="leanModal1" style="display: none;" href="#login">{% trans 'Я уже покупал на сайте' %}</a>
+  <a rel="leanModal1" style="display: none;" href="#registration">{% trans 'Я покупаю в первый раз' %}</a>
 </div>
 
 
-{% comment %}
 <!-- форма авторизации-->
 
 <div class="window_popup_reg" id="login" style="display: none;">
@@ -101,22 +103,25 @@
   <div class="wrap_window_popup">
     <div class="popup_row_reg">
       <div class="popup_row_wrapp">
-       <p class="popup_back_wrap"> <a class="popup_back" rel="leanModal1" href="#auth">&larr; Шаг назад</a></p>
-        <h2 class="title_popup">Я уже являюсь<br>клиентом BIKINIMINI</h2>
+        <p class="popup_back_wrap">
+          <span class="js-show-popup popup_back" data-popup-id="#auth-test">&larr; {% trans 'Шаг назад' %}</span>
+          <a rel="leanModal1" style="display: none;" href="#auth-test">&larr; {% trans 'Шаг назад' %}</a>
+        </p>
+        <h2 class="title_popup">{% trans 'Я уже являюсь <br>клиентом BIKINIMINI' %}</h2>
 
-        <form class="js-auth-form js-auth-login-form" action="/api/auth/login/" method="post">
+        <form class="js-auth-form js-auth-login-form" action="{% url 'auth:login' %}" method="post">
           <div class="error-messages"></div>
 
           <div class="row_form_popup">
             <label class="lbl_box">
-              <p>Ваш e-mail</p>
+              <p>{% trans 'Ваш e-mail' %}</p>
               <input type="email" required="required" value="" name="email" class="input_text">
             </label>
           </div>
           
           <div class="row_form_popup">
             <label class="lbl_box">
-              <p>Ваш пароль</p>
+              <p>{% trans 'Ваш пароль' %}</p>
               <input type="password" required="required" value="" name="password" class="input_text">
             </label>
           </div>
@@ -124,23 +129,23 @@
           <div class="row_form_popup">
             <label class="lbl_box check_popup_row">
               <input class="check_form" type="checkbox" name="remember_me">
-              <p>Запомнить меня на сайте</p>
+              <p>{% trans 'Запомнить меня на сайте' %}</p>
             </label>
           </div>
           
           <div class="row_form_popup row_pop_butt">
-            <button class="bt_red">Войти</button>
-            <span class="js-show-popup" data-popup-id="#reset_password">Забыли пароль?</span>
-            <a rel="leanModal1" style="display: none;" name="reset_password" href="#reset_password">Забыли пароль?</a>
+            <button class="bt_red">{% trans 'Войти' %}</button>
+            <span class="js-show-popup" data-popup-id="#reset_password">{% trans 'Забыли пароль?' %}</span>
+            <a rel="leanModal1" style="display: none;" name="reset_password" href="#reset_password">{% trans 'Забыли пароль?' %}</a>
           </div>
           
           <div class="row_form_popup">
-            <p>Войти при помощи соц. сетей:</p>
+            <p>{% trans 'Войти при помощи соц. сетей' %}:</p>
             <div class="soc_enter">
-              <a href="/api/auth/social/login/fb/"><img src="/static/i/soc_face.png" alt="Facebook"></a>
-              <a href="/api/auth/social/login/vk/"><img src="/static/i/soc_vk.png" alt="ВКонтакте"></a>
-              <a href="/api/auth/social/login/gp/"><img src="/static/i/soc_gplus.png" alt="Google Plus"></a>
-              <a href="/api/auth/social/login/ig/"><img src="/static/i/soc_ins.png" alt="Instagram"></a>
+              <a href="{% url 'auth:social:fb' %}"><img src="/static/i/soc_face.png" alt="{% trans 'Facebook' %}"></a>
+              <a href="{% url 'auth:social:vk' %}"><img src="/static/i/soc_vk.png" alt="{% trans 'ВКонтакте' %}"></a>
+              <a href="{% url 'auth:social:gp' %}"><img src="/static/i/soc_gplus.png" alt="{% trans 'Google Plus' %}"></a>
+              <a href="{% url 'auth:social:ig' %}"><img src="/static/i/soc_ins.png" alt="{% trans 'Instagram' %}"></a>
             </div>
           </div>
 
@@ -157,36 +162,39 @@
   <div class="wrap_window_popup bg_wrapp_window">
     <div class="popup_row_reg bg_popup">
       <div class="popup_row_wrapp">
-            <p class="popup_back_wrap"> <a class="popup_back js-call-close" rel="leanModal1" href="#auth">&larr; Шаг назад</a></p>
-        <h2 class="title_popup">Я новый <br>клиент BIKINIMINI</h2>
+        <p class="popup_back_wrap">
+          <span class="js-show-popup popup_back" data-popup-id="#auth-test">&larr; {% trans 'Шаг назад' %}</span>
+          <a rel="leanModal1" style="display: none;" href="#auth-test">&larr; {% trans 'Шаг назад' %}</a>
+        </p>
+        <h2 class="title_popup">{% trans 'Я новый <br>клиент BIKINIMINI' %}</h2>
 
-        <form class="js-auth-form js-auth-registration-form" action="/api/auth/registration/" method="post">
+        <form class="js-auth-form js-auth-registration-form" action="{% url 'auth:registration' %}" method="post">
           <div class="error-messages"></div>
 
           <div class="row_form_popup">
             <label class="lbl_box">
-              <p>Ваш e-mail</p>
+              <p>{% trans 'Ваш e-mail' %}</p>
               <input type="email" required="required" value="" name="email" class="input_text">
             </label>
           </div>
           
           <div class="row_form_popup">
             <label class="lbl_box">
-              <p>Ваш пароль</p>
+              <p>{% trans 'Ваш пароль' %}</p>
               <input type="password" required="required" value="" name="password" class="input_text">
             </label>
           </div>
           
           <div class="row_form_popup">
             <label class="lbl_box">
-              <p>Ваш пароль ещё раз</p>
+              <p>{% trans 'Ваш пароль ещё раз' %}</p>
               <input type="password" required="required" value="" name="password_repeat" class="input_text">
             </label>
           </div>
           
           <div class="row_form_popup">
             <label class="lbl_box">
-              <p>ФИО</p>
+              <p>{% trans 'ФИО' %}</p>
               <input type="text" required="required" value="" name="name" class="input_text">
             </label>
           </div>
@@ -194,22 +202,22 @@
           <div class="row_form_popup">
             <label class="lbl_box check_popup_row">
               <input class="check_form" type="checkbox" name="subscription" style="margin-right: 5px;">
-              <p style="float: none;">Я хочу получать информацию о скидках и новинках</p>
+              <p style="float: none;">{% trans 'Я хочу получать информацию о скидках и новинках' %}</p>
             </label>
           </div>
 
           <div class="row_form_popup row_pop_butt">
-            <button class="bt_red">Далее</button>
+            <button class="bt_red">{% trans 'Далее' %}</button>
           </div>
         </form>
         
         <div class="row_form_popup">
-          <p>Войти при помощи соц. сетей:</p>
+          <p>{% trans 'Войти при помощи соц. сетей' %}:</p>
           <div class="soc_enter">
-            <a href="/api/auth/social/login/fb/"><img src="/static/i/soc_face.png" alt="Facebook"></a>
-            <a href="/api/auth/social/login/vk/"><img src="/static/i/soc_vk.png" alt="ВКонтакте"></a>
-            <a href="/api/auth/social/login/gp/"><img src="/static/i/soc_gplus.png" alt="Google Plus"></a>
-            <a href="/api/auth/social/login/ig/"><img src="/static/i/soc_ins.png" alt="Instagram"></a>
+            <a href="{% url 'auth:social:fb' %}"><img src="/static/i/soc_face.png" alt="{% trans 'Facebook' %}"></a>
+            <a href="{% url 'auth:social:vk' %}"><img src="/static/i/soc_vk.png" alt="{% trans 'ВКонтакте' %}"></a>
+            <a href="{% url 'auth:social:gp' %}"><img src="/static/i/soc_gplus.png" alt="{% trans 'Google Plus' %}"></a>
+            <a href="{% url 'auth:social:ig' %}"><img src="/static/i/soc_ins.png" alt="{% trans 'Instagram' %}"></a>
           </div>
         </div>
 
@@ -217,7 +225,6 @@
     </div>
   </div>
 </div>
-{% endcomment %}
 
 
 
