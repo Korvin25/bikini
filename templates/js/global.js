@@ -22,12 +22,10 @@ function showErrorPopup(title, text) {
 
 function showPopup(popup_id, close_others) {
   close_others = close_others || true;
-  console.log('showPopup');
 
   var $a = $('a[href="'+popup_id+'"]'),
       $popup = $(popup_id);
 
-  console.log($popup);
   if (close_others) { $('.js-call-close').filter(':visible').click(); }
   $a.click();
   $('a[rel*=leanModal1]').leanModal({ top : 200, closeButton: ".js-call-close" });
@@ -40,7 +38,6 @@ $('body').on('click', '.js-show-popup', function(e) {
   e.preventDefault();
 
   var popup_id = $(this).attr('data-popup-id');
-  console.log(popup_id);
   showPopup(popup_id, true);
 });
 
