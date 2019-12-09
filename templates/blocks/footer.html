@@ -77,7 +77,7 @@
 
 <!-- кнопки определения пользователя -->
 
-<div class="window_popup_but" id="auth-test" style="display: none;">
+<div class="window_popup_but" id="auth" style="display: none;">
   <div class="close_popup js-call-close"><img src="/static/i/close_icon.png" alt="Закрыть"></div>
   <div class="wrap_window_popup">
     <div class="popup_row_but js-show-popup" data-popup-id="#login">
@@ -104,8 +104,8 @@
     <div class="popup_row_reg">
       <div class="popup_row_wrapp">
         <p class="popup_back_wrap">
-          <span class="js-show-popup popup_back" data-popup-id="#auth-test">&larr; {% trans 'Шаг назад' %}</span>
-          <a rel="leanModal1" style="display: none;" href="#auth-test">&larr; {% trans 'Шаг назад' %}</a>
+          <span class="js-show-popup popup_back" data-popup-id="#auth">&larr; {% trans 'Шаг назад' %}</span>
+          <a rel="leanModal1" style="display: none;" href="#auth">&larr; {% trans 'Шаг назад' %}</a>
         </p>
         <h2 class="title_popup">{% trans 'Я уже являюсь <br>клиентом BIKINIMINI' %}</h2>
 
@@ -163,8 +163,8 @@
     <div class="popup_row_reg bg_popup">
       <div class="popup_row_wrapp">
         <p class="popup_back_wrap">
-          <span class="js-show-popup popup_back" data-popup-id="#auth-test">&larr; {% trans 'Шаг назад' %}</span>
-          <a rel="leanModal1" style="display: none;" href="#auth-test">&larr; {% trans 'Шаг назад' %}</a>
+          <span class="js-show-popup popup_back" data-popup-id="#auth">&larr; {% trans 'Шаг назад' %}</span>
+          <a rel="leanModal1" style="display: none;" href="#auth">&larr; {% trans 'Шаг назад' %}</a>
         </p>
         <h2 class="title_popup">{% trans 'Я новый <br>клиент BIKINIMINI' %}</h2>
 
@@ -227,7 +227,7 @@
 </div>
 
 
-
+{% comment %}
 <div class="window_popup" id="auth" style="display: none;">
   <div class="close_popup js-call-close"><img src="/static/i/close_icon.png" alt="Закрыть"></div>
   <div class="wrap_window_popup bg_wrapp_window">
@@ -334,6 +334,7 @@
     
   </div>
 </div>
+{% endcomment %}
 
 
 <div class="window_popup_reg no_float mini_window_popup callback_form" id="reset_password" style="display:none;">
@@ -342,7 +343,7 @@
         <div class="popup_row_reg">
             <div class="popup_row_wrapp">
                 <h2>{% trans 'Восстановить пароль' %}</h2>
-                {% comment %}<p class="call_introtext">{% trans 'Введите свой email, через который вы регистрировались на сайте' %}.</p>{% endcomment %}
+                {# <p class="call_introtext">{% trans 'Введите свой email, через который вы регистрировались на сайте' %}.</p> #}
                 <div class="row_form_popup">
                     <form class="callBackForm js-usual-form" method="post" action="{% url 'auth:reset_password' %}">
                         {% csrf_token %}

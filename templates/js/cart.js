@@ -75,18 +75,6 @@ function showErrorPopup(title, text) {
 };
 
 
-function showPopup(popup_id, old_popup_id) {
-  var $a = $('a[href="'+popup_id+'"]'),
-      $popup = $(popup_id),
-      $closeButtons = $('.js-call-close').filter(':visible');
-
-  $('.window_popup').hide();
-  $('a[rel*=leanModal1]').leanModal({ top : 200, closeButton: ".js-call-close" });
-  $a.click();
-  $('html, body').animate({scrollTop: $popup.offset().top-75}, 400);
-};
-
-
 function getFormData($form){
   // FROM: https://stackoverflow.com/a/11339012
   var unindexed_array = $form.serializeArray();

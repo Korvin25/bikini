@@ -21,7 +21,7 @@ function showErrorPopup(title, text) {
 
 
 function showPopup(popup_id, close_others) {
-  close_others = close_others || false;
+  close_others = close_others || true;
   console.log('showPopup');
 
   var $a = $('a[href="'+popup_id+'"]'),
