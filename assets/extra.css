@@ -172,8 +172,6 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
     font-size: 16px;
  }
  .popup_row_reg {
-    border-radius: 13px;
-    border: 2px solid #e1312f;
     position: relative;
     z-index: 2;
 }
@@ -186,6 +184,7 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
     background-color: #fff;
     border-radius: 15px;
     -webkit-border-radius: 15px;
+    border: 2px solid #e1312f;
     width: 300px;
     overflow: hidden;
 } 
