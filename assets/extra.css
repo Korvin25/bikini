@@ -72,6 +72,7 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
     }
 }
 .js-show-popup { cursor: pointer; }
+.callBackForm label span { top: -7px !important; }
 
 
 /* кнопки*/
@@ -84,48 +85,73 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
     top: 200px;
     height: 100px;
         -webkit-border-radius: 15px;
-    width: 640px;
+    /*width: 640px;*/
     overflow: hidden;
 }        
 .window_popup_but .wrap_window_popup{
-    display: table;
+    /*display: table;*/
+    display: inline-block;
 }     
 .popup_row_but{
+    display: inline-block;
     border-color: #fff;
     background: #A82A33;
     border-radius: 57px;
     text-align: center;
     border: 2px solid;
-    margin: 20px 0;
+    /*margin: 20px 0;*/
     color: #fff;
     text-transform: uppercase;
     width: 300px;
         margin: 0 10px;
 }      
  .popup_row_but .popup_row_wrapp{
-    padding: 22px 27px 5px 27px;
+    /*padding: 22px 27px 5px 27px;*/
+    padding: 0 !important;
+}
+.popup_row_wrapp span{
+        padding: 20px 0px 17px 0px;
+    display: block;
+}
+.popup_row_wrapp span:active{
+     color: #fff;
 }
   .popup_row_but:hover{
     background: #8c2c34;
     border-radius: 100px;
          cursor: pointer;
 }
+.title_popup_but{
+    color: #fff;
+    font-weight: 700;
+    font-size: 18px;
+}
 @media screen and (max-width: 720px) {
-     .window_popup_but .wrap_window_popup{
+     .window_popap_but .wrap_window_popap, .popup_row_but{
     display: block;
 }  
 .popup_row_but{
     margin: 10px 0;
 }
+.window_popup_but{
+    height: 100%;
+    margin: -150px;
+}
+
   }
     
-@media screen and (max-width: 580px) {
+/*@media screen and (max-width: 580px) {
         .window_popup_but, .window_popup_reg {margin-left:0;left:0;width:100%;}
         }
-    
+*/    
+
 @media screen and (max-width: 460px) {
         .window_popup_but, .window_popup_reg {top:100px;}
-        .popup_row_but {float:none;width:100%;}
+        /*.popup_row_but {float:none;width:100%;}*/
+        .popap_row_but {float:none; max-width: 298px;}
+        .popup_row_wrapp {
+            padding: 0;
+        }
     }
   
     
@@ -159,5 +185,9 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
 .popup_row_reg .row_form_popup{
     margin-top: 18px;
 }
-        
+
+.popup_row_wrapp .input_text {
+ background: #fff;
+}
+
  /**/
