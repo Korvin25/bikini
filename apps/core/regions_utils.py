@@ -9,7 +9,7 @@ def get_region_code(request=None):
     return 
 
 
-def region_field(obj, field_name='title', request=None, region_code=None, add_suffix=False):
+def region_field(obj, field_name='title', request=None, region_code=None, add_suffix=False, use_default=True):
     request = request or CrequestMiddleware.get_request()
     region_code = region_code or getattr(request, 'region_code', None)
 
@@ -21,6 +21,8 @@ def region_field(obj, field_name='title', request=None, region_code=None, add_su
 
         if _region_value:
             _value = _region_value
+        elif use_default is False:
+            _value = ''
         elif _value and add_suffix is True:
             seo_suffix = getattr(request, 'region_seo_suffix', '')
             _value = '{} {}'.format(_value, seo_suffix)

@@ -225,7 +225,7 @@ class SEOSetting(models.Model):
         return h1 if h1 else self.description
 
     def get_seo_text(self):
-        seo_text = region_field(self, 'seo_text')
+        seo_text = region_field(self, 'seo_text', use_default=False)
         return seo_text
 
     def show_meta_title(self):
@@ -339,7 +339,7 @@ class MetatagModel(models.Model):
 
     def get_seo_text(self):
         # seo_text = self.seo_text
-        seo_text = region_field(self, 'seo_text')
+        seo_text = region_field(self, 'seo_text', use_default=False)
         return seo_text
 
     def has_seo_text(self):
