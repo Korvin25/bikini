@@ -27,3 +27,8 @@ upload/
 *zip
 Thumbs.db
 *tmp*
+
+# Certificate key files
+*.csr
+*.key
+*.pem
