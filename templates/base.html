@@ -32,11 +32,12 @@
 
     <link href="/static/font.css"  type="text/css"  rel="stylesheet" />
     <link href="/static/style.css?v=597215" type="text/css"  rel="stylesheet" />
-    <link href="/static/extra.css?v=981270" type="text/css"  rel="stylesheet" />
+    <link href="/static/extra.css?v=175909" type="text/css"  rel="stylesheet" />
     {% block extra_css %}{% endblock %}
 
     {# <script src="/static/js/jquery-1.9.0.min.js"></script> #}
     <script src="/static/js/jquery-1.12.4.min.js"></script>
+    {% block pre_head_js %}{% endblock %}
     <script src="/static/js/jquery.cookie.js"></script>
     {% block head_js %}{% endblock %}
 

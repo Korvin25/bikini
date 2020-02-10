@@ -199,4 +199,55 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
     margin-top: 18px;
 }
         
- /**/
+/* аккордион в текстовых страницах */
+.tit{
+    width: 90%;
+    float: left;
+}
+.parent{
+    display: grid;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
+    border-radius: 2px;
+    transition: all 0.5s ease;
+    cursor: pointer;
+    margin-bottom: 20px;
+    border: 5px solid rgba(0,0,0,.050);
+    list-style-type: none;
+}
+.parent:hover{
+    border-color: rgba(185,55,65,.340);
+}
+.parent.uk-open{
+    border-color: rgba(185,55,65,.340);
+}
+.parent h2{
+    display: inline;
+    font-family: 'NeoBold';
+}
+.uk-open .tit{
+    border-bottom: 2px solid;
+    line-height: 1.6;
+    width: 90%;
+    border-color: #b93741;
+}
+.parent a{
+    text-decoration: none !important;
+    display: block;
+    color: initial;
+}
+.parent.uk-open img {
+    transform: rotate(180deg);
+    margin-top: 5px;
+}
+.parent img {
+    transition: all 0.7s ease;
+    float: right;
+    width: 22px;
+    height: 22px;
+    margin-top: 5px;
+}
+.uk-accordion-content { margin-top: 25px; }
+.uk-accordion-content h3:first-child { margin-top: 5px; }

@@ -134,8 +134,8 @@ TEMPLATES = [
                 'apps.settings.context_processors.settings',
             ],
             'debug': DEBUG,
-       },
-   },
+        },
+    },
 ]
 
 
@@ -218,12 +218,14 @@ CKEDITOR_CONFIGS = {
         'language': 'ru',
         'width': '100%',
         # 'width': '140%',
+        # 'extraPlugins': 'accordion2',
         'toolbar': [
             {'name': 'document', 'items': ['Source']},
             {'name': 'clipboard', 'items': ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']},
             {'name': 'editing', 'items': ['Find', 'Replace', '-', 'SelectAll', '-', 'Scayt']},
             '/',
             {'name': 'basicstyles', 'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
+            # {'name': 'paragraph', 'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', 'Accordion', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language']},
             {'name': 'paragraph', 'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language']},
             {'name': 'links', 'items': ['Link', 'Unlink', 'Anchor']},
             {'name': 'insert', 'items': ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe']},
@@ -319,7 +321,7 @@ LOGGING = {
         },
         'console': {
             'class': 'logging.StreamHandler',
-            #'filters': ['require_debug_true'],
+            # 'filters': ['require_debug_true'],
             'formatter': 'simple',
         },
         'mail_admins': {
@@ -348,11 +350,11 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-        #'django': {
+        # 'django': {
         #    'handlers': ['debug_file',],
         #    'level': 'DEBUG',
         #    'propagate': True,
-        #},
+        # },
     }
 }
 

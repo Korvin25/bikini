@@ -5,7 +5,7 @@ from django.contrib import admin
 
 from embed_video.admin import AdminVideoMixin
 from filer.models import Folder, File, Image
-from modeltranslation.admin import TranslationInlineModelAdmin, TabbedTranslationAdmin, TranslationStackedInline
+from modeltranslation.admin import TabbedTranslationAdmin, TranslationStackedInline
 from paypal.standard.ipn.models import PayPalIPN
 
 from .admin_filer import CustomFolderAdmin, CustomFileAdmin, CustomImageAdmin
@@ -85,6 +85,13 @@ class VideoAdmin(AdminVideoMixin, TabbedTranslationAdmin):
         return qs.prefetch_related('products')
 
 
+class PageAccordionSectionInline(TranslationStackedInline):
+    model = PageAccordionSection
+    fields = ('title', 'text', 'order',)
+    suit_classes = 'suit-tab suit-tab-accordion'
+    extra = 0
+
+
 @admin.register(Page)
 class PageAdmin(TabbedTranslationAdmin):
     # list_display = ('title_ru', 'slug', 'image', 'order',)
@@ -92,6 +99,7 @@ class PageAdmin(TabbedTranslationAdmin):
     list_editable = ('order',)
     suit_form_tabs = (
         ('default', 'Страница'),
+        ('accordion', 'Секции (аккордеон)'),
         ('seo', 'SEO'),
         ('seo-regions', 'SEO (регионы)'),
     )
@@ -130,6 +138,7 @@ class PageAdmin(TabbedTranslationAdmin):
             'fields': ('meta_title_svs', 'meta_desc_svs', 'meta_keyw_svs', 'h1_svs', 'seo_text_svs',),
         }),
     )
+    inlines = [PageAccordionSectionInline, ]
     search_fields = ['title', 'slug', 'text', ]
 
 

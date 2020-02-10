@@ -136,7 +136,7 @@ class Page(MetatagModel):
     image_attributes = models.CharField('Атрибуты alt и title у картинки',
                                         max_length=255, blank=True,
                                         help_text='По умолчанию берутся из поля "Заголовок"')
-    text = RichTextUploadingField('Текст')
+    text = RichTextUploadingField('Текст', blank=True)
     # text = RichTextField('Текст')
     # text = HTMLField('Текст')
     order = models.IntegerField('Порядок', default=10)
@@ -163,6 +163,21 @@ class Page(MetatagModel):
     @property
     def image_alt(self):
         return self.image_attributes or self.title
+
+
+class PageAccordionSection(models.Model):
+    page = models.ForeignKey(Page, verbose_name='Страница', related_name='accordion_sections')
+    title = models.CharField('Заголовок', max_length=255)
+    text = RichTextUploadingField('Текст')
+    order = models.IntegerField('Порядок', default=10)
+
+    class Meta:
+        ordering = ['order', 'id', ]
+        verbose_name = 'секция'
+        verbose_name_plural = 'секции'
+
+    def __unicode__(self):
+        return self.title
 
 
 class Menu(models.Model):

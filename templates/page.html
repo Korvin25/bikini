@@ -11,7 +11,13 @@
 {% block twitter_title %}{{ page.get_meta_title }}{% endblock %}
 {% block twitter_desc %}{{ page.get_meta_desc }}{% endblock %}
 
+{% block pre_head_js %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.0/js/uikit.min.js"/>
+{% endblock %}
+
 {% block content %}
+  <style>
+  </style>
   <main>
     <div class="main_content">
         <div class="blog_title">
@@ -26,6 +32,20 @@
         <div id="main_content" class="content_video list_push cnt_left">
             <div class="text_preview_left txt_black text_light_page">
                 {{ page.text|safe }}
+                {% if page.accordion_sections.count %}
+                  <div class="wrap-accordion" uk-accordion="multiple: true">
+                    {% for section in page.accordion_sections.all %}
+                      <div class="parent">
+                        <a class="uk-accordion-title" href="#">
+                          <div class="tit"><h2>{{ section.title|safe }}</h2></div><div><img src="/static/i/dc.svg"></div>
+                        </a>
+                        <div class="uk-accordion-content">
+                          {{ section.text|safe }}
+                        </div>
+                      </div>
+                    {% endfor %}
+                  </div>
+                {% endif %}
             </div>
         </div>
     </div>
