@@ -239,6 +239,7 @@ CKEDITOR_CONFIGS = {
         'format_tags': 'p;h2;h3',
         'removeDialogTabs': 'image:advanced;link:advanced',
         'image_previewText': '&nbsp',
+        'extraAllowedContent': 'a[*]',
     },
     'simple': {
         'forcePasteAsPlainText': True,
@@ -254,6 +255,7 @@ CKEDITOR_CONFIGS = {
         ],
         'removeDialogTabs': 'image:advanced;link:advanced',
         'image_previewText': '&nbsp',
+        'extraAllowedContent': 'a[*]',
     },
 }
 
