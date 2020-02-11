@@ -115,14 +115,16 @@ class Cart(models.Model):
     payment_method = models.ForeignKey(PaymentMethod, verbose_name=_('Способ оплаты'), null=True, blank=True)
     additional_info = models.TextField(_('Дополнительная информация'), blank=True)
 
-    # tracking_number = models.CharField('Номер отслеживания', max_length=255, null=True, blank=True)
-    # delivery_type = models.CharField('Тип доставки', max_length=15, choices=DELIVERY_CHOICES, null=True, blank=True)
-    # payment_type = models.CharField('Тип оплаты', max_length=15, choices=PAYMENT_CHOICES, null=True, blank=True)
-
     status = models.PositiveSmallIntegerField('Статус', choices=STATUS_CHOICES, default=0)
     summary_rub = models.DecimalField('Сумма, руб.', max_digits=9, decimal_places=2, default=0)
     summary_eur = models.DecimalField('Сумма, eur.', max_digits=9, decimal_places=2, default=0)
     summary_usd = models.DecimalField('Сумма, usd.', max_digits=9, decimal_places=2, default=0)
+    clean_cost_rub = models.DecimalField('Чистая стоимость, rub.', max_digits=9, decimal_places=2, default=0)
+    clean_cost_eur = models.DecimalField('Чистая стоимость, eur.', max_digits=9, decimal_places=2, default=0)
+    clean_cost_usd = models.DecimalField('Чистая стоимость, usd.', max_digits=9, decimal_places=2, default=0)
+    delivery_cost_rub = models.DecimalField('Стоимость доставки, rub.', max_digits=9, decimal_places=2, default=0)
+    delivery_cost_eur = models.DecimalField('Стоимость доставки, eur.', max_digits=9, decimal_places=2, default=0)
+    delivery_cost_usd = models.DecimalField('Стоимость доставки, usd.', max_digits=9, decimal_places=2, default=0)
 
     # --- яндекс.метрика ---
     TRAFFIC_SOURCE_CHOICES = (
@@ -159,10 +161,25 @@ class Cart(models.Model):
     def delivery_method_price_c(self):
         return currency_price(self.delivery_method, currency=self.currency)
 
+    @property
+    def clean_cost(self):
+        return currency_price(self, 'clean_cost')
+
+    @property
+    def clean_cost_c(self):
+        return currency_price(self, 'clean_cost', currency=self.currency)
+
+    @property
+    def delivery_cost(self):
+        return currency_price(self, 'delivery_cost')
+
+    @property
+    def delivery_cost_c(self):
+        return currency_price(self, 'delivery_cost', currency=self.currency)
+
     def save(self, *args, **kwargs):
         if not self.checked_out:
             self.get_summary()
-        # self.get_summary()
         return super(Cart, self).save(*args, **kwargs)
 
     def count(self):
@@ -184,8 +201,15 @@ class Cart(models.Model):
             result_eur += sum([price['price_eur'] for price in certificate_prices])
             result_usd += sum([price['price_usd'] for price in certificate_prices])
 
+        self.clean_cost_rub = result_rub
+        self.clean_cost_eur = result_eur
+        self.clean_cost_usd = result_usd
+
         delivery_method = self.delivery_method
         if delivery_method:
+            self.delivery_cost_rub = delivery_method.price_rub
+            self.delivery_cost_eur = delivery_method.price_eur
+            self.delivery_cost_usd = delivery_method.price_usd
             result_rub += delivery_method.price_rub
             result_eur += delivery_method.price_eur
             result_usd += delivery_method.price_usd
@@ -193,15 +217,6 @@ class Cart(models.Model):
         self.summary_rub = result_rub
         self.summary_eur = result_eur
         self.summary_usd = result_usd
-
-        # price_list = self.cartitem_set.all().values_list('price', flat=True)
-        # result = sum(price_list)
-        # certificate_price_list = self.certificatecartitem_set.all().values_list('price', flat=True)
-        # result += sum(certificate_price_list)
-        # delivery_method = self.delivery_method
-        # if delivery_method:
-        #     result = result + delivery_method.price
-        # return result
 
     def get_yandex_currency(self):
         currency = {
@@ -224,8 +239,8 @@ class Cart(models.Model):
     is_order_with_discount.allow_tags = True
     is_order_with_discount.short_description = 'Товары со скидкой'
 
-    # # def get_order_url(self):
-    # #     return reverse('profile:order', kwargs={'pk': self.id})
+    # def get_order_url(self):
+    #     return reverse('profile:order', kwargs={'pk': self.id})
 
     def profile_with_link(self):
         p = self.profile

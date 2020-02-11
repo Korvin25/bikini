@@ -121,9 +121,9 @@ class AttributeOption(models.Model):
     def save(self, *args, **kwargs):
         if self.attribute:
             attr_type = self.attribute.attr_type
-            if not attr_type == 'color':
+            if attr_type != 'color':
                 self.color = ''
-            if not attr_type in ['style', 'color']:
+            if attr_type not in ['style', 'color']:
                 self.picture = ''
         return super(AttributeOption, self).save(*args, **kwargs)
 
@@ -159,13 +159,13 @@ class AttributeOption(models.Model):
     def get_label(self, attr_type=None):
         attr_type = attr_type or self.attribute.attr_type
         label = (self.get_placeholder_image(image_src=self.admin_picture_url, dimension=35)
-                     if (attr_type == 'color' and self.picture)
+                 if (attr_type == 'color' and self.picture)
                  else self.get_placeholder_image('{0}/{0}'.format(self.color[1:]))
-                     if (attr_type == 'color' and self.color)
+                 if (attr_type == 'color' and self.color)
                  else self.get_placeholder_image('ffffff/000000/?text={}'.format(self.title), 45)
-                     if attr_type == 'size'
+                 if attr_type == 'size'
                  else self.get_placeholder_image(image_src=self.admin_picture_url, dimension=200, border=False)
-                     if (attr_type == 'style' and self.picture)
+                 if (attr_type == 'style' and self.picture)
                  else self.title)
         if self.color or self.picture:
             label = '{}&nbsp;&nbsp;{}'.format(label, self.title)
@@ -859,7 +859,7 @@ class ProductPhoto(models.Model):
 class SpecialOfferCategory(models.Model):
     title = models.CharField('Название', max_length=255, help_text='для использования в админке')
     price_rub = models.DecimalField('Стоимость от, руб.', max_digits=9, decimal_places=2, default=0,
-                                   unique=True)
+                                    unique=True)
     price_eur = models.DecimalField('Стоимость от, eur.', max_digits=9, decimal_places=2, default=0)
     price_usd = models.DecimalField('Стоимость от, usd.', max_digits=9, decimal_places=2, default=0)
     is_active = models.BooleanField('Активна?', default=True)
@@ -871,8 +871,8 @@ class SpecialOfferCategory(models.Model):
 
     def __unicode__(self):
         title = '{}{} (от {} руб.)'.format(('[откл.] ' if not self.is_active else ''),
-                                            self.title,
-                                            to_price(self.price_rub))
+                                           self.title,
+                                           to_price(self.price_rub))
         return title
 
     def save(self, *args, **kwargs):
@@ -894,7 +894,7 @@ class SpecialOfferCategory(models.Model):
             if summary >= category.price_rub:
                 cat = category
                 break
-        print cat.id, cat.price_rub
+        # print cat.id, cat.price_rub
         return cat
 
 

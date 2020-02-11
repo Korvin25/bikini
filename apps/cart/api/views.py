@@ -246,7 +246,9 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
                 admin_send_low_in_stock_email(_options, _extra_products)
 
             specials_html = ''
-            specials = (SpecialOffer.get_offers(summary=cart.summary_rub) if profile.can_get_discount
+            # specials = (SpecialOffer.get_offers(summary=cart.summary_rub) if profile.can_get_discount
+            #             else SpecialOffer.objects.none())
+            specials = (SpecialOffer.get_offers(summary=cart.clean_cost_rub) if profile.can_get_discount
                         else SpecialOffer.objects.none())
             if specials.count():
                 specials_template = get_template('cart/step5_specials.html')
