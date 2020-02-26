@@ -8,7 +8,7 @@ def make_hash(o):
     FROM: https://stackoverflow.com/a/8714242
     """
     if isinstance(o, (set, tuple, list)):
-        return tuple([make_hash(e) for e in o])    
+        return tuple([make_hash(e) for e in o])
 
     elif not isinstance(o, dict):
         return hash(o)

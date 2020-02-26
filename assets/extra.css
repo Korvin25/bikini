@@ -199,23 +199,27 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
     margin-top: 18px;
 }
         
-/* аккордион в текстовых страницах */
+/* аккордеон в текстовых страницах */
 .tit{
     width: 90%;
     float: left;
+        line-height: 1.6;
 }
 .parent{
     display: grid;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    padding-left: 40px;
-    padding-right: 40px;
+
     border-radius: 2px;
     transition: all 0.5s ease;
     cursor: pointer;
     margin-bottom: 20px;
     border: 5px solid rgba(0,0,0,.050);
     list-style-type: none;
+}
+.wrap{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
 }
 .parent:hover{
     border-color: rgba(185,55,65,.340);
@@ -226,6 +230,7 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
 .parent h2{
     display: inline;
     font-family: 'NeoBold';
+        text-transform: uppercase;
 }
 .uk-open .tit{
     border-bottom: 2px solid;
@@ -249,5 +254,55 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
     height: 22px;
     margin-top: 5px;
 }
-.uk-accordion-content { margin-top: 25px; }
+.uk-accordion-content{
+        padding: 0 40px 35px 40px;
+}
+/**Табы на странице товара**/
+.uk-switcher {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.uk-subnav {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px 0 18px 0;
+    list-style: none;
+        margin-bottom: 20px;
+        background-color: #313131;
+}
+.uk-subnav a{
+        text-transform: uppercase;
+    text-decoration: none;
+    color: #fff;
+}
+.uk-subnav>* {
+    flex: none;
+    padding-right: 20px;
+    position: relative;
+}
+.uk-subnav-pill>*>:first-child {
+    padding: 21px 10px 20px 10px;
+    color: #fff;
+}
+.uk-switcher>:not(.uk-active) {
+    display: none;
+}
+.uk-subnav .uk-active a{
+    background-color: #a82a33;
+}
+.marbot{
+    margin-bottom: 25px;
+}
+/* fixes */
+.parent a {
+    height: 71px;
+}
+.wrap {
+    height: 31px;
+}
+.tit {
+    line-height: inherit;
+}
+.uk-accordion-content { margin-top: 15px; padding-bottom: 20px; }
 .uk-accordion-content h3:first-child { margin-top: 5px; }

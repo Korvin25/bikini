@@ -37,7 +37,9 @@
                     {% for section in page.accordion_sections.all %}
                       <div class="parent">
                         <a class="uk-accordion-title" href="#">
-                          <div class="tit"><h2>{{ section.title|safe }}</h2></div><div><img src="/static/i/dc.svg"></div>
+                          <div class="wrap">
+                            <div class="tit"><h2>{{ section.title|safe }}</h2></div><div><img src="/static/i/dc.svg"></div>
+                          </div>
                         </a>
                         <div class="uk-accordion-content">
                           {{ section.text|safe }}
