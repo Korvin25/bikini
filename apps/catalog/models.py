@@ -854,6 +854,45 @@ class ProductPhoto(models.Model):
     # admin_show_photo.short_description = 'Превью'
 
 
+class ProductTab(models.Model):
+    title = models.CharField('Заголовок', max_length=255)
+    text = RichTextUploadingField('Текст', blank=True, help_text='текст перед секциями')
+    order = models.IntegerField('Порядок', default=10)
+
+    class Meta:
+        ordering = ['order', 'id', ]
+        verbose_name = 'вкладка'
+        verbose_name_plural = 'страница товара: общие вкладки'
+
+    def __unicode__(self):
+        return self.title
+
+    @property
+    def shown_sections(self):
+        return self.sections.filter(show=True)
+
+    def show_sections_count(self):
+        return self.sections.count()
+    show_sections_count.allow_tags = True
+    show_sections_count.short_description = 'Кол-во секций'
+
+
+class ProductTabSection(models.Model):
+    tab = models.ForeignKey(ProductTab, verbose_name='Вкладка', related_name='sections')
+    title = models.CharField('Заголовок', max_length=255)
+    text = RichTextUploadingField('Текст')
+    show = models.BooleanField('Показывать на сайте', default=True)
+    order = models.IntegerField('Порядок', default=10)
+
+    class Meta:
+        ordering = ['order', 'id', ]
+        verbose_name = 'секция'
+        verbose_name_plural = 'секции'
+
+    def __unicode__(self):
+        return self.title
+
+
 # === Спец.предложения ===
 
 class SpecialOfferCategory(models.Model):

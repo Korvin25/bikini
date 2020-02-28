@@ -10,7 +10,7 @@ from paypal.standard.ipn.models import PayPalIPN
 
 from .admin_filer import CustomFolderAdmin, CustomFileAdmin, CustomImageAdmin
 from .admin_forms import MenuItemAdminForm
-from .models import Video, Page, Menu, MenuItem
+from .models import Video, Page, PageAccordionSection, Menu, MenuItem
 from .translation import *
 
 

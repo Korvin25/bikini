@@ -5,17 +5,15 @@ from collections import OrderedDict
 from decimal import Decimal
 import json
 
-from django.db.models import Q, Max, Min
-from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import get_object_or_404
+from django.db.models import Q  # , Max, Min
+from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
 
-from ..core.templatetags.core_tags import to_int_or_float
 from ..core.http_utils import get_object_from_slug_and_kwargs
 from ..currency.utils import get_currency
 from ..lk.wishlist.utils import get_wishlist_from_request
 from ..settings.models import SEOSetting
-from .models import Attribute, Category, GiftWrapping, Product, ProductOption, SpecialOffer
+from .models import Attribute, Category, GiftWrapping, Product, ProductOption, ProductTab, SpecialOffer
 
 
 class ProductsView(TemplateView):
@@ -552,6 +550,7 @@ class ProductView(TemplateView):
             'in_wishlist': self.in_wishlist,
             'wishlist_data': self.wishlist_data,
             'with_wrapping': self.with_wrapping,
+            'tabs': ProductTab.objects.all().prefetch_related('sections'),
         }
         context.update(super(ProductView, self).get_context_data(**kwargs))
         return context
@@ -564,9 +563,10 @@ class ProductWithDiscountView(ProductView):
         profile = request.user
         self.special_offer = SpecialOffer.get_offers().filter(product_id=product.id, category_id=kwargs.get('category_id')).first()
 
-        if (profile.is_anonymous() or not profile.can_get_discount
-            or not self.special_offer
-            or kwargs.get('code') != profile.discount_code):
+        if (profile.is_anonymous()
+                or not profile.can_get_discount
+                or not self.special_offer
+                or kwargs.get('code') != profile.discount_code):
             return HttpResponseRedirect(product.get_absolute_url())
 
         return super(ProductWithDiscountView, self).get(request, *args, **kwargs)

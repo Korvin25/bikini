@@ -16,6 +16,10 @@ class TextTranslationOptions(TranslationOptions):
     fields = ('text',)
 
 
+class TitleTextTranslationOptions(TranslationOptions):
+    fields = ('title', 'text',)
+
+
 class MetatagTranslationOptions(TranslationOptions):
     fields = ('meta_title', 'meta_desc', 'meta_keyw', 'h1', 'seo_text',)
 

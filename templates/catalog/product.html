@@ -15,6 +15,10 @@
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.css">
 {% endblock %}
 
+{% block pre_head_js %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.0/js/uikit.min.js"/>
+{% endblock %}
+
 {% block head_js %}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 {% endblock %}
@@ -296,18 +300,50 @@
             </div>
           </div>
         <!-- FORM chars ITEM <<< -->
-          
         </div>
 
         {% get_product_text product as product_text %}
 
-        {% if product_text or videos_count %}
+        <div class="marbot">
+          <ul class="uk-subnav uk-subnav-pill" uk-switcher>
+            {% if product_text %}<li><a href="#">{% trans 'Описание товара' %}</a></li>{% endif %}
+            {% for tab in tabs %}<li><a href="#">{{ tab.title|safe }}</a></li>{% endfor %}
+          </ul>
+          <ul class="uk-switcher uk-margin">
+            {% if product_text %}
+              <li>
+                {{ product_text|safe }}
+              </li>
+            {% endif %}
+            {% for tab in tabs %}
+              <li>
+                <div class="text_preview_left txt_black text_light_page">
+                  {{ tab.text|safe }}
+                  {% if tab.shown_sections.count %}
+                    <div class="wrap-accordion" uk-accordion="multiple: true">
+                      {% for section in tab.shown_sections.all %}
+                        <div class="parent">
+                          <a class="uk-accordion-title" href="#">
+                            <div class="wrap">
+                              <div class="tit"><h2>{{ section.title|safe }}</h2></div><div><img src="/static/i/dc.svg"></div>
+                            </div>
+                          </a>
+                          <div class="uk-accordion-content">
+                            {{ section.text|safe }}
+                          </div>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        {% if videos_count %}
           <div class="text_preview_page text_item">
             <div class="text_preview_inner">
-              {% if product_text %}
-                {{ product_text|safe }}
-              {% endif %}
-              
               <div id="player_item">
                 {% for v in videos %}
                   <div class="wrapp_player_item js-video-item" style="display: {% if forloop.counter > 1 %}none{% else %}block{% endif %}">

@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from modeltranslation.translator import register, translator, TranslationOptions
+from modeltranslation.translator import register, translator
 
-from ..core.translation import TitleTranslationOptions, MetatagTitleTranslationOptions
+from ..core.translation import TitleTranslationOptions, TitleTextTranslationOptions, MetatagTitleTranslationOptions
 from .models import (Attribute, AttributeOption, ExtraProduct, Category,
-                     AdditionalProduct, Certificate, Product, ProductOption, ProductExtraOption,)
+                     AdditionalProduct, Certificate, Product, ProductOption, ProductExtraOption,
+                     ProductTab, ProductTabSection,)
 
 
 @register(Product)
@@ -27,3 +28,5 @@ translator.register(AdditionalProduct, TitleTranslationOptions)
 translator.register(Certificate, TitleTranslationOptions)
 translator.register(ProductOption, TitleTranslationOptions)
 translator.register(ProductExtraOption, TitleTranslationOptions)
+translator.register(ProductTab, TitleTextTranslationOptions)
+translator.register(ProductTabSection, TitleTextTranslationOptions)

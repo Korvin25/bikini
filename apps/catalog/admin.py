@@ -13,12 +13,12 @@ from django.utils.safestring import mark_safe
 
 from adminsortable2.admin import SortableAdminMixin
 # from jet.admin import CompactInline
-from modeltranslation.admin import TabbedTranslationAdmin, TranslationInlineModelAdmin
+from modeltranslation.admin import TabbedTranslationAdmin, TranslationInlineModelAdmin, TranslationStackedInline
 from pytils.numeral import choose_plural
 from salmonella.admin import SalmonellaMixin
 from suit import apps
 
-from ..content.models import Video
+# from ..content.models import Video
 from .admin_dynamic import (ProductOptionInlineFormset, ProductPhotoInlineFormset,
                             ProductOptionInlineForm, ProductPhotoInlineForm, ProductExtraOptionInlineForm,
                             ProductOptionAdmin, ProductPhotoAdmin, ProductExtraOptionAdmin,)
@@ -30,6 +30,7 @@ from .models import (Attribute, AttributeOption, ExtraProduct, Category,
                      # AdditionalProduct,
                      Certificate, GiftWrapping,
                      Product, ProductOption, ProductExtraOption, ProductPhoto,
+                     ProductTab, ProductTabSection,
                      SpecialOfferCategory, SpecialOffer,)
 from .translation import *
 
@@ -388,8 +389,8 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
             )
 
         data = {
-            'products': queryset, 'form': form, 
-            'count': count, 'count_label': count_label, 
+            'products': queryset, 'form': form,
+            'count': count, 'count_label': count_label,
             'opts': opts, 'app_label': opts.app_label,
             'request': request,
         }
@@ -422,9 +423,7 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
 
             self.message_user(request,
                               mark_safe('''Категории у товара "<a href="/admin/catalog/product/{}/change/">{}</a>"
-                                 изменены на "{}".'''.format(
-                                    id, obj.__unicode__(), obj.list_categories(),
-                                )),
+                                 изменены на "{}".'''.format(id, obj.__unicode__(), obj.list_categories(),)),
                               messages.SUCCESS)
             return HttpResponseRedirect('/admin/catalog/product/{}/change_attributes/'.format(id))
 
@@ -621,10 +620,10 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
             fieldsets[0][1]['fields'][18] = 'show_categories'  # меняем 'categories' на 'show_categories'
 
             # удаляем вкладки с инструкциями (вместо них будут вкладки с инлайнами)
-            del fieldsets[11] # варианты товара
-            del fieldsets[11] # фото
+            del fieldsets[11]  # варианты товара
+            del fieldsets[11]  # фото
             if obj.extra_options.count():
-                del fieldsets[11] # дополнительные товары
+                del fieldsets[11]  # дополнительные товары
         else:
             fieldsets[0][1]['fields'][18] = 'categories'  # меняем 'show_categories' на 'categories'
         return fieldsets
@@ -672,6 +671,34 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
         if formset.model == ProductOption:
             formset.instance.set_attrs()
         return s
+
+
+class ProductTabSectionInline(TranslationStackedInline):
+    model = ProductTabSection
+    fields = ('title', 'text', 'show', 'order',)
+    suit_classes = 'suit-tab suit-tab-accordion'
+    extra = 0
+
+
+@admin.register(ProductTab)
+class ProductTabAdmin(TabbedTranslationAdmin):
+    list_display = ('title_ru', 'order', 'show_sections_count',)
+    list_editable = ('order',)
+    suit_form_tabs = (
+        ('default', 'Вкладка'),
+        ('accordion', 'Секции'),
+    )
+    fieldsets = (
+        ('Вкладка', {
+            'classes': ('suit-tab suit-tab-default',),
+            'fields': ('title', 'text', 'order',),
+        }),
+    )
+    inlines = [ProductTabSectionInline, ]
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super(ProductTabAdmin, self).get_queryset(*args, **kwargs)
+        return qs.prefetch_related('sections')
 
 
 # === Спец.предложения ===
