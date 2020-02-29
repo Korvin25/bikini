@@ -203,7 +203,7 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
 .tit{
     width: 90%;
     float: left;
-        line-height: 1.6;
+    line-height: 1.6 !important;
 }
 .parent{
     display: grid;
@@ -294,15 +294,17 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
 .marbot{
     margin-bottom: 25px;
 }
+@media screen and (max-width: 380px) {
+    .uk-subnav>* {
+        padding-right: 0px;
+    }
+}
 /* fixes */
 .parent a {
     height: 71px;
 }
 .wrap {
     height: 31px;
-}
-.tit {
-    line-height: inherit;
 }
 .uk-accordion-content { margin-top: 15px; padding-bottom: 20px; }
 .uk-accordion-content h3:first-child { margin-top: 5px; }
