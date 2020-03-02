@@ -278,7 +278,7 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
 }
 .uk-subnav>* {
     flex: none;
-    padding-right: 20px;
+    /*padding-right: 20px;*/
     position: relative;
 }
 .uk-subnav-pill>*>:first-child {
@@ -297,6 +297,25 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
 @media screen and (max-width: 380px) {
     .uk-subnav>* {
         padding-right: 0px;
+    }
+}
+@media screen and (max-width: 420px) {
+    .wrap{
+        padding-left: 10px;
+        padding-right: 10px;
+        font-size: 12px;
+    }
+    .uk-subnav-pill>*>:first-child {
+        font-size: 12px;
+    }
+    .uk-subnav {
+        padding: 18px 0 18px 0;
+    }
+    .uk-open .tit {
+        width: 80%;
+    }
+    .uk-accordion-content {
+        padding: 0px 10px 0px 10px;
     }
 }
 /* fixes */
