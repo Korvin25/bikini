@@ -5,9 +5,12 @@ from collections import OrderedDict
 from decimal import Decimal
 import json
 
+from django.conf import settings
 from django.db.models import Q  # , Max, Min
 from django.http import HttpResponseRedirect
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
+
+from pure_pagination.mixins import PaginationMixin
 
 from ..core.http_utils import get_object_from_slug_and_kwargs
 from ..currency.utils import get_currency
@@ -16,7 +19,13 @@ from ..settings.models import SEOSetting
 from .models import Attribute, Category, GiftWrapping, Product, ProductOption, ProductTab, SpecialOffer
 
 
-class ProductsView(TemplateView):
+PRODUCTS_PAGINATE = getattr(settings, 'PRODUCTS_PAGINATE', 12)
+
+
+# class ProductsView(TemplateView):
+class ProductsView(PaginationMixin, ListView):
+    model = Product
+    context_object_name = 'products'
     with_category = False
     sale_category = False
     sex = 'female'
@@ -29,6 +38,7 @@ class ProductsView(TemplateView):
         'ajax': 'catalog/include/products.html',
     }
     PRICE_QUERY = 'COALESCE(sale_price_{0}, price_{0})'
+    paginate_by = PRODUCTS_PAGINATE
 
     def get_template_names(self):
         TEMPLATES = self.TEMPLATES
@@ -45,11 +55,15 @@ class ProductsView(TemplateView):
             (not is_ajax and catalog_home and self.sex == 'male'): TEMPLATES['men'],
         }.get(True)
 
+    @property
+    def category(self):
+        return getattr(self, '_category', self.get_category())
+
     def get_category(self):
         kw = {'sex': self.sex}
-        self.category = (None if self.with_category is False
-                         else get_object_from_slug_and_kwargs(self.request, model=Category, slug=self.kwargs.get('slug'), **kw))
-        return self.category
+        self._category = (None if self.with_category is False
+                          else get_object_from_slug_and_kwargs(self.request, model=Category, slug=self.kwargs.get('slug'), **kw))
+        return self._category
 
     def get_attributes(self):
         all_attrs_values = ProductOption.objects.select_related('product').filter(product__in=self.base_qs).values_list('attrs', flat=True)
@@ -78,22 +92,22 @@ class ProductsView(TemplateView):
         self.a_values = a_values
         return self.attrs
 
+    @staticmethod
+    def _get_attrs_queries(query):
+        queries = []
+        for k, v in query.iteritems():
+            _lookups = []
+            for value in v:
+                q = 'Q(attrs__{}__contains={})'.format(k, value)
+                _lookups.append(eval(q))
+            _query = _lookups[0]
+            for q in _lookups[1:]:
+                _query |= q
+            queries.append(_query)
+        return queries
+
     def get_attrs_filter(self):
-
-        def _get_attrs_queries(query):
-            queries = []
-            for k, v in query.iteritems():
-                _lookups = []
-                for value in v:
-                    q = 'Q(attrs__{}__contains={})'.format(k, value)
-                    _lookups.append(eval(q))
-                _query = _lookups[0]
-                for q in _lookups[1:]:
-                    _query |= q
-                queries.append(_query)
-            return queries
-
-        queries = _get_attrs_queries(self.f.get('attrs', dict()))
+        queries = self._get_attrs_queries(self.f.get('attrs', dict()))
         self.attrs_filter = queries
         return queries
 
@@ -132,6 +146,7 @@ class ProductsView(TemplateView):
         qs = qs.extra(select={'p_{}'.format(c): self.PRICE_QUERY.format(c) for c in ['rub', 'eur', 'usd']})
 
         self.base_qs = qs
+        self.all_count = self.base_qs.count()
         # self.price_min_max = qs.aggregate(Min('price_{}'.format(self.currency)), Max('price_{}'.format(self.currency)))
         # self.price_min_max['price__min'] = self.price_min_max['price_{}__min'.format(self.currency)]
         # self.price_min_max['price__max'] = self.price_min_max['price_{}__max'.format(self.currency)]
@@ -213,8 +228,7 @@ class ProductsView(TemplateView):
         return h1, seo_text
 
     def get_context_data(self, **kwargs):
-        category = self.get_category()
-        products = self.get_queryset()
+        category = self.category
         categories = Category.objects.filter(sex=self.sex)
         show_sale_category = (
             True if self.sale_category
@@ -228,16 +242,20 @@ class ProductsView(TemplateView):
             'categories': categories,
             'show_sale_category': show_sale_category,
             'is_sale_category': self.sale_category,
-            'products': products,
+            'all_count': self.all_count,
             'attrs': self.attrs,
             'attrs_options': self.a_values,
             'price_min_max': self.price_min_max,
             'f': self.f,
             'filter': self.filter,
+            'paginate_by': self.paginate_by,
             'h1': h1,
             'seo_text': seo_text,
         }
         context.update(super(ProductsView, self).get_context_data(**kwargs))
+        # page_obj = context['page_obj']
+        # p1, p2, p3, p4, p5 = page_obj.pages()
+        # import ipdb; ipdb.set_trace()
         return context
 
 

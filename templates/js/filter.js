@@ -2,29 +2,40 @@
 
 var objListState;
 
-function submitFilterForm($form, $container, url, data, src){
+function sendFilterForm($form, $container, url, data, src){
 
-    var title = $(document).attr('title');
+    var title = $(document).attr('title'),
+        $oldPagination = $container.find('.js-pagination-container'),
+        $toScroll;
 
-    // console.log('submitForm data="' + data + '" data_type="' + data_type + '"' + ' src=' +src );
+    if (src == 'load_more') {
+        $toScroll = $oldPagination;
+        $container = $('#products_container');
+    }
+    else { $toScroll = $container; }
 
-    if( src != 'restore' && objListState != 'refresh' ){
+    if (src != 'restore' && objListState != 'refresh'){
         uri = url + '?' + data;
         history.pushState({}, title, uri);
         //history.pathname = uri;
     }
 
-    if (objListState != 'refresh'){ $('html, body').animate({scrollTop: $("#main_content").offset().top}, 1000); }
+    if (objListState != 'refresh'){ $('html, body').animate({scrollTop: $toScroll.offset().top}, 750); }
     else { objListState = ''; }
 
     $container.addClass('_disabled');
-    
+
     $.ajax({
         url: url,
         data: data,
         cache: false,
         success: function(res){
-            $container.html(res);
+            if (src == 'load_more') {
+                $oldPagination.before(res);
+                $oldPagination.remove();
+            } else {
+                $container.html(res);
+            }
             $container.removeClass('_disabled');
         },
         error: function(){
@@ -35,22 +46,77 @@ function submitFilterForm($form, $container, url, data, src){
 };
 
 
-$('.js-filter-form').on('submit', function(e){
-    e.preventDefault();
-
-    var $form = $(this),
-        $container = $('#'+$form.attr('data-container-id')),
+function submitFilterForm($form, src){
+    var $container = $('#'+$form.attr('data-container-id')),
         url = $form.attr('action');
 
     $(document.activeElement).blur();
 
     var filter = $form.serializeArray();
     filter = jQuery.grep(filter, function(element) {
+        // return ((element.value != '') && !(element.name == 'page' && element.value == '1'))
         return (element.value != '')
     });
     var data = jQuery.param(filter);
-    submitFilterForm($form, $container, url, data, 'js_filter_form');
+    sendFilterForm($form, $container, url, data, src);
+};
+
+
+function setFilterPageNum($form, pageNum){
+    $form.find('input[name="page"]').remove();
+    if (pageNum > 1) { 
+        $form.prepend('<input type="hidden" name="page" value="'+pageNum+'"/>');
+    };
+}
+
+
+$('.js-filter-form').on('submit', function(e){
+    e.preventDefault();
+
+    var $form = $(this),
+        src='js_filter_form';
+
+    setFilterPageNum($form, 1);
+    submitFilterForm($form, src);
 });
+
+
+$('body').on('click', '.js-page', function(e){
+    e.preventDefault();
+
+    var $form = $('.js-filter-form'),
+        pageNum = parseInt($(this).data('page')),
+        src = 'page';
+
+    setFilterPageNum($form, pageNum);
+    submitFilterForm($form, src);
+});
+
+
+$('body').on('click', '.js-load-more', function(e){
+    e.preventDefault();
+
+    var $form = $('.js-filter-form'),
+        pageNum = parseInt($(this).data('page')),
+        src = 'load_more';
+
+    setFilterPageNum($form, pageNum);
+    submitFilterForm($form, src);
+});
+
+
+$('.js-form-reset').click(function(e){
+    var $form = $(this).closest('form');
+
+    $form.find(':input','option:selected')
+     .not(':button, :submit, :reset, :hidden')
+     .removeAttr('checked')
+     .removeAttr('selected');    
+
+    $form.find('input[type="text"]').val('');
+
+    $form.submit();
+})
 
 
 $('.js-form-reset').click(function(e){

@@ -65,6 +65,7 @@ INSTALLED_APPS = (
     'filer',
     'modeltranslation',
     'mptt',
+    'pure_pagination',
     'paypal.standard.ipn',
     'rangefilter',
     'request',
@@ -395,6 +396,14 @@ REDIS_DB = 2
 
 ROSETTA_MESSAGES_PER_PAGE = 50
 ROSETTA_SHOW_AT_ADMIN_PANEL = True
+
+
+PAGINATION_SETTINGS = {
+    'PAGE_RANGE_DISPLAYED': 3,
+    'MARGIN_PAGES_DISPLAYED': 1,
+    'SHOW_FIRST_PAGE_WHEN_INVALID': True,
+}
+PRODUCTS_PAGINATE = 12
 
 
 THUMBNAIL_HIGH_RESOLUTION = True

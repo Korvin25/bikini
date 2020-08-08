@@ -42,6 +42,9 @@
         
         <div class="sec_filtr">
           <form method="get" action="{{ request.path }}" class="sec_filtr_wrapp js-filter-form" data-container-id="products_div">
+            {% if page_obj.number > 1 %}
+              <input type="hidden" name="page" value="{{ page_obj.number }}"/>
+            {% endif %}
             <div class="title_sec_block">{% trans 'Фильтр' %}</div>
             {% for attr in attrs.color %}
               <div class="filtr_title">{{ attr.title }}:</div>
@@ -160,9 +163,32 @@
           </div>
         {% endif %}
 
-        <div id="products_div">
+        <div id="products_div" class="item_list_wrapp" itemscope="" itemtype="http://schema.org/ItemList">
           {% include 'catalog/include/products.html' %}
         </div>
+
+        {% if footer_banner and all_count %}
+          {% with footer_banner as banner %}
+            <div class="products_banner" style="margin-top: 20px;">
+              {% if banner.url and not banner.has_button %}
+                <a rel="nofollow" href="{{ banner.url|add_subdomain }}"{% if banner.target_blank %} target="_blank"{% endif %}>
+              {% endif %}
+                <div class="with_banner_page" style="background-image:url({{ banner.image_url }});">
+                  {% if banner.has_text or banner.has_button %}
+                    <div class="with_banner_padd_page">
+                      {% for line in banner.lines.all %}
+                        <div class="{% if line.big %}with_big_text{% else %}with_mini_text{% endif %}">{{ line.line }}</div>
+                      {% endfor %}
+                      {% if banner.has_button %}<a rel="nofollow" href="{{ banner.url|add_subdomain }}"{% if banner.target_blank %} target="_blank"{% endif %} class="butt_with">{{ banner.button_text }}</a>{% endif %}
+                    </div>
+                  {% endif %}
+                </div>
+              {% if banner.url and not banner.has_button %}
+                </a>
+              {% endif %}
+            </div>
+          {% endwith %}
+        {% endif %}
         
         <div class="text_preview_page">
           <div class="text_preview_inner">

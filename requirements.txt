@@ -18,6 +18,7 @@ django-ipware==2.0.1
 django-modeltranslation==0.12.1
 django-multiselectfield==0.1.8
 django-object-actions==0.10.0
+django-pure-pagination-0.3.0
 django-paypal==0.4.1
 django-redis-cache==2.0.0
 django-request==1.5.3

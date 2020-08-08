@@ -1,56 +1,130 @@
 {% load core_tags catalog_tags currency_tags %}
 {% load i18n %}
 
+
 {% if products|length %}
-
-  <div class="item_list_wrapp" itemscope="" itemtype="http://schema.org/ItemList">
-    {% for product in products %}
-      <div class="product_list">
-        {% with product|get_product_url:category_or_sex as product_url %}
-          <div class="photo_list">
-            <a href="{{ product_url }}">
-              <img src="{{ product.cover_thumb }}" alt="{{ product.title }}" />
-            </a>
-            {% if product.is_on_sale %}<span class="product-label product-label_discount" title="">-{{ product.sale_percent }}%</span>{% endif %}
-          </div>
-          <h3><a href="{{ product_url }}">{{ product.title }}</a></h3>
-          <h4>{{ product.subtitle }}</h4>
-          <div class="product_price{% if product.is_on_sale %} product_price_sale{% endif %}">
-            {% if product.is_on_sale %}
-              <s title="Старая цена">{{ product.get_price|with_currency:currency|abbr_to_span|safe }}</s>
-              {{ product.get_sale_price|with_currency:currency|abbr_to_span|safe }}
-            {% else %}
-              {{ product.get_price|with_currency:currency|abbr_to_span|safe }}
-            {% endif %}
-          </div>
-          <a href="{{ product_url }}" class="to_cart_list">{% trans 'В корзину' %}</a>
-        {% endwith %}
-      </div>
-    {% endfor %}
-  </div>
-
-  {% if footer_banner %}
-    {% with footer_banner as banner %}
-      {% if not banner.has_button %}
-        <a rel="nofollow" href="{{ banner.url|add_subdomain }}"{% if banner.target_blank %} target="_blank"{% endif %}>
-      {% endif %}
-        <div class="with_banner_page" style="background-image:url({{ banner.image_url }});">
-          {% if banner.has_text or banner.has_button %}
-            <div class="with_banner_padd_page">
-              {% for line in banner.lines.all %}
-                <div class="{% if line.big %}with_big_text{% else %}with_mini_text{% endif %}">{{ line.line }}</div>
-              {% endfor %}
-              {% if banner.has_button %}<a rel="nofollow" href="{{ banner.url|add_subdomain }}"{% if banner.target_blank %} target="_blank"{% endif %} class="butt_with">{{ banner.button_text }}</a>{% endif %}
-            </div>
+  {% for product in products %}
+    <div class="product_list">
+      {% with product|get_product_url:category_or_sex as product_url %}
+        <div class="photo_list">
+          <a href="{{ product_url }}">
+            <img src="{{ product.cover_thumb }}" alt="{{ product.title }}" />
+          </a>
+          {% if product.is_on_sale %}<span class="product-label product-label_discount" title="">-{{ product.sale_percent }}%</span>{% endif %}
+        </div>
+        <h3><a href="{{ product_url }}">{{ product.title }}</a></h3>
+        <h4>{{ product.subtitle }}</h4>
+        <div class="product_price{% if product.is_on_sale %} product_price_sale{% endif %}">
+          {% if product.is_on_sale %}
+            <s title="Старая цена">{{ product.get_price|with_currency:currency|abbr_to_span|safe }}</s>
+            {{ product.get_sale_price|with_currency:currency|abbr_to_span|safe }}
+          {% else %}
+            {{ product.get_price|with_currency:currency|abbr_to_span|safe }}
           {% endif %}
         </div>
-      {% if not banner.has_button %}
-        </a>
-      {% endif %}
-    {% endwith %}
-  {% endif %}
+        <a href="{{ product_url }}" class="to_cart_list">{% trans 'В корзину' %}</a>
+      {% endwith %}
+    </div>
+  {% endfor %}
 
-  <div class="item_list_wrapp" itemscope="" itemtype="http://schema.org/ItemList"></div>
+  <style>
+    .pagination {
+      margin-top: 15px;
+      /*line-height: 30px;*/
+    }
+    .pagination_item {
+      min-width: 30px;
+      text-align: center;
+      color: #424554;
+      text-decoration: none;
+      padding: 8px 2px;
+      display: inline-block;
+      outline: none;
+      font-size: 16px;
+      line-height: 30px;
+      font-weight: 500;
+    }
+    .pagination_item:hover {
+      color: #00a8f6;
+    }
+    .pagination_item._current {
+      font-weight: 700;
+      /*color: #ff7041;*/
+      color: #c90101;
+      pointer-events: none;
+    }
+    .pagination_item._icon {
+      font-size: 30px;
+      /*margin: 3px 0;*/
+      padding-top: 6px;
+      vertical-align: middle;
+    }
+    /*.pagination_item_icon {
+      vertical-align: top;
+      width: 18px;
+      height: 18px;
+      margin: 3px 0;
+      fill: currentColor;
+    }*/
+    .yet_items {
+      font-size: 16px;
+      line-height: 24px;
+    }
+    .yet_items:hover {
+      color: rgba(201,1,1,.7);
+    }
+    .yet_items:hover span {
+      border-bottom-color: rgba(201,1,1,.6);
+    }
+    </style>
+
+  <div class="js-pagination-container product_list" style="width: auto !important; border: none; display: block;">
+    {% if page_obj.pages|length > 1 %}
+      <div class="pagination">
+        <div class="pagination_pages_block">
+          {% comment %}
+            {% if page_obj.has_previous %}
+              <a href="?{{ page_obj.previous_page_number.querystring }}" class="pagination_item js-page" data-page="{{ page_obj.previous_page_number }}">&lsaquo;&lsaquo; {% trans 'Назад' %}</a>
+            {% else %}
+              <span class="pagination_item disabled">&lsaquo;&lsaquo; {% trans 'Назад' %}</span>
+            {% endif %}
+          {% endcomment %}
+          {% for page in page_obj.pages %}
+            {# {{ forloop.counter }}/{{ page_obj.number }}/{% if forloop.counter > page_obj.number %}T{% else %}F{% endif %} #}
+            {% if page %}
+              {% ifequal page page_obj.number %}
+                <span class="pagination_item _current">{{ page }}</span>
+              {% else %}
+                <a href="?{{ page.querystring }}" class="pagination_item js-page" data-page="{{ page }}">{{ page }}</a>
+              {% endifequal %}
+            {% elif forloop.counter < page_obj.number and page_obj.has_previous %}
+              <a href="?{{ page_obj.previous_page_number.querystring }}" class="pagination_item _icon js-page" data-page="{{ page_obj.previous_page_number }}">&lsaquo;</a>
+            {% elif forloop.counter > page_obj.number and page_obj.has_next %}
+              <a href="?{{ page_obj.next_page_number.querystring }}" class="pagination_item _icon js-page" data-page="{{ page_obj.next_page_number }}">&rsaquo;</a>
+            {% else %}
+              <span class="pagination_item disabled">...</span>
+            {% endif %}
+          {% endfor %}
+          {% comment %}
+            {% if page_obj.has_next %}
+              <a href="?{{ page_obj.next_page_number.querystring }}" class="pagination_item js-page" data-page="{{ page_obj.next_page_number }}">&rsaquo;</a>
+            {% else %}
+              <span class="pagination_item disabled">{% trans 'Вперед' %} &rsaquo;&rsaquo;</span>
+            {% endif %}
+          {% endcomment %}
+        </div>
+        <div class="pagination_more_block">
+          {% if page_obj.number < page_obj.pages|length %}
+            <a href="?{{ page_obj.next_page_number.querystring }}" class="yet_items js-load-more" data-page="{{ page_obj.next_page_number }}">
+              <span>{% trans 'Загрузить ещё' %} {{ paginate_by }}</span>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+  {# <div class="item_list_wrapp" itemscope="" itemtype="http://schema.org/ItemList"></div> #}
 
   {% comment %}
     <div class="pagination_block">
@@ -61,9 +135,13 @@
   {% endcomment %}
 
 {% else %}
-  {% if category %}
-    <p><center style="margin: 100px 0;">{% trans 'В данной категории пока что нет товаров' %}</center></p>
-  {% else %}
-    <p><center style="margin: 100px 0;">{% trans 'В этом разделе пока что нет товаров' %}</center></p>
-  {% endif %}
+  <div class="products_nothing_found" style="line-height: 150px; text-align: center;">
+    {% if all_count %}
+      {% trans 'Нет товаров, попадающих под фильтр' %}
+    {% elif category %}
+      {% trans 'В данной категории пока что нет товаров' %}
+    {% else %}
+      {% trans 'В этом разделе пока что нет товаров' %}
+    {% endif %}
+  </div>
 {% endif %}

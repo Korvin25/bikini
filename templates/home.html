@@ -145,7 +145,7 @@
 
     {% if footer_banner %}
       {% with footer_banner as banner %}
-        {% if not banner.has_button %}
+        {% if banner.url and not banner.has_button %}
           <a rel="nofollow" href="{{ banner.url|add_subdomain }}"{% if banner.target_blank %} target="_blank"{% endif %}>
         {% endif %}
           <div class="with_banner">
@@ -160,7 +160,7 @@
               {% endif %}
             </div>
           </div>
-        {% if not banner.has_button %}
+        {% if banner.url and not banner.has_button %}
           </a>
         {% endif %}
       {% endwith %}
