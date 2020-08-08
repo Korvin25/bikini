@@ -10,7 +10,7 @@ function sendFilterForm($form, $container, url, data, src){
 
     if (src == 'load_more') {
         $toScroll = $oldPagination;
-        $container = $('#products_container');
+        $container = $('#products_div');
     }
     else { $toScroll = $container; }
 
@@ -111,21 +111,7 @@ $('.js-form-reset').click(function(e){
     $form.find(':input','option:selected')
      .not(':button, :submit, :reset, :hidden')
      .removeAttr('checked')
-     .removeAttr('selected');    
-
-    $form.find('input[type="text"]').val('');
-
-    $form.submit();
-})
-
-
-$('.js-form-reset').click(function(e){
-    var $form = $(this).closest('form');
-
-    $form.find(':input','option:selected')
-     .not(':button, :submit, :reset, :hidden')
-     .removeAttr('checked')
-     .removeAttr('selected');    
+     .removeAttr('selected');
 
     $form.find('input[type="text"]').val('');
 
