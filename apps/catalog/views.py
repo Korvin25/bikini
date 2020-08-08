@@ -22,7 +22,6 @@ from .models import Attribute, Category, GiftWrapping, Product, ProductOption, P
 PRODUCTS_PAGINATE = getattr(settings, 'PRODUCTS_PAGINATE', 12)
 
 
-# class ProductsView(ListView):
 class ProductsView(PaginationMixin, ListView):
     model = Product
     context_object_name = 'products'
@@ -38,7 +37,7 @@ class ProductsView(PaginationMixin, ListView):
         'ajax': 'catalog/include/products.html',
     }
     PRICE_QUERY = 'COALESCE(sale_price_{0}, price_{0})'
-    paginate_by = 1
+    paginate_by = PRODUCTS_PAGINATE
 
     def get_template_names(self):
         TEMPLATES = self.TEMPLATES
