@@ -22,7 +22,7 @@ from .models import Attribute, Category, GiftWrapping, Product, ProductOption, P
 PRODUCTS_PAGINATE = getattr(settings, 'PRODUCTS_PAGINATE', 12)
 
 
-# class ProductsView(TemplateView):
+# class ProductsView(ListView):
 class ProductsView(PaginationMixin, ListView):
     model = Product
     context_object_name = 'products'
@@ -38,7 +38,7 @@ class ProductsView(PaginationMixin, ListView):
         'ajax': 'catalog/include/products.html',
     }
     PRICE_QUERY = 'COALESCE(sale_price_{0}, price_{0})'
-    paginate_by = PRODUCTS_PAGINATE
+    paginate_by = 1
 
     def get_template_names(self):
         TEMPLATES = self.TEMPLATES
@@ -227,6 +227,23 @@ class ProductsView(PaginationMixin, ListView):
         h1 = h1 or 'Каталог товаров'
         return h1, seo_text
 
+    def _update_context_with_pages(self, context):
+        page_obj = context['page_obj']
+        pages = []
+        state = 'before'
+        for page in page_obj.pages():
+            if page:
+                pages.append(page)
+                state = ('before' if page < page_obj.number
+                         else 'after' if page > page_obj.number
+                         else 'current')
+            elif state == 'before':
+                pages.append('prev')
+            else:
+                pages.append('next')
+        context['pages'] = pages
+        return context
+
     def get_context_data(self, **kwargs):
         category = self.category
         categories = Category.objects.filter(sex=self.sex)
@@ -253,9 +270,7 @@ class ProductsView(PaginationMixin, ListView):
             'seo_text': seo_text,
         }
         context.update(super(ProductsView, self).get_context_data(**kwargs))
-        # page_obj = context['page_obj']
-        # p1, p2, p3, p4, p5 = page_obj.pages()
-        # import ipdb; ipdb.set_trace()
+        context = self._update_context_with_pages(context)
         return context
 
 

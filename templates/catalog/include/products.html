@@ -89,18 +89,19 @@
               <span class="pagination_item disabled">&lsaquo;&lsaquo; {% trans 'Назад' %}</span>
             {% endif %}
           {% endcomment %}
-          {% for page in page_obj.pages %}
+          {# {% for page in page_obj.pages %} #}
+          {% for page in pages %}
             {# {{ forloop.counter }}/{{ page_obj.number }}/{% if forloop.counter > page_obj.number %}T{% else %}F{% endif %} #}
-            {% if page %}
+            {% if page == 'prev' %}
+              <a href="?{{ page_obj.previous_page_number.querystring }}" class="pagination_item _icon js-page" data-page="{{ page_obj.previous_page_number }}">&lsaquo;</a>
+            {% elif page == 'next' %}
+              <a href="?{{ page_obj.next_page_number.querystring }}" class="pagination_item _icon js-page" data-page="{{ page_obj.next_page_number }}">&rsaquo;</a>
+            {% elif page %}
               {% ifequal page page_obj.number %}
                 <span class="pagination_item _current">{{ page }}</span>
               {% else %}
                 <a href="?{{ page.querystring }}" class="pagination_item js-page" data-page="{{ page }}">{{ page }}</a>
               {% endifequal %}
-            {% elif forloop.counter < page_obj.number and page_obj.has_previous %}
-              <a href="?{{ page_obj.previous_page_number.querystring }}" class="pagination_item _icon js-page" data-page="{{ page_obj.previous_page_number }}">&lsaquo;</a>
-            {% elif forloop.counter > page_obj.number and page_obj.has_next %}
-              <a href="?{{ page_obj.next_page_number.querystring }}" class="pagination_item _icon js-page" data-page="{{ page_obj.next_page_number }}">&rsaquo;</a>
             {% else %}
               <span class="pagination_item disabled">...</span>
             {% endif %}
@@ -114,7 +115,7 @@
           {% endcomment %}
         </div>
         <div class="pagination_more_block">
-          {% if page_obj.number < page_obj.pages|length %}
+          {% if page_obj.number < page_obj.pages|last %}
             <a href="?{{ page_obj.next_page_number.querystring }}" class="yet_items js-load-more" data-page="{{ page_obj.next_page_number }}">
               <span>{% trans 'Загрузить ещё' %} {{ paginate_by }}</span>
             </a>
