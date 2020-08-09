@@ -28,7 +28,7 @@
   {% endfor %}
 
   <style>
-    .pagination {
+    .pagination_container {
       margin-top: 15px;
       /*line-height: 30px;*/
     }
@@ -80,7 +80,7 @@
 
   <div class="js-pagination-container product_list" style="width: auto !important; border: none; display: block;">
     {% if page_obj.pages|length > 1 %}
-      <div class="pagination">
+      <div class="pagination_container">
         <div class="pagination_pages_block">
           {% comment %}
             {% if page_obj.has_previous %}
