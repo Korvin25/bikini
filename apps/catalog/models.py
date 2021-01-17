@@ -254,6 +254,7 @@ class Category(MetatagModel):
     order = models.IntegerField('Порядок', default=10)
     attributes = SortedManyToManyField(Attribute, verbose_name='Атрибуты', related_name='categories', blank=True,
                                        limit_choices_to={'category': 'primary'})
+    is_shown = models.BooleanField('Показывать на сайте', default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -499,8 +500,21 @@ class Product(MetatagModel):
     #         self.set_attributes_from_category(self.category)
     #     return s
 
+    @classmethod
+    def shown(cls):
+        return cls.objects.prefetch_related('categories')\
+                          .filter(categories__is_shown=True)\
+                          .distinct()
+
+    @property
+    def shown_categories(self):
+        return self.categories.filter(is_shown=True)
+
     def get_absolute_url(self, category=None, sex=None):
-        category = category or (self.categories.first() if not sex else self.categories.filter(sex=sex).first())
+        category = category or (self.shown_categories.first() if not sex
+                                else self.shown_categories.filter(sex=sex).first())
+        if not category and self.categories.count():
+            category = self.categories.first()
         return ('{}{}-{}/'.format(category.get_absolute_url(), self.slug, self.id) if category
                 else None)
 
@@ -524,7 +538,9 @@ class Product(MetatagModel):
 
     @property
     def shown_also_products(self):
-        return self.also_products.prefetch_related('categories').filter(show=True).exclude(id=self.id)
+        return self.also_products.prefetch_related('categories')\
+                                 .filter(show=True, categories__is_shown=True)\
+                                 .exclude(id=self.id)
 
     def set_attributes_from_categories(self, categories_ids):
         self.attributes = Attribute.objects.filter(categories__id__in=categories_ids).distinct()

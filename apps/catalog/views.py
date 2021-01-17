@@ -7,7 +7,7 @@ import json
 
 from django.conf import settings
 from django.db.models import Q  # , Max, Min
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.views.generic import TemplateView, ListView
 
 from pure_pagination.mixins import PaginationMixin
@@ -38,6 +38,13 @@ class ProductsView(PaginationMixin, ListView):
     }
     PRICE_QUERY = 'COALESCE(sale_price_{0}, price_{0})'
     paginate_by = PRODUCTS_PAGINATE
+
+    def get(self, request, *args, **kwargs):
+        if self.with_category is True:
+            category = self.category
+            if not category.is_shown:
+                raise Http404
+        return super(ProductsView, self).get(request, *args, **kwargs)
 
     def get_template_names(self):
         TEMPLATES = self.TEMPLATES
@@ -131,11 +138,13 @@ class ProductsView(PaginationMixin, ListView):
         self.f = {'attrs': {}, 'attrs_values': []}
         self.currency = get_currency(self.request)
 
+        self.categories = Category.objects.filter(sex=self.sex, is_shown=True)
+
         qs = Product.objects.prefetch_related('categories', 'options').filter(show=True)
         if self.category:
             qs = qs.filter(categories=self.category.id)
         else:
-            qs = qs.filter(categories__sex=self.sex)
+            qs = qs.filter(categories__in=self.categories)
 
         if self.sale_category:
             qs = qs.filter(is_on_sale=True)
@@ -245,17 +254,16 @@ class ProductsView(PaginationMixin, ListView):
 
     def get_context_data(self, **kwargs):
         category = self.category
-        categories = Category.objects.filter(sex=self.sex)
         show_sale_category = (
             True if self.sale_category
-            else bool(Product.objects.filter(show=True,is_on_sale=True, categories__in=categories))
+            else bool(Product.objects.filter(show=True,is_on_sale=True, categories__in=self.categories))
         )
         h1, seo_text = self.get_seo_data()
         context = {
             'category': category,
             'sex': self.sex,
             'category_or_sex': category or self.sex,
-            'categories': categories,
+            'categories': self.categories,
             'show_sale_category': show_sale_category,
             'is_sale_category': self.sale_category,
             'all_count': self.all_count,

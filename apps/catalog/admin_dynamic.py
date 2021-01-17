@@ -114,7 +114,7 @@ class ProductExtraOptionInlineForm(forms.ModelForm):
                                                                  min_choices=self.attrs_min_choices)
                 self.fields[attr['slug']].initial = self.instance.attrs.get(attr['slug'], list())
                 self.fields[attr['slug']].widget.attrs = {'class': 'can_be_collapsed'}
-                
+
         else:
             self.attrs_list = []
 

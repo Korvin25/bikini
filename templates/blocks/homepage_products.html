@@ -3,14 +3,15 @@
 
 <div class="item_list_wrapp" itemscope="" itemtype="http://schema.org/ItemList">
   {% for product in products %}
+    {% with product.get_absolute_url as product_url %}
     <div class="product_list">
       <div class="photo_list">
-        <a href="{{ product.get_absolute_url }}">
+        <a href="{{ product_url }}">
           <img src="{{ product.cover_thumb }}" alt="{{ product.title }}" />
         </a>
         {% if product.is_on_sale %}<span class="product-label product-label_discount" title="">-{{ product.sale_percent }}%</span>{% endif %}
       </div>
-      <h3><a href="{{ product.get_absolute_url }}">{{ product.title }}</a></h3>
+      <h3><a href="{{ product_url }}">{{ product.title }}</a></h3>
       <h4>{{ product.subtitle }}</h4>
       <div class="product_price{% if product.is_on_sale %} product_price_sale{% endif %}">
         {% if product.is_on_sale %}
@@ -20,8 +21,9 @@
           {{ product.get_price|with_currency:currency|abbr_to_span|safe }}
         {% endif %}
       </div>
-      <a href="{{ product.get_absolute_url }}" class="to_cart_list">{% trans 'В корзину' %}</a>
+      <a href="{{ product_url }}" class="to_cart_list">{% trans 'В корзину' %}</a>
     </div>
+    {% endwith %}
   {% endfor %}
   <div style="clear:both;text-align:center;">
 	<a rel="nofollow" href="{{ promo_banner.link|add_subdomain }}" title="{{ promo_banner.link_text }}" target="_blank" class="text_link_cat" style="color:#fff;margin-left: 35px;">{{ promo_banner.link_text }}</a>

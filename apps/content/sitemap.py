@@ -41,7 +41,7 @@ class HomeSitemap(Sitemap):
 
 
 # --------------------
-# Общее 
+# Общее
 # --------------------
 
 class SectionBaseSitemap(Sitemap):
@@ -123,16 +123,16 @@ class PagesSitemap(SectionBaseSitemap):
 class CatalogCategoriesSitemap(SubSectionBaseSitemap):
 
     def items(self):
-        return catalog_models.Category.objects.all()
+        return catalog_models.Category.objects.filter(is_shown=True)
 
 
 class CatalogProductsSitemap(ObjectBaseSitemap):
 
     def items(self):
-        products = catalog_models.Product.objects.prefetch_related('categories').filter(show=True)
+        products = catalog_models.Product.shown().prefetch_related('categories').filter(show=True)
         items = [{'product': product, 'category': category}
                   for product in products
-                  for category in product.categories.all()]
+                  for category in product.shown_categories.all()]
         return items
 
     def location(self, obj):

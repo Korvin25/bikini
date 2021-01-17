@@ -161,10 +161,10 @@ class ExtraProductAdmin(TabbedTranslationAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(TabbedTranslationAdmin):
-    list_display = ('show_sex', 'title', 'slug', 'order', 'show_attributes',)
+    list_display = ('show_sex', 'title', 'slug', 'order', 'show_attributes', 'is_shown',)
     list_display_links = ('title',)
-    list_editable = ('order',)
-    list_filter = ('sex',)
+    list_editable = ('order', 'is_shown',)
+    list_filter = ('sex', 'is_shown',)
     list_per_page = 200
     suit_form_tabs = (
         ('default', 'Категория'),
@@ -174,7 +174,7 @@ class CategoryAdmin(TabbedTranslationAdmin):
     fieldsets = (
         ('Категория', {
             'classes': ('suit-tab suit-tab-default',),
-            'fields': ('sex', 'title', 'slug', 'order',),
+            'fields': ('sex', 'title', 'slug', 'order', 'is_shown',),
         }),
         ('Атрибуты', {
             'classes': ('suit-tab suit-tab-default',),
