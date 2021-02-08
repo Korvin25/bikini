@@ -540,7 +540,8 @@ class Product(MetatagModel):
     def shown_also_products(self):
         return self.also_products.prefetch_related('categories')\
                                  .filter(show=True, categories__is_shown=True)\
-                                 .exclude(id=self.id)
+                                 .exclude(id=self.id)\
+                                 .distinct()
 
     def set_attributes_from_categories(self, categories_ids):
         self.attributes = Attribute.objects.filter(categories__id__in=categories_ids).distinct()
