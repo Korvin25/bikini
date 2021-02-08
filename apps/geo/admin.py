@@ -4,11 +4,11 @@ from __future__ import unicode_literals
 from django.contrib import admin
 
 # from jet.admin import CompactInline
-from modeltranslation.admin import TranslationInlineModelAdmin, TabbedTranslationAdmin
+from modeltranslation.admin import TabbedTranslationAdmin  # TranslationInlineModelAdmin
 # from tabbed_admin import TabbedModelAdmin
 
-from .models import Country, City
-from .translation import *
+from .models import Country  # , City
+from .translation import *  # noqa
 
 
 # class CityInline(TranslationInlineModelAdmin, admin.StackedInline):  # CompactInline

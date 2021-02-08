@@ -8,7 +8,7 @@ from solo.admin import SingletonModelAdmin
 
 from ..core.admin import ImageThumbAdminMixin
 from .models import Settings, SEOSetting  # , Setting, VisualSetting
-from .translation import *
+from .translation import *  # noqa
 
 
 def MetatagModelAdmin(cls=None):

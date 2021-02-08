@@ -8,7 +8,7 @@ from modeltranslation.admin import TranslationInlineModelAdmin, TabbedTranslatio
 from ..core.admin import ImageThumbAdminMixin
 from .forms import ContestAdminForm
 from .models import Contest, ContestTitleLine, Participant, ParticipantPhoto
-from .translation import *
+from .translation import *  # noqa
 
 
 class ContestTitleLineInline(TranslationInlineModelAdmin, admin.TabularInline):

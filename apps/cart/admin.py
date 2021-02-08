@@ -12,7 +12,7 @@ from rangefilter.filter import DateTimeRangeFilter
 
 from ..analytics.admin_utils import CountryFilter, TrafficSourceFilter, traffic_source_to_str
 from .models import DeliveryMethod, PaymentMethod, Cart
-from .translation import *
+from .translation import *  # noqa
 
 
 @admin.register(DeliveryMethod)
@@ -59,9 +59,9 @@ class CartAdmin(admin.ModelAdmin):
     )
     readonly_fields = ['id', 'profile_with_link', 'show_items',]
     readonly_fields += ['country', 'city', 'postal_code', 'address', 'phone', 'name',
-                       # 'delivery_method', 'payment_method',
-                       'ym_client_id', 'ym_source', 'ym_source_detailed',
-                       'additional_info',]
+                        # 'delivery_method', 'payment_method',
+                        'ym_client_id', 'ym_source', 'ym_source_detailed',
+                        'additional_info',]
     search_fields = ['id', 'country', 'city', 'profile__name',
                      'ym_source', 'ym_source_detailed', 'ym_client_id', ]
 

@@ -7,7 +7,7 @@ from modeltranslation.admin import TranslationInlineModelAdmin, TabbedTranslatio
 
 from ..content.models import Video
 from .models import Category, Post, GalleryPhoto, PostComment
-from .translation import *
+from .translation import *  # noqa
 
 
 admin.site.site_header = 'Bikinimini.ru'

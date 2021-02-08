@@ -15,11 +15,11 @@ def get_traffic_source(client_id):
     ym_source = None
     ym_source_detailed = None
 
-    _args = [YANDEX_API_BASE_URL, YM_COUNTER, YANDEX_OAUTH_TOKEN, client_id]
-    url = '{}?ids={}&period=week&oauth_token={}&metrics=ym:s:visits&dimensions=ym:s:firstTrafficSource,ym:s:firstSourceEngineName&filters=ym:s:clientID=={}'.format(*_args)
+    _args = [YANDEX_API_BASE_URL, YM_COUNTER, client_id]
+    url = '{}?ids={}&period=week&metrics=ym:s:visits&dimensions=ym:s:firstTrafficSource,ym:s:firstSourceEngineName&filters=ym:s:clientID=={}'.format(*_args)
 
     try:
-        r = requests.get(url)
+        r = requests.get(url, headers={'Authorization': 'OAuth {}'.format(YANDEX_OAUTH_TOKEN)})
         r.raise_for_status()
         response = r.json()
 

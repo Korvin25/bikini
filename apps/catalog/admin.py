@@ -32,7 +32,7 @@ from .models import (Attribute, AttributeOption, ExtraProduct, Category,
                      Product, ProductOption, ProductExtraOption, ProductPhoto,
                      ProductTab, ProductTabSection,
                      SpecialOfferCategory, SpecialOffer,)
-from .translation import *
+from .translation import *  # noqa
 
 
 def _pop(_list, name):

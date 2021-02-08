@@ -11,7 +11,7 @@ from paypal.standard.ipn.models import PayPalIPN
 from .admin_filer import CustomFolderAdmin, CustomFileAdmin, CustomImageAdmin
 from .admin_forms import MenuItemAdminForm
 from .models import Video, Page, PageAccordionSection, Menu, MenuItem
-from .translation import *
+from .translation import *  # noqa
 
 
 admin.site.site_header = 'Bikinimini.ru'

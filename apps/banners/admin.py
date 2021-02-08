@@ -9,7 +9,7 @@ from django.utils import timezone
 from modeltranslation.admin import TranslationInlineModelAdmin, TabbedTranslationAdmin
 
 from .models import Banner, BannerTextLine, PromoBanner, PromoBannerGirl
-from .translation import *
+from .translation import *  # noqa
 
 
 class IsPublishedNow(SimpleListFilter):
@@ -78,9 +78,10 @@ class PromoBannerAdmin(TabbedTranslationAdmin):
     list_filter = ('is_enabled',)
     fieldsets = (
         (None, {
-            'fields': (# 'banner_type', 
-                       'title',
-                       'description_h1', 'description_picture', 'description_picture_alt', 'description_p',
+            'fields': ('title',
+                       # 'banner_type',
+                       'description_h1', 'description_picture',
+                       'description_picture_alt', 'description_p',
                        'link', 'link_text', 'is_enabled', 'add_dt',),
         }),
         ('Обложка', {
