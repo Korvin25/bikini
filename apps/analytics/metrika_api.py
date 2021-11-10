@@ -27,7 +27,9 @@ def get_traffic_source(client_id):
         ym_source = source_data[0].get('id')
         ym_source_detailed = source_data[1].get('name')
 
-    except Exception as exc:
-        print exc
+    # except Exception as exc:
+    #     print exc
+    except Exception:
+        pass
 
     return ym_source, ym_source_detailed
