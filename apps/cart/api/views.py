@@ -450,11 +450,12 @@ class YooKassaCartView(View):
                 # -- остатки на складе --
                 cart.update_in_stock()
 
-        # логиним человека
+        # определяем человека
         profile = cart.profile
         if request.user != profile:
-            profile.backend = 'django.contrib.auth.backends.ModelBackend'
-            login(request, profile)
+            return HttpResponseRedirect('home')
+            # profile.backend = 'django.contrib.auth.backends.ModelBackend'
+            # login(request, profile)
 
         # собираем redirect_url
         redirect_url = '{}?tab=orders&order_id={}'.format(reverse('profile'), cart.id)
