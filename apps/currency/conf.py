@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.conf import settings
+
 
 RUB_CODE = 'rub'
 EUR_CODE = 'eur'
@@ -23,3 +25,4 @@ SESSION_COUNTRY_CODE = 'country_code'
 
 IPDATA_UNAVAILABLE_REDIS_KEY = 'bikini.ipdata.unavailable'
 IPDATA_API_URL = 'https://api.ipdata.co/'
+IPDATA_API_KEY = settings.IPDATA_API_KEY

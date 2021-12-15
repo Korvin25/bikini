@@ -5,7 +5,7 @@ from ipware.ip import get_real_ip
 import requests
 
 from ..core.redis_utils import redis
-from .conf import RU_CODE, EU_CODE, IPDATA_UNAVAILABLE_REDIS_KEY, IPDATA_API_URL
+from .conf import RU_CODE, EU_CODE, IPDATA_UNAVAILABLE_REDIS_KEY, IPDATA_API_URL, IPDATA_API_KEY
 
 
 class RequestError(BaseException):
@@ -25,7 +25,7 @@ def _request(url, method='get', data=None, headers={'Accept': 'application/json'
 
     try:
         return response.json()
-    except Exception as exc:
+    except Exception as exc:  # noqa
         raise RequestError('response is not json')
 
 
@@ -40,9 +40,9 @@ def get_country_data(request):
         ip = get_real_ip(request)
         if ip:
             try:
-                url = '{}{}'.format(IPDATA_API_URL, ip)
+                url = '{}{}?api-key={}'.format(IPDATA_API_URL, ip, IPDATA_API_KEY)
                 data = _request(url)
-            except RequestError as err:
+            except RequestError as err:  # noqa
                 redis.setex(IPDATA_UNAVAILABLE_REDIS_KEY, 1800, 'true')
                 # TODO: logging
             else:
