@@ -108,7 +108,7 @@ class CartGetDiscountView(View):
         if not profile.is_anonymous() and profile.can_get_discount:
             try:
                 special_offer = SpecialOffer.get_offers().get(id=offer_id)
-            except (ValueError, SpecialOffer.DoesNotExist) as e:
+            except (ValueError, SpecialOffer.DoesNotExist) as e:  # noqa
                 pass
             else:
                 discount_code = profile.get_discount_code()

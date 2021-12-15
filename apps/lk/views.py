@@ -9,6 +9,7 @@ from django.utils.translation import ugettext as __
 from django.views.generic import TemplateView, UpdateView, View
 
 from ..cart.cart import Cart
+from ..cart.models import Cart as CartModel
 from ..core.mixins import JSONFormMixin
 from ..geo.models import Country
 from .auth.utils import update_wishlist
@@ -50,7 +51,25 @@ class ProfileHomeView(ProfileMixin, TemplateView):
         }
 
         # получаем order, popup_id и specials_html
-        # TODO
+        cart_id = self.request.GET.get('order_id')
+        if cart_id:
+            try:
+                cart = CartModel.objects.filter(id=cart_id, profile=self.request.user).first()
+                if cart:
+                    context['order'] = cart
+                    context['order_popup'] = '#order-popup'
+
+                    # if cart.payment_type == 'yookassa' and cart.yoo_popup_showed is False:
+                    #     cart.yoo_popup_showed = True
+                    #     cart.save()
+                    #     # -- спец.предложения --
+                    #     specials = cart.get_specials()
+                    #     has_specials = bool(specials)
+                    #     if has_specials:
+                    #         context['specials_html'] = cart.get_specials_html(specials=specials, request=self.request)
+                    #         context['order_popup'] = '#order-specials'
+            except Exception:
+                pass
 
         context.update(super(ProfileHomeView, self).get_context_data(**kwargs))
         return context

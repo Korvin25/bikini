@@ -381,6 +381,43 @@
   <div style="display: none">
     <a rel="leanModal1" href="#error-popup"></a>
   </div>
+  <div style="display: none">
+    <a href="#order-popup"></a>
+  </div>
+
+  {% if order %}
+    <div id="order-popup" class="window_popup no_float mini_window_popup{% if order.yoo_status == 'canceled' %} with_error_icon{% endif %}" style="display:none;">
+      <div class="close_popup js-call-close"><img src="/static/i/close_icon.png" alt="{% trans 'Закрыть' %}" /></div>
+      <div class="wrap_window_popup bg_wrapp_window">
+        <div class="popup_row">
+          <div class="popup_row_wrapp">
+            <h2 class="title_popup">{% if order.yoo_status == 'pending' %}{% trans 'Заказ успешно <br />оформлен' %}.<br/>{% trans 'Оплатите заказ на сайте ЮКасса' %}{% elif order.yoo_status == 'succeeded' %}{% trans 'Заказ успешно <br />оплачен' %}{% elif order.yoo_status == 'canceled' %}{% trans 'Оплата заказа отменена' %}{% else %}{% trans 'Заказ успешно <br />оформлен' %}{% endif %}</h2>
+            <div class="row_form_popup">
+              <p><strong>{% trans 'Заказ №' %}:</strong><span class="js-order-number">{{ order.number }}</span></p>
+              <p><strong >{% trans 'На сумму' %}:</strong>{{ order.summary|with_js_cart_summary:order.currency|safe }}</p>
+
+              <div style="margin-top: 30px;">
+                {% if order.yoo_status == 'pending' %}
+                  <p>Для оплаты заказа перейдите, пожалуйста, <a href="{{ order.yoo_redirect_url|default_if_none:'' }}">на сайт ЮКасса</a></p>
+
+                {% elif order.yoo_status != 'canceled' %}
+                  <p>В ближайшее время с вами свяжутся 
+                  менеджеры отдела доставки для уточнения 
+                  деталей заказа</p>
+                {% endif %}
+
+                <p>Если у вас возникли какие либо вопросы,
+                вы можете связаться с нами по телефону
+                <strong class="pup_strong">+7 (916) 445 -65 -55</strong></p>
+              </div>
+
+              <p>{% trans 'С уважением, администация Bikinimini.ru' %}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
 
   <div class="window_popup no_float mini_window_popup callback_form" id="error-popup" style="display:none;">
       <div class="close_popup call_close js-call-close"><img src="/static/i/close_white_45.png" alt="{% trans 'Закрыть' %}"></div>
@@ -408,5 +445,10 @@
 {% block extra_js %}
   <script type="text/javascript">
     {% include 'js/profile.js' %}
+    {% if order %}
+      $a = $('a[href="{{ order_popup }}"]');
+      $a.leanModal({ top : 200, closeButton: ".js-call-close" });
+      $a.click();
+    {% endif %}
   </script>
 {% endblock %}

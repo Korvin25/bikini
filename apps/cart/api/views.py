@@ -276,7 +276,7 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
                 specials = cart.get_specials()
                 has_specials = bool(specials)
                 if has_specials:
-                    data['specials_html'] = cart.get_specials_html(specials=specials)
+                    data['specials_html'] = cart.get_specials_html(specials=specials, request=self.request)
                 popup = '#step5' if has_specials else '#step4'
 
                 data.update({
