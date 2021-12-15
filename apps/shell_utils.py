@@ -14,19 +14,19 @@ Configuration.account_id = settings.YOOKASSA_ACCOUNT_ID
 Configuration.secret_key = settings.YOOKASSA_SECRET_KEY
 
 
-def create_payment():
+def create_payment(currency='RUB', value='200.00', description='Заказ № 000 111'):
     _return_url = reverse('cart_api:yookassa', kwargs={'pk': 111})
     payment = Payment.create({
         "amount": {
-            "value": '200.00',  # noqa
-            "currency": 'RUB',
+            "value": value,
+            "currency": currency,
         },
         "confirmation": {
             "type": "redirect",
             "return_url": absolute(_return_url),
         },
         "capture": True,
-        "description": '{} {}'.format('Заказ №', '000 111'),
+        "description": description,
     }, uuid.uuid4())
     import ipdb; ipdb.set_trace()
     return payment
