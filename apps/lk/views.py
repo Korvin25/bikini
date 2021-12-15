@@ -59,15 +59,15 @@ class ProfileHomeView(ProfileMixin, TemplateView):
                     context['order'] = cart
                     context['order_popup'] = '#order-popup'
 
-                    # if cart.payment_type == 'yookassa' and cart.yoo_popup_showed is False:
-                    #     cart.yoo_popup_showed = True
-                    #     cart.save()
-                    #     # -- спец.предложения --
-                    #     specials = cart.get_specials()
-                    #     has_specials = bool(specials)
-                    #     if has_specials:
-                    #         context['specials_html'] = cart.get_specials_html(specials=specials, request=self.request)
-                    #         context['order_popup'] = '#order-specials'
+                    if cart.payment_type == 'yookassa' and cart.yoo_popup_showed is False and cart.yoo_paid is True:
+                        cart.yoo_popup_showed = True
+                        cart.save()
+                        # -- спец.предложения --
+                        specials = cart.get_specials()
+                        has_specials = bool(specials)
+                        if has_specials:
+                            context['specials_html'] = cart.get_specials_html(specials=specials, request=self.request)
+                            context['order_popup'] = '#order-specials'
             except Exception:
                 pass
 

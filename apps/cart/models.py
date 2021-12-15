@@ -409,11 +409,10 @@ class Cart(models.Model):
             admin_send_low_in_stock_email(_options, _extra_products)
 
     def get_specials(self):
-        # profile = self.profile
-        # specials = (SpecialOffer.get_offers(summary=self.clean_cost_rub)
-        #             if profile.can_get_discount
-        #             else SpecialOffer.objects.none())
-        specials = SpecialOffer.objects.all()
+        profile = self.profile
+        specials = (SpecialOffer.get_offers(summary=self.clean_cost_rub)
+                    if profile.can_get_discount
+                    else SpecialOffer.objects.none())
         return specials
 
     def get_specials_html(self, specials=None, request=None):

@@ -1,7 +1,60 @@
 {% load i18n %}
 
-// ----- Отправка форм на бекенд: вспомогательные функции -----
+// ----- Попап со спецпредложениями -----
 
+function addSpecialOffersDots() {
+  var $offers = $('.js-special-offer'),
+      offers_length = $offers.length,
+      $navigation = $('.slides_navigation');
+
+  if (offers_length && (offers_length > 1)) {
+    for (j=0; j < offers_length; j++) {
+      if (j==0) {
+        $navigation.append('<div data-slide-id="'+j+'" class="dot js-navigation-dot active"></div>');
+      }
+      else {
+        $navigation.append('<div data-slide-id="'+j+'" class="dot js-navigation-dot"></div>');
+      }
+    }
+  }
+}
+
+function showSpecialOffer(pos_id, from_click) {
+  pos_id = pos_id || 0;
+  from_click = from_click || false;
+
+  var $offers = $('.js-special-offer'),
+      offers_length = $offers.length;
+
+  if (offers_length && (offers_length > 1)) {
+
+    var current_pos = parseInt($('.js-navigation-dot.active').attr('data-slide-id'));
+    if (!from_click && pos_id != (current_pos+1)) { console.log('return'); return; }
+
+    if (pos_id >= offers_length) { pos_id = 0; }
+
+    var $offerToShow = $($offers[pos_id]),
+        $dots = $('.js-navigation-dot');
+        $dotActive = $($dots[pos_id]);
+
+    $offers.hide();
+    $offerToShow.show();
+    $dots.removeClass('active');
+    $dotActive.addClass('active');
+    setTimeout(showSpecialOffer, 6000, pos_id+1);
+  }
+}
+
+$('body').on('click', '.js-navigation-dot', function(e) {
+  var $dot = $(this),
+      pos_id = $dot.attr('data-slide-id');
+
+  pos_id = parseInt(pos_id);
+  showSpecialOffer(pos_id, true);
+})
+
+
+// ----- Отправка форм на бекенд: вспомогательные функции -----
 
 function showErrorPopup(title, text) {
   var error_popup_id = 'error-popup',
