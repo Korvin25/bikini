@@ -239,7 +239,7 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
 
                     # обновляем поля, связанные с yookassa
                     redirect_url = payment.confirmation.confirmation_url
-                    cart.yoo_return_url = redirect_url
+                    cart.yoo_redirect_url = redirect_url
                     for key in ['id', 'status', 'paid', 'test']:
                         setattr(cart, 'yoo_{}'.format(key), getattr(payment, key))
                     cart.save()
