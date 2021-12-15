@@ -11,13 +11,14 @@ from django.template.loader import get_template
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
-from ..catalog.models import Certificate, Product, ProductOption, GiftWrapping
+from ..catalog.models import Certificate, Product, ProductOption, GiftWrapping, SpecialOffer
 from ..catalog.templatetags.catalog_tags import get_product_attrs_url
 from ..core.templatetags.core_tags import to_int_or_float
 from ..currency.templatetags.currency_tags import with_currency, currency_compact
 from ..currency.utils import get_currency, currency_price
 from ..geo.models import Country
 from ..hash_utils import make_hash_from_cartitem
+from ..lk.email import admin_send_order_email, admin_send_low_in_stock_email, send_order_email
 
 
 class DeliveryMethod(models.Model):
@@ -55,11 +56,16 @@ class DeliveryMethod(models.Model):
 
 
 class PaymentMethod(models.Model):
+    PAYMENT_TYPES = (
+        ('yookassa', 'YooKassa'),
+        ('paypal', 'PayPal'),
+        ('offline', 'наличные'),
+    )
     title = models.CharField('Название', max_length=511)
     short_title = models.CharField('Краткое название', max_length=63, blank=True, help_text='для вывода в личном кабинете')
     delivery_methods = models.ManyToManyField(DeliveryMethod, verbose_name='Способы доставки',
                                               blank=True, related_name='payment_methods')
-    is_paypal = models.BooleanField('Оплата через PayPal', default=False)
+    payment_type = models.CharField('Тип оплаты', max_length=15, choices=PAYMENT_TYPES, default='offline')
     is_enabled = models.BooleanField('Включен?', default=True)
     order = models.PositiveSmallIntegerField(default=0, blank=False, null=False, verbose_name=mark_safe('&nbsp;&nbsp;&nbsp;&nbsp;'))
 
@@ -102,6 +108,7 @@ class Cart(models.Model):
     creation_date = models.DateTimeField('Дата создания', auto_now_add=True)
     checked_out = models.BooleanField('Корзина оформлена', default=False)
     checkout_date = models.DateTimeField('Дата оформления', null=True, blank=True)
+    payment_date = models.DateTimeField('Дата оплаты', null=True, blank=True, help_text='для оплаты онлайн')
     currency = models.CharField('Валюта', max_length=3, default='rub', choices=CURRENCY_CHOICES)
 
     country = models.ForeignKey(Country, verbose_name=_('Страна'), null=True, blank=True)
@@ -125,6 +132,21 @@ class Cart(models.Model):
     delivery_cost_rub = models.DecimalField('Стоимость доставки, rub.', max_digits=9, decimal_places=2, default=0)
     delivery_cost_eur = models.DecimalField('Стоимость доставки, eur.', max_digits=9, decimal_places=2, default=0)
     delivery_cost_usd = models.DecimalField('Стоимость доставки, usd.', max_digits=9, decimal_places=2, default=0)
+
+    # --- yookassa ---
+    YOO_STATUS_CHOICES = (
+        ('pending', 'не оплачен'),
+        ('succeeded', 'оплачен'),
+        ('canceled', 'отменен'),
+        ('error', 'ошибка'),
+    )
+    yoo_id = models.UUIDField('YooKassa: ID платежа', null=True, blank=True)
+    yoo_status = models.CharField('YooKassa: Статус платежа', max_length=15, blank=True, default='',
+                                  choices=YOO_STATUS_CHOICES)
+    yoo_paid = models.NullBooleanField('YooKassa: Оплачен?', default=None)
+    yoo_redirect_url = models.URLField('YooKassa: URL для перенаправления', null=True, blank=True)
+    yoo_test = models.NullBooleanField('YooKassa: Тестовый платеж?', default=None)
+    yoo_popup_showed = models.BooleanField(default=False)
 
     # --- яндекс.метрика ---
     TRAFFIC_SOURCE_CHOICES = (
@@ -322,6 +344,86 @@ class Cart(models.Model):
     @property
     def certificate_items(self):
         return self.certificatecartitem_set.select_related('certificate').all()
+
+    @property
+    def payment_type(self):
+        return self.payment_method.payment_type
+
+    def show_status(self):
+        payment_type = self.payment_type
+        status = self.get_status_display()
+        if payment_type == 'yookassa':
+            yoo_status = {
+                'error': 'ошибка',
+                'pending': 'не оплачен',
+                'succeeded': 'оплачен',
+                'canceled': 'оплата отменена',
+            }.get(self.yoo_status, '')
+            if yoo_status:
+                status = (yoo_status if self.yoo_status == 'error'
+                          else '{} / {}'.format(yoo_status, status))
+        return status
+    show_status.short_description = 'Статус'
+    show_status.allow_tags = True
+
+    # -- штуки после покупки
+
+    def send_order_emails(self):
+        admin_send_order_email(self)
+        profile = self.profile
+        if profile and profile.has_email:
+            send_order_email(profile, obj=self)
+
+    def update_in_stock(self, send_email=True):
+        _options = []
+        _extra_products = []
+
+        items = self.cartitem_set.all()
+        for item in items:
+            count = item.count
+
+            option = item.option
+            in_stock = option.in_stock - count
+            in_stock = 0 if in_stock < 0 else in_stock
+            option.in_stock = in_stock
+            option.save()
+            if in_stock < 5:
+                _options.append({'option': option, 'product': item.product, 'in_stock': in_stock})
+
+            extra_p_ids = item.extra_products.keys()
+            if extra_p_ids:
+                try:
+                    extra_products = item.product.extra_options.filter(extra_product_id__in=extra_p_ids)
+                except ValueError:
+                    pass
+                else:
+                    for extra_p in extra_products:
+                        in_stock = extra_p.in_stock - count
+                        in_stock = 0 if in_stock < 0 else in_stock
+                        extra_p.in_stock = in_stock
+                        extra_p.save()
+                        if in_stock < 5:
+                            _extra_products.append({'extra_p': extra_p, 'product': item.product, 'in_stock': in_stock})
+
+        if _options or _extra_products:
+            admin_send_low_in_stock_email(_options, _extra_products)
+
+    def get_specials(self):
+        profile = self.profile
+        specials = (SpecialOffer.get_offers(summary=self.clean_cost_rub)
+                    if profile.can_get_discount
+                    else SpecialOffer.objects.none())
+        return specials
+
+    def get_specials_html(self, specials=None):
+        if specials is None:
+            specials = self.get_specials()
+        if not specials:
+            return ''
+        specials_template = get_template('cart/step5_specials.html')
+        currency = get_currency(self.request)
+        context = {'specials': specials, 'currency': currency}
+        return specials_template.render(context)
 
 
 class CartItem(models.Model):

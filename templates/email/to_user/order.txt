@@ -21,7 +21,7 @@
 -----------------
 {% include 'email/include/order_items.txt' with obj=obj for_admin=False %}
 
-{% trans 'Итого к оплате' %}: {{ obj.show_summary_c|currency_light:obj.currency }}
+{% if obj.payment_type == 'yookassa' %}{% trans 'Сумма заказа' %}{% else %}{% trans 'Итого к оплате' %}{% endif %}: {{ obj.show_summary_c|currency_light:obj.currency }}
 
 
 {% trans 'Для подтверждения заказа ожидайте звонка от нашего оператора' %}.

@@ -29,6 +29,7 @@ DEBUG = False
 ENABLE_METRICS = False
 
 ALLOWED_HOSTS = []
+DEFAULT_SCHEME = 'http'
 DEFAULT_SITENAME = 'localhost:8000'
 
 SITE_ID = 1
@@ -55,6 +56,7 @@ INSTALLED_APPS = (
     'colorfield',
     'crequest',
     'django_cleanup',
+    'django_extensions',
     'django_object_actions',
     'django_select2',
     'django_user_agents',
@@ -497,6 +499,11 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 1500
 # paypal
 PAYPAL_EMAIL = ''
 PAYPAL_TEST = False
+
+
+# yookassa
+YOOKASSA_ACCOUNT_ID = ''
+YOOKASSA_SECRET_KEY = ''
 
 
 # django-filer

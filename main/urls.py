@@ -12,6 +12,7 @@ from django.views.generic import TemplateView, RedirectView
 # from solid_i18n.urls import solid_i18n_patterns
 
 from apps.analytics.views import SetYMClientIDView
+from apps.cart.api.views import YooKassaWebhookView
 from apps.cart.views import CartView, CartGetDiscountView
 from apps.cart.certificate.views import CertificateView
 from apps.catalog.views import ProductsView, ProductView, ProductWithDiscountView
@@ -35,7 +36,7 @@ urlpatterns = [
 
     url(r'^yandex_32b44e0eb9e4fa78\.html$', TemplateView.as_view(template_name='ya_verification.html')),
 
-    url(r'^404/$', TemplateView.as_view(template_name='404.html')),
+    url(r'^404/$', TemplateView.as_view(template_name='404.html'), name='404'),
 
     # # api
     # url(r'^api/cart/', include('apps.cart.api.urls', namespace='cart_api')),
@@ -44,6 +45,7 @@ urlpatterns = [
     # url(r'^api/profile/edit/', ProfileFormView.as_view(), name='profile-edit'),
     # url(r'^api/forms/', include('apps.feedback.urls', namespace='forms')),
     # url(r'^api/currency/set/', SetCurrencyView.as_view(), name='set_currency'),
+    url(r'^api/yookassa/webhook/', YooKassaWebhookView.as_view(), name='yookassa_webhook'),
 
     # 3rd party apps
     # url(r'^jet/', include('jet.urls', 'jet')),

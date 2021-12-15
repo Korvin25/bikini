@@ -8,6 +8,7 @@ from django.contrib.postgres.fields import JSONField
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Min, Max
+from django.template.loader import get_template
 from django.utils.safestring import mark_safe
 
 from ckeditor_uploader.fields import RichTextUploadingField

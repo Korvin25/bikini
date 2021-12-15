@@ -48,6 +48,10 @@ class ProfileHomeView(ProfileMixin, TemplateView):
             'countries': Country.objects.values('id', 'title'),
             'shipping_data': shipping_data,
         }
+
+        # получаем order, popup_id и specials_html
+        # TODO
+
         context.update(super(ProfileHomeView, self).get_context_data(**kwargs))
         return context
 

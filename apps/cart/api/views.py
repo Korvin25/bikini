@@ -2,28 +2,38 @@
 from __future__ import unicode_literals
 
 import json
+import uuid
 
-from django.http import Http404, JsonResponse
-from django.template.loader import get_template
-from django.views.generic import View, UpdateView
+from django.conf import settings
+from django.contrib.auth import login
+from django.core.urlresolvers import reverse
+from django.http import Http404, HttpResponse, JsonResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext as __
+from django.views.generic import View, UpdateView
 
 from apps.analytics.conf import SESSION_YM_CLIENT_ID_KEY
 from apps.analytics.utils import update_traffic_source
 from apps.cart.cart import Cart
 from apps.cart.forms import CartCheckoutForm
-from apps.catalog.models import SpecialOffer
 from apps.core.mixins import JSONFormMixin
+from apps.cart.models import Cart as CartModel
 from apps.core.templatetags.core_tags import to_price
 from apps.currency.utils import get_currency
 from apps.hash_utils import make_hash_from_cartitem
-from apps.lk.email import admin_send_order_email, admin_send_low_in_stock_email, send_order_email
+from apps.third_party.yookassa import Configuration, Payment
+from apps.third_party.yookassa.domain.notification import WebhookNotification
+from apps.utils import absolute, get_error_message
 
 
 translated_strings = (_('Корзина пуста'), _('Неправильный формат запроса'), _('Неправильный id товара'),
                       _('Выберите способы оставки и оплаты'), _('Выберите способ доставки'), _('Выберите способ оплаты'))
+
+
+Configuration.account_id = settings.YOOKASSA_ACCOUNT_ID
+Configuration.secret_key = settings.YOOKASSA_SECRET_KEY
 
 
 class EmptyCartError(Exception):
@@ -169,9 +179,11 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
 
             profile = cart.profile
 
+            # -- сбрасываем CART_ID --
             if self.request.session.get('CART_ID'):
                 del self.request.session['CART_ID']
 
+            # -- проставляем поля --
             for k in self.mapping.keys():
                 key = {'country': 'country_id'}.get(k, k)
                 if not getattr(profile, key, None) or key in ['delivery_method_id', 'payment_method_id']:
@@ -182,88 +194,99 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
             profile.orders_num = profile.orders_num + 1
             profile.save()
 
-            admin_send_order_email(cart)
-            if profile and profile.has_email:
-                send_order_email(profile, cart)
-
             # -- аналитика --
             cart.ym_client_id = self.request.session.get(SESSION_YM_CLIENT_ID_KEY)
             if not cart.ym_client_id:
                 for key in ['ym_client_id', 'ym_source', 'ym_source_detailed']:
                     setattr(cart, key, getattr(profile, key, None))
             cart.save()
-
             if cart.ym_client_id and not cart.ym_source:
                 update_traffic_source(cart)
 
-            # -- ответ на фронт --
-            count = cart.count()
-            summary = cart.show_summary()
-            ya_summary = cart.summary_c
-            ya_currency = cart.get_yandex_currency()
-            order_number = cart.number
-
-            # -- скидки --
-            # if cart.has_items_with_discount:
-            #     profile.discount_used = True
-            #     profile.save()
+            # -- убираем скидки из профиля --
             profile.discount_code = ''
             profile.discount_used = False
             profile.save()
 
-            # -- остатки на складе --
-            _options = []
-            _extra_products = []
+            # -- начинаем собирать ответ на фронт --
+            data = {
+                'count': cart.count(),
+                'summary': cart.show_summary(),
+                'ya_summary': cart.summary_c,
+                'ya_currency': cart.get_yandex_currency(),
+                'order_number': cart.number,
+            }
 
-            items = cart.cartitem_set.all()
-            for item in items:
-                count = item.count
+            # -- главная развилка по типу оплаты --
+            payment_type = cart.payment_method.payment_type
+            if payment_type == 'yookassa':
+                # 1/3: yookassa
+                try:
+                    # создаем платеж
+                    _return_url = reverse('cart_api:yookassa', kwargs={'pk': cart.id})
+                    payment = Payment.create({
+                        "amount": {
+                            "value": unicode(cart.summary),  # noqa
+                            "currency": cart.currency.upper(),
+                        },
+                        "confirmation": {
+                            "type": "redirect",
+                            "return_url": absolute(_return_url),
+                        },
+                        "capture": True,
+                        "description": '{} {}'.format(__('Заказ №'), cart.number),
+                    }, uuid.uuid4())
 
-                option = item.option
-                in_stock = option.in_stock - count
-                in_stock = 0 if in_stock < 0 else in_stock
-                option.in_stock = in_stock
-                option.save()
-                if in_stock < 5:
-                    _options.append({'option': option, 'product': item.product, 'in_stock': in_stock})
+                    # обновляем поля, связанные с yookassa
+                    redirect_url = payment.confirmation.confirmation_url
+                    cart.yoo_return_url = redirect_url
+                    for key in ['id', 'status', 'paid', 'test']:
+                        setattr(cart, 'yoo_{}'.format(key), getattr(payment, key))
+                    cart.save()
 
-                extra_p_ids = item.extra_products.keys()
-                if extra_p_ids:
+                    # обновляем ответ на фронт
+                    data.update({
+                        'result': 'redirect',
+                        'redirect_url': redirect_url,
+                    })
+
+                except Exception as exc:
                     try:
-                        extra_products = item.product.extra_options.filter(extra_product_id__in=extra_p_ids)
-                    except ValueError:
-                        pass
-                    else:
-                        for extra_p in extra_products:
-                            in_stock = extra_p.in_stock - count
-                            in_stock = 0 if in_stock < 0 else in_stock
-                            extra_p.in_stock = in_stock
-                            extra_p.save()
-                            if in_stock < 5:
-                                _extra_products.append({'extra_p': extra_p, 'product': item.product, 'in_stock': in_stock})
+                        err_message = get_error_message(exc)
+                    except Exception:
+                        err_message = 'Неизвестная ошибка'
+                    cart.yoo_paid = False
+                    cart.yoo_status = 'error'
+                    cart.save()
+                    data = {'result': 'error', 'error': err_message}
+                    return JsonResponse(data, status=400)
 
-            if _options or _extra_products:
-                admin_send_low_in_stock_email(_options, _extra_products)
+            # elif payment_type == 'paypal':
+            #     # 2/3: paypal # TODO
 
-            specials_html = ''
-            # specials = (SpecialOffer.get_offers(summary=cart.summary_rub) if profile.can_get_discount
-            #             else SpecialOffer.objects.none())
-            specials = (SpecialOffer.get_offers(summary=cart.clean_cost_rub) if profile.can_get_discount
-                        else SpecialOffer.objects.none())
-            if specials.count():
-                specials_template = get_template('cart/step5_specials.html')
-                currency = get_currency(self.request)
-                context = {'specials': specials, 'currency': currency}
-                specials_html = specials_template.render(context)
+            else:
+                # 3/3: наличные
+                # -- отправка имейлов --
+                cart.send_order_emails()
 
-            popup = '#step5' if specials else '#step4'
-            data = {'result': 'ok', 'popup': popup, 'count': count, 'summary': summary,
-                    'ya_summary': ya_summary, 'ya_currency': ya_currency,
-                    'order_number': order_number, 'specials_html': specials_html}
+                # -- остатки на складе --
+                cart.update_in_stock()
+
+                # -- спец.предложения --
+                specials = cart.get_specials()
+                has_specials = bool(specials)
+                if has_specials:
+                    data['specials_html'] = cart.get_specials_html(specials=specials)
+                popup = '#step5' if has_specials else '#step4'
+
+                data.update({
+                    'result': 'ok',
+                    'popup': popup,
+                })
             return JsonResponse(data)
 
         else:
-            data = {'result': 'error', 'error_message': __('Корзина пуста')}
+            data = {'result': 'error', 'error': __('Корзина пуста'), 'error_code': 'CART_EMPTY'}
             return JsonResponse(data, status=400)
 
 
@@ -364,3 +387,73 @@ class CartAjaxView(View):
                     data['product_link'] = item.product.get_absolute_url()
 
         return JsonResponse(data)
+
+
+class YooKassaWebhookView(View):
+    """
+    Обрабатываем webhook-запрос от ЮКассы
+    """
+
+    def post(self, request, *args, **kwargs):
+        event_json = json.loads(request.body)
+        notification_object = WebhookNotification(event_json)
+        payment = notification_object.object
+
+        cart = CartModel.objects.get(yoo_id=payment.id)
+        if cart.yoo_status == 'pending':
+            # обновляем cart
+            for key in ['status', 'paid']:
+                setattr(cart, 'yoo_{}'.format(key), getattr(payment, key))
+            cart.save()
+
+            # если заказ оплачен, делаем всякие штуки
+            if cart.yoo_paid is True:
+                cart.payment_date = timezone.now()
+                cart.save()
+                # -- отправка имейлов --
+                cart.send_order_emails()
+                # -- остатки на складе --
+                cart.update_in_stock()
+
+        return HttpResponse(status=200)
+
+
+class YooKassaCartView(View):
+    """
+    Обрабатываем человека, вернувшегося на redirect_url из ЮКассы
+    """
+
+    def get(self, request, *args, **kwargs):
+        # получаем объект cart
+        cart = get_object_or_404(CartModel, id=kwargs.get('pk'))
+
+        # обновляем cart в базе
+        if cart.yoo_status == 'pending':
+
+            # запрашиваем данные о платеже
+            _id = str(cart.yoo_id)
+            payment = Payment.find_one(_id)
+
+            # обновляем cart
+            for key in ['status', 'paid']:
+                setattr(cart, 'yoo_{}'.format(key), getattr(payment, key))
+            cart.save()
+
+            # если заказ оплачен, делаем всякие штуки
+            if cart.yoo_paid is True:
+                cart.payment_date = timezone.now()
+                cart.save()
+                # -- отправка имейлов --
+                cart.send_order_emails()
+                # -- остатки на складе --
+                cart.update_in_stock()
+
+        # логиним человека
+        profile = cart.profile
+        if request.user != profile:
+            profile.backend = 'django.contrib.auth.backends.ModelBackend'
+            login(request, profile)
+
+        # собираем redirect_url
+        redirect_url = '{}?tab=orders&order_id={}'.format(reverse('profile'), cart.id)
+        return HttpResponseRedirect(redirect_url)

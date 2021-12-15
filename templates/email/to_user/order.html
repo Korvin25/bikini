@@ -34,7 +34,7 @@
 
 <p>
     <br/><br/>
-    <strong>{% trans 'Итого к оплате' %}: {{ obj.show_summary_c|currency_light:obj.currency }}</strong><br/>
+    <strong>{% if obj.payment_type == 'yookassa' %}{% trans 'Сумма заказа' %}{% else %}{% trans 'Итого к оплате' %}{% endif %}: {{ obj.show_summary_c|currency_light:obj.currency }}</strong><br/>
 </p>
 
 <p>

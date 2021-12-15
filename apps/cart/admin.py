@@ -24,10 +24,8 @@ class DeliveryMethodAdmin(SortableAdminMixin, TabbedTranslationAdmin):
 
 @admin.register(PaymentMethod)
 class PaymentMethodAdmin(SortableAdminMixin, TabbedTranslationAdmin):
-    # list_display = ('title', 'short_title', 'is_paypal', 'is_enabled',)
-    list_display = ('title', 'short_title', 'is_enabled', 'show_delivery_methods',)
+    list_display = ('title', 'short_title', 'payment_type', 'is_enabled', 'show_delivery_methods',)
     list_editable = ('short_title',)
-    exclude = ('is_paypal',)
     filter_horizontal = ['delivery_methods', ]
 
 
@@ -35,20 +33,23 @@ class PaymentMethodAdmin(SortableAdminMixin, TabbedTranslationAdmin):
 class CartAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'profile', 'checked_out', 'is_order_with_discount', 'checkout_date',
                     'admin_show_summary', 'count', 'country', 'city', 'show_traffic_source', 'show_num_orders',
-                    'show_delivery_method', 'show_payment_method', 'status',)
+                    'show_delivery_method', 'show_payment_method', 'show_status', 'yoo_paid',)
     list_display_links = ('__unicode__', 'profile',)
-    list_filter = ('status', 'delivery_method', 'payment_method',
+    list_filter = ('status', 'yoo_status', 'delivery_method', 'payment_method',
                    ('checkout_date', DateTimeRangeFilter),
-                   CountryFilter, 'city', TrafficSourceFilter,)
+                   CountryFilter, 'city', TrafficSourceFilter)
     suit_list_filter_horizontal = (CountryFilter, 'city', TrafficSourceFilter,)
     list_per_page = 200
     fieldsets = (
         ('Общее', {
-            'fields': ('id', 'profile_with_link', 'status',)
+            'fields': ('id', 'profile_with_link', 'status', 'payment_date',)
         }),
         ('Данные из формы', {
             'fields': ('country', 'city', 'postal_code', 'address', 'phone', 'name',
                        'delivery_method', 'payment_method', 'additional_info',)
+        }),
+        ('YooKassa', {
+            'fields': ('yoo_id', 'yoo_status', 'yoo_paid', 'yoo_redirect_url', 'yoo_test',)
         }),
         ('Яндекс.Метрика', {
             'fields': ('ym_client_id', 'ym_source', 'ym_source_detailed',)
@@ -60,6 +61,8 @@ class CartAdmin(admin.ModelAdmin):
     readonly_fields = ['id', 'profile_with_link', 'show_items',]
     readonly_fields += ['country', 'city', 'postal_code', 'address', 'phone', 'name',
                         # 'delivery_method', 'payment_method',
+                        'payment_date',
+                        'yoo_id', 'yoo_status', 'yoo_paid', 'yoo_redirect_url', 'yoo_test',
                         'ym_client_id', 'ym_source', 'ym_source_detailed',
                         'additional_info',]
     search_fields = ['id', 'country', 'city', 'profile__name',

@@ -40,7 +40,7 @@
 
 <p>
     <br/><br/>
-    <strong>Итого к оплате: {{ obj.show_summary_c|currency_light:obj.currency }}</strong><br/>
+    <strong>{% if obj.payment_type == 'yookassa' %}Сумма заказа{% else %}Итого к оплате{% endif %}: {{ obj.show_summary_c|currency_light:obj.currency }}</strong><br/>
 </p>
 
 <p>

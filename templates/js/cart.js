@@ -199,7 +199,8 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
           item_base_price = res['item_price_without_discount'],
           popup = res['popup'],
           shipping_data = res['profile_shipping_data'],
-          specials_html = res['specials_html'];
+          specials_html = res['specials_html'],
+          redirect_url = res['redirect_url'];
 
       if ($to_disable) { $to_disable.removeClass('_disabled'); };
       if (send_type == 'remove') {
@@ -207,77 +208,84 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
         if ($row_clear_div) { $row_clear_div.slideUp(function() { $row_clear_div.remove(); }); };
       }
 
-      if (result == 'ok') {
-        if (cart_count != undefined) {
-          showOrHide(cart_count);
-          $('.js-cart-count').text(cart_count); 
-        }
-        if (cart_summary != undefined) { $('.js-cart-summary').text(cart_summary); }
-        if (order_number != undefined) { $('.js-order-number').text(order_number); }
-        if ($item_div && send_type == 'set') {
-          if (item_count != undefined) {
-            $item_div.find('input[name="item-count"]').val(item_count);
-            if (item_count > 0) { $item_div.find('.js-with-data-count').attr('data-count', item_count); }
-          }
-          if (item_price != undefined) { $item_div.find('.item-summary-span').html(item_price); }
-          if (item_base_price != undefined) { $item_div.find('.item-base-summary-span').html(item_base_price); }
-        };
-        if (send_type == 'step0') {
-          if (yametrics_enabled) {
-            yaCounter{{ YM_COUNTER }}.reachGoal('button_zakaz', {}, yaGoalCallback);
-          };
-        }
-        if (send_type == 'step1') {
-          $('.js-auth-switch').toggle();
-          if (shipping_data) {
-            $.each(shipping_data, function(slug, value){
-              var $input = $('#step3').find('[name="'+slug+'"]');
-              $input.val(value);
-              if (slug == 'email') { $('.js-email-cart-input').remove(); };
-            });
-          }
-          {% include 'js/ajax_setup.js' %}
-          if (yametrics_enabled) {
-            if ($form.hasClass('js-step1-login-form')) {
-              yaCounter{{ YM_COUNTER }}.reachGoal('zakaz_login', {}, yaGoalCallback);
-            }
-            else if ($form.hasClass('js-step1-registration-form')) {
-              yaCounter{{ YM_COUNTER }}.reachGoal('zakaz_registration', {}, yaGoalCallback);
-            }
-          };
-        }
-        if (send_type == 'step3') {
-          showOrHide(0);
-          $('.js-cart-count').text(0);
-          $('.js-cart-summary').text(0);
-          $('#step4 .js-cart-summary').text(cart_summary);
-          $('#step5 .js-cart-summary').text(cart_summary);
-          if (yametrics_enabled) {
-            var yaGoalParams = {
-              order_price: parseFloat(res['ya_summary'] || 0.0),
-              currency: res['ya_currency'] || 'RUB',
-              city: form_data['city'],
-            };
-            yaCounter{{ YM_COUNTER }}.reachGoal('zakaz_form', yaGoalParams, yaGoalCallback);
-          };
-        }
-        if (popup) {
-          showPopup(popup);
-          $('html, body').animate({scrollTop: $(popup).offset().top-75}, 400);
-          if (popup == '#step5') {
-            if (specials_html) { $('.js-step5-specials').html(specials_html); };
-            addSpecialOffersDots();
-            setTimeout(showSpecialOffer, 6000, 1);
-          }
-        };
+      if (result == 'redirect') {
+        if (redirect_url) { window.location = redirect_url; }
+        else { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}'); }
       }
+
       else {
-        if (error) { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', error); }
-        else if (errors) { 
-          if ($form) { addErrors($form, errors); }
-          else { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', errors); }
+        if (result == 'ok') {
+          if (cart_count != undefined) {
+            showOrHide(cart_count);
+            $('.js-cart-count').text(cart_count); 
+          }
+          if (cart_summary != undefined) { $('.js-cart-summary').text(cart_summary); }
+          if (order_number != undefined) { $('.js-order-number').text(order_number); }
+          if ($item_div && send_type == 'set') {
+            if (item_count != undefined) {
+              $item_div.find('input[name="item-count"]').val(item_count);
+              if (item_count > 0) { $item_div.find('.js-with-data-count').attr('data-count', item_count); }
+            }
+            if (item_price != undefined) { $item_div.find('.item-summary-span').html(item_price); }
+            if (item_base_price != undefined) { $item_div.find('.item-base-summary-span').html(item_base_price); }
+          };
+          if (send_type == 'step0') {
+            if (yametrics_enabled) {
+              yaCounter{{ YM_COUNTER }}.reachGoal('button_zakaz', {}, yaGoalCallback);
+            };
+          }
+          if (send_type == 'step1') {
+            $('.js-auth-switch').toggle();
+            if (shipping_data) {
+              $.each(shipping_data, function(slug, value){
+                var $input = $('#step3').find('[name="'+slug+'"]');
+                $input.val(value);
+                if (slug == 'email') { $('.js-email-cart-input').remove(); };
+              });
+            }
+            {% include 'js/ajax_setup.js' %}
+            if (yametrics_enabled) {
+              if ($form.hasClass('js-step1-login-form')) {
+                yaCounter{{ YM_COUNTER }}.reachGoal('zakaz_login', {}, yaGoalCallback);
+              }
+              else if ($form.hasClass('js-step1-registration-form')) {
+                yaCounter{{ YM_COUNTER }}.reachGoal('zakaz_registration', {}, yaGoalCallback);
+              }
+            };
+          }
+          if (send_type == 'step3') {
+            showOrHide(0);
+            $('.js-cart-count').text(0);
+            $('.js-cart-summary').text(0);
+            $('#step4 .js-cart-summary').text(cart_summary);
+            $('#step5 .js-cart-summary').text(cart_summary);
+            if (yametrics_enabled) {
+              var yaGoalParams = {
+                order_price: parseFloat(res['ya_summary'] || 0.0),
+                currency: res['ya_currency'] || 'RUB',
+                city: form_data['city'],
+              };
+              yaCounter{{ YM_COUNTER }}.reachGoal('zakaz_form', yaGoalParams, yaGoalCallback);
+            };
+          }
+          if (popup) {
+            showPopup(popup);
+            $('html, body').animate({scrollTop: $(popup).offset().top-75}, 400);
+            if (popup == '#step5') {
+              if (specials_html) { $('.js-step5-specials').html(specials_html); };
+              addSpecialOffersDots();
+              setTimeout(showSpecialOffer, 6000, 1);
+            }
+          };
         }
-        else { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', res.status + ' ' + res.statusText); }
+        else {
+          if (error) { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', error); }
+          else if (errors) { 
+            if ($form) { addErrors($form, errors); }
+            else { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', errors); }
+          }
+          else { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', res.status + ' ' + res.statusText); }
+        };
       };
     },
     error: function(res){
