@@ -453,7 +453,7 @@ class YooKassaCartView(View):
         # определяем человека
         profile = cart.profile
         if request.user != profile:
-            return HttpResponseRedirect('home')
+            return HttpResponseRedirect(reverse('home'))
             # profile.backend = 'django.contrib.auth.backends.ModelBackend'
             # login(request, profile)
 
