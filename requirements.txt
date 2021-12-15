@@ -1,6 +1,8 @@
 Django==1.11.28
 Pillow==4.1.1  # not 4.3.0 because of django-watermark
 celery==4.1.1
+deprecated==1.2.13
+distro==1.6.0
 django-admin-rangefilter==0.3.7
 django-admin-sortable2==0.6.18
 django-anymail[mandrill]

@@ -226,8 +226,8 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
                     _return_url = reverse('cart_api:yookassa', kwargs={'pk': cart.id})
                     payment = Payment.create({
                         "amount": {
-                            "value": unicode(cart.summary),  # noqa
-                            "currency": cart.currency.upper(),
+                            "value": unicode(cart.summary_rub),  # noqa
+                            "currency": 'RUB',
                         },
                         "confirmation": {
                             "type": "redirect",
