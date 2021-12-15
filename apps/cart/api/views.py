@@ -399,8 +399,10 @@ class YooKassaWebhookView(View):
         notification_object = WebhookNotification(event_json)
         payment = notification_object.object
 
+        # обновляем cart в базе
         cart = CartModel.objects.get(yoo_id=payment.id)
         if cart.yoo_status == 'pending':
+
             # обновляем cart
             for key in ['status', 'paid']:
                 setattr(cart, 'yoo_{}'.format(key), getattr(payment, key))

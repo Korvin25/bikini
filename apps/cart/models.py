@@ -141,7 +141,7 @@ class Cart(models.Model):
         ('error', 'ошибка'),
     )
     yoo_id = models.UUIDField('YooKassa: ID платежа', null=True, blank=True)
-    yoo_status = models.CharField('YooKassa: Статус платежа', max_length=15, blank=True, default='',
+    yoo_status = models.CharField('YooKassa: Статус платежа', max_length=15, null=True, blank=True, default='',
                                   choices=YOO_STATUS_CHOICES)
     yoo_paid = models.NullBooleanField('YooKassa: Оплачен?', default=None)
     yoo_redirect_url = models.URLField('YooKassa: URL для перенаправления', null=True, blank=True)
