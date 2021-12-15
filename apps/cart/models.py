@@ -347,7 +347,7 @@ class Cart(models.Model):
 
     @property
     def payment_type(self):
-        return self.payment_method.payment_type
+        return self.payment_method.payment_type if self.payment_method else 'offline'
 
     def show_status(self):
         payment_type = self.payment_type

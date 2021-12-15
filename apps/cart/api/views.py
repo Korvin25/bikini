@@ -218,7 +218,7 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
             }
 
             # -- главная развилка по типу оплаты --
-            payment_type = cart.payment_method.payment_type
+            payment_type = cart.payment_type
             if payment_type == 'yookassa':
                 # 1/3: yookassa
                 try:
