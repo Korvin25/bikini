@@ -5,7 +5,7 @@ import json
 import uuid
 
 from django.conf import settings
-from django.contrib.auth import login
+# from django.contrib.auth import login
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -18,8 +18,9 @@ from apps.analytics.conf import SESSION_YM_CLIENT_ID_KEY
 from apps.analytics.utils import update_traffic_source
 from apps.cart.cart import Cart
 from apps.cart.forms import CartCheckoutForm
-from apps.core.mixins import JSONFormMixin
 from apps.cart.models import Cart as CartModel
+from apps.cart.utils import update_cart_with_payment
+from apps.core.mixins import JSONFormMixin
 from apps.core.templatetags.core_tags import to_price
 from apps.currency.utils import get_currency
 from apps.hash_utils import make_hash_from_cartitem
@@ -401,22 +402,7 @@ class YooKassaWebhookView(View):
 
         # обновляем cart в базе
         cart = CartModel.objects.get(yoo_id=payment.id)
-        if cart.yoo_status == 'pending':
-
-            # обновляем cart
-            for key in ['status', 'paid']:
-                setattr(cart, 'yoo_{}'.format(key), getattr(payment, key))
-            cart.save()
-
-            # если заказ оплачен, делаем всякие штуки
-            if cart.yoo_paid is True:
-                cart.payment_date = timezone.now()
-                cart.save()
-                # -- отправка имейлов --
-                cart.send_order_emails()
-                # -- остатки на складе --
-                cart.update_in_stock()
-
+        update_cart_with_payment(cart, payment)
         return HttpResponse(status=200)
 
 
@@ -429,26 +415,10 @@ class YooKassaCartView(View):
         # получаем объект cart
         cart = get_object_or_404(CartModel, id=kwargs.get('pk'))
 
-        # обновляем cart в базе
-        if cart.yoo_status == 'pending':
-
-            # запрашиваем данные о платеже
-            _id = str(cart.yoo_id)
-            payment = Payment.find_one(_id)
-
-            # обновляем cart
-            for key in ['status', 'paid']:
-                setattr(cart, 'yoo_{}'.format(key), getattr(payment, key))
-            cart.save()
-
-            # если заказ оплачен, делаем всякие штуки
-            if cart.yoo_paid is True:
-                cart.payment_date = timezone.now()
-                cart.save()
-                # -- отправка имейлов --
-                cart.send_order_emails()
-                # -- остатки на складе --
-                cart.update_in_stock()
+        # запрашиваем данные о платеже (и обновляем его в случае необходимости)
+        _id = str(cart.yoo_id)
+        payment = Payment.find_one(_id)
+        update_cart_with_payment(cart, payment)
 
         # определяем человека
         profile = cart.profile

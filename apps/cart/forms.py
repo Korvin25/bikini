@@ -32,5 +32,5 @@ class CartCheckoutForm(forms.ModelForm):
         if email:
             same_profile = Profile.objects.filter(email__iexact=email).first()
             if same_profile and self.instance.profile != same_profile:
-                    raise forms.ValidationError(_('Такой email уже занят.'))
+                raise forms.ValidationError(_('Такой email уже занят.'))
         return email
