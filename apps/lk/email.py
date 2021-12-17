@@ -43,10 +43,11 @@ def email_admin(subject, email_key, obj=None, settings_key='feedback_email', **k
     text_content = template_text.render(context)
     html_content = template_html.render(context)
 
-    admin_backend = get_connection(settings.ADMIN_EMAIL_BACKEND)
+    # admin_backend = get_connection(settings.ADMIN_EMAIL_BACKEND)
     message = EmailMultiAlternatives(subject, text_content, from_email, to)
     message.attach_alternative(html_content, "text/html")
-    msg = message.send()
+    # msg = message.send()
+    message.send()
 
 
 # def admin_send_registration_email(obj, **kwargs):
@@ -60,7 +61,7 @@ def admin_send_order_email(obj, **kwargs):
     subject = 'Bikinimini.ru: Заказ № {}'.format(obj.number)
     email_key = 'order'
     admin_slug = 'cart/cart'
-    email_admin(subject, email_key, obj, admin_slug=admin_slug, **kwargs)
+    email_admin(subject, email_key, obj, admin_slug=admin_slug, settings_key='orders_email', **kwargs)
 
 
 def admin_send_callback_order_email(obj, **kwargs):

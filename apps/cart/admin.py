@@ -31,9 +31,9 @@ class PaymentMethodAdmin(SortableAdminMixin, TabbedTranslationAdmin):
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'profile', 'checked_out', 'is_order_with_discount', 'checkout_date',
-                    'admin_show_summary', 'count', 'country', 'city', 'show_traffic_source', 'show_num_orders',
-                    'show_delivery_method', 'show_payment_method', 'show_status', 'yoo_paid',)
+    list_display = ('__unicode__', 'profile', 'checked_out', 'is_order_with_discount', 'yoo_paid', 'checkout_date',
+                    'admin_show_summary', 'show_status', 'count', 'country', 'city', 'show_traffic_source', 'show_num_orders',
+                    'show_delivery_method', 'show_payment_method',)
     list_display_links = ('__unicode__', 'profile',)
     list_filter = ('status', 'yoo_status', 'delivery_method', 'payment_method',
                    ('checkout_date', DateTimeRangeFilter),
@@ -42,7 +42,7 @@ class CartAdmin(admin.ModelAdmin):
     list_per_page = 200
     fieldsets = (
         ('Общее', {
-            'fields': ('id', 'profile_with_link', 'status', 'payment_date',)
+            'fields': ('id', 'profile_with_link', 'checked_out', 'checkout_date', 'payment_date', 'status',)
         }),
         ('Данные из формы', {
             'fields': ('country', 'city', 'postal_code', 'address', 'phone', 'name',
@@ -61,7 +61,7 @@ class CartAdmin(admin.ModelAdmin):
     readonly_fields = ['id', 'profile_with_link', 'show_items',]
     readonly_fields += ['country', 'city', 'postal_code', 'address', 'phone', 'name',
                         # 'delivery_method', 'payment_method',
-                        'payment_date',
+                        'checked_out', 'checkout_date', 'payment_date',
                         'yoo_id', 'yoo_status', 'yoo_paid', 'yoo_redirect_url', 'yoo_test',
                         'ym_client_id', 'ym_source', 'ym_source_detailed',
                         'additional_info',]
