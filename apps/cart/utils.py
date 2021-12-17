@@ -16,10 +16,14 @@ def get_payment(cart):
         pass
 
 
-def update_cart_with_payment(cart, payment=None, force=False):
-    payment = payment or get_payment(cart)
+def update_cart_with_payment(cart, payment=None, force=False, logger=None):
+    if payment is None:
+        payment = get_payment(cart)
+        if not payment and logger: logger.warning('  (cart id {}) no payment found!'.format(cart.id))
 
     if payment and (cart.yoo_status == 'pending' or force is True):
+
+        if logger: logger.info('  (cart id {} / payment {}) updating cart...'.format(cart.id, payment.id))
 
         # обновляем cart
         for key in ['status', 'paid']:
@@ -35,4 +39,5 @@ def update_cart_with_payment(cart, payment=None, force=False):
             # -- остатки на складе --
             cart.update_in_stock()
 
+        if logger: logger.info('  (cart id {} / payment {}) done! new status: {}'.format(cart.id, payment.id, cart.yoo_status))
         return cart.yoo_status

@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import json
+import logging
 import uuid
 
 from django.conf import settings
@@ -32,9 +33,10 @@ from apps.utils import absolute, get_error_message
 translated_strings = (_('Корзина пуста'), _('Неправильный формат запроса'), _('Неправильный id товара'),
                       _('Выберите способы оставки и оплаты'), _('Выберите способ доставки'), _('Выберите способ оплаты'))
 
-
 Configuration.account_id = settings.YOOKASSA_ACCOUNT_ID
 Configuration.secret_key = settings.YOOKASSA_SECRET_KEY
+
+l_yookassa = logging.getLogger('yookassa')
 
 
 class EmptyCartError(Exception):
@@ -399,10 +401,13 @@ class YooKassaWebhookView(View):
         event_json = json.loads(request.body)
         notification_object = WebhookNotification(event_json)
         payment = notification_object.object
+        l_yookassa.info('----')
+        l_yookassa.info('NEW event: payment {}; status {}'.format(payment.id, payment.status))
 
         # обновляем cart в базе
         cart = CartModel.objects.get(yoo_id=payment.id)
-        update_cart_with_payment(cart, payment)
+        l_yookassa.info('cart id: {}; cart status {}'.format(cart.id, cart.yoo_status))
+        update_cart_with_payment(cart, payment, logger=l_yookassa)
         return HttpResponse(status=200)
 
 
@@ -418,7 +423,10 @@ class YooKassaCartView(View):
         # запрашиваем данные о платеже (и обновляем его в случае необходимости)
         _id = str(cart.yoo_id)
         payment = Payment.find_one(_id)
-        update_cart_with_payment(cart, payment)
+        l_yookassa.info('----')
+        l_yookassa.info('NEW visit: payment {}; status {}'.format(payment.id, payment.status))
+        l_yookassa.info('cart id: {}; cart status {}'.format(cart.id, cart.yoo_status))
+        update_cart_with_payment(cart, payment, logger=l_yookassa)
 
         # определяем человека
         profile = cart.profile
