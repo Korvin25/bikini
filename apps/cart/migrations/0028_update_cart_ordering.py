@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='cart',
-            options={'ordering': ('-creation_date',), 'verbose_name': '\u0437\u0430\u043a\u0430\u0437', 'verbose_name_plural': '\u0437\u0430\u043a\u0430\u0437\u044b'},
+            options={'ordering': ('-checkout_date',), 'verbose_name': '\u0437\u0430\u043a\u0430\u0437', 'verbose_name_plural': '\u0437\u0430\u043a\u0430\u0437\u044b'},
         ),
     ]

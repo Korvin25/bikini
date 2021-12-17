@@ -60,7 +60,7 @@ class SettingsAdmin(ImageThumbAdminMixin, SingletonModelAdmin, TabbedTranslation
             'fields': ('feedback_email', 'orders_email',)
         }),
         ('Контент на страницах', {
-            'fields': ('title_suffix', 'phone', 'telegram_login',)
+            'fields': ('title_suffix', 'telegram_login', 'whatsapp_phone', 'phone',)
         }),
         ('Robots.txt и метрика', {
             'fields': ('robots_txt', 'ym_code', 'ga_code',)

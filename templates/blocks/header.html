@@ -11,7 +11,7 @@
       <li class="bt_phone"><a href="tel:{{ settings.phone|to_phone }}">{{ settings.phone|safe }}</strong></a></li>
       {# <li class="bt_soc"><a href="viber://chat?number={{ settings.phone|to_viber }}"><img src="/static/i/soc_viber.png" alt="{% trans 'Viber' %}" />{% trans 'Viber' %}</a></li> #}
       <li class="bt_soc"><a href="tg://resolve?domain={{ settings.telegram_login|to_telegram }}"><img src="/static/i/soc_telegram.png" alt="{% trans 'Telegram' %}">{% trans 'Telegram' %}</a></li>
-      <li class="bt_soc"><a href="whatsapp://send?phone={{ settings.phone|to_phone }}"><img src="/static/i/soc_whatsapp.png" alt="{% trans 'Whatsapp' %}" />{% trans 'Whatsapp' %}</a></li>
+      <li class="bt_soc"><a href="whatsapp://send?phone={{ settings.whatsapp_phone|to_phone }}"><img src="/static/i/soc_whatsapp.png" alt="{% trans 'Whatsapp' %}" />{% trans 'Whatsapp' %}</a></li>
       <li class="clr_butt_head clr_butt_head0"></li>
       
       <li class="bt_req_call"><a rel="leanModal1" name="callback" href="#callback"{% if ENABLE_METRICS and settings.ym_code %} onclick="yaCounter{{ YM_COUNTER }}.reachGoal('button_callback'); return true;"{% endif %}><strong>{% trans 'Заказать звонок' %}</strong></a></li>
