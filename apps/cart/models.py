@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from decimal import Decimal
+import logging
 
 from django.contrib.postgres.fields import JSONField
 from django.core.urlresolvers import reverse
@@ -11,6 +12,10 @@ from django.template.loader import get_template
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
+# from paypal.standard.models import ST_PP_COMPLETED, ST_PP_PAID
+from paypal.standard.ipn.models import PayPalIPN
+from paypal.standard.ipn.signals import valid_ipn_received, invalid_ipn_received
+
 from ..catalog.models import Certificate, Product, ProductOption, GiftWrapping, SpecialOffer
 from ..catalog.templatetags.catalog_tags import get_product_attrs_url
 from ..core.templatetags.core_tags import to_int_or_float
@@ -19,6 +24,11 @@ from ..currency.utils import get_currency, currency_price
 from ..geo.models import Country
 from ..hash_utils import make_hash_from_cartitem
 from ..lk.email import admin_send_order_email, admin_send_low_in_stock_email, send_order_email
+from ..math_utils import round_decimal
+from ..utils import get_error_message
+
+
+l_paypal = logging.getLogger('paypal')
 
 
 class DeliveryMethod(models.Model):
@@ -132,6 +142,10 @@ class Cart(models.Model):
     delivery_cost_rub = models.DecimalField('Стоимость доставки, rub.', max_digits=9, decimal_places=2, default=0)
     delivery_cost_eur = models.DecimalField('Стоимость доставки, eur.', max_digits=9, decimal_places=2, default=0)
     delivery_cost_usd = models.DecimalField('Стоимость доставки, usd.', max_digits=9, decimal_places=2, default=0)
+    payment_type_cost_percent = models.FloatField('Наценка за тип оплаты, %', default=0)
+    payment_type_cost_rub = models.DecimalField('Наценка за тип оплаты, rub.', max_digits=9, decimal_places=2, default=0)
+    payment_type_cost_eur = models.DecimalField('Наценка за тип оплаты, eur.', max_digits=9, decimal_places=2, default=0)
+    payment_type_cost_usd = models.DecimalField('Наценка за тип оплаты, usd.', max_digits=9, decimal_places=2, default=0)
 
     # --- yookassa ---
     YOO_STATUS_CHOICES = (
@@ -147,6 +161,42 @@ class Cart(models.Model):
     yoo_redirect_url = models.URLField('YooKassa: URL для перенаправления', null=True, blank=True)
     yoo_test = models.NullBooleanField('YooKassa: Тестовый платеж?', default=None)
     yoo_popup_showed = models.BooleanField(default=False)
+
+    # --- paypal ---
+    PAYPAL_STATUS_CHOICES = (
+        ('active', 'активен'),
+        ('created', 'создан'),
+        ('pending', 'в ожидании'),  # по дефолту
+        ('processed', 'обработан'),  # в случае успеха
+        ('in-progress', 'в ходе выполнения'),
+        ('completed', 'оплачен'),
+        ('paid', 'оплачен'),
+        ('cancelled', 'оплата отменена'),
+        ('denied', 'отказано'),
+        ('refused', 'отказано'),
+        ('declined', 'отклонен'),
+        ('cleared', 'удален'),
+        ('failed', 'не удался'),
+        ('expired', 'истек'),
+        ('refunded', 'возвращен'),
+        ('partially_refunded', 'частично возвращен'),
+        ('reversed', 'обратный'),
+        ('canceled_reversal', 'отмененный обратный'),
+        ('rewarded', 'награжден'),
+        ('unclaimed', 'невостребован'),
+        ('uncleared', 'неочищен'),
+        ('voided', 'аннулирован'),
+        ('error', 'ошибка'),
+    )
+    paypal_txn_id = models.CharField('PayPal: ID транзакции', max_length=31, null=True, blank=True)
+    paypal_txn_type = models.CharField('PayPal: Тип транзакции', max_length=31, null=True, blank=True)
+    paypal_status = models.CharField('PayPal: Статус платежа', max_length=15, null=True, blank=True, default='',
+                                     choices=PAYPAL_STATUS_CHOICES)
+    paypal_paid = models.NullBooleanField('PayPal: Оплачен?', default=None)
+    paypal_popup_showed = models.BooleanField(default=False)
+    paypal_ipn_obj = models.ForeignKey(PayPalIPN, null=True, blank=True)
+    paypal_approve_token = models.CharField('PayPal: Токен подтверждения', max_length=31, blank=True, default='')
+    paypal_cancel_token = models.CharField('PayPal: Токен отмены', max_length=31, blank=True, default='')
 
     # --- яндекс.метрика ---
     TRAFFIC_SOURCE_CHOICES = (
@@ -199,6 +249,14 @@ class Cart(models.Model):
     def delivery_cost_c(self):
         return currency_price(self, 'delivery_cost', currency=self.currency)
 
+    @property
+    def payment_type_cost(self):
+        return currency_price(self, 'payment_type_cost')
+
+    @property
+    def payment_type_cost_c(self):
+        return currency_price(self, 'payment_type_cost', currency=self.currency)
+
     def save(self, *args, **kwargs):
         if not self.checked_out:
             self.get_summary()
@@ -212,30 +270,52 @@ class Cart(models.Model):
     count.short_description = 'Количество товара'
 
     def get_summary(self):
+        # сумма всех товаров в корзине
         prices = self.cartitem_set.all().values('price_rub', 'price_eur', 'price_usd')
         result_rub = sum([price['price_rub'] for price in prices])
         result_eur = sum([price['price_eur'] for price in prices])
         result_usd = sum([price['price_usd'] for price in prices])
 
+        # + сумма сертификатов в корзине
         if self.certificatecartitem_set.count():
             certificate_prices = self.certificatecartitem_set.all().values('price_rub', 'price_eur', 'price_usd')
             result_rub += sum([price['price_rub'] for price in certificate_prices])
             result_eur += sum([price['price_eur'] for price in certificate_prices])
             result_usd += sum([price['price_usd'] for price in certificate_prices])
 
+        # (запоминаем чистую сумму)
         self.clean_cost_rub = result_rub
         self.clean_cost_eur = result_eur
         self.clean_cost_usd = result_usd
 
+        # + добавляем стоимость доставки
         delivery_method = self.delivery_method
         if delivery_method:
             self.delivery_cost_rub = delivery_method.price_rub
             self.delivery_cost_eur = delivery_method.price_eur
             self.delivery_cost_usd = delivery_method.price_usd
-            result_rub += delivery_method.price_rub
-            result_eur += delivery_method.price_eur
-            result_usd += delivery_method.price_usd
+            result_rub += self.delivery_cost_rub
+            result_eur += self.delivery_cost_eur
+            result_usd += self.delivery_cost_usd
 
+        # + накидываем 7% за paypal
+        payment_type = self.payment_type
+        if payment_type == 'paypal':
+            self.payment_type_cost_percent = 7.0
+            _multiplier = Decimal('0.07')
+            self.payment_type_cost_rub = round_decimal(result_rub*_multiplier)
+            self.payment_type_cost_eur = round_decimal(result_eur*_multiplier)
+            self.payment_type_cost_usd = round_decimal(result_usd*_multiplier)
+            result_rub += self.payment_type_cost_rub
+            result_eur += self.payment_type_cost_eur
+            result_usd += self.payment_type_cost_usd
+        else:
+            self.payment_type_cost_percent = 0
+            self.payment_type_cost_rub = 0
+            self.payment_type_cost_eur = 0
+            self.payment_type_cost_usd = 0
+
+        # готово
         self.summary_rub = result_rub
         self.summary_eur = result_eur
         self.summary_usd = result_usd
@@ -306,11 +386,29 @@ class Cart(models.Model):
         value = int(value) if int(value) == value else value
         return '{0:,}'.format(value).replace(',', ' ')
 
+    def show_clean_cost(self):
+        return self._show_value(self.clean_cost)
+
+    def show_clean_cost_c(self):
+        return self._show_value(self.clean_cost_c)
+
     def show_summary(self):
         return self._show_value(self.summary)
 
     def show_summary_c(self):
         return self._show_value(self.summary_c)
+
+    def show_delivery_cost(self):
+        return self._show_value(self.delivery_cost)
+
+    def show_delivery_cost_c(self):
+        return self._show_value(self.delivery_cost_c)
+
+    def show_payment_type_cost(self):
+        return self._show_value(self.payment_type_cost)
+
+    def show_payment_type_cost_c(self):
+        return self._show_value(self.payment_type_cost_c)
 
     def get_order_id(self):
         return '{0:06}'.format(self.id)
@@ -349,19 +447,51 @@ class Cart(models.Model):
     def payment_type(self):
         return self.payment_method.payment_type if self.payment_method else 'offline'
 
+    @property
+    def payment_status(self):
+        return {
+            'yookassa': self.yoo_status,
+            'paypal': self.paypal_status,
+        }.get(self.payment_type, '')
+
+    @property
+    def is_pending(self):
+        payment_status = self.payment_status
+        return payment_status == 'pending'
+
+    @property
+    def is_canceled(self):
+        payment_status = self.payment_status
+        return payment_status in ['error', 'canceled', 'cancelled']
+
+    @property
+    def is_paid(self):
+        return {
+            'yookassa': self.yoo_paid,
+            'paypal': self.paypal_paid,
+        }.get(self.payment_type, None)
+
     def show_status(self):
         payment_type = self.payment_type
         status = self.get_status_display()
-        if payment_type == 'yookassa':
-            yoo_status = {
+        if payment_type != 'offline':
+            # 1
+            _yoo_status = {
                 'error': 'ошибка',
                 'pending': 'не оплачен',
                 'succeeded': 'оплачен',
                 'canceled': 'оплата отменена',
             }.get(self.yoo_status, '')
-            if yoo_status:
-                status = (yoo_status if self.yoo_status == 'error'
-                          else '{} / {}'.format(yoo_status, status))
+            _paypal_status = self.get_paypal_status_display()
+            # 2
+            status_str = {
+                'yookassa': _yoo_status,
+                'paypal': _paypal_status,
+            }.get(payment_type, '')
+            # 3
+            if status_str:
+                status = (status_str if self.is_canceled
+                          else '{} / {}'.format(status_str, status))
         return status
     show_status.short_description = 'Статус'
     show_status.allow_tags = True
@@ -424,6 +554,65 @@ class Cart(models.Model):
         currency = get_currency(request=request)
         context = {'specials': specials, 'currency': currency}
         return specials_template.render(context)
+
+    def get_paypal_paid(self):
+        return self.paypal_status in ['completed', 'paid']
+
+
+def show_me_the_money(sender, **kwargs):
+    ipn_obj = sender
+
+    l_paypal.info('------ Получен сигнал от PayPal')
+    l_paypal.info('[ipn_obj id: {}]'.format(ipn_obj.id))
+
+    if ipn_obj.receiver_email != settings.PAYPAL_EMAIL:
+        l_paypal.warning('email не совпадают; return')
+        l_paypal.warning('------/')
+        return
+
+    try:
+        cart_id = int(ipn_obj.invoice)
+        cart = Cart.objects.get(id=cart_id)
+        was_paid = cart.paypal_paid
+
+        if ipn_obj.mc_gross == cart.summary and ipn_obj.mc_currency.lower() == cart.currency:
+            l_paypal.info('[cart id: {}]; обновляем...'.format(cart.id))
+
+            cart.paypal_txn_id = ipn_obj.txn_id
+            cart.paypal_txn_type = ipn_obj.txn_type
+            cart.paypal_status = (ipn_obj.payment_status or '').lower()
+            cart.paypal_paid = cart.get_paypal_paid()
+            cart.paypal_ipn_obj = ipn_obj
+            cart.save()
+
+            l_paypal.info('  paypal_status: {}; paypal_paid: {}...'.format(cart.paypal_status, cart.paypal_paid))
+
+            if cart.paypal_paid and not was_paid:
+                l_paypal.info('  отправляем мыла об оплате...')
+                # -- отправка имейлов --
+                cart.send_order_emails()
+                # -- остатки на складе --
+                cart.update_in_stock()
+
+            l_paypal.info('  done!')
+            l_paypal.info('------/')
+
+        else:
+            raise Exception('(cart_id {}): что-то не совпадает'.format(cart.id))
+
+    except Exception as exc:
+        err_message = get_error_message(exc)
+        l_paypal.error('------ Ошибка при получении сигнала: {}'.format(err_message))
+        l_paypal.error('[ipn_obj id: {}]'.format(ipn_obj.id))
+        l_paypal.error('[ipn_obj txn_id: {}]'.format(ipn_obj.txn_id))
+        l_paypal.error('[ipn_obj payment_status: {}]'.format(ipn_obj.payment_status))
+        l_paypal.error('[ipn_obj mc_gross: {}]'.format(ipn_obj.mc_gross))
+        l_paypal.error('[ipn_obj mc_currency: {}]'.format(ipn_obj.mc_currency))
+        l_paypal.warning('------/')
+
+
+valid_ipn_received.connect(show_me_the_money)
+invalid_ipn_received.connect(show_me_the_money)
 
 
 class CartItem(models.Model):

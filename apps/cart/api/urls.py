@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import url
 
-from .views import Step0View, Step2View, Step3View, UpdateCartView, CartAjaxView, YooKassaWebhookView, YooKassaCartView
 from .paypal_views import paypal_form
+from .views import (Step0View, Step2View, Step3View, UpdateCartView, CartAjaxView,
+                    YooKassaWebhookView, YooKassaCartView, PayPalWebhookView, PayPalCartView)
 
 
 urlpatterns = [
@@ -20,6 +21,8 @@ urlpatterns = [
     url(r'^yookassa/webhook/$', YooKassaWebhookView.as_view(), name='yookassa_webhook'),
     url(r'^yookassa/(?P<pk>\d+)/$', YooKassaCartView.as_view(), name='yookassa'),
 
-    # paypal  # TODO
-    url(r'^paypal/$', paypal_form),
+    # paypal
+    url(r'^paypal/webhook/$', PayPalWebhookView.as_view(), name='paypal_webhook'),
+    url(r'^paypal/(?P<pk>\d+)/$', PayPalCartView.as_view(), name='paypal'),
+    url(r'^paypal/form/$', paypal_form, name='paypal_form'),
 ]

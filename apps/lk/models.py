@@ -243,6 +243,15 @@ class Profile(AbstractBaseUser, PermissionsMixin):
         data = {k: v for k, v in data.iteritems() if v}
         return data
 
+    # @property
+    # def methods_data(self):
+    #     data = {
+    #         'payment_method_id': self.payment_method_id,
+    #         'delivery_method_id': self.delivery_method_id,
+    #     }
+    #     data = {k: v for k, v in data.iteritems() if v}
+    #     return data
+
     @property
     def complete_orders(self):
         return self.cart_set.filter(checked_out=True)

@@ -31,11 +31,11 @@ class PaymentMethodAdmin(SortableAdminMixin, TabbedTranslationAdmin):
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'profile', 'checked_out', 'is_order_with_discount', 'yoo_paid', 'checkout_date',
-                    'admin_show_summary', 'show_status', 'count', 'country', 'city', 'show_traffic_source', 'show_num_orders',
-                    'show_delivery_method', 'show_payment_method',)
+    list_display = ('__unicode__', 'profile', 'checked_out', 'is_order_with_discount', 'yoo_paid', 'paypal_paid',
+                    'checkout_date', 'show_delivery_method', 'show_payment_method',
+                    'admin_show_summary', 'show_status', 'count', 'country', 'city', 'show_traffic_source', 'show_num_orders',)
     list_display_links = ('__unicode__', 'profile',)
-    list_filter = ('status', 'yoo_status', 'delivery_method', 'payment_method',
+    list_filter = ('status', 'yoo_status', 'paypal_status', 'delivery_method', 'payment_method',
                    ('checkout_date', DateTimeRangeFilter),
                    CountryFilter, 'city', TrafficSourceFilter)
     suit_list_filter_horizontal = (CountryFilter, 'city', TrafficSourceFilter,)
@@ -51,6 +51,9 @@ class CartAdmin(admin.ModelAdmin):
         ('YooKassa', {
             'fields': ('yoo_id', 'yoo_status', 'yoo_paid', 'yoo_redirect_url', 'yoo_test',)
         }),
+        ('PayPal', {
+            'fields': ('paypal_txn_id', 'paypal_status', 'paypal_paid', 'paypal_ipn_obj',)
+        }),
         ('Яндекс.Метрика', {
             'fields': ('ym_client_id', 'ym_source', 'ym_source_detailed',)
         }),
@@ -63,6 +66,7 @@ class CartAdmin(admin.ModelAdmin):
                         # 'delivery_method', 'payment_method',
                         'checked_out', 'checkout_date', 'payment_date',
                         'yoo_id', 'yoo_status', 'yoo_paid', 'yoo_redirect_url', 'yoo_test',
+                        'paypal_txn_id', 'paypal_status', 'paypal_paid', 'paypal_ipn_obj',
                         'ym_client_id', 'ym_source', 'ym_source_detailed',
                         'additional_info',]
     search_fields = ['id', 'country', 'city', 'profile__name',

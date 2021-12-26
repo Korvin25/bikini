@@ -6,7 +6,7 @@ import logging
 from django.core.management.base import BaseCommand
 
 from apps.cart.models import Cart as CartModel
-from apps.cart.utils import update_cart_with_payment
+from apps.cart.yoo_utils import yoo_update_cart_with_payment
 
 
 l = logging.getLogger('yookassa')
@@ -24,6 +24,6 @@ class Command(BaseCommand):
             l.info('-------')
             l.info('Updating pending carts (count {})'.format(carts_count))
             for cart in carts:
-                update_cart_with_payment(cart, logger=l)
+                yoo_update_cart_with_payment(cart, logger=l)
             l.info('  done!')
         self.stdout.write(self.style.SUCCESS('Done!'))

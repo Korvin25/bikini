@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import random
+import string
+
 from django.conf import settings
 from django.contrib.admin.utils import quote
 from django.core.urlresolvers import reverse
@@ -12,6 +15,10 @@ from crequest.middleware import CrequestMiddleware
 DEFAULT_SCHEME = settings.DEFAULT_SCHEME
 DEFAULT_SITENAME = settings.DEFAULT_SITENAME
 MEDIA_URL = settings.MEDIA_URL
+
+ASCII_CHARS = string.ascii_letters
+DIGITS_CHARS = string.digits
+TOKEN_CHARS = ASCII_CHARS + '-' + DIGITS_CHARS
 
 
 def absolute(url=None, append_media_url=False):
@@ -75,3 +82,11 @@ def get_error_message(e):
     if err_message.startswith("'ascii' codec"):
         err_message = 'Unknown error'
     return err_message
+
+
+def get_a_token(length=20, charset=None):
+    CHARS = {
+        'ascii': ASCII_CHARS,
+        'digits': DIGITS_CHARS,
+    }.get(charset, TOKEN_CHARS)
+    return ''.join([random.choice(CHARS) for x in range(length)])

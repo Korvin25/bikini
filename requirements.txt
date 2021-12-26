@@ -1,11 +1,12 @@
 Django==1.11.28
 Pillow==4.1.1  # not 4.3.0 because of django-watermark
 celery==4.1.1
+cryptography==2.9.2
 deprecated==1.2.13
 distro==1.6.0
 django-admin-rangefilter==0.3.7
 django-admin-sortable2==0.6.18
-django-anymail[mandrill]
+django-anymail[mandrill]==7.0.0
 django-celery-email==2.0.0
 django-ckeditor==5.4.0
 django-cleanup==1.0.1
@@ -19,7 +20,7 @@ django-modeltranslation==0.12.1
 django-multiselectfield==0.1.8
 django-object-actions==0.10.0
 django-pure-pagination==0.3.0
-django-paypal==0.4.1
+django-paypal==1.1.2
 django-redis-cache==2.0.0
 django-request==1.5.3
 django-rosetta==0.7.13
@@ -36,7 +37,9 @@ ipdb==0.10.3
 ipython==2.0.0
 mailchimp3==3.0.6
 openpyxl==2.5.1
+paypalhttp==1.0.1
 psycopg2==2.7.3.2
+pyopenssl==18.0.0
 pytils==0.3
 rauth==0.7.3
 redis==3.2.1

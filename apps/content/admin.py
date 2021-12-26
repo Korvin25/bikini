@@ -6,7 +6,6 @@ from django.contrib import admin
 from embed_video.admin import AdminVideoMixin
 from filer.models import Folder, File, Image
 from modeltranslation.admin import TabbedTranslationAdmin, TranslationStackedInline
-from paypal.standard.ipn.models import PayPalIPN
 
 from .admin_filer import CustomFolderAdmin, CustomFileAdmin, CustomImageAdmin
 from .admin_forms import MenuItemAdminForm
@@ -17,7 +16,6 @@ from .translation import *  # noqa
 admin.site.site_header = 'Bikinimini.ru'
 
 
-admin.site.unregister(PayPalIPN)
 admin.site.unregister(Folder)
 admin.site.unregister(File)
 admin.site.unregister(Image)

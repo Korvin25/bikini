@@ -200,7 +200,8 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
           popup = res['popup'],
           shipping_data = res['profile_shipping_data'],
           specials_html = res['specials_html'],
-          redirect_url = res['redirect_url'];
+          redirect_url = res['redirect_url'],
+          paypal_form = res['paypal_form'];
 
       if ($to_disable) { $to_disable.removeClass('_disabled'); };
       if (send_type == 'remove') {
@@ -210,6 +211,17 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
 
       if (result == 'redirect') {
         if (redirect_url) { window.location = redirect_url; }
+        else { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}'); }
+      }
+
+      else if (result == 'paypal_form') {
+        if (paypal_form) { 
+          var $form_container = $('#js-paypal-form-container');
+          $form_container.html(paypal_form);
+          var $form = $form_container.find('form');
+          $form.submit();
+          // console.log(paypal_form);
+        }
         else { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}'); }
       }
 

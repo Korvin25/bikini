@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function
 
 from .models import Country
 
@@ -15,4 +15,4 @@ def populate_countries():
         if _created is False:
             country.title = title
             country.save()
-        print country.id, country.title
+        print(country.id, country.title)

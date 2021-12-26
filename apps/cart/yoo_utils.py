@@ -3,22 +3,22 @@ from __future__ import unicode_literals
 
 from django.utils import timezone
 
-from ..third_party.yookassa import Payment
+from ..third_party.yookassa import Payment as YooPayment
 
 
-def get_payment(cart):
+def yoo_get_payment(cart):
     # запрашиваем данные о платеже (и обновляем его в случае необходимости)
     try:
         _id = str(cart.yoo_id)
-        payment = Payment.find_one(_id)
+        payment = YooPayment.find_one(_id)
         return payment
     except Exception:
         pass
 
 
-def update_cart_with_payment(cart, payment=None, force=False, logger=None):
+def yoo_update_cart_with_payment(cart, payment=None, force=False, logger=None):
     if payment is None:
-        payment = get_payment(cart)
+        payment = yoo_get_payment(cart)
         if not payment and logger: logger.warning('  (cart id {}) no payment found!'.format(cart.id))
 
     if payment and (cart.yoo_status == 'pending' or force is True):

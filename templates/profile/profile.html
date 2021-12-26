@@ -406,28 +406,46 @@
   </div>
 
   {% if order %}
-    <div id="order-popup" class="window_popup no_float mini_window_popup{% if order.yoo_status == 'canceled' %} with_error_icon{% endif %}" style="display:none;">
+    <div id="order-popup" class="window_popup no_float mini_window_popup{% if order.is_canceled %} with_error_icon{% endif %}" style="display:none;">
       <div class="close_popup js-call-close"><img src="/static/i/close_icon.png" alt="{% trans 'Закрыть' %}" /></div>
       <div class="wrap_window_popup bg_wrapp_window">
         <div class="popup_row">
           <div class="popup_row_wrapp">
-            <h2 class="title_popup">{% if order.yoo_status == 'pending' %}{% trans 'Заказ успешно <br />оформлен' %}.<br/>{% trans 'Оплатите заказ на сайте ЮКасса' %}{% elif order.yoo_status == 'succeeded' %}{% trans 'Заказ успешно <br />оплачен' %}{% elif order.yoo_status == 'canceled' %}{% trans 'Оплата заказа отменена' %}{% else %}{% trans 'Заказ успешно <br />оформлен' %}{% endif %}</h2>
+            <h2 class="title_popup">
+              {% if order.is_pending %}
+                {% trans 'Заказ успешно <br />оформлен' %}
+                {% if order.payment_type == 'yookassa' %}
+                  .<br/>{% trans 'Оплатите заказ на сайте ЮКасса' %}
+                {% elif order.payment_type == 'paypal' %}
+                  .<br/>{% trans 'Оплатите заказ на сайте PayPal' %}
+                {% endif %}
+              {% elif order.paypal_status == 'processed' %}{% trans 'Заказ успешно <br />обработан' %}
+              {% elif order.is_paid %}{% trans 'Заказ успешно <br />оплачен' %}
+              {% elif order.is_canceled %}{% trans 'Оплата заказа отменена' %}
+              {% else %}{% trans 'Заказ успешно <br />оформлен' %}
+            {% endif %}</h2>
             <div class="row_form_popup">
               <p><strong>{% trans 'Заказ №' %}:</strong><span class="js-order-number">{{ order.number }}</span></p>
               <p><strong >{% trans 'На сумму' %}:</strong>{{ order.summary|with_js_cart_summary:order.currency|safe }}</p>
 
               <div style="margin-top: 30px;">
-                {% if order.yoo_status == 'pending' %}
-                  <p>Для оплаты заказа перейдите, пожалуйста, <a href="{{ order.yoo_redirect_url|default_if_none:'' }}">на сайт ЮКасса</a></p>
+                {% if order.yoo_status == 'pending' and order.yoo_redirect_url %}
+                  <p>{% trans 'Для оплаты заказа перейдите, пожалуйста' %}, <a href="{{ order.yoo_redirect_url|default_if_none:'' }}">{% trans 'на сайт ЮКасса' %}</a></p>
 
-                {% elif order.yoo_status != 'canceled' %}
-                  <p>В ближайшее время с вами свяжутся 
+                {% elif order.paypal_status == 'pending' %}
+                  <p>{% trans 'Для оплаты заказа вернитесь, пожалуйста, на сайт PayPal' %}</p>
+
+                {% elif order.paypal_status == 'processed' %}
+                  <p>{% trans 'В данный момент мы ожидаем подтверждения оплаты со стороны PayPal' %}</a></p>
+
+                {% elif not order.is_canceled %}
+                  <p>{% blocktrans %}В ближайшее время с вами свяжутся 
                   менеджеры отдела доставки для уточнения 
-                  деталей заказа</p>
+                  деталей заказа{% endblocktrans %}</p>
                 {% endif %}
 
-                <p>Если у вас возникли какие либо вопросы,
-                вы можете связаться с нами по телефону
+                <p>{% blocktrans %}Если у вас возникли какие либо вопросы,
+                вы можете связаться с нами по телефону{% endblocktrans %}
                 <strong class="pup_strong">+7 (916) 445 -65 -55</strong></p>
               </div>
 

@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function
 
 import json
 import logging
+import time
 import uuid
 
 from django.conf import settings
@@ -11,21 +12,27 @@ from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext as __
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View, UpdateView
+
+from apps.third_party.paypal.core import PayPalHttpClient, SandboxEnvironment
 
 from apps.analytics.conf import SESSION_YM_CLIENT_ID_KEY
 from apps.analytics.utils import update_traffic_source
 from apps.cart.cart import Cart
 from apps.cart.forms import CartCheckoutForm
 from apps.cart.models import Cart as CartModel
-from apps.cart.utils import update_cart_with_payment
+from apps.cart.paypal_utils import get_paypal_form
+from apps.cart.yoo_utils import yoo_update_cart_with_payment
 from apps.core.mixins import JSONFormMixin
 from apps.core.templatetags.core_tags import to_price
 from apps.currency.utils import get_currency
 from apps.hash_utils import make_hash_from_cartitem
-from apps.third_party.yookassa import Configuration, Payment
+from apps.third_party.yookassa import Payment as YooPayment
+from apps.third_party.yookassa import Configuration as YooConfiguration
 from apps.third_party.yookassa.domain.notification import WebhookNotification
 from apps.utils import absolute, get_error_message
 
@@ -33,10 +40,14 @@ from apps.utils import absolute, get_error_message
 translated_strings = (_('Корзина пуста'), _('Неправильный формат запроса'), _('Неправильный id товара'),
                       _('Выберите способы оставки и оплаты'), _('Выберите способ доставки'), _('Выберите способ оплаты'))
 
-Configuration.account_id = settings.YOOKASSA_ACCOUNT_ID
-Configuration.secret_key = settings.YOOKASSA_SECRET_KEY
+YooConfiguration.account_id = settings.YOOKASSA_ACCOUNT_ID
+YooConfiguration.secret_key = settings.YOOKASSA_SECRET_KEY
+
+environment = SandboxEnvironment(client_id=settings.PAYPAL_CLIENT_ID, client_secret=settings.PAYPAL_SECRET)
+client = PayPalHttpClient(environment)
 
 l_yookassa = logging.getLogger('yookassa')
+l_paypal = logging.getLogger('paypal')
 
 
 class EmptyCartError(Exception):
@@ -174,17 +185,11 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
         cart = form.instance
 
         if cart.count():
-            cart.checked_out = True
-            cart.checkout_date = timezone.now()
             cart.currency = get_currency(self.request)
             cart.save()
             super(Step3View, self).form_valid(form)
 
             profile = cart.profile
-
-            # -- сбрасываем CART_ID --
-            if self.request.session.get('CART_ID'):
-                del self.request.session['CART_ID']
 
             # -- проставляем поля --
             for k in self.mapping.keys():
@@ -227,7 +232,7 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
                 try:
                     # создаем платеж
                     _return_url = reverse('cart_api:yookassa', kwargs={'pk': cart.id})
-                    payment = Payment.create({
+                    payment = YooPayment.create({
                         "amount": {
                             "value": unicode(cart.summary_rub),  # noqa
                             "currency": 'RUB',
@@ -239,20 +244,17 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
                         "capture": True,
                         "description": '{} {}'.format(__('Заказ №'), cart.number),
                     }, uuid.uuid4())
-
                     # обновляем поля, связанные с yookassa
                     redirect_url = payment.confirmation.confirmation_url
                     cart.yoo_redirect_url = redirect_url
                     for key in ['id', 'status', 'paid', 'test']:
                         setattr(cart, 'yoo_{}'.format(key), getattr(payment, key))
                     cart.save()
-
                     # обновляем ответ на фронт
                     data.update({
                         'result': 'redirect',
                         'redirect_url': redirect_url,
                     })
-
                 except Exception as exc:
                     try:
                         err_message = get_error_message(exc)
@@ -264,17 +266,38 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
                     data = {'result': 'error', 'error': err_message}
                     return JsonResponse(data, status=400)
 
-            # elif payment_type == 'paypal':
-            #     # 2/3: paypal # TODO
+            elif payment_type == 'paypal':
+                # 2/3: paypal
+                try:
+                    # получаем форму
+                    form_data = get_paypal_form(self.request, cart)
+                    # обновляем поля, связанные с пейпелом
+                    cart.paypal_status = 'pending'
+                    cart.paypal_approve_token = form_data['approve_token']
+                    cart.paypal_cancel_token = form_data['cancel_token']
+                    cart.save()
+                    # обновляем ответ на фронт
+                    data.update({
+                        'result': 'paypal_form',
+                        'paypal_form': form_data['form_html'],
+                    })
+                except Exception as exc:
+                    try:
+                        err_message = get_error_message(exc)
+                    except Exception:
+                        err_message = 'Неизвестная ошибка'
+                    cart.paypal_paid = False
+                    cart.paypal_status = 'error'
+                    cart.save()
+                    data = {'result': 'error', 'error': err_message}
+                    return JsonResponse(data, status=400)
 
             else:
                 # 3/3: наличные
                 # -- отправка имейлов --
                 cart.send_order_emails()
-
                 # -- остатки на складе --
                 cart.update_in_stock()
-
                 # -- спец.предложения --
                 specials = cart.get_specials()
                 has_specials = bool(specials)
@@ -286,6 +309,14 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
                     'result': 'ok',
                     'popup': popup,
                 })
+
+            # -- проставляем checked_out (поскольку не было ошибок) --
+            cart.checked_out = True
+            cart.checkout_date = timezone.now()
+            cart.save()
+            # -- сбрасываем CART_ID --
+            if self.request.session.get('CART_ID'):
+                del self.request.session['CART_ID']
             return JsonResponse(data)
 
         else:
@@ -407,7 +438,7 @@ class YooKassaWebhookView(View):
         # обновляем cart в базе
         cart = CartModel.objects.get(yoo_id=payment.id)
         l_yookassa.info('cart id: {}; cart status {}'.format(cart.id, cart.yoo_status))
-        update_cart_with_payment(cart, payment, logger=l_yookassa)
+        yoo_update_cart_with_payment(cart, payment, logger=l_yookassa)
         return HttpResponse(status=200)
 
 
@@ -422,11 +453,11 @@ class YooKassaCartView(View):
 
         # запрашиваем данные о платеже (и обновляем его в случае необходимости)
         _id = str(cart.yoo_id)
-        payment = Payment.find_one(_id)
+        payment = YooPayment.find_one(_id)
         l_yookassa.info('----')
         l_yookassa.info('NEW visit: payment {}; status {}'.format(payment.id, payment.status))
         l_yookassa.info('cart id: {}; cart status {}'.format(cart.id, cart.yoo_status))
-        update_cart_with_payment(cart, payment, logger=l_yookassa)
+        yoo_update_cart_with_payment(cart, payment, logger=l_yookassa)
 
         # определяем человека
         profile = cart.profile
@@ -438,3 +469,54 @@ class YooKassaCartView(View):
         # собираем redirect_url
         redirect_url = '{}?tab=orders&order_id={}'.format(reverse('profile'), cart.id)
         return HttpResponseRedirect(redirect_url)
+
+
+class PayPalWebhookView(View):
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        l_paypal.info('-------')
+        l_paypal.info('new webhook request!')
+        l_paypal.info('  path is: {}'.format(request.method))
+        l_paypal.info('  body is: {}'.format(request.body))
+        for k in ['payment_date', 'txn_id', 'payment_status', 'custom', 'invoice']:
+            l_paypal.info('  {}: {}'.format(k, request.POST.get(k)))
+        l_paypal.info('-------/')
+        return HttpResponse(status=200)
+
+
+class PayPalCartView(View):
+
+    def dispatch(self, request, *args, **kwargs):
+        action = request.GET.get('action')
+        approve_token = request.GET.get('approve_token')
+        cancel_token = request.GET.get('cancel_token')
+
+        time.sleep(1.5)
+
+        return_url = reverse('home')
+        cart_id = kwargs.get('pk')
+        cart = CartModel.objects.filter(id=cart_id).first()
+
+        if cart:
+            if request.user == cart.profile:
+                return_url = '{}?tab=orders&order_id={}'.format(reverse('profile'), cart.id)
+
+            if not cart.get_paypal_paid():
+
+                if action == 'return' and cart.paypal_status != 'processed':
+                    if approve_token == cart.paypal_approve_token:
+                        # оплата завершена
+                        cart.paypal_status = 'processed'
+                        cart.save()
+                        l_paypal.info('------- [by return view] cart id {}: paypal_status: "processed"! -----/'.format(cart_id))
+
+                elif action == 'cancel' and cart.paypal_status != 'cancelled':
+                    if cancel_token == cart.paypal_cancel_token:
+                        # отменено
+                        cart.paypal_status = 'cancelled'
+                        cart.paypal_paid = False
+                        cart.save()
+                        l_paypal.info('------- [by return view] cart id {}: paypal_status: "cancelled"! -----/'.format(cart_id))
+
+        return HttpResponseRedirect(return_url)

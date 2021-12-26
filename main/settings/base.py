@@ -296,6 +296,12 @@ LOGGING = {
             'filename': os.path.join(BASE_DIR, 'logs/yookassa.log'),
             'formatter': 'normal',
         },
+        'paypal_log_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/paypal.log'),
+            'formatter': 'normal',
+        },
         'currency_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
@@ -347,6 +353,10 @@ LOGGING = {
     'loggers': {
         'yookassa': {
             'handlers': ['yookassa_log_file', 'console'],
+            'level': 'INFO',
+        },
+        'paypal': {
+            'handlers': ['paypal_log_file', 'console'],
             'level': 'INFO',
         },
         'currency.tasks': {

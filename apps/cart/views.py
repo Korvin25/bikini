@@ -40,9 +40,21 @@ class CartView(TemplateView):
         profile = self.request.user
         if profile.is_authenticated():
             shipping_data.update(profile.shipping_data)
+        _update = False
         for k, v in shipping_data.items():
-            if getattr(self.cart.cart, k, None):
-                shipping_data[k] = getattr(self.cart.cart, k)
+            cart_obj = self.cart.cart
+            # получаем shipping_data из корзины
+            if getattr(cart_obj, k, None):
+                shipping_data[k] = getattr(cart_obj, k)
+            # если данных нет (но были в профиле) - обновляем в корзине
+            elif v and hasattr(cart_obj, k):
+                _k = {'country': 'country_id'}.get(k, k)
+                setattr(cart_obj, _k, v)
+                _update = True
+        if _update:
+            cart_obj.save()
+
+        # проставляем payment_method и delivery_method
 
         delivery_methods = DeliveryMethod.objects.prefetch_related('payment_methods').filter(
             is_enabled=True, payment_methods__isnull=False,

@@ -45,9 +45,10 @@ class CurrentSiteAndRegionMiddleware(MiddlewareMixin):
                 if lang_prefix.lower() in settings.LANGUAGES_DICT.keys():
                     raise RedirectToMainDomain
 
-        except (Site.DoesNotExist, RedirectToMainDomain) as e:
-            # определение по ip?
-            domain = Site.objects.order_by('id').first().domain
-            return HttpResponseRedirect('{}://{}{}'.format(request.scheme, domain, request.get_full_path()))
+        except (Site.DoesNotExist, RedirectToMainDomain) as e:  # noqa
+            pass
+            # # определение по ip?
+            # domain = Site.objects.order_by('id').first().domain
+            # return HttpResponseRedirect('{}://{}{}'.format(request.scheme, domain, request.get_full_path()))
 
         return None

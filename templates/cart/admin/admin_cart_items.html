@@ -190,5 +190,10 @@
 
 <p>
   <br/>
-  Общая стоимость заказа с доставкой: <strong>{{ cart.show_summary_c|currency_light:cart.currency }}</strong>
+  Стоимость корзины: <strong>{{ cart.show_clean_cost_c|currency_light:cart.currency }}</strong><br/>
+  Стоимость доставки: <strong>{{ cart.show_delivery_cost_c|currency_light:cart.currency }}</strong><br/>
+  {% if cart.payment_type == 'paypal' %}
+    Наценка за PayPal (7%): <strong>{{ cart.show_payment_type_cost_c|currency_light:cart.currency }}</strong><br/>
+  {% endif %}
+  <strong>Общая стоимость заказа: {{ cart.show_summary_c|currency_light:cart.currency }}</strong>
 </p>
