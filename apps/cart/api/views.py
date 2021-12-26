@@ -18,8 +18,6 @@ from django.utils.translation import ugettext as __
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View, UpdateView
 
-from apps.third_party.paypal.core import PayPalHttpClient, SandboxEnvironment
-
 from apps.analytics.conf import SESSION_YM_CLIENT_ID_KEY
 from apps.analytics.utils import update_traffic_source
 from apps.cart.cart import Cart
@@ -43,8 +41,6 @@ translated_strings = (_('Корзина пуста'), _('Неправильны�
 YooConfiguration.account_id = settings.YOOKASSA_ACCOUNT_ID
 YooConfiguration.secret_key = settings.YOOKASSA_SECRET_KEY
 
-environment = SandboxEnvironment(client_id=settings.PAYPAL_CLIENT_ID, client_secret=settings.PAYPAL_SECRET)
-client = PayPalHttpClient(environment)
 
 l_yookassa = logging.getLogger('yookassa')
 l_paypal = logging.getLogger('paypal')
