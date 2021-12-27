@@ -142,10 +142,10 @@ class Cart(models.Model):
     delivery_cost_rub = models.DecimalField('Стоимость доставки, rub.', max_digits=9, decimal_places=2, default=0)
     delivery_cost_eur = models.DecimalField('Стоимость доставки, eur.', max_digits=9, decimal_places=2, default=0)
     delivery_cost_usd = models.DecimalField('Стоимость доставки, usd.', max_digits=9, decimal_places=2, default=0)
-    payment_type_cost_percent = models.FloatField('Наценка за тип оплаты, %', default=0)
-    payment_type_cost_rub = models.DecimalField('Наценка за тип оплаты, rub.', max_digits=9, decimal_places=2, default=0)
-    payment_type_cost_eur = models.DecimalField('Наценка за тип оплаты, eur.', max_digits=9, decimal_places=2, default=0)
-    payment_type_cost_usd = models.DecimalField('Наценка за тип оплаты, usd.', max_digits=9, decimal_places=2, default=0)
+    payment_type_cost_percent = models.FloatField('Наценка за тип оплаты, %', default=0, null=True, blank=True)
+    payment_type_cost_rub = models.DecimalField('Наценка за тип оплаты, rub.', max_digits=9, decimal_places=2, default=0, null=True, blank=True)
+    payment_type_cost_eur = models.DecimalField('Наценка за тип оплаты, eur.', max_digits=9, decimal_places=2, default=0, null=True, blank=True)
+    payment_type_cost_usd = models.DecimalField('Наценка за тип оплаты, usd.', max_digits=9, decimal_places=2, default=0, null=True, blank=True)
 
     # --- yookassa ---
     YOO_STATUS_CHOICES = (
