@@ -16,7 +16,7 @@ translated_strings = (_('Заказ на Bikinimini.ru'),)
 
 
 def get_paypal_form(request, cart):
-    amount = unicode(cart.summary)  # noqa
+    amount = unicode(cart.summary_c)  # noqa
     currency = cart.currency.upper()
     order_id = unicode(cart.id)  # noqa
     approve_token = get_a_token()

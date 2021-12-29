@@ -575,7 +575,8 @@ def show_me_the_money(sender, **kwargs):
         cart = Cart.objects.get(id=cart_id)
         was_paid = cart.paypal_paid
 
-        if ipn_obj.mc_gross == cart.summary and ipn_obj.mc_currency.lower() == cart.currency:
+        # if ipn_obj.mc_gross == cart.summary_c and ipn_obj.mc_currency.lower() == cart.currency:
+        if ipn_obj.mc_currency.lower() == cart.currency:
             l_paypal.info('[cart id: {}]; обновляем...'.format(cart.id))
 
             cart.paypal_txn_id = ipn_obj.txn_id
