@@ -18,15 +18,16 @@ from .translation import *  # noqa
 @admin.register(DeliveryMethod)
 class DeliveryMethodAdmin(SortableAdminMixin, TabbedTranslationAdmin):
     list_display = ('title', 'short_title', 'price_rub', 'price_eur', 'price_usd',
-                    'is_enabled', 'show_payment_methods',)
+                    'show_languages', 'is_enabled', 'show_payment_methods',)
     list_editable = ('short_title', 'price_rub', 'price_eur', 'price_usd',)
 
 
 @admin.register(PaymentMethod)
 class PaymentMethodAdmin(SortableAdminMixin, TabbedTranslationAdmin):
-    list_display = ('title', 'short_title', 'payment_type', 'is_enabled', 'show_delivery_methods',)
+    list_display = ('title', 'short_title', 'payment_type', 'show_languages',
+                    'is_enabled', 'show_delivery_methods',)
     list_editable = ('short_title',)
-    filter_horizontal = ['delivery_methods', ]
+    filter_horizontal = ['delivery_methods',]
 
 
 @admin.register(Cart)

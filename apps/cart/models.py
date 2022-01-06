@@ -12,6 +12,7 @@ from django.template.loader import get_template
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
+from multiselectfield import MultiSelectField
 # from paypal.standard.models import ST_PP_COMPLETED, ST_PP_PAID
 from paypal.standard.ipn.models import PayPalIPN
 from paypal.standard.ipn.signals import valid_ipn_received, invalid_ipn_received
@@ -30,6 +31,9 @@ from ..utils import get_error_message
 
 l_paypal = logging.getLogger('paypal')
 
+ALL_LANGUAGES = [x[0] for x in settings.LANGUAGES]
+LANGUAGE_CHOICES = [(x, x.upper()) for x in ALL_LANGUAGES]
+
 
 class DeliveryMethod(models.Model):
     title = models.CharField('Название', max_length=511)
@@ -37,6 +41,8 @@ class DeliveryMethod(models.Model):
     price_rub = models.DecimalField('Стоимость, руб.', max_digits=9, decimal_places=2, default=0)
     price_eur = models.DecimalField('Стоимость, eur.', max_digits=9, decimal_places=2, default=0)
     price_usd = models.DecimalField('Стоимость, usd.', max_digits=9, decimal_places=2, default=0)
+    languages = MultiSelectField('Языковые разделы', max_length=255, null=True, blank=True,
+                                 choices=LANGUAGE_CHOICES, default=ALL_LANGUAGES)
     is_enabled = models.BooleanField('Включен?', default=True)
     order = models.PositiveSmallIntegerField(default=0, blank=False, null=False, verbose_name=mark_safe('&nbsp;&nbsp;&nbsp;&nbsp;'))
 
@@ -60,6 +66,11 @@ class DeliveryMethod(models.Model):
     show_payment_methods.allow_tags = True
     show_payment_methods.short_description = 'Способы оплаты'
 
+    def show_languages(self):
+        return ', '.join(self.languages) or '-'
+    show_languages.allow_tags = True
+    show_languages.short_description = 'Языковые разделы'
+
     @property
     def payment_ids(self):
         return list(self.payment_methods.values_list('id', flat=True))
@@ -76,6 +87,8 @@ class PaymentMethod(models.Model):
     delivery_methods = models.ManyToManyField(DeliveryMethod, verbose_name='Способы доставки',
                                               blank=True, related_name='payment_methods')
     payment_type = models.CharField('Тип оплаты', max_length=15, choices=PAYMENT_TYPES, default='offline')
+    languages = MultiSelectField('Языковые разделы', max_length=255, null=True, blank=True,
+                                 choices=LANGUAGE_CHOICES, default=ALL_LANGUAGES)
     is_enabled = models.BooleanField('Включен?', default=True)
     order = models.PositiveSmallIntegerField(default=0, blank=False, null=False, verbose_name=mark_safe('&nbsp;&nbsp;&nbsp;&nbsp;'))
 
@@ -94,6 +107,11 @@ class PaymentMethod(models.Model):
         return ', '.join(list(self.delivery_methods.values_list('title', flat=True))) or '-'
     show_delivery_methods.allow_tags = True
     show_delivery_methods.short_description = 'Способы доставки'
+
+    def show_languages(self):
+        return ', '.join(self.languages) or '-'
+    show_languages.allow_tags = True
+    show_languages.short_description = 'Языковые разделы'
 
     @property
     def delivery_ids(self):

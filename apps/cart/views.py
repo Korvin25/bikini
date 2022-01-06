@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView, View
 from django.http import HttpResponseRedirect
@@ -56,12 +57,25 @@ class CartView(TemplateView):
 
         # проставляем payment_method и delivery_method
 
+        LANGUAGE_CODE = self.request.LANGUAGE_CODE or settings.LANGUAGE_CODE
         delivery_methods = DeliveryMethod.objects.prefetch_related('payment_methods').filter(
-            is_enabled=True, payment_methods__isnull=False,
+            is_enabled=True, payment_methods__isnull=False, languages__contains=LANGUAGE_CODE,
         ).distinct()
         payment_methods = PaymentMethod.objects.prefetch_related('delivery_methods').filter(
-            is_enabled=True, delivery_methods__isnull=False,
+            is_enabled=True, delivery_methods__isnull=False, languages__contains=LANGUAGE_CODE,
         ).distinct()
+
+        _update = False
+        if cart_obj.delivery_method not in delivery_methods:
+            cart_obj.delivery_method = None
+            shipping_data['delivery_method_id'] = None
+            _update = True
+        if cart_obj.payment_method not in payment_methods:
+            cart_obj.payment_method = None
+            shipping_data['payment_method_id'] = None
+            _update = True
+        if _update:
+            cart_obj.save()
 
         context = {
             'cart_items': cart_items,
