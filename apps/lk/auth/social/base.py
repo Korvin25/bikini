@@ -148,7 +148,7 @@ class BaseSocialView(View):
     def _vk_method(self, method_name, params, token):
         api_url = settings.VKONTAKTE_API_URL
         url = '{}/{}'.format(api_url, method_name)
-        params.update({'access_token': token, 'v': '5.73'})
+        params.update({'access_token': token, 'v': '5.131'})
         response = requests.get(url, params)
         return response
 
@@ -163,7 +163,7 @@ class BaseSocialView(View):
             email = response.get('email', '')
             token = response.get('access_token')
 
-            session = self._vk.get_session(token=token)
+            self._vk.get_session(token=token)
             response = self._vk_method('users.get', params={'user_ids': id, 'fields': 'photo_200,screen_name'}, token=token)
             response = response.json()
             user = response['response'][0]
@@ -171,7 +171,8 @@ class BaseSocialView(View):
             first_name = user.get('first_name', '')
             last_name = user.get('last_name', '')
             name = ' '.join([first_name, last_name])
-            photo = user.get('photo_200', '')
+            photo = user.get('photo_max', '')
+            photo = photo or user.get('photo_200', '')
             link = user.get('screen_name', '')
 
         except Exception as e:

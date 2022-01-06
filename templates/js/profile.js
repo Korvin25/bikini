@@ -130,7 +130,9 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
     contentType: 'application/json',
 
     success: function(res){
-      var error = res['error'],
+      var click_to = res['click_to'],
+          popup = res['popup'],
+          error = res['error'],
           errors = res['errors'],
           result = res['result'],
           has_password = res['has_password'];
