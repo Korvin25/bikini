@@ -46,6 +46,8 @@
   </head>
   <body>
     <div class="{% block base_class %}shell_wrapp inner_page_wrapp{% endblock %}">
+      {% include 'blocks/header_popups.html' %}
+
       {% block header %}
         {% include 'blocks/header.html' %}
       {% endblock %}
