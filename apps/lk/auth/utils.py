@@ -11,7 +11,7 @@ def update_wishlist(request, profile):
     if len(s_wishlist) and not profile.wishlist_items.count():
         for item in s_wishlist:
             try:
-                import ipdb; ipdb.set_trace()
+                # import ipdb; ipdb.set_trace()
                 WishListItem.objects.create(profile=profile,
                                             product_id=item.get('product_id', 0),
                                             option_id=item.get('option_id', 0),

@@ -25,6 +25,7 @@ class LogoutView(View):
     """
     Разлогиниваем юзера и перебрасываем на главную
     """
+
     def get(self, request, *args, **kwargs):
         logout(request)
         return HttpResponseRedirect(redirect_to=reverse('home'))
