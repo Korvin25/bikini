@@ -1,5 +1,3 @@
 # Bikinimini.ru
 
-## Demo
-
-http://new.bikinimini.ru/
+https://bikinimini.ru/
