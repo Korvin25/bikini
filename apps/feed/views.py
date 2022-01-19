@@ -10,7 +10,7 @@ from apps.catalog.models import Product, Category, AttributeOption
 
 SITE_TITLE = u'Интернет магазин мини и микро бикини от Анастасии Ивановской'
 SITE_LINK = u'https://bikinimini.ru'
-SITE_DESC = u'Здесь вы можете купить мини и микро бикини от Анастасии Ивановской'
+SITE_DESC = u'Большой выбор мини и микро бикини, миниатюрные купальники ручной работы, которые выбирают смелые и уверенные в себе представительницы прекрасного пола.'
 SITE_PLATFORM = u'bikinimini'
 SITE_COMPANY = u'bikinimini'
 SITE_VERSION = u'1.0'
@@ -75,15 +75,17 @@ class GenerateFeed:
         hash.update(item.get_absolute_url())
 
         self.sub_element(el_item, 'name', item.title)
+        self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaya')
         self.sub_element(el_item, 'vendorCode', item.vendor_code)
         self.sub_element(el_item, 'url', SITE_LINK + item.get_absolute_url())
         self.sub_element(el_item, 'currencyId', 'RUR')
         self.sub_element(el_item, 'price', str(item.price_rub))
         self.sub_element(el_item, 'categoryId', str(item.categories.first().id))
         self.sub_element(el_item, 'description', self.wrap_in_cdata(item.text))
+        self.sub_element(el_item, 'country_of_origin', u'Россия')
 
         self.sub_element(el_item, 'picture', SITE_LINK + item.photo_f.url)
-        for photo in item.photos.all():
+        for photo in item.photos.all()[:9]:
             self.sub_element(el_item, 'picture', SITE_LINK + photo.photo_f.url)
 
         self.sub_element(el_item, 'param', u'женский' if item.categories.first().sex == 'female' else u'мужской').attrib= {
