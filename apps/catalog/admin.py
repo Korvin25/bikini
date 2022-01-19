@@ -174,7 +174,7 @@ class CategoryAdmin(TabbedTranslationAdmin):
     fieldsets = (
         ('Категория', {
             'classes': ('suit-tab suit-tab-default',),
-            'fields': ('sex', 'title', 'slug', 'order', 'is_shown',),
+            'fields': ('sex', 'title', 'slug', 'title_yandex', 'order', 'is_shown',),
         }),
         ('Атрибуты', {
             'classes': ('suit-tab suit-tab-default',),
@@ -540,7 +540,7 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
         }),
         ('Настройки показа на сайте', {
             'classes': ('suit-tab suit-tab-default',),
-            'fields': ('show', 'show_at_homepage', 'order_at_homepage', 'add_dt',),
+            'fields': ('show', 'show_at_yandex', 'show_at_homepage', 'order_at_homepage', 'add_dt',),
         }),
         ('Сопутствующие товары', {
             'classes': ('suit-tab suit-tab-also',),

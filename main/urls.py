@@ -66,6 +66,9 @@ urlpatterns += i18n_patterns(
     # -- home --
     url(r'^$', HomepageView.as_view(), name='home'),
 
+    # feed
+    url(r'^feed/', include('apps.feed.urls', namespace='feed')),
+
     # -- api --
     url(r'^api/cart/', include('apps.cart.api.urls', namespace='cart_api')),
     url(r'^api/certificate/', include('apps.cart.certificate.urls', namespace='certificate_api')),
