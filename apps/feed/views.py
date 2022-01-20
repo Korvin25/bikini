@@ -43,7 +43,7 @@ def aliexpress_rss(request):\
 
     feed = GenerateFeed(**PARAMS)
 
-    for product in Product.objects.filter(show_at_yandex=True)[:5]:
+    for product in Product.objects.filter(show_at_yandex=True)[6:10]:
         feed.create_aliexpress_item(product)
     
     return HttpResponse(html_unescape(feed.to_xml()), content_type='text/xml')
