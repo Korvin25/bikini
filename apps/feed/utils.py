@@ -129,15 +129,29 @@ class GenerateFeed:
         #         u'name': u'Пол',
         #     }
 
+        # for attrs in item.attrs:
+        #     for id in item.attrs[attrs]:
+        #         attr = AttributeOption.objects.get(pk=id)
+        #         if attr.attribute.title not in [u'Низ купальника', u'Верх купальника', u'Фасон', u'Фасон одежды']:
+        #             if attr.attribute.title == u'Цвет':
+        #                 i+=1
+        #                 self.create_aliexpress_params(item, attr.title, i, chech_color=True)
+        #             else:
+        #                 self.create_aliexpress_params(item, attr.title, i, chech_size=True)
+
         for attrs in item.attrs:
             for id in item.attrs[attrs]:
                 attr = AttributeOption.objects.get(pk=id)
                 if attr.attribute.title not in [u'Низ купальника', u'Верх купальника', u'Фасон', u'Фасон одежды']:
                     if attr.attribute.title == u'Цвет':
-                        i+=1
-                        self.create_aliexpress_params(item, attr.title, i, chech_color=True)
+                        self.sub_element(el_item, 'param', attr.title).attrib= {
+                            u'name': attr.attribute.title,
+                        }
                     else:
-                        self.create_aliexpress_params(item, attr.title, i, chech_size=True)
+                        self.sub_element(el_item, 'param', attr.title).attrib= {
+                            u'name': attr.attribute.title,
+                            u'unit': u'INT'
+                        }
 
         return el_item
 
