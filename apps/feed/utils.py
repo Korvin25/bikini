@@ -100,7 +100,7 @@ class GenerateFeed:
         i=0
         el_item = self.sub_element(self.offers, 'offer ')
         el_item.attrib = {
-            'id': str(item.id) + str(i),
+            'id': str(item.id+10000) + str(i),
             'group_id': str(item.id)
         }
         name = item.title + u' от Анастасии Ивановской'
@@ -125,9 +125,9 @@ class GenerateFeed:
         for photo in item.photos.all()[:5]:
             self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
 
-        self.sub_element(el_item, 'param', u'женский' if item.categories.first().sex == 'female' else u'мужской').attrib= {
-                u'name': u'Пол',
-            }
+        # self.sub_element(el_item, 'param', u'женский' if item.categories.first().sex == 'female' else u'мужской').attrib= {
+        #         u'name': u'Пол',
+        #     }
 
         for attrs in item.attrs:
             for id in item.attrs[attrs]:
@@ -144,30 +144,30 @@ class GenerateFeed:
     def create_aliexpress_params(self, item, param, i=0, chech_color=False, chech_size=False):
         el_item = self.sub_element(self.offers, 'offer ')
         el_item.attrib = {
-            'id': str(item.id) + str(i),
+            'id': str(item.id+10000) + str(i),
             'group_id': str(item.id)
         }
-        # name = item.title + u' от Анастасии Ивановской'
-        # dimensions = self.dimensions.split('/')
+        name = item.title + u' от Анастасии Ивановской'
+        dimensions = self.dimensions.split('/')
 
-        # self.sub_element(el_item, 'name', name)
-        # self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaya')
-        # self.sub_element(el_item, 'vendorCode', item.vendor_code)
-        # self.sub_element(el_item, 'url', self.site_link + item.get_absolute_url())
-        # self.sub_element(el_item, 'currencyId', 'RUR')
-        # self.sub_element(el_item, 'price', str(item.price_rub))
-        # self.sub_element(el_item, 'categoryId', str(item.categories.first().id))
-        # self.sub_element(el_item, 'description', self.wrap_in_cdata(item.text))
-        # self.sub_element(el_item, 'country_of_origin', u'Россия')
-        # self.sub_element(el_item, 'weight', self.weight)
-        # self.sub_element(el_item, 'length', dimensions[0])
-        # self.sub_element(el_item, 'width', dimensions[1])
-        # self.sub_element(el_item, 'height', dimensions[2])
-        # self.sub_element(el_item, 'quantity', str(item.in_stock_counts['in_stock__min']))
+        self.sub_element(el_item, 'name', name)
+        self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaya')
+        self.sub_element(el_item, 'vendorCode', item.vendor_code)
+        self.sub_element(el_item, 'url', self.site_link + item.get_absolute_url())
+        self.sub_element(el_item, 'currencyId', 'RUR')
+        self.sub_element(el_item, 'price', str(item.price_rub))
+        self.sub_element(el_item, 'categoryId', str(item.categories.first().id))
+        self.sub_element(el_item, 'description', self.wrap_in_cdata(item.text))
+        self.sub_element(el_item, 'country_of_origin', u'Россия')
+        self.sub_element(el_item, 'weight', self.weight)
+        self.sub_element(el_item, 'length', dimensions[0])
+        self.sub_element(el_item, 'width', dimensions[1])
+        self.sub_element(el_item, 'height', dimensions[2])
+        self.sub_element(el_item, 'quantity', str(item.in_stock_counts['in_stock__min']))
 
-        # self.sub_element(el_item, 'picture', self.site_link + item.photo_f.url)
-        # for photo in item.photos.all()[:9]:
-        #     self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
+        self.sub_element(el_item, 'picture', self.site_link + item.photo_f.url)
+        for photo in item.photos.all()[:9]:
+            self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
 
         # self.sub_element(el_item, 'param', u'женский' if item.categories.first().sex == 'female' else u'мужской').attrib= {
         #         u'name': u'Пол',
