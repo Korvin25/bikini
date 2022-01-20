@@ -125,17 +125,15 @@ class GenerateFeed:
         for photo in item.photos.all()[:5]:
             self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
 
-        # self.sub_element(el_item, 'param', u'женский' if item.categories.first().sex == 'female' else u'мужской').attrib= {
-        #         u'name': u'Пол',
-        #     }
-
-        for attrs in item.attrs:
-            for id in item.attrs[attrs]:
+        colors = item.attrs.get('color', False)
+        if colors:
+            attr = AttributeOption.objects.get(pk=colors[-1])
+            self.sub_element(el_item, 'cus_skucolor', attr.title)
+            colors.pop()
+            for id in colors:
                 attr = AttributeOption.objects.get(pk=id)
-                if attr.attribute.title not in [u'Низ купальника', u'Верх купальника', u'Фасон', u'Фасон одежды']:
-                    if attr.attribute.title == u'Цвет':
-                        i+=1
-                        self.create_aliexpress_params(item, attr.title, i, chech_color=True)
+                i+=1
+                self.create_aliexpress_params(item, attr.title, i, chech_color=True)
     
         return el_item
 
