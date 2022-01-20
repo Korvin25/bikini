@@ -123,7 +123,7 @@ class GenerateFeed:
         self.sub_element(el_item, 'quantity', str(item.in_stock_counts['in_stock__min']))
 
         self.sub_element(el_item, 'picture', self.site_link + item.photo_f.url)
-        for photo in item.photos.all()[:9]:
+        for photo in item.photos.all()[:5]:
             self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
 
         self.sub_element(el_item, 'param', u'женский' if item.categories.first().sex == 'female' else u'мужской').attrib= {
