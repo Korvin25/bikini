@@ -98,6 +98,8 @@ class GenerateFeed:
 
     def create_aliexpress_item(self, item):
         i=0
+        dimensions = self.dimensions.split('/')
+        name = item.title + u' от Анастасии Ивановской'
         colors_id = item.attrs.get('color', [])
         sizes_id = item.attrs.get('bottom_size', []) + item.attrs.get('top_size', [])
         colors = AttributeOption.objects.filter(pk__in=colors_id)
@@ -112,9 +114,7 @@ class GenerateFeed:
                     'id': '1000'+str(item.id) + str(i),
                     'group_id': '10'+str(item.id)
                 }
-                name = item.title + u' от Анастасии Ивановской'
-                dimensions = self.dimensions.split('/')
-
+                
                 self.sub_element(el_item, 'name', name)
                 self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaya')
                 self.sub_element(el_item, 'sku_code', item.vendor_code + str(i))
@@ -132,7 +132,7 @@ class GenerateFeed:
                 self.sub_element(el_item, 'size', size)
                 self.sub_element(el_item, 'cus_skucolor', color.title)
                 if color.picture:
-                    self.sub_element(el_item, 'sku_picture', self.site_link + self.site_link + color.picture.url)
+                    self.sub_element(el_item, 'sku_picture', self.site_link + color.picture.url)
                 self.sub_element(el_item, 'picture', self.site_link + item.photo_f.url)
                 for photo in item.photos.all()[:5]:
                     self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
