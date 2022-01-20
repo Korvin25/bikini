@@ -97,11 +97,12 @@ class GenerateFeed:
         return el_item
 
     def create_aliexpress_item(self, item):
-        i=0
+        # i=0
         el_item = self.sub_element(self.offers, 'offer ')
         el_item.attrib = {
-            'id': str(item.id) + str(i),
-            'group_id': str(item.id)
+            # 'id': str(item.id) + str(i),
+            # 'group_id': str(item.id)
+            'id': str(item.id)
         }
         name = item.title + u' от Анастасии Ивановской'
         dimensions = self.dimensions.split('/')
@@ -134,10 +135,12 @@ class GenerateFeed:
                 attr = AttributeOption.objects.get(pk=id)
                 if attr.attribute.title not in [u'Низ купальника', u'Верх купальника', u'Фасон', u'Фасон одежды']:
                     if attr.attribute.title == u'Цвет':
-                        i+=1
-                        self.create_aliexpress_params(item, attr.title, i, chech_color=True)
+                        # i+=1
+                        # self.create_aliexpress_params(item, attr.title, i, chech_color=True)
+                        self.sub_element(el_item, 'cus_skucolor', attr.title)
                     else:
-                        self.create_aliexpress_params(item, attr.title, i, chech_size=True)
+                        # self.create_aliexpress_params(item, attr.title, i, chech_size=True)
+                        self.sub_element(el_item, 'size', attr.title)
 
         return el_item
 
