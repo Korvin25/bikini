@@ -176,7 +176,7 @@ class GenerateFeed:
         if chech_color:
             self.sub_element(el_item, 'cus_skucolor', param)
         if url_color_image:
-                self.sub_element(el_item, 'sku_picture', self.site_link + self.site_link + url_color_image)
+                self.sub_element(el_item, 'sku_picture', self.site_link + url_color_image)
         
         # for attrs in item.attrs:
         #     for id in item.attrs[attrs]:
