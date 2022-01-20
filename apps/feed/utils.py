@@ -101,7 +101,7 @@ class GenerateFeed:
         el_item.attrib = {
             'id': str(item.id)
         }
-        name = item.title + u'от Анастасии Ивановской'
+        name = item.title + u' от Анастасии Ивановской'
         dimensions = self.dimensions.split('/')
 
         self.sub_element(el_item, 'name', name)
