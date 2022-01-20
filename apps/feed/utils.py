@@ -108,7 +108,7 @@ class GenerateFeed:
 
         self.sub_element(el_item, 'name', name)
         self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaya')
-        self.sub_element(el_item, 'vendorCode', item.vendor_code)
+        self.sub_element(el_item, 'sku_code', item.vendor_code + str(i))
         self.sub_element(el_item, 'url', self.site_link + item.get_absolute_url())
         self.sub_element(el_item, 'currencyId', 'RUR')
         self.sub_element(el_item, 'price', str(item.price_rub))
@@ -150,7 +150,7 @@ class GenerateFeed:
 
         self.sub_element(el_item, 'name', name)
         self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaya')
-        self.sub_element(el_item, 'vendorCode', item.vendor_code)
+        self.sub_element(el_item, 'sku_code', item.vendor_code + str(i))
         self.sub_element(el_item, 'url', self.site_link + item.get_absolute_url())
         self.sub_element(el_item, 'currencyId', 'RUR')
         self.sub_element(el_item, 'price', str(item.price_rub))
