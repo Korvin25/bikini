@@ -168,7 +168,10 @@ class GenerateFeed:
             self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
 
         if chech_color:
-            self.sub_element(el_item, 'cus_skucolor', param)
+            # self.sub_element(el_item, 'cus_skucolor', param)
+            self.sub_element(el_item, 'param', param).attrib= {
+                            u'name': u'Цвет',
+                        }
         
         # for attrs in item.attrs:
         #     for id in item.attrs[attrs]:
