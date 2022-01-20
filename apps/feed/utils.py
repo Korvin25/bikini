@@ -100,7 +100,7 @@ class GenerateFeed:
         i=0
         el_item = self.sub_element(self.offers, 'offer ')
         el_item.attrib = {
-            'id': str(item.id+10000) + str(i),
+            'id': str(item.id) + str(i),
             'group_id': str(item.id)
         }
         name = item.title + u' от Анастасии Ивановской'
@@ -142,7 +142,7 @@ class GenerateFeed:
     def create_aliexpress_params(self, item, param, i=0, chech_color=False, chech_size=False):
         el_item = self.sub_element(self.offers, 'offer ')
         el_item.attrib = {
-            'id': str(item.id+10000) + str(i),
+            'id': str(item.id) + str(i),
             'group_id': str(item.id)
         }
         name = item.title + u' от Анастасии Ивановской'
