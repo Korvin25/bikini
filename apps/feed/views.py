@@ -4,8 +4,8 @@ from functools import reduce
 import xml.etree.ElementTree as et
 from datetime import datetime
 from django.http import HttpResponse
-from django.template.defaultfilters import striptags
 from apps.catalog.models import Product, Category, AttributeOption
+from apps.feed.utils import html_unescape
 
 
 SITE_TITLE = u'Интернет магазин мини и микро бикини от Анастасии Ивановской'
@@ -123,32 +123,6 @@ def yandex_rss(request):
         'email': SITE_EMAIL,
     }
     feed = GenerateFeed(**param)
-
-    def html_unescape(text):
-        html_escape_table = [
-            ['&amp;', "&amp;amp;"],
-            ['"', "&amp;quot;"],
-            ["'", "&amp;apos;"],
-            [">", "&amp;gt;"],
-            ["<", "&amp;lt;"],
-            [" ", "&amp;nbsp;"],
-            ["«", "&amp;laquo;"],
-            ["»", "&amp;raquo;"],
-            ["–", "&amp;ndash;"],
-            ["—", "&amp;mdash;"],
-            ["Š", "&amp;Scaron;"],
-            ['"', "&quot;"],
-            ["'", "&apos;"],
-            [">", "&gt;"],
-            ["<", "&lt;"],
-            [" ", "&nbsp;"],
-            ["«", "&laquo;"],
-            ["»", "&raquo;"],
-            ["–", "&ndash;"],
-            ["—", "&mdash;"],
-            ["Š", "&Scaron;"],
-        ]
-        return reduce(lambda text, x: text.replace(x[1], x[0]), html_escape_table, text)
 
     for product in Product.objects.filter(show=True, show_at_yandex=True):
         feed.create_yandex_item(product)

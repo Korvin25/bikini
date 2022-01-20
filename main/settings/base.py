@@ -90,6 +90,7 @@ INSTALLED_APPS = (
     'apps.contests',
     'apps.banners',
     'apps.feedback',
+    'apps.feed',
 )
 
 MIDDLEWARE = [
