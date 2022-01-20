@@ -128,16 +128,24 @@ class GenerateFeed:
         colors = item.attrs.get('color', False)
         if colors:
             attr = AttributeOption.objects.get(pk=colors[-1])
+
+            if attr.picture:
+                self.sub_element(el_item, 'sku_picture', self.site_link + self.site_link + attr.picture.url)
+
             self.sub_element(el_item, 'cus_skucolor', attr.title)
             colors.pop()
+
             for id in colors:
                 attr = AttributeOption.objects.get(pk=id)
+                url_color_image = None
+                if attr.picture:
+                    url_color_image = attr.picture.url
                 i+=1
-                self.create_aliexpress_params(item, attr.title, i, chech_color=True)
+                self.create_aliexpress_params(item, attr.title, i, chech_color=True, url_color_image=url_color_image)
     
         return el_item
 
-    def create_aliexpress_params(self, item, param, i=0, chech_color=False, chech_size=False):
+    def create_aliexpress_params(self, item, param, i=0, chech_color=False, url_color_image=None):
         el_item = self.sub_element(self.offers, 'offer ')
         el_item.attrib = {
             'id': '1000'+str(item.id) + str(i),
@@ -167,6 +175,8 @@ class GenerateFeed:
 
         if chech_color:
             self.sub_element(el_item, 'cus_skucolor', param)
+        if url_color_image:
+                self.sub_element(el_item, 'sku_picture', self.site_link + self.site_link + url_color_image)
         
         # for attrs in item.attrs:
         #     for id in item.attrs[attrs]:
