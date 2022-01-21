@@ -166,7 +166,7 @@ class GenerateFeed:
 
                 photos = item.photos.all()
                 photo_first = self.site_link + item.photo_f.url
-                text = item.text
+                text = item.text or ''
 
                 if photo_first:
                     text += photos_html.format(photo_first)
