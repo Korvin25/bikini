@@ -149,6 +149,12 @@ class GenerateFeed:
         sizes = [s.title for s in AttributeOption.objects.filter(pk__in=sizes_id)]
         sizes = list(set(sizes))
 
+        photos_html = """
+            <p>
+                <img src="{}">
+            </p>
+        """
+
         for size in sizes:
             for color in colors:
                 i += 1
@@ -157,6 +163,15 @@ class GenerateFeed:
                     'id': '1000'+str(item.id) + str(i),
                     'group_id': '10'+str(item.id)
                 }
+
+                photos = item.photos.all()
+                photo_first = self.site_link + item.photo_f.url
+                text = item.text
+
+                text += photos_html.format(photo_first)
+
+                for photo in photos:
+                    text += photos_html.format(self.site_link + photo.photo_f.url)
                 
                 self.sub_element(el_item, 'name', name)
                 self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaya')
@@ -165,7 +180,7 @@ class GenerateFeed:
                 self.sub_element(el_item, 'currencyId', 'RUR')
                 self.sub_element(el_item, 'price', str(item.price_rub))
                 self.sub_element(el_item, 'categoryId', str(item.categories.first().id))
-                self.sub_element(el_item, 'description', self.wrap_in_cdata(item.text))
+                self.sub_element(el_item, 'description', self.wrap_in_cdata(text))
                 self.sub_element(el_item, 'country_of_origin', u'Россия')
                 self.sub_element(el_item, 'weight', self.weight)
                 self.sub_element(el_item, 'length', dimensions[0])
@@ -176,8 +191,9 @@ class GenerateFeed:
                 self.sub_element(el_item, 'cus_skucolor', color.title)
                 if color.picture:
                     self.sub_element(el_item, 'sku_picture', self.site_link + color.picture.url)
-                self.sub_element(el_item, 'picture', self.site_link + item.photo_f.url)
-                for photo in item.photos.all()[:5]:
+
+                self.sub_element(el_item, 'picture', photo_first)
+                for photo in photos[:5]:
                     self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
 
     def to_xml(self):
