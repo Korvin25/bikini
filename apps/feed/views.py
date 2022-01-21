@@ -47,3 +47,13 @@ def aliexpress_rss(request):\
         feed.create_aliexpress_item(product)
     
     return HttpResponse(html_unescape(feed.to_xml()), content_type='text/xml')
+
+
+def ozon_rss(request):
+
+    feed = GenerateFeed(**PARAMS)
+
+    for product in Product.objects.filter(show_at_yandex=True):
+        feed.create_ozon_item(product)
+    
+    return HttpResponse(html_unescape(feed.to_xml()), content_type='text/xml')
