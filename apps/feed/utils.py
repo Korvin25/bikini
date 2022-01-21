@@ -168,7 +168,8 @@ class GenerateFeed:
                 photo_first = self.site_link + item.photo_f.url
                 text = item.text
 
-                text += photos_html.format(photo_first)
+                if photo_first:
+                    text += photos_html.format(photo_first)
 
                 for photo in photos:
                     text += photos_html.format(self.site_link + photo.photo_f.url)
@@ -191,8 +192,8 @@ class GenerateFeed:
                 self.sub_element(el_item, 'cus_skucolor', color.title)
                 if color.picture:
                     self.sub_element(el_item, 'sku_picture', self.site_link + color.picture.url)
-
-                self.sub_element(el_item, 'picture', photo_first)
+                if photo_first:
+                    self.sub_element(el_item, 'picture', photo_first)
                 for photo in photos[:5]:
                     self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
 
