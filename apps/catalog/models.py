@@ -251,6 +251,7 @@ class Category(MetatagModel):
     )
     title = models.CharField('Название', max_length=255)
     title_yandex = models.CharField('Название для Яндекса', max_length=255, blank=True, null=True)
+    ozon_category_id = models.PositiveIntegerField('ID категории Ozon', blank=True, null=True)
     slug = models.SlugField('В URL', max_length=127)
     sex = models.CharField('Пол', max_length=7, choices=SEX_CHOICES, default='female')
     order = models.IntegerField('Порядок', default=10)

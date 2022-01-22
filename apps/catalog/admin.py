@@ -174,7 +174,7 @@ class CategoryAdmin(TabbedTranslationAdmin):
     fieldsets = (
         ('Категория', {
             'classes': ('suit-tab suit-tab-default',),
-            'fields': ('sex', 'title', 'slug', 'title_yandex', 'order', 'is_shown',),
+            'fields': ('sex', 'title', 'slug', 'title_yandex', 'ozon_category_id', 'order', 'is_shown',),
         }),
         ('Атрибуты', {
             'classes': ('suit-tab suit-tab-default',),
