@@ -161,9 +161,9 @@ class ExtraProductAdmin(TabbedTranslationAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(TabbedTranslationAdmin):
-    list_display = ('show_sex', 'title', 'slug', 'order', 'show_attributes', 'is_shown',)
+    list_display = ('show_sex', 'title', 'slug', 'order', 'show_attributes', 'ozon_category_id', 'is_shown',)
     list_display_links = ('title',)
-    list_editable = ('order', 'is_shown',)
+    list_editable = ('order', 'ozon_category_id', 'is_shown',)
     list_filter = ('sex', 'is_shown',)
     list_per_page = 200
     suit_form_tabs = (
