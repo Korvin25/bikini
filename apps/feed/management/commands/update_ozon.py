@@ -14,5 +14,5 @@ class Command(BaseCommand):
 
         ozon_api = OzonSeller(settings.OZON_CLIENT_ID, settings.OZON_API_KEY)
 
-        for product in Product.objects.filter(id=577, show_at_yandex=True):
+        for product in Product.objects.filter(show_at_yandex=True):
             ozon_api.update_product(product)
