@@ -40,8 +40,10 @@ class OzonSeller():
 
             colors_id = product.attrs.get('color', [])
             sizes_id = product.attrs.get('bottom_size', []) + product.attrs.get('top_size', [])  + product.attrs.get('size', []) + product.attrs.get('razmer_kupalnika', []) + product.attrs.get('size_yubka_dop', [])
+            shueze_size_id =  product.attrs.get('size_yubka_dop', []) 
             colors = [c.title for c in AttributeOption.objects.filter(pk__in=colors_id)]
             sizes = [s.title for s in AttributeOption.objects.filter(pk__in=sizes_id)]
+            shueze_sizes = [sh.title for sh in AttributeOption.objects.filter(pk__in=shueze_size_id)]
             sizes = list(set(sizes))
 
             name = product.title + u' от Анастасии Ивановской'
@@ -55,14 +57,11 @@ class OzonSeller():
             vendor_code = str(product.vendor_code)
             mod = product.title
             text = strip_tags(product.text)
+            attributes_type = categorys_product[0].title
             i = 0
-            print(categorys_product[0].ozon_category_id, categorys_product[0].title)
-            print('colors', colors)
-            print('sizes', sizes)
-            print('atrr', product.attrs)
 
-            if not sizes:
-                for color in colors:
+            for color in colors:
+                if not sizes: # если нет размера, в основносм это аксесуары
                     i += 1
                     param_dict = {
                         "attributes": [],
@@ -97,17 +96,14 @@ class OzonSeller():
                     param_dict['attributes'].append(self.get_attributes(9163, sex)) # пол
                     param_dict['attributes'].append(self.get_attributes(85, "Нет бренда")) # бренд
                     # param_dict['attributes'].append(self.get_attributes(9070, "true")) # признаки 18+
-                    param_dict['attributes'].append(self.get_attributes(8229, categorys_product[0].title)) # тип TODO доработать в будущев в завсисимомсти от категории
+                    param_dict['attributes'].append(self.get_attributes(8229, attributes_type)) # тип TODO доработать в будущев в завсисимомсти от категории
                     param_dict['attributes'].append(self.get_attributes(4191, text)) # описание продукта
                     param_dict['attributes'].append(self.get_attributes(4495, "На любой сезон")) # сезон
                     param_dict['attributes'].append(self.get_attributes(9048, mod)) # модель
-                    # param_dict['attributes'].append(self.get_attributes(12121, "6108 - Женские, для девочек: сорочка ночная, халат, пеньюар, неглиже, термобелье, комплект нижнего белья, трусы, топ-бра, пижама, кигуруми, эротическое белье т.д.")) 
 
                     lists["items"].append(param_dict)
 
-
-            for size in sizes:
-                for color in colors:
+                for size in sizes: # все категории одежды
                     i += 1
                     param_dict = {
                         "attributes": [],
@@ -147,12 +143,60 @@ class OzonSeller():
                     param_dict['attributes'].append(self.get_attributes(9163, sex)) # пол
                     param_dict['attributes'].append(self.get_attributes(31, "Нет бренда")) # бренд
                     # param_dict['attributes'].append(self.get_attributes(9070, "true")) # признаки 18+
-                    param_dict['attributes'].append(self.get_attributes(8229, categorys_product[0].title)) # тип TODO доработать в будущев в завсисимомсти от категории
+                    param_dict['attributes'].append(self.get_attributes(8229, attributes_type)) # тип TODO доработать в будущев в завсисимомсти от категории
                     param_dict['attributes'].append(self.get_attributes(4191, text)) # описание продукта
                     param_dict['attributes'].append(self.get_attributes(4495, "На любой сезон")) # сезон
-                    param_dict['attributes'].append(self.get_attributes(12121, "6108 - Женские, для девочек: сорочка ночная, халат, пеньюар, неглиже, термобелье, комплект нижнего белья, трусы, топ-бра, пижама, кигуруми, эротическое белье т.д.")) # сезон
+                    param_dict['attributes'].append(self.get_attributes(12121, "6108 - Женские, для девочек: сорочка ночная, халат, пеньюар, неглиже, термобелье, комплект нижнего белья, трусы, топ-бра, пижама, кигуруми, эротическое белье т.д.")) # Код ОКПД/ТН ВЭД для обуви 
 
                     lists["items"].append(param_dict)
+
+                for shueze_size in shueze_sizes: # обувь
+                    i += 1
+                    param_dict = {
+                        "attributes": [],
+                        "barcode": "",
+                        "category_id": category_id,
+                        "color_image": "",
+                        "complex_attributes": [ ],
+                        "depth": 30,
+                        "dimension_unit": "mm",
+                        "height": 300,
+                        "images": images,
+                        "images360": [ ],
+                        "name": name,
+                        "offer_id": offer_id + '_' + str(i),
+                        "old_price": "",
+                        "pdf_list": [ ],
+                        "premium_price": "",
+                        "price": price,
+                        "primary_image": primary_image,
+                        "vat": "0.1",
+                        "weight": 100,
+                        "weight_unit": "g",
+                        "width": 250
+                    }
+                
+                    sex = u'Женский' if categorys_product[0].sex == 'female' else u'Мужской'
+
+                    param_dict['attributes'].append(self.get_attributes(8292, vendor_code)) #обьеденить на одной карточке
+                    for color in COLORS_MAP[color]:
+                        param_dict['attributes'].append(self.get_attributes(10096, color)) # цвет
+                    
+                    param_dict['attributes'].append(self.get_attributes(4298, shueze_size)) # размер росийский
+                    
+                    
+                    param_dict['attributes'].append(self.get_attributes(9163, sex)) # пол
+                    param_dict['attributes'].append(self.get_attributes(31, "Нет бренда")) # бренд
+                    # param_dict['attributes'].append(self.get_attributes(9070, "true")) # признаки 18+
+                    param_dict['attributes'].append(self.get_attributes(8229, attributes_type)) # тип TODO доработать в будущев в завсисимомсти от категории
+                    param_dict['attributes'].append(self.get_attributes(4191, text)) # описание продукта
+                    param_dict['attributes'].append(self.get_attributes(4495, "На любой сезон")) # сезон
+                    param_dict['attributes'].append(self.get_attributes(12121, " ОКПД 2 - 15.20.11.124 - Сапожки и полусапожки из полимерных материалов ")) # Код ОКПД/ТН ВЭД для обуви 
+
+                    lists["items"].append(param_dict)
+
+
+                    
             
             response = requests.post(self.url, data=json.dumps(lists), headers=self.headers)
             print("product id:", product.id, response, response.json())
