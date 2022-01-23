@@ -65,6 +65,22 @@ class GenerateFeed:
         instock = str(item.in_stock_counts['in_stock__min'])
 
         i=0
+
+        if not sizes:
+            for color in colors:
+                i += 1
+                el_item = self.sub_element(self.offers, 'offer ')
+                el_item.attrib = {
+                    'id': item_id + '_' + str(i),
+                }
+                self.sub_element(el_item, 'price', price)
+                # self.sub_element(el_item, 'oldprice', price)
+                # self.sub_element(el_item, 'premium_price', price)
+                outlets = self.sub_element(el_item, 'outlets')
+                self.sub_element(outlets, 'outlet').attrib = {
+                    'instock': instock,
+                }
+
         for size in sizes:
             for color in colors:
                 i += 1
@@ -100,6 +116,40 @@ class GenerateFeed:
         vendorCode = item.vendor_code
         name = item.title
         i=0
+
+        if not sizes:
+            for color in colors:
+                i += 1
+                el_item = self.sub_element(self.offers, 'offer ')
+                el_item.attrib = {
+                    'id': item_id + letters[i-1],
+                    'group_id': item_id
+                }
+
+                self.sub_element(el_item, 'name', name)
+                self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaya')
+                self.sub_element(el_item, 'vendorCode', vendorCode)
+                self.sub_element(el_item, 'url', url)
+                self.sub_element(el_item, 'currencyId', 'RUR')
+                self.sub_element(el_item, 'price', price)
+                self.sub_element(el_item, 'categoryId', categoryId)
+                self.sub_element(el_item, 'description', text)
+                self.sub_element(el_item, 'country_of_origin', u'Россия')
+                self.sub_element(el_item, 'weight', self.weight)
+                self.sub_element(el_item, 'dimensions', self.dimensions)
+
+                self.sub_element(el_item, 'picture', picture)
+                for photo in photos:
+                    self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
+
+                self.sub_element(el_item, 'param', famile).attrib= {
+                        u'name': u'Пол',
+                    }
+
+                self.sub_element(el_item, 'param', color).attrib= {
+                        u'name': u'Цвет',
+                    }
+
         for size in sizes:
             for color in colors:
                 i += 1
@@ -170,6 +220,37 @@ class GenerateFeed:
         item_id = str(item.id)
 
         quantity = str(item.in_stock_counts['in_stock__min'])
+
+        if not sizes:
+            for color in colors:
+                i += 1
+                el_item = self.sub_element(self.offers, 'offer ')
+                el_item.attrib = {
+                    'id': '1000'+item_id + str(i),
+                    'group_id': '10'+item_id
+                }
+  
+                self.sub_element(el_item, 'name', name)
+                self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaya')
+                self.sub_element(el_item, 'sku_code', vendor_code + str(i))
+                self.sub_element(el_item, 'url', site_link)
+                self.sub_element(el_item, 'currencyId', 'RUR')
+                self.sub_element(el_item, 'price', price)
+                self.sub_element(el_item, 'categoryId', categoryId)
+                self.sub_element(el_item, 'description', description)
+                self.sub_element(el_item, 'country_of_origin', u'Россия')
+                self.sub_element(el_item, 'weight', self.weight)
+                self.sub_element(el_item, 'length', dimensions[0])
+                self.sub_element(el_item, 'width', dimensions[1])
+                self.sub_element(el_item, 'height', dimensions[2])
+                self.sub_element(el_item, 'quantity', quantity)
+                self.sub_element(el_item, 'cus_skucolor', color.title)
+                if color.picture:
+                    self.sub_element(el_item, 'sku_picture', self.site_link + color.picture.url)
+                if photo_first:
+                    self.sub_element(el_item, 'picture', photo_first)
+                for photo in photos[:5]:
+                    self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
 
         for size in sizes:
             for color in colors:
