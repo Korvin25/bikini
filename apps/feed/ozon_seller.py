@@ -40,7 +40,7 @@ class OzonSeller():
 
             colors_id = product.attrs.get('color', [])
             sizes_id = product.attrs.get('bottom_size', []) + product.attrs.get('top_size', [])  + product.attrs.get('size', []) + product.attrs.get('razmer_kupalnika', []) + product.attrs.get('size_yubka_dop', [])
-            shueze_size_id =  product.attrs.get('size_yubka_dop', []) 
+            shueze_size_id =  product.attrs.get('shueze_size', []) 
             colors = [c.title for c in AttributeOption.objects.filter(pk__in=colors_id)]
             sizes = [s.title for s in AttributeOption.objects.filter(pk__in=sizes_id)]
             shueze_sizes = [sh.title for sh in AttributeOption.objects.filter(pk__in=shueze_size_id)]
