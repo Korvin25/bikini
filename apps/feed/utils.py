@@ -58,8 +58,10 @@ class GenerateFeed:
     def create_ozon_item(self, item):
         colors_id = item.attrs.get('color', [])
         sizes_id = item.attrs.get('bottom_size', []) + item.attrs.get('top_size', [])  + item.attrs.get('size', []) + item.attrs.get('razmer_kupalnika', []) + item.attrs.get('size_yubka_dop', [])
+        shueze_size_id =  item.attrs.get('shueze_size', []) 
         colors = AttributeOption.objects.filter(pk__in=colors_id)
         sizes = [s.title for s in AttributeOption.objects.filter(pk__in=sizes_id)]
+        shueze_sizes = [sh.title for sh in AttributeOption.objects.filter(pk__in=shueze_size_id)]
         sizes = list(set(sizes))
         price = str(item.price_rub)
         item_id = str(item.id)
@@ -67,8 +69,8 @@ class GenerateFeed:
 
         i=0
 
-        if not sizes:
-            for color in colors:
+        for color in colors:
+            if not sizes and not shueze_sizes: # если нет размера, в основносм это аксесуары
                 i += 1
                 el_item = self.sub_element(self.offers, 'offer ')
                 el_item.attrib = {
@@ -82,8 +84,7 @@ class GenerateFeed:
                     'instock': instock,
                 }
 
-        for size in sizes:
-            for color in colors:
+            for size in sizes:
                 i += 1
                 el_item = self.sub_element(self.offers, 'offer ')
                 el_item.attrib = {
@@ -98,13 +99,29 @@ class GenerateFeed:
                     'instock': instock,
                 }
 
+            for shueze_size in shueze_sizes: # обувь
+                i += 1
+                el_item = self.sub_element(self.offers, 'offer ')
+                el_item.attrib = {
+                    'id': item_id + '_' + str(i),
+                }
+                self.sub_element(el_item, 'price', price)
+                # self.sub_element(el_item, 'oldprice', price)
+                # self.sub_element(el_item, 'premium_price', price)
+                outlets = self.sub_element(el_item, 'outlets')
+                self.sub_element(outlets, 'outlet').attrib = {
+                    'instock': instock,
+                }
+
     def create_yandex_item(self, item):
         letters = 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI,AJ,AK,AL,AM,AN,AO,AP,AQ,AR,AS,AT,AU,AV,AW,AX,AY,AZ'.split(',')
         name = item.title + u' от Анастасии Ивановской'
         colors_id = item.attrs.get('color', [])
         sizes_id = item.attrs.get('bottom_size', []) + item.attrs.get('top_size', [])  + item.attrs.get('size', []) + item.attrs.get('razmer_kupalnika', []) + item.attrs.get('size_yubka_dop', [])
+        shueze_size_id =  item.attrs.get('shueze_size', []) 
         colors = [c.title for c in AttributeOption.objects.filter(pk__in=colors_id)]
         sizes = [s.title for s in AttributeOption.objects.filter(pk__in=sizes_id)]
+        shueze_sizes = [sh.title for sh in AttributeOption.objects.filter(pk__in=shueze_size_id)]
         sizes = list(set(sizes))
         price = str(item.price_rub)
         item_id = str(item.id)
@@ -120,8 +137,8 @@ class GenerateFeed:
         name = item.title
         i=0
 
-        if not sizes:
-            for color in colors:
+        for color in colors:
+            if not sizes and not shueze_sizes: # если нет размера, в основносм это аксесуары
                 i += 1
                 el_item = self.sub_element(self.offers, 'offer ')
                 el_item.attrib = {
@@ -153,8 +170,7 @@ class GenerateFeed:
                         u'name': u'Цвет',
                     }
 
-        for size in sizes:
-            for color in colors:
+            for size in sizes:
                 i += 1
                 el_item = self.sub_element(self.offers, 'offer ')
                 el_item.attrib = {
@@ -190,14 +206,52 @@ class GenerateFeed:
                         u'unit': u'INT'
                     }
 
+            for shueze_size in shueze_sizes: # обувь
+                i += 1
+                el_item = self.sub_element(self.offers, 'offer ')
+                el_item.attrib = {
+                    'id': item_id + letters[i-1],
+                    'group_id': item_id
+                }
+
+                self.sub_element(el_item, 'name', name)
+                self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaya')
+                self.sub_element(el_item, 'vendorCode', vendorCode)
+                self.sub_element(el_item, 'url', url)
+                self.sub_element(el_item, 'currencyId', 'RUR')
+                self.sub_element(el_item, 'price', price)
+                self.sub_element(el_item, 'categoryId', categoryId)
+                self.sub_element(el_item, 'description', text)
+                self.sub_element(el_item, 'country_of_origin', u'Россия')
+                self.sub_element(el_item, 'weight', self.weight)
+                self.sub_element(el_item, 'dimensions', self.dimensions)
+
+                self.sub_element(el_item, 'picture', picture)
+                for photo in photos:
+                    self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
+
+                self.sub_element(el_item, 'param', famile).attrib= {
+                        u'name': u'Пол',
+                    }
+
+                self.sub_element(el_item, 'param', color).attrib= {
+                        u'name': u'Цвет',
+                    }
+                self.sub_element(el_item, 'param', shueze_size).attrib= {
+                        u'name': u'Размер',
+                        u'unit': u'RU'
+                    }
+
     def create_aliexpress_item(self, item):
         i=0
         dimensions = self.dimensions.split('/')
         name = item.title + u' от Анастасии Ивановской'
         colors_id = item.attrs.get('color', [])
         sizes_id = item.attrs.get('bottom_size', []) + item.attrs.get('top_size', [])  + item.attrs.get('size', []) + item.attrs.get('razmer_kupalnika', []) + item.attrs.get('size_yubka_dop', [])
+        shueze_size_id =  item.attrs.get('shueze_size', []) 
         colors = AttributeOption.objects.filter(pk__in=colors_id)
         sizes = [s.title for s in AttributeOption.objects.filter(pk__in=sizes_id)]
+        shueze_sizes = [sh.title for sh in AttributeOption.objects.filter(pk__in=shueze_size_id)]
         sizes = list(set(sizes))
 
         photos_html = """
@@ -226,15 +280,14 @@ class GenerateFeed:
 
         quantity = str(item.in_stock_counts['in_stock__min'])
 
-        if not sizes:
-            for color in colors:
+        for color in colors:
+            if not sizes and not shueze_sizes: # если нет размера, в основносм это аксесуары
                 i += 1
                 el_item = self.sub_element(self.offers, 'offer ')
                 el_item.attrib = {
                     'id': '1000'+item_id + str(i),
                     'group_id': '10'+item_id
                 }
-  
                 self.sub_element(el_item, 'name', name)
                 self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaya')
                 self.sub_element(el_item, 'sku_code', vendor_code + str(i))
@@ -257,8 +310,7 @@ class GenerateFeed:
                 for photo in photos[:5]:
                     self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
 
-        for size in sizes:
-            for color in colors:
+            for size in sizes:
                 i += 1
                 el_item = self.sub_element(self.offers, 'offer ')
                 el_item.attrib = {
@@ -281,6 +333,37 @@ class GenerateFeed:
                 self.sub_element(el_item, 'height', dimensions[2])
                 self.sub_element(el_item, 'quantity', quantity)
                 self.sub_element(el_item, 'size', size)
+                self.sub_element(el_item, 'cus_skucolor', color.title)
+                if color.picture:
+                    self.sub_element(el_item, 'sku_picture', self.site_link + color.picture.url)
+                if photo_first:
+                    self.sub_element(el_item, 'picture', photo_first)
+                for photo in photos[:5]:
+                    self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
+
+            for shueze_size in shueze_sizes: # обувь
+                i += 1
+                el_item = self.sub_element(self.offers, 'offer ')
+                el_item.attrib = {
+                    'id': '1000'+item_id + str(i),
+                    'group_id': '10'+item_id
+                }
+  
+                self.sub_element(el_item, 'name', name)
+                self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaya')
+                self.sub_element(el_item, 'sku_code', vendor_code + str(i))
+                self.sub_element(el_item, 'url', site_link)
+                self.sub_element(el_item, 'currencyId', 'RUR')
+                self.sub_element(el_item, 'price', price)
+                self.sub_element(el_item, 'categoryId', categoryId)
+                self.sub_element(el_item, 'description', description)
+                self.sub_element(el_item, 'country_of_origin', u'Россия')
+                self.sub_element(el_item, 'weight', self.weight)
+                self.sub_element(el_item, 'length', dimensions[0])
+                self.sub_element(el_item, 'width', dimensions[1])
+                self.sub_element(el_item, 'height', dimensions[2])
+                self.sub_element(el_item, 'quantity', quantity)
+                self.sub_element(el_item, 'size', shueze_size)
                 self.sub_element(el_item, 'cus_skucolor', color.title)
                 if color.picture:
                     self.sub_element(el_item, 'sku_picture', self.site_link + color.picture.url)

@@ -61,8 +61,6 @@ class OzonSeller():
             sex = u'Женский' if categorys_product[0].sex == 'female' else u'Мужской'
             i = 0
 
-            print(product.attrs)
-
             for color in colors:
                 if not sizes and not shueze_sizes: # если нет размера, в основносм это аксесуары
                     i += 1
