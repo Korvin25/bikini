@@ -55,47 +55,31 @@ class GenerateFeed:
         return u'<![CDATA[ {}]]>'.format(text)
 
     def create_ozon_item(self, item):
-        el_item = self.sub_element(self.offers, 'offer ')
-        el_item.attrib = {
-            'id': str(item.id)
-        }
+        colors_id = item.attrs.get('color', [])
+        sizes_id = item.attrs.get('bottom_size', []) + item.attrs.get('top_size', [])
+        colors = AttributeOption.objects.filter(pk__in=colors_id)
+        sizes = [s.title for s in AttributeOption.objects.filter(pk__in=sizes_id)]
+        sizes = list(set(sizes))
+        price = str(item.price_rub)
+        item_id = str(item.id)
+        instock = str(item.in_stock_counts['in_stock__min'])
 
-        self.sub_element(el_item, 'name', item.title)
-        self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaya')
-        self.sub_element(el_item, 'vendorCode', item.vendor_code)
-        self.sub_element(el_item, 'url', self.site_link + item.get_absolute_url())
-        self.sub_element(el_item, 'currencyId', 'RUR')
-        self.sub_element(el_item, 'price', str(item.price_rub))
-        self.sub_element(el_item, 'categoryId', str(item.categories.first().id))
-        self.sub_element(el_item, 'description', self.wrap_in_cdata(item.text))
-        self.sub_element(el_item, 'country_of_origin', u'Россия')
-        self.sub_element(el_item, 'weight', self.weight)
-        self.sub_element(el_item, 'dimensions', self.dimensions)
-        self.sub_element(el_item, 'instock', str(item.in_stock_counts['in_stock__min']))
-
-        self.sub_element(el_item, 'picture', self.site_link + item.photo_f.url)
-        for photo in item.photos.all()[:9]:
-            self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
-
-        self.sub_element(el_item, 'param', u'женский' if item.categories.first().sex == 'female' else u'мужской').attrib= {
-                u'name': u'Пол',
-            }
-
-        for attrs in item.attrs:
-            for id in item.attrs[attrs]:
-                attr = AttributeOption.objects.get(pk=id)
-                if attr.attribute.title not in [u'Низ купальника', u'Верх купальника', u'Фасон', u'Фасон одежды']:
-                    if attr.attribute.title == u'Цвет':
-                        self.sub_element(el_item, 'param', attr.title).attrib= {
-                            u'name': attr.attribute.title,
-                        }
-                    else:
-                        self.sub_element(el_item, 'param', attr.title).attrib= {
-                            u'name': attr.attribute.title,
-                            u'unit': u'INT'
-                        }
-
-        return el_item
+        i=0
+        for size in sizes:
+            for color in colors:
+                i += 1
+                el_item = self.sub_element(self.offers, 'offer ')
+                el_item.attrib = {
+                    'id': item_id + '_' + str(i),
+                }
+  
+                self.sub_element(el_item, 'price', price)
+                self.sub_element(el_item, 'oldprice', price)
+                self.sub_element(el_item, 'premium_price', price)
+                outlets = self.sub_element(el_item, 'outlets')
+                self.sub_element(outlets, 'outlet').attrib = {
+                    'instock': instock,
+                }
 
     def create_yandex_item(self, item):
         el_item = self.sub_element(self.offers, 'offer ')
