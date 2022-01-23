@@ -40,9 +40,10 @@ class OzonSeller():
 
             colors_id = product.attrs.get('color', [])
             sizes_id = product.attrs.get('bottom_size', []) + product.attrs.get('top_size', [])  + product.attrs.get('size', []) + product.attrs.get('razmer_kupalnika', []) + product.attrs.get('size_yubka_dop', [])
-            shueze_sizes =  product.attrs.get('shueze_size', []) 
+            shueze_size_id =  product.attrs.get('shueze_size', []) 
             colors = [c.title for c in AttributeOption.objects.filter(pk__in=colors_id)]
             sizes = [s.title for s in AttributeOption.objects.filter(pk__in=sizes_id)]
+            shueze_sizes = [sh.title for sh in AttributeOption.objects.filter(pk__in=shueze_size_id)]
             sizes = list(set(sizes))
 
             name = product.title + u' от Анастасии Ивановской'
@@ -57,6 +58,7 @@ class OzonSeller():
             mod = product.title
             text = strip_tags(product.text)
             attributes_type = categorys_product[0].title
+            sex = u'Женский' if categorys_product[0].sex == 'female' else u'Мужской'
             i = 0
 
             print(sizes)
@@ -90,8 +92,6 @@ class OzonSeller():
                         "width": 250
                     }
                 
-                    sex = u'Женский' if categorys_product[0].sex == 'female' else u'Мужской'
-
                     param_dict['attributes'].append(self.get_attributes(8292, vendor_code)) #обьеденить на одной карточке
                     for color in COLORS_MAP[color]:
                         param_dict['attributes'].append(self.get_attributes(10096, color)) # цвет
@@ -132,11 +132,9 @@ class OzonSeller():
                         "width": 250
                     }
                 
-                    sex = u'Женский' if categorys_product[0].sex == 'female' else u'Мужской'
-
                     param_dict['attributes'].append(self.get_attributes(8292, vendor_code)) #обьеденить на одной карточке
-                    for color in COLORS_MAP[color]:
-                        param_dict['attributes'].append(self.get_attributes(10096, color)) # цвет
+                    for col in COLORS_MAP[color]:
+                        param_dict['attributes'].append(self.get_attributes(10096, col)) # цвет
                     
                     if sex == u'Женский':
                         param_dict['attributes'].append(self.get_attributes(4295, SIZES_FAMELE_MAP[size])) # размер женский
@@ -178,12 +176,10 @@ class OzonSeller():
                         "weight_unit": "g",
                         "width": 250
                     }
-                
-                    sex = u'Женский' if categorys_product[0].sex == 'female' else u'Мужской'
 
                     param_dict['attributes'].append(self.get_attributes(8292, vendor_code)) #обьеденить на одной карточке
-                    for color in COLORS_MAP[color]:
-                        param_dict['attributes'].append(self.get_attributes(10096, color)) # цвет
+                    for col in COLORS_MAP[color]:
+                        param_dict['attributes'].append(self.get_attributes(10096, col)) # цвет
                     
                     param_dict['attributes'].append(self.get_attributes(4298, shueze_size)) # размер росийский
                     
