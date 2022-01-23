@@ -10,10 +10,10 @@ from django.db import models
 from django.db.models import Min, Max
 from django.template.loader import get_template
 from django.utils.safestring import mark_safe
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from apps.feed.ozon_seller import OzonSeller
-from django.conf import settings
+# from django.db.models.signals import post_save
+# from django.dispatch import receiver
+# from apps.feed.ozon_seller import OzonSeller
+# from django.conf import settings
 
 from ckeditor_uploader.fields import RichTextUploadingField
 from colorfield.fields import ColorField
