@@ -10,6 +10,10 @@ from django.db import models
 from django.db.models import Min, Max
 from django.template.loader import get_template
 from django.utils.safestring import mark_safe
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from apps.feed.ozon_seller import OzonSeller
+from django.conf import settings
 
 from ckeditor_uploader.fields import RichTextUploadingField
 from colorfield.fields import ColorField
@@ -999,3 +1003,14 @@ class SpecialOffer(models.Model):
     def get_offer_url(self, discount_code):
         product_url = self.product.get_absolute_url()
         return '{}discount/{}/{}/'.format(product_url, self.category_id, discount_code)
+
+
+
+@receiver(post_save, sender=Product)
+def update_uzon_product(sender, instance, **kwargs):
+    try:
+        if instance.show_at_yandex:
+            ozon_api = OzonSeller(settings.OZON_CLIENT_ID, settings.OZON_API_KEY)
+            ozon_api.update_product(instance)
+    except:
+        print('Error update ozon - product', instance.id)
