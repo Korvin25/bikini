@@ -52,6 +52,9 @@ class OzonSeller():
             price = price = str(product.price_rub)
             vendor_code = str(product.vendor_code)
             i = 0
+            print('sizes', sizes)
+            print('colors', colors)
+
             for size in sizes:
                 for color in colors:
                     i += 1
