@@ -74,54 +74,68 @@ class GenerateFeed:
                 }
   
                 self.sub_element(el_item, 'price', price)
-                self.sub_element(el_item, 'oldprice', price)
-                self.sub_element(el_item, 'premium_price', price)
+                # self.sub_element(el_item, 'oldprice', price)
+                # self.sub_element(el_item, 'premium_price', price)
                 outlets = self.sub_element(el_item, 'outlets')
                 self.sub_element(outlets, 'outlet').attrib = {
                     'instock': instock,
                 }
 
     def create_yandex_item(self, item):
-        el_item = self.sub_element(self.offers, 'offer ')
-        el_item.attrib = {
-            'id': str(item.id)
-        }
+        letters = 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI,AJ,AK,AL,AM,AN,AO,AP,AQ,AR,AS,AT,AU,AV,AW,AX,AY,AZ'.split(',')
+        name = item.title + u' от Анастасии Ивановской'
+        colors_id = item.attrs.get('color', [])
+        sizes_id = item.attrs.get('bottom_size', []) + item.attrs.get('top_size', [])
+        colors = [c.title for c in AttributeOption.objects.filter(pk__in=colors_id)]
+        sizes = [s.title for s in AttributeOption.objects.filter(pk__in=sizes_id)]
+        sizes = list(set(sizes))
+        price = str(item.price_rub)
+        item_id = str(item.id)
+        famile = u'женский' if item.categories.first().sex == 'female' else u'мужской'
+        photos = item.photos.all()[:9]
+        picture = self.site_link + item.photo_f.url
+        text = self.wrap_in_cdata(item.text) 
+        categoryId = str(item.categories.first().id)
+        url = self.site_link + item.get_absolute_url()
+        vendorCode = item.vendor_code
+        name = item.title
+        i=0
+        for size in sizes:
+            for color in colors:
+                i += 1
+                el_item = self.sub_element(self.offers, 'offer ')
+                el_item.attrib = {
+                    'id': item_id + letters[i-1],
+                    'group_id': item_id
+                }
 
-        self.sub_element(el_item, 'name', item.title)
-        self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaya')
-        self.sub_element(el_item, 'vendorCode', item.vendor_code)
-        self.sub_element(el_item, 'url', self.site_link + item.get_absolute_url())
-        self.sub_element(el_item, 'currencyId', 'RUR')
-        self.sub_element(el_item, 'price', str(item.price_rub))
-        self.sub_element(el_item, 'categoryId', str(item.categories.first().id))
-        self.sub_element(el_item, 'description', self.wrap_in_cdata(item.text))
-        self.sub_element(el_item, 'country_of_origin', u'Россия')
-        self.sub_element(el_item, 'weight', self.weight)
-        self.sub_element(el_item, 'dimensions', self.dimensions)
+                self.sub_element(el_item, 'name', name)
+                self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaya')
+                self.sub_element(el_item, 'vendorCode', vendorCode)
+                self.sub_element(el_item, 'url', url)
+                self.sub_element(el_item, 'currencyId', 'RUR')
+                self.sub_element(el_item, 'price', price)
+                self.sub_element(el_item, 'categoryId', categoryId)
+                self.sub_element(el_item, 'description', text)
+                self.sub_element(el_item, 'country_of_origin', u'Россия')
+                self.sub_element(el_item, 'weight', self.weight)
+                self.sub_element(el_item, 'dimensions', self.dimensions)
 
-        self.sub_element(el_item, 'picture', self.site_link + item.photo_f.url)
-        for photo in item.photos.all()[:9]:
-            self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
+                self.sub_element(el_item, 'picture', picture)
+                for photo in photos:
+                    self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
 
-        self.sub_element(el_item, 'param', u'женский' if item.categories.first().sex == 'female' else u'мужской').attrib= {
-                u'name': u'Пол',
-            }
+                self.sub_element(el_item, 'param', famile).attrib= {
+                        u'name': u'Пол',
+                    }
 
-        for attrs in item.attrs:
-            for id in item.attrs[attrs]:
-                attr = AttributeOption.objects.get(pk=id)
-                if attr.attribute.title not in [u'Низ купальника', u'Верх купальника', u'Фасон', u'Фасон одежды']:
-                    if attr.attribute.title == u'Цвет':
-                        self.sub_element(el_item, 'param', attr.title).attrib= {
-                            u'name': attr.attribute.title,
-                        }
-                    else:
-                        self.sub_element(el_item, 'param', attr.title).attrib= {
-                            u'name': attr.attribute.title,
-                            u'unit': u'INT'
-                        }
-
-        return el_item
+                self.sub_element(el_item, 'param', color).attrib= {
+                        u'name': u'Цвет',
+                    }
+                self.sub_element(el_item, 'param', size).attrib= {
+                        u'name': u'Размер',
+                        u'unit': u'INT'
+                    }
 
     def create_aliexpress_item(self, item):
         i=0
