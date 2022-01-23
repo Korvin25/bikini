@@ -154,40 +154,48 @@ class GenerateFeed:
                 <img src="{}">
             </p>
         """
+        site_link = self.site_link + item.get_absolute_url()
+        vendor_code = item.vendor_code
+        categoryId = str(item.categories.first().id)
+        price = str(item.price_rub)
+        photos = item.photos.all()
+        photo_first = self.site_link + item.photo_f.url
+        text = item.text or ''
+
+        if photo_first:
+            text += photos_html.format(photo_first)
+
+        for photo in photos:
+            text += photos_html.format(self.site_link + photo.photo_f.url)
+
+        description = self.wrap_in_cdata(text)
+        item_id = str(item.id)
+
+        quantity = str(item.in_stock_counts['in_stock__min'])
 
         for size in sizes:
             for color in colors:
                 i += 1
                 el_item = self.sub_element(self.offers, 'offer ')
                 el_item.attrib = {
-                    'id': '1000'+str(item.id) + str(i),
-                    'group_id': '10'+str(item.id)
+                    'id': '1000'+item_id + str(i),
+                    'group_id': '10'+item_id
                 }
-
-                photos = item.photos.all()
-                photo_first = self.site_link + item.photo_f.url
-                text = item.text or ''
-
-                if photo_first:
-                    text += photos_html.format(photo_first)
-
-                for photo in photos:
-                    text += photos_html.format(self.site_link + photo.photo_f.url)
-                
+  
                 self.sub_element(el_item, 'name', name)
                 self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaya')
-                self.sub_element(el_item, 'sku_code', item.vendor_code + str(i))
-                self.sub_element(el_item, 'url', self.site_link + item.get_absolute_url())
+                self.sub_element(el_item, 'sku_code', vendor_code + str(i))
+                self.sub_element(el_item, 'url', site_link)
                 self.sub_element(el_item, 'currencyId', 'RUR')
-                self.sub_element(el_item, 'price', str(item.price_rub))
-                self.sub_element(el_item, 'categoryId', str(item.categories.first().id))
-                self.sub_element(el_item, 'description', self.wrap_in_cdata(text))
+                self.sub_element(el_item, 'price', price)
+                self.sub_element(el_item, 'categoryId', categoryId)
+                self.sub_element(el_item, 'description', description)
                 self.sub_element(el_item, 'country_of_origin', u'Россия')
                 self.sub_element(el_item, 'weight', self.weight)
                 self.sub_element(el_item, 'length', dimensions[0])
                 self.sub_element(el_item, 'width', dimensions[1])
                 self.sub_element(el_item, 'height', dimensions[2])
-                self.sub_element(el_item, 'quantity', str(item.in_stock_counts['in_stock__min']))
+                self.sub_element(el_item, 'quantity', quantity)
                 self.sub_element(el_item, 'size', size)
                 self.sub_element(el_item, 'cus_skucolor', color.title)
                 if color.picture:
