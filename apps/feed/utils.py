@@ -56,7 +56,7 @@ class GenerateFeed:
 
     def create_ozon_item(self, item):
         colors_id = item.attrs.get('color', [])
-        sizes_id = item.attrs.get('bottom_size', []) + item.attrs.get('top_size', [])
+        sizes_id = item.attrs.get('bottom_size', []) + item.attrs.get('top_size', [])  + item.attrs.get('size', []) + item.attrs.get('razmer_kupalnika', []) + item.attrs.get('size_yubka_dop', [])
         colors = AttributeOption.objects.filter(pk__in=colors_id)
         sizes = [s.title for s in AttributeOption.objects.filter(pk__in=sizes_id)]
         sizes = list(set(sizes))
@@ -85,7 +85,7 @@ class GenerateFeed:
         letters = 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI,AJ,AK,AL,AM,AN,AO,AP,AQ,AR,AS,AT,AU,AV,AW,AX,AY,AZ'.split(',')
         name = item.title + u' от Анастасии Ивановской'
         colors_id = item.attrs.get('color', [])
-        sizes_id = item.attrs.get('bottom_size', []) + item.attrs.get('top_size', [])
+        sizes_id = item.attrs.get('bottom_size', []) + item.attrs.get('top_size', [])  + item.attrs.get('size', []) + item.attrs.get('razmer_kupalnika', []) + item.attrs.get('size_yubka_dop', [])
         colors = [c.title for c in AttributeOption.objects.filter(pk__in=colors_id)]
         sizes = [s.title for s in AttributeOption.objects.filter(pk__in=sizes_id)]
         sizes = list(set(sizes))
@@ -142,7 +142,7 @@ class GenerateFeed:
         dimensions = self.dimensions.split('/')
         name = item.title + u' от Анастасии Ивановской'
         colors_id = item.attrs.get('color', [])
-        sizes_id = item.attrs.get('bottom_size', []) + item.attrs.get('top_size', [])
+        sizes_id = item.attrs.get('bottom_size', []) + item.attrs.get('top_size', [])  + item.attrs.get('size', []) + item.attrs.get('razmer_kupalnika', []) + item.attrs.get('size_yubka_dop', [])
         colors = AttributeOption.objects.filter(pk__in=colors_id)
         sizes = [s.title for s in AttributeOption.objects.filter(pk__in=sizes_id)]
         sizes = list(set(sizes))
