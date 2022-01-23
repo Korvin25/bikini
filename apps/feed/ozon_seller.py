@@ -56,7 +56,7 @@ class OzonSeller():
             mod = product.title
             text = strip_tags(product.text)
             i = 0
-            print(categorys_product[0].ozon_category_id, categorys_product[0].first().title)
+            print(categorys_product[0].ozon_category_id, categorys_product[0].title)
             print('colors', colors)
             print('sizes', sizes)
             print('atrr', product.attrs)
