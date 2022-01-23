@@ -54,9 +54,10 @@ class OzonSeller():
             mod = product.title
             text = strip_tags(product.text)
             i = 0
-
+            print(product.categories.first().ozon_category_id, product.categories.first().title)
             print('colors', colors)
             print('sizes', sizes)
+            print('atrr', product.attrs)
 
             if not sizes:
                 for color in colors:
