@@ -66,7 +66,7 @@ class OzonSeller():
             print(shueze_sizes)
 
             for color in colors:
-                if not sizes: # если нет размера, в основносм это аксесуары
+                if not sizes and not shueze_sizes: # если нет размера, в основносм это аксесуары
                     i += 1
                     param_dict = {
                         "attributes": [],
