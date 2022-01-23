@@ -45,7 +45,9 @@ class OzonSeller():
             sizes = list(set(sizes))
 
             name = product.title + u' от Анастасии Ивановской'
-            category_id = product.categories.first().ozon_category_id
+            categorys_product = product.categories.all()
+            categorys_product = categorys_product.exclude(title=u"Happy new year")
+            category_id = categorys_product[0].ozon_category_id
             offer_id = str(product.id)
             primary_image = self.site_link + product.photo_f.url
             images = [self.site_link + photo.photo_f.url for photo in product.photos.all()[:13]]
@@ -54,7 +56,7 @@ class OzonSeller():
             mod = product.title
             text = strip_tags(product.text)
             i = 0
-            print(product.categories.first().ozon_category_id, product.categories.first().title)
+            print(categorys_product[0].ozon_category_id, categorys_product[0].first().title)
             print('colors', colors)
             print('sizes', sizes)
             print('atrr', product.attrs)

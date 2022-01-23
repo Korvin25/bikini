@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from unicodedata import category
 import xml.etree.ElementTree as et
 from datetime import datetime
 from functools import reduce
@@ -111,7 +112,9 @@ class GenerateFeed:
         photos = item.photos.all()[:9]
         picture = self.site_link + item.photo_f.url
         text = self.wrap_in_cdata(item.text) 
-        categoryId = str(item.categories.first().id)
+        categorys_product = item.categories.all()
+        categorys_product = categorys_product.exclude(title=u"Happy new year")
+        categoryId = str(categorys_product[0].id)
         url = self.site_link + item.get_absolute_url()
         vendorCode = item.vendor_code
         name = item.title
@@ -204,7 +207,9 @@ class GenerateFeed:
         """
         site_link = self.site_link + item.get_absolute_url()
         vendor_code = item.vendor_code
-        categoryId = str(item.categories.first().id)
+        categorys_product = item.categories.all()
+        categorys_product = categorys_product.exclude(title=u"Happy new year")
+        categoryId = str(categorys_product[0].id)
         price = str(item.price_rub)
         photos = item.photos.all()
         photo_first = self.site_link + item.photo_f.url
