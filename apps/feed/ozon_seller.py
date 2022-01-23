@@ -50,6 +50,7 @@ class OzonSeller():
             primary_image = self.site_link + product.photo_f.url
             images = [self.site_link + photo.photo_f.url for photo in product.photos.all()[:13]]
             price = price = str(product.price_rub)
+            vendor_code = str(product.vendor_code)
             i = 0
             for size in sizes:
                 for color in colors:
@@ -80,7 +81,7 @@ class OzonSeller():
                 
                     sex = u'Женский' if product.categories.first().sex == 'female' else u'Мужской'
 
-                    param_dict['attributes'].append(self.get_attributes(8292, str(product.vendor_code))) #обьеденить на одной карточке
+                    param_dict['attributes'].append(self.get_attributes(8292, vendor_code)) #обьеденить на одной карточке
                     for color in COLORS_MAP[color]:
                         param_dict['attributes'].append(self.get_attributes(10096, color)) # цвет
                     
@@ -98,7 +99,7 @@ class OzonSeller():
                     param_dict['attributes'].append(self.get_attributes(12121, "6108 - Женские, для девочек: сорочка ночная, халат, пеньюар, неглиже, термобелье, комплект нижнего белья, трусы, топ-бра, пижама, кигуруми, эротическое белье т.д.")) # сезон
 
                     lists["items"].append(param_dict)
-            
+            print(lists)
             response = requests.post(self.url, data=json.dumps(lists), headers=self.headers)
             print("product id:", product.id, response, response.json())
         except Exception as e:
