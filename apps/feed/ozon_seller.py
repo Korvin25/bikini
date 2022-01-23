@@ -33,69 +33,72 @@ class OzonSeller():
         return obj
 
     def update_product(self, product):
-        lists = {
-            "items": []
-        }
+        try:
+            lists = {
+                "items": []
+            }
 
-        colors_id = product.attrs.get('color', [])
-        sizes_id = product.attrs.get('bottom_size', []) + product.attrs.get('top_size', [])
-        colors = [c.title for c in AttributeOption.objects.filter(pk__in=colors_id)]
-        sizes = [s.title for s in AttributeOption.objects.filter(pk__in=sizes_id)]
-        sizes = list(set(sizes))
+            colors_id = product.attrs.get('color', [])
+            sizes_id = product.attrs.get('bottom_size', []) + product.attrs.get('top_size', [])
+            colors = [c.title for c in AttributeOption.objects.filter(pk__in=colors_id)]
+            sizes = [s.title for s in AttributeOption.objects.filter(pk__in=sizes_id)]
+            sizes = list(set(sizes))
 
-        name = product.title + u' от Анастасии Ивановской'
-        category_id = product.categories.first().ozon_category_id
-        offer_id = str(product.id)
-        primary_image = self.site_link + product.photo_f.url
-        images = [self.site_link + photo.photo_f.url for photo in product.photos.all()[:13]]
-        i = 0
-        for size in sizes:
-            for color in colors:
-                i += 1
-                param_dict = {
-                    "attributes": [],
-                    "barcode": "",
-                    "category_id": category_id,
-                    "color_image": "",
-                    "complex_attributes": [ ],
-                    "depth": 30,
-                    "dimension_unit": "mm",
-                    "height": 300,
-                    "images": images,
-                    "images360": [ ],
-                    "name": name,
-                    "offer_id": offer_id + '_' + str(i),
-                    "old_price": "",
-                    "pdf_list": [ ],
-                    "premium_price": "",
-                    "price": "2100.00",
-                    "primary_image": primary_image,
-                    "vat": "0.1",
-                    "weight": 100,
-                    "weight_unit": "g",
-                    "width": 250
-                }
+            name = product.title + u' от Анастасии Ивановской'
+            category_id = product.categories.first().ozon_category_id
+            offer_id = str(product.id)
+            primary_image = self.site_link + product.photo_f.url
+            images = [self.site_link + photo.photo_f.url for photo in product.photos.all()[:13]]
+            i = 0
+            for size in sizes:
+                for color in colors:
+                    i += 1
+                    param_dict = {
+                        "attributes": [],
+                        "barcode": "",
+                        "category_id": category_id,
+                        "color_image": "",
+                        "complex_attributes": [ ],
+                        "depth": 30,
+                        "dimension_unit": "mm",
+                        "height": 300,
+                        "images": images,
+                        "images360": [ ],
+                        "name": name,
+                        "offer_id": offer_id + '_' + str(i),
+                        "old_price": "",
+                        "pdf_list": [ ],
+                        "premium_price": "",
+                        "price": "2100.00",
+                        "primary_image": primary_image,
+                        "vat": "0.1",
+                        "weight": 100,
+                        "weight_unit": "g",
+                        "width": 250
+                    }
+                
+                    sex = u'Женский' if product.categories.first().sex == 'female' else u'Мужской'
+
+                    param_dict['attributes'].append(self.get_attributes(8292, str(product.vendor_code))) #обьеденить на одной карточке
+                    for color in COLORS_MAP[color]:
+                        param_dict['attributes'].append(self.get_attributes(10096, color)) # цвет
+                    
+                    if sex == u'Женский':
+                        param_dict['attributes'].append(self.get_attributes(4295, SIZES_FAMELE_MAP[size])) # размер женский
+                    else:
+                        param_dict['attributes'].append(self.get_attributes(4295, SIZES_MEN_MAP[size])) # размер мужской
+                    
+                    param_dict['attributes'].append(self.get_attributes(9163, sex)) # пол
+                    param_dict['attributes'].append(self.get_attributes(31, "Нет бренда")) # бренд
+                    # param_dict['attributes'].append(self.get_attributes(9070, "true")) # признаки 18+
+                    param_dict['attributes'].append(self.get_attributes(8229, product.categories.first().title)) # тип TODO доработать в будущев в завсисимомсти от категории
+                    param_dict['attributes'].append(self.get_attributes(4191, strip_tags(product.text))) # описание продукта
+                    param_dict['attributes'].append(self.get_attributes(4495, "На любой сезон")) # сезон
+                    param_dict['attributes'].append(self.get_attributes(12121, "6108 - Женские, для девочек: сорочка ночная, халат, пеньюар, неглиже, термобелье, комплект нижнего белья, трусы, топ-бра, пижама, кигуруми, эротическое белье т.д.")) # сезон
+
+                    lists["items"].append(param_dict)
             
-                sex = u'Женский' if product.categories.first().sex == 'female' else u'Мужской'
-
-                param_dict['attributes'].append(self.get_attributes(8292, str(product.vendor_code))) #обьеденить на одной карточке
-                for color in COLORS_MAP[color]:
-                    param_dict['attributes'].append(self.get_attributes(10096, color)) # цвет
-                
-                if sex == u'Женский':
-                    param_dict['attributes'].append(self.get_attributes(4295, SIZES_FAMELE_MAP[size])) # размер женский
-                else:
-                    param_dict['attributes'].append(self.get_attributes(4295, SIZES_MEN_MAP[size])) # размер мужской
-                
-                param_dict['attributes'].append(self.get_attributes(9163, sex)) # пол
-                param_dict['attributes'].append(self.get_attributes(31, "Нет бренда")) # бренд
-                # param_dict['attributes'].append(self.get_attributes(9070, "true")) # признаки 18+
-                param_dict['attributes'].append(self.get_attributes(8229, product.categories.first().title)) # тип TODO доработать в будущев в завсисимомсти от категории
-                param_dict['attributes'].append(self.get_attributes(4191, strip_tags(product.text))) # описание продукта
-                param_dict['attributes'].append(self.get_attributes(4495, "На любой сезон")) # сезон
-                param_dict['attributes'].append(self.get_attributes(12121, "6108 - Женские, для девочек: сорочка ночная, халат, пеньюар, неглиже, термобелье, комплект нижнего белья, трусы, топ-бра, пижама, кигуруми, эротическое белье т.д.")) # сезон
-
-                lists["items"].append(param_dict)
-        
-        response = requests.post(self.url, data=json.dumps(lists), headers=self.headers)
-        print("product id:", product.id, response)
+            response = requests.post(self.url, data=json.dumps(lists), headers=self.headers)
+            print("product id:", product.id, response)
+        except Exception as e:
+            print('Error ', e)

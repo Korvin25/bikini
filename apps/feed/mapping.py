@@ -135,6 +135,7 @@ SIZES_FAMELE_MAP = {
     'L': '48', 
     'XL': '50',
     'XXL': '52',
+    'XXXL': '54',
 }
 
 
