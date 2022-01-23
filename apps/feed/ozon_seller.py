@@ -49,6 +49,7 @@ class OzonSeller():
             offer_id = str(product.id)
             primary_image = self.site_link + product.photo_f.url
             images = [self.site_link + photo.photo_f.url for photo in product.photos.all()[:13]]
+            price = price = str(product.price_rub)
             i = 0
             for size in sizes:
                 for color in colors:
@@ -69,7 +70,7 @@ class OzonSeller():
                         "old_price": "",
                         "pdf_list": [ ],
                         "premium_price": "",
-                        "price": "2100.00",
+                        "price": price,
                         "primary_image": primary_image,
                         "vat": "0.1",
                         "weight": 100,
