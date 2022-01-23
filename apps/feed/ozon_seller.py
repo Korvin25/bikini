@@ -96,6 +96,6 @@ class OzonSeller():
                 param_dict['attributes'].append(self.get_attributes(12121, "6108 - Женские, для девочек: сорочка ночная, халат, пеньюар, неглиже, термобелье, комплект нижнего белья, трусы, топ-бра, пижама, кигуруми, эротическое белье т.д.")) # сезон
 
                 lists["items"].append(param_dict)
-        print(lists["items"])
+        
         response = requests.post(self.url, data=json.dumps(lists), headers=self.headers)
         print("product id:", product.id, response)
