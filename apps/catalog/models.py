@@ -1006,11 +1006,11 @@ class SpecialOffer(models.Model):
 
 
 
-@receiver(post_save, sender=Product)
-def update_uzon_product(sender, instance, **kwargs):
-    try:
-        if instance.show_at_yandex:
-            ozon_api = OzonSeller(settings.OZON_CLIENT_ID, settings.OZON_API_KEY)
-            ozon_api.update_product(instance)
-    except:
-        print('Error update ozon - product', instance.id)
+# @receiver(post_save, sender=Product)
+# def update_uzon_product(sender, instance, **kwargs):
+#     try:
+#         if instance.show_at_yandex:
+#             ozon_api = OzonSeller(settings.OZON_CLIENT_ID, settings.OZON_API_KEY)
+#             ozon_api.update_product(instance)
+#     except:
+#         print('Error update ozon - product', instance.id)
