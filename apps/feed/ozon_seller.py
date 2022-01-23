@@ -60,6 +60,10 @@ class OzonSeller():
             attributes_type = categorys_product[0].title
             i = 0
 
+            print(sizes)
+            print(colors)
+            print(shueze_sizes)
+
             for color in colors:
                 if not sizes: # если нет размера, в основносм это аксесуары
                     i += 1
