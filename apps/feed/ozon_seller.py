@@ -70,7 +70,7 @@ class OzonSeller():
                         "category_id": category_id,
                         "color_image": "",
                         "complex_attributes": [ ],
-                        "depth": 30,
+                        "depth": 80,
                         "dimension_unit": "mm",
                         "height": 300,
                         "images": images,
@@ -82,8 +82,8 @@ class OzonSeller():
                         "premium_price": "",
                         "price": price,
                         "primary_image": primary_image,
-                        "vat": "0.1",
-                        "weight": 100,
+                        "vat": "0",
+                        "weight": 400,
                         "weight_unit": "g",
                         "width": 400
                     }
