@@ -269,6 +269,8 @@ class GenerateFeed:
         photo_first = self.site_link + item.photo_f.url
         text = item.text or ''
 
+        text += u'<p>Если хотите разный размер верха и низа, то пишите комментарий к заказу</p>'
+
         if photo_first:
             text += photos_html.format(photo_first)
 
@@ -303,8 +305,14 @@ class GenerateFeed:
                 self.sub_element(el_item, 'height', dimensions[2])
                 self.sub_element(el_item, 'quantity', quantity)
                 self.sub_element(el_item, 'cus_skucolor', color.title)
+                self.sub_element(el_item, 'param', color.title).attrib = {
+                    "name" : "cus_skucolor"
+                }
                 if color.picture:
                     self.sub_element(el_item, 'sku_picture', self.site_link + color.picture.url)
+                    self.sub_element(el_item, 'param', self.site_link + color.picture.url).attrib = {
+                    "name" : "sku_picture"
+                }
                 if photo_first:
                     self.sub_element(el_item, 'picture', photo_first)
                 for photo in photos[:5]:
@@ -334,8 +342,14 @@ class GenerateFeed:
                 self.sub_element(el_item, 'quantity', quantity)
                 self.sub_element(el_item, 'size', size)
                 self.sub_element(el_item, 'cus_skucolor', color.title)
+                self.sub_element(el_item, 'param', color.title).attrib = {
+                    "name" : "cus_skucolor"
+                }
                 if color.picture:
                     self.sub_element(el_item, 'sku_picture', self.site_link + color.picture.url)
+                    self.sub_element(el_item, 'param', self.site_link + color.picture.url).attrib = {
+                    "name" : "sku_picture"
+                }
                 if photo_first:
                     self.sub_element(el_item, 'picture', photo_first)
                 for photo in photos[:5]:
@@ -365,8 +379,14 @@ class GenerateFeed:
                 self.sub_element(el_item, 'quantity', quantity)
                 self.sub_element(el_item, 'size', shueze_size)
                 self.sub_element(el_item, 'cus_skucolor', color.title)
+                self.sub_element(el_item, 'param', color.title).attrib = {
+                    "name" : "cus_skucolor"
+                }
                 if color.picture:
                     self.sub_element(el_item, 'sku_picture', self.site_link + color.picture.url)
+                    self.sub_element(el_item, 'param', self.site_link + color.picture.url).attrib = {
+                    "name" : "sku_picture"
+                }
                 if photo_first:
                     self.sub_element(el_item, 'picture', photo_first)
                 for photo in photos[:5]:
