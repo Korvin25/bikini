@@ -85,7 +85,7 @@ class OzonSeller():
                         "vat": "0.1",
                         "weight": 100,
                         "weight_unit": "g",
-                        "width": 250
+                        "width": 400
                     }
                 
                     param_dict['attributes'].append(self.get_attributes(8292, vendor_code)) #обьеденить на одной карточке
