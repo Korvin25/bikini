@@ -439,7 +439,7 @@ class Product(MetatagModel):
     categories = models.ManyToManyField(Category, verbose_name='Категории', related_name='products')
     title = models.CharField('Название', max_length=255)
     subtitle = models.CharField('Подзаголовок', max_length=255, blank=True)
-    ozone_type = models.CharField('Тип Ozon', max_length=255, blank=True, null=True, help_text='Нужен для того чтобы, более точно передать тип товара в Ozon, если не заполенно, то пердается назание первой рубрики, которой принадлежит товар.')
+    ozone_type = models.CharField('Тип Ozon', max_length=255, blank=True, null=True, help_text='Нужен для того чтобы, более точно передать тип товара в Ozon, eсли не заполнено, то передается название первой рубрики, которой принадлежит товар.')
     slug = models.SlugField('В URL', max_length=127)
     vendor_code = models.CharField('Артикул', max_length=255, blank=True)
     # photo = ThumbnailerImageField('Фото', upload_to='catalog/products/')

@@ -167,7 +167,7 @@ class OzonSeller():
                         "premium_price": "",
                         "price": price,
                         "primary_image": primary_image,
-                        "vat": "0.1",
+                        "vat": "0",
                         "weight": 100,
                         "weight_unit": "g",
                         "width": 250
