@@ -264,6 +264,10 @@ class GenerateFeed:
         categorys_product = item.categories.all()
         categorys_product = categorys_product.exclude(title=u"Happy new year")
         categoryId = str(categorys_product[0].id)
+        if categorys_product[0].title in [u'Микро бикини', u'Мини бикини', u'Макси бикини', u'Экстрим бикини']:
+            name = u'Купальник  ' + item.title + u' от Анастасии Ивановской'
+        else:
+            name = item.title + u' от Анастасии Ивановской'
         price = str(item.price_rub)
         photos = item.photos.all()
         photo_first = self.site_link + item.photo_f.url
