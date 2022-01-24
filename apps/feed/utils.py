@@ -245,7 +245,6 @@ class GenerateFeed:
     def create_aliexpress_item(self, item):
         i=0
         dimensions = self.dimensions.split('/')
-        name = item.title + u' от Анастасии Ивановской'
         colors_id = item.attrs.get('color', [])
         sizes_id = item.attrs.get('bottom_size', []) + item.attrs.get('top_size', [])  + item.attrs.get('size', []) + item.attrs.get('razmer_kupalnika', []) + item.attrs.get('size_yubka_dop', [])
         shueze_size_id =  item.attrs.get('shueze_size', []) 
