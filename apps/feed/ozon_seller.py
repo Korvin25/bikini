@@ -37,7 +37,7 @@ class OzonSeller():
             lists = {
                 "items": []
             }
-            print(product.extra_options.all())
+
             colors_id = product.attrs.get('color', [])
             sizes_id = product.attrs.get('bottom_size', []) + product.attrs.get('top_size', [])  + product.attrs.get('size', []) + product.attrs.get('razmer_kupalnika', []) + product.attrs.get('size_yubka_dop', [])
             shueze_size_id =  product.attrs.get('shueze_size', []) 
@@ -190,9 +190,6 @@ class OzonSeller():
 
                     lists["items"].append(param_dict)
 
-
-                    
-            
             response = requests.post(self.url, data=json.dumps(lists), headers=self.headers)
             print("product id:", product.id, response, response.json())
         except Exception as e:
