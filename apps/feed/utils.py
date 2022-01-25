@@ -71,6 +71,39 @@ class GenerateFeed:
             'instock': instock,
         }
 
+    def get_offer_yandex(self, item_id, letters, i, name, vendorCode, url, price, categoryId, text, picture, photos, famile, color):
+        el_item = self.sub_element(self.offers, 'offer ')
+        el_item.attrib = {
+            'id': item_id + letters[i-1],
+            'group_id': item_id
+        }
+
+        self.sub_element(el_item, 'name', name)
+        self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaia')
+        self.sub_element(el_item, 'vendorCode', vendorCode)
+        self.sub_element(el_item, 'url', url)
+        self.sub_element(el_item, 'currencyId', 'RUR')
+        self.sub_element(el_item, 'price', price)
+        self.sub_element(el_item, 'categoryId', categoryId)
+        self.sub_element(el_item, 'description', text)
+        self.sub_element(el_item, 'country_of_origin', u'Россия')
+        self.sub_element(el_item, 'weight', self.weight)
+        self.sub_element(el_item, 'dimensions', self.dimensions)
+
+        self.sub_element(el_item, 'picture', picture)
+        for photo in photos:
+            self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
+
+        self.sub_element(el_item, 'param', famile).attrib= {
+                u'name': u'Пол',
+            }
+
+        self.sub_element(el_item, 'param', COLORS_MAP_YANDEX[color]).attrib= {
+                u'name': u'Цвет',
+            }
+
+        return el_item
+
     def create_ozon_item(self, item):
         colors_id = item.attrs.get('color', [])
         sizes_id = item.attrs.get('bottom_size', []) + item.attrs.get('top_size', [])  + item.attrs.get('size', []) + item.attrs.get('razmer_kupalnika', []) + item.attrs.get('size_yubka_dop', [])
@@ -135,67 +168,12 @@ class GenerateFeed:
         for color in colors:
             if not sizes and not shueze_sizes: # если нет размера, в основносм это аксесуары
                 i += 1
-                el_item = self.sub_element(self.offers, 'offer ')
-                el_item.attrib = {
-                    'id': item_id + letters[i-1],
-                    'group_id': item_id
-                }
-
-                self.sub_element(el_item, 'name', name)
-                self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaia')
-                self.sub_element(el_item, 'vendorCode', vendorCode)
-                self.sub_element(el_item, 'url', url)
-                self.sub_element(el_item, 'currencyId', 'RUR')
-                self.sub_element(el_item, 'price', price)
-                self.sub_element(el_item, 'categoryId', categoryId)
-                self.sub_element(el_item, 'description', text)
-                self.sub_element(el_item, 'country_of_origin', u'Россия')
-                self.sub_element(el_item, 'weight', self.weight)
-                self.sub_element(el_item, 'dimensions', self.dimensions)
-
-                self.sub_element(el_item, 'picture', picture)
-                for photo in photos:
-                    self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
-
-                self.sub_element(el_item, 'param', famile).attrib= {
-                        u'name': u'Пол',
-                    }
-
-                self.sub_element(el_item, 'param', COLORS_MAP_YANDEX[color]).attrib= {
-                        u'name': u'Цвет',
-                    }
+                self.get_offer_yandex(item_id, letters, i, name, vendorCode, url, price, categoryId, text, picture, photos, famile, color)
+                
 
             for size in sizes:
                 i += 1
-                el_item = self.sub_element(self.offers, 'offer ')
-                el_item.attrib = {
-                    'id': item_id + letters[i-1],
-                    'group_id': item_id
-                }
-
-                self.sub_element(el_item, 'name', name)
-                self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaia')
-                self.sub_element(el_item, 'vendorCode', vendorCode)
-                self.sub_element(el_item, 'url', url)
-                self.sub_element(el_item, 'currencyId', 'RUR')
-                self.sub_element(el_item, 'price', price)
-                self.sub_element(el_item, 'categoryId', categoryId)
-                self.sub_element(el_item, 'description', text)
-                self.sub_element(el_item, 'country_of_origin', u'Россия')
-                self.sub_element(el_item, 'weight', self.weight)
-                self.sub_element(el_item, 'dimensions', self.dimensions)
-
-                self.sub_element(el_item, 'picture', picture)
-                for photo in photos:
-                    self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
-
-                self.sub_element(el_item, 'param', famile).attrib= {
-                        u'name': u'Пол',
-                    }
-
-                self.sub_element(el_item, 'param', COLORS_MAP_YANDEX[color]).attrib= {
-                        u'name': u'Цвет',
-                    }
+                el_item = self.get_offer_yandex(item_id, letters, i, name, vendorCode, url, price, categoryId, text, picture, photos, famile, color)
                 self.sub_element(el_item, 'param', size).attrib= {
                         u'name': u'Размер',
                         u'unit': u'INT'
@@ -203,35 +181,7 @@ class GenerateFeed:
 
             for shueze_size in shueze_sizes: # обувь
                 i += 1
-                el_item = self.sub_element(self.offers, 'offer ')
-                el_item.attrib = {
-                    'id': item_id + letters[i-1],
-                    'group_id': item_id
-                }
-
-                self.sub_element(el_item, 'name', name)
-                self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaia')
-                self.sub_element(el_item, 'vendorCode', vendorCode)
-                self.sub_element(el_item, 'url', url)
-                self.sub_element(el_item, 'currencyId', 'RUR')
-                self.sub_element(el_item, 'price', price)
-                self.sub_element(el_item, 'categoryId', categoryId)
-                self.sub_element(el_item, 'description', text)
-                self.sub_element(el_item, 'country_of_origin', u'Россия')
-                self.sub_element(el_item, 'weight', self.weight)
-                self.sub_element(el_item, 'dimensions', self.dimensions)
-
-                self.sub_element(el_item, 'picture', picture)
-                for photo in photos:
-                    self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
-
-                self.sub_element(el_item, 'param', famile).attrib= {
-                        u'name': u'Пол',
-                    }
-
-                self.sub_element(el_item, 'param', COLORS_MAP_YANDEX[color]).attrib= {
-                        u'name': u'Цвет',
-                    }
+                el_item = self.get_offer_yandex(item_id, letters, i, name, vendorCode, url, price, categoryId, text, picture, photos, famile, color)
                 self.sub_element(el_item, 'param', shueze_size).attrib= {
                         u'name': u'Размер',
                         u'unit': u'RU'
