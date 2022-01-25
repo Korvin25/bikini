@@ -5,6 +5,7 @@ from datetime import datetime
 from functools import reduce
 
 from apps.catalog.models import AttributeOption, Category
+from apps.feed.mapping import COLORS_MAP_YANDEX
 
 
 class GenerateFeed:
@@ -136,7 +137,7 @@ class GenerateFeed:
         vendorCode = item.vendor_code
         name = item.title
         i=0
-
+        
         for color in colors:
             if not sizes and not shueze_sizes: # если нет размера, в основносм это аксесуары
                 i += 1
@@ -147,7 +148,7 @@ class GenerateFeed:
                 }
 
                 self.sub_element(el_item, 'name', name)
-                self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaya')
+                self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaia')
                 self.sub_element(el_item, 'vendorCode', vendorCode)
                 self.sub_element(el_item, 'url', url)
                 self.sub_element(el_item, 'currencyId', 'RUR')
@@ -166,7 +167,7 @@ class GenerateFeed:
                         u'name': u'Пол',
                     }
 
-                self.sub_element(el_item, 'param', color).attrib= {
+                self.sub_element(el_item, 'param', COLORS_MAP_YANDEX[color]).attrib= {
                         u'name': u'Цвет',
                     }
 
@@ -179,7 +180,7 @@ class GenerateFeed:
                 }
 
                 self.sub_element(el_item, 'name', name)
-                self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaya')
+                self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaia')
                 self.sub_element(el_item, 'vendorCode', vendorCode)
                 self.sub_element(el_item, 'url', url)
                 self.sub_element(el_item, 'currencyId', 'RUR')
@@ -198,7 +199,7 @@ class GenerateFeed:
                         u'name': u'Пол',
                     }
 
-                self.sub_element(el_item, 'param', color).attrib= {
+                self.sub_element(el_item, 'param', COLORS_MAP_YANDEX[color]).attrib= {
                         u'name': u'Цвет',
                     }
                 self.sub_element(el_item, 'param', size).attrib= {
@@ -215,7 +216,7 @@ class GenerateFeed:
                 }
 
                 self.sub_element(el_item, 'name', name)
-                self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaya')
+                self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaia')
                 self.sub_element(el_item, 'vendorCode', vendorCode)
                 self.sub_element(el_item, 'url', url)
                 self.sub_element(el_item, 'currencyId', 'RUR')
@@ -234,7 +235,7 @@ class GenerateFeed:
                         u'name': u'Пол',
                     }
 
-                self.sub_element(el_item, 'param', color).attrib= {
+                self.sub_element(el_item, 'param', COLORS_MAP_YANDEX[color]).attrib= {
                         u'name': u'Цвет',
                     }
                 self.sub_element(el_item, 'param', shueze_size).attrib= {
@@ -294,7 +295,7 @@ class GenerateFeed:
                     'group_id': '10'+item_id
                 }
                 self.sub_element(el_item, 'name', name)
-                self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaya')
+                self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaia')
                 self.sub_element(el_item, 'sku_code', vendor_code + str(i))
                 self.sub_element(el_item, 'url', site_link)
                 self.sub_element(el_item, 'currencyId', 'RUR')
@@ -330,7 +331,7 @@ class GenerateFeed:
                 }
   
                 self.sub_element(el_item, 'name', name)
-                self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaya')
+                self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaia')
                 self.sub_element(el_item, 'sku_code', vendor_code + str(i))
                 self.sub_element(el_item, 'url', site_link)
                 self.sub_element(el_item, 'currencyId', 'RUR')
@@ -367,7 +368,7 @@ class GenerateFeed:
                 }
   
                 self.sub_element(el_item, 'name', name)
-                self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaya')
+                self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaia')
                 self.sub_element(el_item, 'sku_code', vendor_code + str(i))
                 self.sub_element(el_item, 'url', site_link)
                 self.sub_element(el_item, 'currencyId', 'RUR')
