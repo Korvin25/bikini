@@ -38,6 +38,7 @@ class Settings(SingletonModel):
     catalog_special_banner = ThumbnailerImageField('Баннер с акциями', null=True, blank=True, upload_to='b/catalog/', help_text='Будет выводиться в размере 851x315 px')
     catalog_special_text = RichTextUploadingField('Текст с акциями', default='', null=True, blank=True)
     catalog_special_order = models.CharField('Порядок отображения', choices=CATALOG_SPECIAL_ORDER_CHOICES, max_length=15, default='banner_first',)
+    percent_marketplays = models.IntegerField('Процент на который увеличить цену для маркетплейс', blank=True, null=True, default=20)
 
     class Meta:
         verbose_name = 'Настройки'

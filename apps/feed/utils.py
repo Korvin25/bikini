@@ -6,6 +6,7 @@ from functools import reduce
 
 from apps.catalog.models import AttributeOption, Category
 from apps.feed.mapping import COLORS_MAP_YANDEX
+from apps.settings.models import Settings
 
 
 class GenerateFeed:
@@ -64,7 +65,12 @@ class GenerateFeed:
         sizes = [s.title for s in AttributeOption.objects.filter(pk__in=sizes_id)]
         shueze_sizes = [sh.title for sh in AttributeOption.objects.filter(pk__in=shueze_size_id)]
         sizes = list(set(sizes))
-        price = str(item.price_rub)
+        price = item.price_rub
+        percent_marketplays = Settings.objects.first().percent_marketplays
+        if percent_marketplays:
+            tmp_percent = price * percent_marketplays / 100
+            price += tmp_percent
+        price = str(price)
         item_id = str(item.id)
         instock = str(item.in_stock_counts['in_stock__min'])
 
@@ -124,7 +130,12 @@ class GenerateFeed:
         sizes = [s.title for s in AttributeOption.objects.filter(pk__in=sizes_id)]
         shueze_sizes = [sh.title for sh in AttributeOption.objects.filter(pk__in=shueze_size_id)]
         sizes = list(set(sizes))
-        price = str(item.price_rub)
+        price = item.price_rub
+        percent_marketplays = Settings.objects.first().percent_marketplays
+        if percent_marketplays:
+            tmp_percent = price * percent_marketplays / 100
+            price += tmp_percent
+        price = str(price)
         item_id = str(item.id)
         famile = u'женский' if item.categories.first().sex == 'female' else u'мужской'
         photos = item.photos.all()[:9]
@@ -268,7 +279,12 @@ class GenerateFeed:
             name = u'Купальник  ' + item.title + u' от Анастасии Ивановской'
         else:
             name = item.title + u' от Анастасии Ивановской'
-        price = str(item.price_rub)
+        price = item.price_rub
+        percent_marketplays = Settings.objects.first().percent_marketplays
+        if percent_marketplays:
+            tmp_percent = price * percent_marketplays / 100
+            price += tmp_percent
+        price = str(price)
         photos = item.photos.all()
         photo_first = self.site_link + item.photo_f.url
         text = item.text or ''

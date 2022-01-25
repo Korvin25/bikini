@@ -9,6 +9,7 @@ from django.conf import settings
 
 from apps.feed.mapping import COLORS_MAP, SIZES_FAMELE_MAP, SIZES_MEN_MAP
 from apps.catalog.models import AttributeOption
+from apps.settings.models import Settings
 
 
 class OzonSeller():
@@ -53,7 +54,12 @@ class OzonSeller():
             offer_id = str(product.id)
             primary_image = self.site_link + product.photo_f.url
             images = [self.site_link + photo.photo_f.url for photo in product.photos.all()[:13]]
-            price = price = str(product.price_rub)
+            price = product.price_rub
+            percent_marketplays = Settings.objects.first().percent_marketplays
+            if percent_marketplays:
+                tmp_percent = price * percent_marketplays / 100
+                price += tmp_percent
+            price = str(price)
             vendor_code = str(product.vendor_code)
             mod = product.title
             text = strip_tags(product.text)
