@@ -104,6 +104,42 @@ class GenerateFeed:
 
         return el_item
 
+    def get_offer_aliexpress(self, item_id, i, name, vendor_code, site_link, price, categoryId, description, dimensions, quantity, color, photo_first, photos):
+        el_item = self.sub_element(self.offers, 'offer ')
+        el_item.attrib = {
+            'id': '1000'+item_id + str(i),
+            'group_id': '10'+item_id
+        }
+        self.sub_element(el_item, 'name', name)
+        self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaia')
+        self.sub_element(el_item, 'sku_code', vendor_code + str(i))
+        self.sub_element(el_item, 'url', site_link)
+        self.sub_element(el_item, 'currencyId', 'RUR')
+        self.sub_element(el_item, 'price', price)
+        self.sub_element(el_item, 'categoryId', categoryId)
+        self.sub_element(el_item, 'description', description)
+        self.sub_element(el_item, 'country_of_origin', u'Россия')
+        self.sub_element(el_item, 'weight', self.weight)
+        self.sub_element(el_item, 'length', dimensions[0])
+        self.sub_element(el_item, 'width', dimensions[1])
+        self.sub_element(el_item, 'height', dimensions[2])
+        self.sub_element(el_item, 'quantity', quantity)
+        self.sub_element(el_item, 'cus_skucolor', color.title)
+        self.sub_element(el_item, 'param', color.title).attrib = {
+            "name" : "cus_skucolor"
+        }
+        if color.picture:
+            self.sub_element(el_item, 'sku_picture', self.site_link + color.picture.url)
+            self.sub_element(el_item, 'param', self.site_link + color.picture.url).attrib = {
+            "name" : "sku_picture"
+        }
+        if photo_first:
+            self.sub_element(el_item, 'picture', photo_first)
+        for photo in photos[:5]:
+            self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
+
+        return el_item
+
     def create_ozon_item(self, item):
         colors_id = item.attrs.get('color', [])
         sizes_id = item.attrs.get('bottom_size', []) + item.attrs.get('top_size', [])  + item.attrs.get('size', []) + item.attrs.get('razmer_kupalnika', []) + item.attrs.get('size_yubka_dop', [])
@@ -238,112 +274,17 @@ class GenerateFeed:
         for color in colors:
             if not sizes and not shueze_sizes: # если нет размера, в основносм это аксесуары
                 i += 1
-                el_item = self.sub_element(self.offers, 'offer ')
-                el_item.attrib = {
-                    'id': '1000'+item_id + str(i),
-                    'group_id': '10'+item_id
-                }
-                self.sub_element(el_item, 'name', name)
-                self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaia')
-                self.sub_element(el_item, 'sku_code', vendor_code + str(i))
-                self.sub_element(el_item, 'url', site_link)
-                self.sub_element(el_item, 'currencyId', 'RUR')
-                self.sub_element(el_item, 'price', price)
-                self.sub_element(el_item, 'categoryId', categoryId)
-                self.sub_element(el_item, 'description', description)
-                self.sub_element(el_item, 'country_of_origin', u'Россия')
-                self.sub_element(el_item, 'weight', self.weight)
-                self.sub_element(el_item, 'length', dimensions[0])
-                self.sub_element(el_item, 'width', dimensions[1])
-                self.sub_element(el_item, 'height', dimensions[2])
-                self.sub_element(el_item, 'quantity', quantity)
-                self.sub_element(el_item, 'cus_skucolor', color.title)
-                self.sub_element(el_item, 'param', color.title).attrib = {
-                    "name" : "cus_skucolor"
-                }
-                if color.picture:
-                    self.sub_element(el_item, 'sku_picture', self.site_link + color.picture.url)
-                    self.sub_element(el_item, 'param', self.site_link + color.picture.url).attrib = {
-                    "name" : "sku_picture"
-                }
-                if photo_first:
-                    self.sub_element(el_item, 'picture', photo_first)
-                for photo in photos[:5]:
-                    self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
+                self.get_offer_aliexpress(item_id, i, name, vendor_code, site_link, price, categoryId, description, dimensions, quantity, color, photo_first, photos)
 
             for size in sizes:
                 i += 1
-                el_item = self.sub_element(self.offers, 'offer ')
-                el_item.attrib = {
-                    'id': '1000'+item_id + str(i),
-                    'group_id': '10'+item_id
-                }
-  
-                self.sub_element(el_item, 'name', name)
-                self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaia')
-                self.sub_element(el_item, 'sku_code', vendor_code + str(i))
-                self.sub_element(el_item, 'url', site_link)
-                self.sub_element(el_item, 'currencyId', 'RUR')
-                self.sub_element(el_item, 'price', price)
-                self.sub_element(el_item, 'categoryId', categoryId)
-                self.sub_element(el_item, 'description', description)
-                self.sub_element(el_item, 'country_of_origin', u'Россия')
-                self.sub_element(el_item, 'weight', self.weight)
-                self.sub_element(el_item, 'length', dimensions[0])
-                self.sub_element(el_item, 'width', dimensions[1])
-                self.sub_element(el_item, 'height', dimensions[2])
-                self.sub_element(el_item, 'quantity', quantity)
+                el_item = self.get_offer_aliexpress(item_id, i, name, vendor_code, site_link, price, categoryId, description, dimensions, quantity, color, photo_first, photos)
                 self.sub_element(el_item, 'size', size)
-                self.sub_element(el_item, 'cus_skucolor', color.title)
-                self.sub_element(el_item, 'param', color.title).attrib = {
-                    "name" : "cus_skucolor"
-                }
-                if color.picture:
-                    self.sub_element(el_item, 'sku_picture', self.site_link + color.picture.url)
-                    self.sub_element(el_item, 'param', self.site_link + color.picture.url).attrib = {
-                    "name" : "sku_picture"
-                }
-                if photo_first:
-                    self.sub_element(el_item, 'picture', photo_first)
-                for photo in photos[:5]:
-                    self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
-
+                
             for shueze_size in shueze_sizes: # обувь
                 i += 1
-                el_item = self.sub_element(self.offers, 'offer ')
-                el_item.attrib = {
-                    'id': '1000'+item_id + str(i),
-                    'group_id': '10'+item_id
-                }
-  
-                self.sub_element(el_item, 'name', name)
-                self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaia')
-                self.sub_element(el_item, 'sku_code', vendor_code + str(i))
-                self.sub_element(el_item, 'url', site_link)
-                self.sub_element(el_item, 'currencyId', 'RUR')
-                self.sub_element(el_item, 'price', price)
-                self.sub_element(el_item, 'categoryId', categoryId)
-                self.sub_element(el_item, 'description', description)
-                self.sub_element(el_item, 'country_of_origin', u'Россия')
-                self.sub_element(el_item, 'weight', self.weight)
-                self.sub_element(el_item, 'length', dimensions[0])
-                self.sub_element(el_item, 'width', dimensions[1])
-                self.sub_element(el_item, 'height', dimensions[2])
-                self.sub_element(el_item, 'quantity', quantity)
+                el_item = self.get_offer_aliexpress(item_id, i, name, vendor_code, site_link, price, categoryId, description, dimensions, quantity, color, photo_first, photos)
                 self.sub_element(el_item, 'size', shueze_size)
-                self.sub_element(el_item, 'cus_skucolor', color.title)
-                self.sub_element(el_item, 'param', color.title).attrib = {
-                    "name" : "cus_skucolor"
-                }
-                if color.picture:
-                    self.sub_element(el_item, 'sku_picture', self.site_link + color.picture.url)
-                    self.sub_element(el_item, 'param', self.site_link + color.picture.url).attrib = {
-                    "name" : "sku_picture"
-                }
-                if photo_first:
-                    self.sub_element(el_item, 'picture', photo_first)
-                for photo in photos[:5]:
-                    self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
 
     def to_xml(self):
         return et.tostring(self.el_root, encoding="UTF-8")
