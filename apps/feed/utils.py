@@ -57,6 +57,20 @@ class GenerateFeed:
     def wrap_in_cdata(self, text):
         return u'<![CDATA[ {}]]>'.format(text)
 
+    def get_offer_ozon(self, item_id, i, price, instock):
+        el_item = self.sub_element(self.offers, 'offer ')
+        el_item.attrib = {
+            'id': item_id + '_' + str(i),
+        }
+
+        self.sub_element(el_item, 'price', price)
+        # self.sub_element(el_item, 'oldprice', price)
+        # self.sub_element(el_item, 'premium_price', price)
+        outlets = self.sub_element(el_item, 'outlets')
+        self.sub_element(outlets, 'outlet').attrib = {
+            'instock': instock,
+        }
+
     def create_ozon_item(self, item):
         colors_id = item.attrs.get('color', [])
         sizes_id = item.attrs.get('bottom_size', []) + item.attrs.get('top_size', [])  + item.attrs.get('size', []) + item.attrs.get('razmer_kupalnika', []) + item.attrs.get('size_yubka_dop', [])
@@ -79,46 +93,15 @@ class GenerateFeed:
         for color in colors:
             if not sizes and not shueze_sizes: # если нет размера, в основносм это аксесуары
                 i += 1
-                el_item = self.sub_element(self.offers, 'offer ')
-                el_item.attrib = {
-                    'id': item_id + '_' + str(i),
-                }
-                self.sub_element(el_item, 'price', price)
-                # self.sub_element(el_item, 'oldprice', price)
-                # self.sub_element(el_item, 'premium_price', price)
-                outlets = self.sub_element(el_item, 'outlets')
-                self.sub_element(outlets, 'outlet').attrib = {
-                    'instock': instock,
-                }
+                self.get_offer_ozon(item_id, i, price, instock)
 
             for size in sizes:
                 i += 1
-                el_item = self.sub_element(self.offers, 'offer ')
-                el_item.attrib = {
-                    'id': item_id + '_' + str(i),
-                }
-  
-                self.sub_element(el_item, 'price', price)
-                # self.sub_element(el_item, 'oldprice', price)
-                # self.sub_element(el_item, 'premium_price', price)
-                outlets = self.sub_element(el_item, 'outlets')
-                self.sub_element(outlets, 'outlet').attrib = {
-                    'instock': instock,
-                }
+                self.get_offer_ozon(item_id, i, price, instock)
 
             for shueze_size in shueze_sizes: # обувь
                 i += 1
-                el_item = self.sub_element(self.offers, 'offer ')
-                el_item.attrib = {
-                    'id': item_id + '_' + str(i),
-                }
-                self.sub_element(el_item, 'price', price)
-                # self.sub_element(el_item, 'oldprice', price)
-                # self.sub_element(el_item, 'premium_price', price)
-                outlets = self.sub_element(el_item, 'outlets')
-                self.sub_element(outlets, 'outlet').attrib = {
-                    'instock': instock,
-                }
+                self.get_offer_ozon(item_id, i, price, instock)
 
     def create_yandex_item(self, item):
         letters = 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI,AJ,AK,AL,AM,AN,AO,AP,AQ,AR,AS,AT,AU,AV,AW,AX,AY,AZ'.split(',')
