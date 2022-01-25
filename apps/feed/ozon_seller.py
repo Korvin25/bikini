@@ -33,6 +33,33 @@ class OzonSeller():
         obj = {"id": id,"values": [{"value": value }]}
         return obj
 
+    @staticmethod
+    def get_param_dict(category_id, images, name, offer_id, i, price, primary_image):
+        param_dict = {
+                "attributes": [],
+                "barcode": "",
+                "category_id": category_id,
+                "color_image": "",
+                "complex_attributes": [ ],
+                "depth": 30,
+                "dimension_unit": "mm",
+                "height": 300,
+                "images": images,
+                "images360": [ ],
+                "name": name,
+                "offer_id": offer_id + '_' + str(i),
+                "old_price": "",
+                "pdf_list": [ ],
+                "premium_price": "",
+                "price": price,
+                "primary_image": primary_image,
+                "vat": "0",
+                "weight": 100,
+                "weight_unit": "g",
+                "width": 250
+            }
+        return param_dict
+
     def update_product(self, product):
         try:
             lists = {
@@ -70,29 +97,7 @@ class OzonSeller():
             for color in colors:
                 if not sizes and not shueze_sizes: # если нет размера, в основносм это аксесуары
                     i += 1
-                    param_dict = {
-                        "attributes": [],
-                        "barcode": "",
-                        "category_id": category_id,
-                        "color_image": "",
-                        "complex_attributes": [ ],
-                        "depth": 80,
-                        "dimension_unit": "mm",
-                        "height": 300,
-                        "images": images,
-                        "images360": [ ],
-                        "name": name,
-                        "offer_id": offer_id + '_' + str(i),
-                        "old_price": "",
-                        "pdf_list": [ ],
-                        "premium_price": "",
-                        "price": price,
-                        "primary_image": primary_image,
-                        "vat": "0",
-                        "weight": 400,
-                        "weight_unit": "g",
-                        "width": 400
-                    }
+                    param_dict = self.get_param_dict(category_id, images, name, offer_id, i, price, primary_image)
                 
                     param_dict['attributes'].append(self.get_attributes(8292, vendor_code)) #обьеденить на одной карточке
                     for color in COLORS_MAP[color]:
@@ -110,29 +115,7 @@ class OzonSeller():
 
                 for size in sizes: # все категории одежды
                     i += 1
-                    param_dict = {
-                        "attributes": [],
-                        "barcode": "",
-                        "category_id": category_id,
-                        "color_image": "",
-                        "complex_attributes": [ ],
-                        "depth": 30,
-                        "dimension_unit": "mm",
-                        "height": 300,
-                        "images": images,
-                        "images360": [ ],
-                        "name": name,
-                        "offer_id": offer_id + '_' + str(i),
-                        "old_price": "",
-                        "pdf_list": [ ],
-                        "premium_price": "",
-                        "price": price,
-                        "primary_image": primary_image,
-                        "vat": "0.1",
-                        "weight": 100,
-                        "weight_unit": "g",
-                        "width": 250
-                    }
+                    param_dict = self.get_param_dict(category_id, images, name, offer_id, i, price, primary_image)
                 
                     param_dict['attributes'].append(self.get_attributes(8292, vendor_code)) #обьеденить на одной карточке
                     for col in COLORS_MAP[color]:
@@ -155,29 +138,7 @@ class OzonSeller():
 
                 for shueze_size in shueze_sizes: # обувь
                     i += 1
-                    param_dict = {
-                        "attributes": [],
-                        "barcode": "",
-                        "category_id": category_id,
-                        "color_image": "",
-                        "complex_attributes": [ ],
-                        "depth": 30,
-                        "dimension_unit": "mm",
-                        "height": 300,
-                        "images": images,
-                        "images360": [ ],
-                        "name": name,
-                        "offer_id": offer_id + '_' + str(i),
-                        "old_price": "",
-                        "pdf_list": [ ],
-                        "premium_price": "",
-                        "price": price,
-                        "primary_image": primary_image,
-                        "vat": "0",
-                        "weight": 100,
-                        "weight_unit": "g",
-                        "width": 250
-                    }
+                    param_dict = self.get_param_dict(category_id, images, name, offer_id, i, price, primary_image)
 
                     param_dict['attributes'].append(self.get_attributes(8292, vendor_code)) #обьеденить на одной карточке
                     for col in COLORS_MAP[color]:
