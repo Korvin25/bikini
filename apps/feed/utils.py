@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
-from unicodedata import category
+import sys  
 import xml.etree.ElementTree as et
 from datetime import datetime
 from functools import reduce
 
 from apps.catalog.models import AttributeOption, Category
-from apps.feed.mapping import COLORS_MAP_YANDEX
+from apps.feed.mapping import COLORS_MAP_YANDEX, COLORS_MAP, SIZES_FAMELE_MAP
 from apps.settings.models import Settings
+
+reload(sys)  
+sys.setdefaultencoding('utf-8')
 
 
 class GenerateFeed:
@@ -57,10 +60,10 @@ class GenerateFeed:
     def wrap_in_cdata(self, text):
         return u'<![CDATA[ {}]]>'.format(text)
 
-    def get_offer_ozon(self, item_id, i, price, instock):
+    def get_offer_ozon(self, vendor_code, i, price, instock, color_ozon, size=None):
         el_item = self.sub_element(self.offers, 'offer ')
         el_item.attrib = {
-            'id': item_id + '_' + str(i),
+            'id': '{}-{}-{}-{}'.format(vendor_code, color_ozon, size, i) if size else '{}-{}-{}'.format(vendor_code, color_ozon, i),
         }
 
         self.sub_element(el_item, 'price', price)
@@ -144,7 +147,7 @@ class GenerateFeed:
         colors_id = item.attrs.get('color', [])
         sizes_id = item.attrs.get('bottom_size', []) + item.attrs.get('top_size', [])  + item.attrs.get('size', []) + item.attrs.get('razmer_kupalnika', []) + item.attrs.get('size_yubka_dop', [])
         shueze_size_id =  item.attrs.get('shueze_size', []) 
-        colors = AttributeOption.objects.filter(pk__in=colors_id)
+        colors = [c.title for c in AttributeOption.objects.filter(pk__in=colors_id)]
         sizes = [s.title for s in AttributeOption.objects.filter(pk__in=sizes_id)]
         shueze_sizes = [sh.title for sh in AttributeOption.objects.filter(pk__in=shueze_size_id)]
         sizes = list(set(sizes))
@@ -154,7 +157,7 @@ class GenerateFeed:
             tmp_percent = price * percent_marketplays / 100
             price += tmp_percent
         price = str(price)
-        item_id = str(item.id)
+        vendor_code = str(item.vendor_code)
         instock = str(item.in_stock_counts['in_stock__min'])
 
         i=0
@@ -162,15 +165,15 @@ class GenerateFeed:
         for color in colors:
             if not sizes and not shueze_sizes: # если нет размера, в основносм это аксесуары
                 i += 1
-                self.get_offer_ozon(item_id, i, price, instock)
+                self.get_offer_ozon(vendor_code, i, price, instock, COLORS_MAP[color])
 
             for size in sizes:
                 i += 1
-                self.get_offer_ozon(item_id, i, price, instock)
+                self.get_offer_ozon(vendor_code, i, price, instock, COLORS_MAP[color], SIZES_FAMELE_MAP[size])
 
             for shueze_size in shueze_sizes: # обувь
                 i += 1
-                self.get_offer_ozon(item_id, i, price, instock)
+                self.get_offer_ozon(vendor_code, i, price, instock, COLORS_MAP[color], shueze_size)
 
     def create_yandex_item(self, item):
         letters = 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI,AJ,AK,AL,AM,AN,AO,AP,AQ,AR,AS,AT,AU,AV,AW,AX,AY,AZ'.split(',')

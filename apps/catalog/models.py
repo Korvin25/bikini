@@ -27,7 +27,7 @@ from ..core.utils import with_watermark
 from ..currency.models import EUR, USD
 from ..currency.utils import currency_price, get_price_from_rub
 from ..settings.models import SEOSetting, MetatagModel
-
+from ..feed.mapping import COLOR_CHOICES
 
 # === Атрибуты (справочники) ===
 
@@ -143,7 +143,10 @@ class AttributeOption(models.Model):
 
     @property
     def admin_picture_url(self):
-        return self.picture['admin_attribute_option'].url if self.picture else ''
+        try:
+            return self.picture['admin_attribute_option'].url if self.picture else ''
+        except:
+            return ''
 
     @mark_safe
     def admin_show_picture(self):
@@ -440,6 +443,7 @@ class Product(MetatagModel):
     title = models.CharField('Название', max_length=255)
     subtitle = models.CharField('Подзаголовок', max_length=255, blank=True)
     ozone_type = models.CharField('Тип Ozon', max_length=255, blank=True, null=True, help_text='Нужен для того чтобы, более точно передать тип товара в Ozon, eсли не заполнено, то передается название первой рубрики, которой принадлежит товар.')
+    ozone_ocpd = models.CharField('Озон Код ОКПД/ТН ВЭД', max_length=512, blank=True, null=True, help_text='Указать если значение по умолчанию не подошло.')
     slug = models.SlugField('В URL', max_length=127)
     vendor_code = models.CharField('Артикул', max_length=255, blank=True)
     # photo = ThumbnailerImageField('Фото', upload_to='catalog/products/')
@@ -838,6 +842,7 @@ class ProductPhoto(models.Model):
     photo_f = FilerImageField(verbose_name='Фото')
     attrs = JSONField(default=dict)
     order = models.IntegerField('Порядок', default=10)
+    color_ozon = models.CharField('Цвет для Озон', choices=COLOR_CHOICES, blank=True, null=True, max_length=100)
 
     class Meta:
         ordering = ['order', 'id', ]

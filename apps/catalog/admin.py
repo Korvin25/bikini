@@ -337,7 +337,7 @@ class ProductPhotoInline(ProductPhotoAdmin):
     model = ProductPhoto
     form = ProductPhotoInlineForm
     formset = ProductPhotoInlineFormset
-    fields = ('title', 'photo_f', 'order',)
+    fields = ('title', 'photo_f', 'color_ozon', 'order',)
     suit_classes = 'suit-tab suit-tab-photos'
 
     def get_extra(self, request, obj=None, **kwargs):
@@ -518,6 +518,7 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
         ('photos', 'Фото'),
         # ('video', 'Видео'),
         ('extra', 'Дополнительные товары'),
+        ('marketplays', 'Маркетплейс'),
     )
     suit_form_size = {
         'fields': {
@@ -540,7 +541,7 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
         }),
         ('Настройки показа на сайте', {
             'classes': ('suit-tab suit-tab-default',),
-            'fields': ('show', 'show_at_yandex', 'show_at_homepage', 'order_at_homepage', 'ozone_type', 'add_dt',),
+            'fields': ('show', 'show_at_homepage', 'order_at_homepage', 'add_dt',),
         }),
         ('Сопутствующие товары', {
             'classes': ('suit-tab suit-tab-also',),
@@ -591,6 +592,10 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
         ('Дополнительные товары', {
             'classes': ('suit-tab suit-tab-extra',),
             'fields': ('extra_options_instruction',),
+        }),
+        ('Маркетплейс', {
+            'classes': ('suit-tab suit-tab-marketplays',),
+            'fields': ('show_at_yandex', 'ozone_type', 'ozone_ocpd'),
         }),
     )
     prepopulated_fields = {'slug': ('title',)}

@@ -7,7 +7,7 @@ from django.contrib import admin
 # from jet.admin import CompactInline
 from multiselectfield.forms.fields import MultiSelectFormField
 
-from .models import ExtraProduct, ProductOption, ProductExtraOption, ProductPhoto, Category
+from .models import ExtraProduct, ProductOption, ProductExtraOption, ProductPhoto, Category, Product, AttributeOption
 
 
 """
@@ -86,8 +86,8 @@ class ProductPhotoInlineForm(AttrsBasedInlineFormMixin, forms.ModelForm):
 
     class Meta:
         model = ProductPhoto
-        fields = ('title', 'photo_f', 'order',)
-        default_fields = ('title', 'photo_f', 'order',)
+        fields = ('title', 'photo_f', 'order', 'color_ozon')
+        default_fields = ('title', 'photo_f', 'order', 'color_ozon')
 
 
 class ProductExtraOptionInlineForm(forms.ModelForm):
@@ -191,6 +191,18 @@ class ProductPhotoAdmin(AttrsBasedAdminMixin, admin.StackedInline):  # CompactIn
 
     def get_new_fields_names(self, obj):
         return obj.get_attrs_slugs(filter='photos')
+
+    def formfield_for_choice_field(self, db_field, request, **kwargs):
+        path = request.path.split('/')
+        
+        if db_field.name == "color_ozon" and path[3] == "product":
+
+            product = Product.objects.filter(id=path[4])
+            if product:
+                colors_id = product[0].attrs.get('color', [])
+                colors = ["----------"] + [c.title for c in AttributeOption.objects.filter(pk__in=colors_id)]
+                kwargs['choices'] = ((color, color) for color in colors)
+        return super(ProductPhotoAdmin, self).formfield_for_choice_field(db_field, request, **kwargs)
 
 
 class ProductExtraOptionAdmin(AttrsBasedAdminMixin, admin.StackedInline):  # CompactInline
