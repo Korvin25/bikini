@@ -187,6 +187,7 @@ class OzonSeller():
     @staticmethod
     def get_param_dict(category_id, photos, name, i, price, primary_image, color, site_link, vendor_code, color_ozon, size=None):
         photos = photos.filter(color_ozon=color)
+        print(color, photos)
         param_dict = {
                 "attributes": [],
                 "barcode": "",
@@ -198,7 +199,8 @@ class OzonSeller():
                 "height": 300,
                 "images": [site_link + photo.photo_f.url for photo in photos.filter(color_ozon=color)] if photos else [primary_image],
                 "images360": [],
-                "name": name,
+                # "name": name,
+                "name": '',
                 "offer_id":  '{}-{}-{}-{}'.format(vendor_code, color_ozon, size, i) if size else '{}-{}-{}'.format(vendor_code, color_ozon, i),
                 "old_price": "",
                 "pdf_list": [ ],
