@@ -264,6 +264,7 @@ class OzonSeller():
                     param_dict['attributes'].append(self.get_attributes(4191, text)) # описание продукта
                     param_dict['attributes'].append(self.get_attributes(4495, "На любой сезон")) # сезон
                     param_dict['attributes'].append(self.get_attributes(9048, mod)) # модель
+                    param_dict['attributes'].append(self.get_attributes(4389, "Россия"))# Страна 
 
                     lists["items"].append(param_dict)
 
@@ -287,6 +288,7 @@ class OzonSeller():
                     param_dict['attributes'].append(self.get_attributes(4495, "На любой сезон")) # сезон
                     param_dict['attributes'].append(self.get_attributes(12121, ozone_ocpd or "6108 - Женские, для девочек: сорочка ночная, халат, пеньюар, неглиже, термобелье, комплект нижнего белья, трусы, топ-бра, пижама, кигуруми, эротическое белье т.д.")) # Код ОКПД/ТН ВЭД для обуви 
                     param_dict['attributes'].append(self.get_attributes(4496, "Бифлекс"))# материал 
+                    param_dict['attributes'].append(self.get_attributes(4389, "Россия"))# Страна 
 
                     lists["items"].append(param_dict)
 
@@ -308,6 +310,7 @@ class OzonSeller():
                     param_dict['attributes'].append(self.get_attributes(4191, text)) # описание продукта
                     param_dict['attributes'].append(self.get_attributes(4495, "На любой сезон")) # сезон
                     param_dict['attributes'].append(self.get_attributes(9904, ozone_ocpd or "ОКПД 2 - 15.20.11.124 - Сапожки и полусапожки из полимерных материалов ")) # Код ОКПД/ТН ВЭД для обуви 
+                    param_dict['attributes'].append(self.get_attributes(4389, "Россия"))# Страна 
 
                     lists["items"].append(param_dict)
 
