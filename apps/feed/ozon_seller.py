@@ -258,7 +258,7 @@ class OzonSeller():
                     param_dict['attributes'].append(self.get_attributes(10096, COLORS_MAP[color])) # цвет
         
                     param_dict['attributes'].append(self.get_attributes(9163, sex)) # пол
-                    param_dict['attributes'].append(self.get_attributes(85, "Нет бренда")) # бренд
+                    param_dict['attributes'].append(self.get_attributes(85, "ANASTASIA IVANOVSKAIA")) # бренд
                     # param_dict['attributes'].append(self.get_attributes(9070, "true")) # признаки 18+
                     param_dict['attributes'].append(self.get_attributes(8229, attributes_type)) # тип товара
                     param_dict['attributes'].append(self.get_attributes(4191, text)) # описание продукта
@@ -280,12 +280,13 @@ class OzonSeller():
                         param_dict['attributes'].append(self.get_attributes(4295, SIZES_MEN_MAP[size])) # размер мужской
                     
                     param_dict['attributes'].append(self.get_attributes(9163, sex)) # пол
-                    param_dict['attributes'].append(self.get_attributes(31, "Нет бренда")) # бренд
+                    param_dict['attributes'].append(self.get_attributes(31, "ANASTASIA IVANOVSKAIA")) # бренд
                     # param_dict['attributes'].append(self.get_attributes(9070, "true")) # признаки 18+
                     param_dict['attributes'].append(self.get_attributes(8229, attributes_type)) # тип товара
                     param_dict['attributes'].append(self.get_attributes(4191, text)) # описание продукта
                     param_dict['attributes'].append(self.get_attributes(4495, "На любой сезон")) # сезон
                     param_dict['attributes'].append(self.get_attributes(12121, ozone_ocpd or "6108 - Женские, для девочек: сорочка ночная, халат, пеньюар, неглиже, термобелье, комплект нижнего белья, трусы, топ-бра, пижама, кигуруми, эротическое белье т.д.")) # Код ОКПД/ТН ВЭД для обуви 
+                    param_dict['attributes'].append(self.get_attributes(4496, "Бифлекс"))# материал 
 
                     lists["items"].append(param_dict)
 
@@ -301,7 +302,7 @@ class OzonSeller():
                     
                     
                     param_dict['attributes'].append(self.get_attributes(9163, sex)) # пол
-                    param_dict['attributes'].append(self.get_attributes(31, "Нет бренда")) # бренд
+                    param_dict['attributes'].append(self.get_attributes(31, "ANASTASIA IVANOVSKAIA")) # бренд
                     # param_dict['attributes'].append(self.get_attributes(9070, "true")) # признаки 18+
                     param_dict['attributes'].append(self.get_attributes(8229, attributes_type)) # тип товара
                     param_dict['attributes'].append(self.get_attributes(4191, text)) # описание продукта
