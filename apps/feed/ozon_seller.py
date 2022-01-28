@@ -187,7 +187,6 @@ class OzonSeller():
     @staticmethod
     def get_param_dict(category_id, photos, name, i, price, primary_image, color, site_link, vendor_code, color_ozon, size=None):
         photos = photos.filter(color_ozon=color)
-        print(color, photos)
         param_dict = {
                 "attributes": [],
                 "barcode": "",
@@ -199,8 +198,8 @@ class OzonSeller():
                 "height": 300,
                 "images": [site_link + photo.photo_f.url for photo in photos.filter(color_ozon=color)] if photos else [primary_image],
                 "images360": [],
-                # "name": name,
-                "name": '',
+                "name": name,
+                # "name": '',
                 "offer_id":  '{}-{}-{}-{}'.format(vendor_code, color_ozon, size, i) if size else '{}-{}-{}'.format(vendor_code, color_ozon, i),
                 "old_price": "",
                 "pdf_list": [ ],
@@ -291,6 +290,7 @@ class OzonSeller():
                     param_dict['attributes'].append(self.get_attributes(12121, ozone_ocpd or "6108 - Женские, для девочек: сорочка ночная, халат, пеньюар, неглиже, термобелье, комплект нижнего белья, трусы, топ-бра, пижама, кигуруми, эротическое белье т.д.")) # Код ОКПД/ТН ВЭД для обуви 
                     param_dict['attributes'].append(self.get_attributes(4496, "Бифлекс"))# материал 
                     param_dict['attributes'].append(self.get_attributes(4389, "Россия"))# Страна 
+                    # param_dict['attributes'].append(self.get_attributes(4610, "бикини"))# Вид одежды  
 
                     lists["items"].append(param_dict)
 
