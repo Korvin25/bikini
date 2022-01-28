@@ -204,7 +204,7 @@ class OzonSeller():
                 "pdf_list": [ ],
                 "premium_price": "",
                 "price": price,
-                "primary_image": primary_image,
+                "primary_image": "",
                 "vat": "0",
                 "weight": 400,
                 "weight_unit": "g",
