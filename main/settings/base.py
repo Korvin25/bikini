@@ -581,3 +581,20 @@ MAILCHIMP_LIST_IDS = {
     'subscribe': '...',
     'unsubscribe': '...',
 }
+
+
+# ozon seller api
+OZON_CLIENT_ID = '...'
+OZON_API_KEY = '...'
+
+SITE_TITLE = 'Интернет магазин мини и микро бикини от Анастасии Ивановской'
+SITE_LINK = 'https://bikinimini.ru'
+SITE_DESC = 'Большой выбор мини и микро бикини, миниатюрные купальники ручной работы, которые выбирают смелые и уверенные в себе представительницы прекрасного пола.'
+SITE_PLATFORM = 'bikinimini'
+SITE_COMPANY = 'bikinimini'
+SITE_VERSION = '1.0'
+SITE_EMAIL = 'ivan@adving.ru'
+WEIDHT = '0.400'
+DIMENSIONS = '30.000/40.000/8.000'
+
+HOST = 'https://bikinimini.ru'
