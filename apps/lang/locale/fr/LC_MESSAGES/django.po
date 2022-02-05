@@ -30,15 +30,15 @@ msgstr "La cesta está vacía"
 #: apps/cart/api/views.py:22 apps/core/mixins.py:14
 #: apps/lk/wishlist/views.py:20
 msgid "Неправильный формат запроса"
-msgstr ""
+msgstr "Formato de solicitud incorrecto"
 
 #: apps/cart/api/views.py:22 apps/lk/wishlist/views.py:20
 msgid "Неправильный id товара"
-msgstr ""
+msgstr "Id de artículo incorrecto"
 
 #: apps/cart/api/views.py:23
 msgid "Выберите способы оставки и оплаты"
-msgstr ""
+msgstr "Elija los métodos de envío y pago"
 
 #: apps/cart/api/views.py:23
 msgid "Выберите способ доставки"
