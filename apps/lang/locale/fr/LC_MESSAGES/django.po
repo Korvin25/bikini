@@ -25,7 +25,7 @@ msgstr "Blog"
 
 #: apps/cart/api/views.py:22
 msgid "Корзина пуста"
-msgstr ""
+msgstr "La cesta está vacía"
 
 #: apps/cart/api/views.py:22 apps/core/mixins.py:14
 #: apps/lk/wishlist/views.py:20
