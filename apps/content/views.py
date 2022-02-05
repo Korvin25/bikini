@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.http import HttpResponse
+from django.utils.translation import ugettext as __
 from django.views.generic import TemplateView, DetailView
 
 from el_pagination.views import AjaxListView
@@ -23,9 +24,25 @@ class HomepageView(TemplateView):
         products = Product.shown()\
                           .filter(show=True, show_at_homepage=True)\
                           .order_by('order_at_homepage', 'order', '-id')
+
+        social_widgets = []
+        SettingsObj = Settings.get_solo()
+        for key in ['ig', 'vk', 'fb', 'tw']:
+            code = getattr(SettingsObj, '{}_widget'.format(key), '')
+            if code:
+                icon = {'ig': 'INS'}.get(key, key.upper())
+                label = {
+                    'ig': __('Instagram'),
+                    'vk': __('ВКонтакте'),
+                    'fb': __('FaceBook'),
+                    'tw': __('Twitter'),
+                }.get(key, key)
+                social_widgets.append({'key': key, 'icon': icon, 'label': label, 'code': code})
+
         context = {
             'promo_banner': banner,
             'products': products,
+            'social_widgets': social_widgets,
         }
         context.update(super(HomepageView, self).get_context_data(**kwargs))
         return context

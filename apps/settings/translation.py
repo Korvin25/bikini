@@ -9,6 +9,7 @@ from .models import Settings, Setting, VisualSetting, SEOSetting
 @register(Settings)
 class SettingsTranslationOptions(TranslationOptions):
     fields = ('title_suffix', 'phone', 'telegram_login', 'whatsapp_phone',
+              'ig_widget', 'vk_widget', 'fb_widget', 'tw_widget',
               'cookies_notify', 'cookies_alert', 'cookies_cart',
               'catalog_special_banner', 'catalog_special_text',)
 

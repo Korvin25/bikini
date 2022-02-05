@@ -62,6 +62,9 @@ class SettingsAdmin(ImageThumbAdminMixin, SingletonModelAdmin, TabbedTranslation
         ('Контент на страницах', {
             'fields': ('title_suffix', 'telegram_login', 'whatsapp_phone', 'phone',)
         }),
+        ('Виджеты с соц.сетями на главной', {
+            'fields': ('ig_widget', 'vk_widget', 'fb_widget', 'tw_widget',)
+        }),
         ('Robots.txt и метрика', {
             'fields': ('robots_txt', 'ym_code', 'ga_code',)
         }),

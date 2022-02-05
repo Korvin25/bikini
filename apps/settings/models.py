@@ -19,9 +19,14 @@ class Settings(SingletonModel):
                                     help_text='можно несколько; каждый на новой строке')
 
     title_suffix = models.CharField('Хвост title у страниц', max_length=255, default='интернет магазин мини и микро бикини от Анастасии Ивановской')
-    phone = RichTextUploadingField('Номер телефона (в шапке и футере)', default='<p>+7 (916) <strong>445-65-55</strong></p>')
     telegram_login = models.CharField('Логин в телеграме', max_length=255, default='@ivanovskaya_anastasia')
     whatsapp_phone = models.CharField('Номер в Whatsapp', max_length=127, default='+7 902 354-38-45')
+    phone = RichTextUploadingField('Номер телефона (в шапке и футере)', default='<p>+7 (916) <strong>445-65-55</strong></p>')
+
+    ig_widget = models.TextField('Instagram', default='', blank=True, help_text='HTML-код')
+    vk_widget = models.TextField('VK', default='', blank=True, help_text='HTML-код')
+    fb_widget = models.TextField('Facebook', default='', blank=True, help_text='HTML-код')
+    tw_widget = models.TextField('Twitter', default='', blank=True, help_text='HTML-код')
 
     robots_txt = models.TextField('Содержимое файла /robots.txt', default='User-agent: *\r\nDisallow: \r\nHost: bikinimini.ru\r\nSitemap: https://bikinimini.ru/sitemap.xml')
     ym_code = models.TextField('Код Яндекс.Метрики', default='<!-- Yandex.Metrika counter --> <script type="text/javascript" > (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter26447493 = new Ya.Metrika({ id:26447493, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks"); </script> <noscript><div><img src="https://mc.yandex.ru/watch/26447493" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->')
