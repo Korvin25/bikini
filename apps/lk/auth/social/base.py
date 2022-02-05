@@ -59,6 +59,8 @@ class BaseSocialView(View):
 
     def get_authorize_url(self):
         self.url = self.request.build_absolute_uri().split("?")[0]
+        if settings.DEFAULT_SCHEME == 'https' and self.url.startswith('http://'):
+            self.url = self.url.replace('http://', 'https://', 1)
 
         params = {'redirect_uri': self.url}
         if self.network == 'gp':
@@ -78,6 +80,8 @@ class BaseSocialView(View):
 
     def get_user_data(self):
         self.url = self.request.build_absolute_uri().split("?")[0]
+        if settings.DEFAULT_SCHEME == 'https' and self.url.startswith('http://'):
+            self.url = self.url.replace('http://', 'https://', 1)
         user_data = {}
         data = {'code': self.request.GET.get('code'), 'redirect_uri': self.url}
 
