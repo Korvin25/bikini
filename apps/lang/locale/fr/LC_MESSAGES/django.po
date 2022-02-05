@@ -200,7 +200,7 @@ msgstr "Tu me gusta cuenta"
 
 #: apps/contests/views.py:20
 msgid "Оценить участницу +"
-msgstr ""
+msgstr "Evaluar participante +"
 
 #: apps/core/mixins.py:14
 msgid "Ошибка при парсинге запроса"
