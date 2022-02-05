@@ -1,0 +1,110 @@
+{% load i18n core_tags %}
+
+<style>
+    .title_popup_but a {
+        color: #fff;
+        font-weight: 700;
+        font-size: 18px;
+    }
+    #popap1 {
+        top: 300px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-left: 0 !important;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+    #popap1 .popap1__title {
+        margin-bottom: 15px;
+        color: #d8e2e7;
+        background-color: #a82a33;
+        padding: 20px;
+        border-radius: 57px;
+        border-color: #fff;
+        border: 2px solid;
+    }
+    @media screen and (max-width: 720px){
+        #popap1 {
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+        }
+
+        #popap1 .popap1__title {
+            margin-bottom: 0;
+        }
+
+        #popap1 .close_popup {
+            top: -60px;
+        }
+    }
+</style>
+
+<div id="popap" style="display:none;">
+    <div class="window_popup_but" id="popap1">
+        <h3 class="popap1__title">Select the language of the site</h3>
+        <div class="wrap_window_popup">
+            {% for lang_code, lang_name in LANGUAGES|slice:":3" %}
+                <div class="popup_row_but js-show-popup">
+                    <form action="{% url 'set_language' %}" method="post" id="i18n_{{ lang_code }}1">
+                        {% csrf_token %}
+                        <input name="next" type="hidden" value="{% get_translated_path lang=lang_code %}" />
+                        <input name="language" type="hidden" value="{{ lang_code }}" />
+                    </form>
+                    <div class="popup_row_wrapp" onClick="javascript:SetCookiePopap()">
+                        <span class="title_popup_but">
+                        <a href="#"  class="link" onClick="document.getElementById('i18n_{{ lang_code }}1').submit()">
+                            {{ lang_name }}</a>
+                        </span>
+                    </div>
+                    </div>
+            {% endfor %}
+            <div class="close_popup js-call-close" style="margin-top:-35px;margin-right:-45px !important;" onClick="javascript:PopUpHide()"><img src="/static/i/close_icon.png" alt="Закрыть"></div>
+        </div>
+    </div>
+<div>
+
+<script type="text/javascript">
+    var popup = document.getElementById('popap');
+    var language = window.navigator ? (window.navigator.language ||
+                    window.navigator.systemLanguage ||
+                    window.navigator.userLanguage) : "ru";
+    language = language.substr(0, 2).toLowerCase();
+
+    //показать PopUp если язык браузера не ru и если в куках нет ключа
+    if (language == 'ru'){
+        var popap_cookies = readCookie('popap');
+        if (!popap_cookies) {
+            PopUpShow();
+        }
+    }
+
+    //Функция отображения PopUp
+    function PopUpShow(){
+        popup.style.display = 'block';
+    }
+    //Функция скрытия PopUp
+    function PopUpHide(){
+        popup.style.display = 'none';
+        writeCookie('popap', 'true', 1);
+    }
+
+    function SetCookiePopap(){
+        writeCookie('popap', 'true', 90);
+    }
+    
+    function writeCookie(name, val, expires) {
+        var date = new Date;
+        date.setDate(date.getDate() + expires);
+        document.cookie = name+"="+val+"; path=/; expires=" + date.toUTCString();
+    }
+    
+    function readCookie(name) {
+        var matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : false;
+    }
+</script>
