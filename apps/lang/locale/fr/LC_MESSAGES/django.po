@@ -21,7 +21,7 @@ msgstr ""
 #: apps/blog/models.py:49 templates/blog/category.html:18
 #: templates/blog/post.html:28
 msgid "Блог"
-msgstr ""
+msgstr "Blog"
 
 #: apps/cart/api/views.py:22
 msgid "Корзина пуста"
