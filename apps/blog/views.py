@@ -13,6 +13,7 @@ from ..core.http_utils import get_object_from_slug_and_kwargs
 from ..lk.email import admin_send_blog_comment_email
 from .models import Category, Post, GalleryPhoto, PostComment
 from ..settings.models import Settings
+from django.utils.translation import ugettext as __
 
 
 class PostListView(TemplateView):
