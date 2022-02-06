@@ -26,18 +26,18 @@ class HomepageView(TemplateView):
                           .order_by('order_at_homepage', 'order', '-id')
 
         social_widgets = []
-        SettingsObj = Settings.get_solo()
-        for key in ['ig', 'vk', 'fb', 'tw']:
-            code = getattr(SettingsObj, '{}_widget'.format(key), '')
-            if code:
-                icon = {'ig': 'INS'}.get(key, key.upper())
-                label = {
-                    'ig': __('Instagram'),
-                    'vk': __('ВКонтакте'),
-                    'fb': __('FaceBook'),
-                    'tw': __('Twitter'),
-                }.get(key, key)
-                social_widgets.append({'key': key, 'icon': icon, 'label': label, 'code': code})
+        # SettingsObj = Settings.get_solo()
+        # for key in ['ig', 'vk', 'fb', 'tw']:
+        #     code = getattr(SettingsObj, '{}_widget'.format(key), '')
+        #     if code:
+        #         icon = {'ig': 'INS'}.get(key, key.upper())
+        #         label = {
+        #             'ig': __('Instagram'),
+        #             'vk': __('ВКонтакте'),
+        #             'fb': __('FaceBook'),
+        #             'tw': __('Twitter'),
+        #         }.get(key, key)
+        #         social_widgets.append({'key': key, 'icon': icon, 'label': label, 'code': code})
 
         context = {
             'promo_banner': banner,
