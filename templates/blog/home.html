@@ -15,15 +15,11 @@
   <main>
     <div class="main_content main_content_blog">
 
-      <!--ul id="touch_breadcrumb" class="breadcrumb">
-        <li><a href="#">Главная</a></li>
-        <li><a href="#">Блог</a></li>
-      </ul-->
       {% block breadcrumbs %}
         <div class="blog_title">
           <ul class="breadcrumb">
             <li><a href="{% url 'home' %}">{% trans 'Главная' %}</a></li>
-            <li>Блог</li>
+            <li>{% trans 'Блог' %}</li>
           </ul>
           <h1 class="title_block">{{ seo_settings.blog.get_h1 }}</h1>
         </div>
