@@ -732,160 +732,160 @@ msgstr "Comprar"
 
 #: templates/catalog/include/product_attr_extra_price.html:7
 msgid "Добавить к комплекту"
-msgstr ""
+msgstr "Añadir al kit"
 
 #: templates/catalog/include/product_attr_extra_price.html:9
 msgid "Убрать из комплекта"
-msgstr ""
+msgstr "Retirar del kit"
 
 #: templates/catalog/include/product_popups.html:31
 msgid "Пожалуйста, выберите одно из нескольких значений"
-msgstr ""
+msgstr "Por favor, seleccione uno de varios valores"
 
 #: templates/catalog/include/product_popups.html:52
 msgid "Товар добавлен в корзину"
-msgstr ""
+msgstr "Artículo agregado al carrito"
 
 #: templates/catalog/include/product_popups.html:54
 msgid "Товаров в корзине"
-msgstr ""
+msgstr "Productos en la cesta"
 
 #: templates/catalog/include/product_popups.html:55
 msgid "Общая сумма"
-msgstr ""
+msgstr "Suma total"
 
 #: templates/catalog/include/product_popups.html:59
 msgid "Перейти к корзине"
-msgstr ""
+msgstr "Ir al carrito"
 
 #: templates/catalog/include/product_popups.html:62
 msgid "Продолжить покупки"
-msgstr ""
+msgstr "Continuar comprando"
 
 #: templates/catalog/include/products.html:54
 msgid "В данной категории пока что нет товаров"
-msgstr ""
+msgstr "En esta categoría todavía no hay productos"
 
 #: templates/catalog/include/products.html:56
 msgid "В этом разделе пока что нет товаров"
-msgstr ""
+msgstr "En esta sección todavía no hay productos"
 
 #: templates/catalog/product.html:43
 msgid "Артикул"
-msgstr ""
+msgstr "Articulo"
 
 #: templates/catalog/product.html:114
 msgid "Удалить из списка желаемых покупок"
-msgstr ""
+msgstr "Eliminar de la lista de compras deseadas"
 
 #: templates/catalog/product.html:114
 msgid "Добавить в список желаемых покупок"
-msgstr ""
+msgstr "Añadir a la lista de compras deseadas"
 
 #: templates/catalog/product.html:232
 msgid "Такого товара нет в наличии"
-msgstr ""
+msgstr "Tal producto no está disponible"
 
 #: templates/catalog/product.html:234
 msgid "Под заказ"
-msgstr ""
+msgstr "Bajo pedido"
 
 #: templates/catalog/product.html:241
 msgid "Подарочная<br />упаковка"
-msgstr ""
+msgstr "Regalo embalaje"
 
 #: templates/catalog/product.html:247
 msgid "Цены в"
-msgstr ""
+msgstr "Precios en"
 
 #: templates/catalog/product.html:275
 msgid "Смотреть всё видео"
-msgstr ""
+msgstr "Ver todos los videos"
 
 #: templates/catalog/product.html:283
 msgid "С этим товаром также покупают"
-msgstr ""
+msgstr "С этим товаром также покупают"
 
 #: templates/catalog/products.html:32
 msgid "Категории"
-msgstr ""
+msgstr "Categorías"
 
 #: templates/catalog/products.html:36
 msgid "Смотреть все"
-msgstr ""
+msgstr "Ver todo"
 
 #: templates/catalog/products.html:42
 msgid "Фильтр"
-msgstr ""
+msgstr "Filtro"
 
 #: templates/catalog/products.html:113
 msgid "Показать"
-msgstr ""
+msgstr "Mostrar"
 
 #: templates/catalog/products.html:114
 msgid "Сбросить"
-msgstr ""
+msgstr "Borrar"
 
 #: templates/contests/contest.html:19
 msgid "Победитель конкурса"
-msgstr ""
+msgstr "Ganador del concurso"
 
 #: templates/contests/contest.html:36 templates/contests/contest.html:202
 msgid "Принять участие"
-msgstr ""
+msgstr "Participar"
 
 #: templates/contests/contest.html:62
 msgid "Условия конкурса"
-msgstr ""
+msgstr "Condiciones del concurso"
 
 #: templates/contests/contest.html:74
 msgid "Участники конкурса"
-msgstr ""
+msgstr "Concursante"
 
 #: templates/contests/contest.html:86 templates/contests/participant.html:40
 #: templates/contests/participant.html:47
 msgid "Оценить участницу"
-msgstr ""
+msgstr "Evaluar participante"
 
 #: templates/contests/contest.html:99
 msgid "Архив конкурсов"
-msgstr ""
+msgstr "Archivo de concursos"
 
 #: templates/contests/contest.html:153
 msgid "Ошибка"
-msgstr ""
+msgstr "Error"
 
 #: templates/contests/contest.html:154
 msgid "Вы уже принимаете участие в конкурсе"
-msgstr ""
+msgstr "Ya estás participando en el concurso"
 
 #: templates/contests/contest.html:169
 msgid "Принять участие в конкурсе"
-msgstr ""
+msgstr "Participar en el concurso"
 
 #: templates/contests/contest.html:193
 msgid "Перетащите сюда файлы или"
-msgstr ""
+msgstr "Arrastre y suelte los archivos o"
 
 #: templates/contests/contest.html:193
 msgid "выберите на компьютере"
-msgstr ""
+msgstr "seleccione en el equipo"
 
 #: templates/contests/contest.html:194
 msgid "Максимальный размер фото - 10МБ. Не более 5 фотографий"
-msgstr ""
+msgstr "El Tamaño máximo de la foto es de 10 MB. No más de 5 fotos"
 
 #: templates/contests/participant.html:161
 msgid "Участница демонстрирует"
-msgstr ""
+msgstr "Concursante demuestra"
 
 #: templates/el_pagination/show_more.html:5
 msgid "Показать ещё"
-msgstr ""
+msgstr "Mostrar más"
 
 #: templates/el_pagination/show_more.html:6
 msgid "Идет загрузка..."
-msgstr ""
+msgstr "Se está cargando..."
 
 #: templates/email/include/order_items.html:6
 #: templates/email/include/order_items.html:8
@@ -894,159 +894,159 @@ msgstr ""
 #: templates/email/include/order_items.txt:2
 #: templates/email/include/order_items.txt:7
 msgid "артикул"
-msgstr ""
+msgstr "articulo"
 
 #: templates/email/include/order_items.html:6
 #: templates/email/include/order_items.txt:1
 msgid "цена со скидкой"
-msgstr ""
+msgstr "precio con descuento"
 
 #: templates/email/include/order_items.html:6
 #: templates/email/include/order_items.txt:1
 msgid "цена"
-msgstr ""
+msgstr "precio"
 
 #: templates/email/include/order_items.html:8
 #: templates/email/include/order_items.txt:2
 msgid "Дополнительные товары"
-msgstr ""
+msgstr "Productos adicionales"
 
 #: templates/email/include/order_items.html:8
 #: templates/email/include/order_items.txt:2
 msgid "Цена доп.товаров"
-msgstr ""
+msgstr "Precio de productos adicionales"
 
 #: templates/email/include/order_items.html:20
 #: templates/email/include/order_items.txt:7
 msgid "имя получателя"
-msgstr ""
+msgstr "nombre del destinatario"
 
 #: templates/email/include/order_items.html:20
 #: templates/email/include/order_items.txt:7
 msgid "email получателя"
-msgstr ""
+msgstr "email del destinatario"
 
 #: templates/email/include/order_items.html:20
 #: templates/email/include/order_items.txt:7
 msgid "имя отправителя"
-msgstr ""
+msgstr "nombre del remitente"
 
 #: templates/email/include/order_items.html:20
 #: templates/email/include/order_items.txt:7
 msgid "телефон отправителя"
-msgstr ""
+msgstr "Teléfono del remitente"
 
 #: templates/email/include/order_items.html:20
 #: templates/email/include/order_items.txt:7
 msgid "email отправителя"
-msgstr ""
+msgstr "email del remitente"
 
 #: templates/email/include/order_items.html:20
 #: templates/email/include/order_items.txt:7
 msgid "сообщение получателю"
-msgstr ""
+msgstr "mensaje al destinatario"
 
 #: templates/email/include/order_items.html:23
 #: templates/email/include/order_items.txt:8
 msgid "сразу"
-msgstr ""
+msgstr "de inmediato"
 
 #: templates/email/to_user/order.html:5 templates/email/to_user/order.txt:3
 msgid "Уважаемая(ый)"
-msgstr ""
+msgstr "Respetado"
 
 #: templates/email/to_user/order.html:5 templates/email/to_user/order.txt:3
 msgid "Рады сообщить, что Ваш заказ"
-msgstr ""
+msgstr "Nos complace anunciar que Su pedido"
 
 #: templates/email/to_user/order.html:5 templates/email/to_user/order.txt:3
 msgid "от"
-msgstr ""
+msgstr "a"
 
 #: templates/email/to_user/order.html:5 templates/email/to_user/order.txt:3
 msgid "был оформлен"
-msgstr ""
+msgstr "fue decorado"
 
 #: templates/email/to_user/order.html:30 templates/email/to_user/order.txt:20
 msgid "Содержимое заказа"
-msgstr ""
+msgstr "Contenido del pedido"
 
 #: templates/email/to_user/order.html:37 templates/email/to_user/order.txt:24
 #: templates/profile/profile.html:294 templates/profile/profile.html:327
 msgid "Итого к оплате"
-msgstr ""
+msgstr "Total a pagar"
 
 #: templates/email/to_user/order.html:42 templates/email/to_user/order.txt:27
 msgid "Для подтверждения заказа ожидайте звонка от нашего оператора"
-msgstr ""
+msgstr "Para confirmar el pedido, espere una llamada de nuestro operador"
 
 #: templates/email/to_user/order.html:46 templates/email/to_user/order.txt:29
 #: templates/email/to_user/reset_password.html:9
 #: templates/email/to_user/reset_password.txt:6
 msgid "Мы будем рады ответить на Ваши вопросы"
-msgstr ""
+msgstr "Estaremos encantados de responder a sus preguntas"
 
 #: templates/email/to_user/order.html:47 templates/email/to_user/order.txt:30
 #: templates/email/to_user/reset_password.html:10
 #: templates/email/to_user/reset_password.txt:7
 msgid "по телефону"
-msgstr ""
+msgstr "telefónicamente"
 
 #: templates/email/to_user/order.html:48 templates/email/to_user/order.txt:31
 #: templates/email/to_user/reset_password.html:11
 #: templates/email/to_user/reset_password.txt:8
 msgid "или по электронной почте"
-msgstr ""
+msgstr "o por correo electrónico"
 
 #: templates/email/to_user/order.html:53 templates/email/to_user/order.txt:36
 #: templates/email/to_user/reset_password.html:16
 #: templates/email/to_user/reset_password.txt:13
 msgid "С уважением, Ваша команда Bikinimini"
-msgstr ""
+msgstr "Atentamente, Su equipo Bikinimini"
 
 #: templates/email/to_user/reset_password.html:2
 #: templates/email/to_user/reset_password.txt:1
 msgid "Сбросьте ваш пароль на Bikinimini.ru"
-msgstr ""
+msgstr "Restablezca su contraseña Bikinimini.ru"
 
 #: templates/email/to_user/reset_password.html:5
 #: templates/email/to_user/reset_password.txt:3
 msgid "Чтобы сбросить свой пароль, пожалуйста, перейдите по этой ссылке"
-msgstr ""
+msgstr "Para restablecer su contraseña, siga este enlace"
 
 #: templates/home.html:23
 msgid "Популярные товары"
-msgstr ""
+msgstr "Productos populares"
 
 #: templates/home.html:52
 msgid "FaceBook"
-msgstr ""
+msgstr "FaceBook"
 
 #: templates/home.html:53
 msgid "Twitter"
-msgstr ""
+msgstr "Twitter"
 
 #: templates/home.html:76
 msgid "Перейти к нам на страницу Facebook"
-msgstr ""
+msgstr "Ir a nosotros en la página de Facebook"
 
 #: templates/home.html:76
 msgid "Присоединяйтесь к Bikinimini на Facebook"
-msgstr ""
+msgstr "Únete a Bikini mini en Facebook"
 
 #: templates/home.html:93
 msgid "Твиты от @wwwBikinimini"
-msgstr ""
+msgstr "Tweets de @wwwBikinimini"
 
 #: templates/profile/profile.html:24 templates/profile/profile.html:30
 #: templates/profile/profile.html:32 templates/profile/set_password.html:24
 #: templates/profile/set_password.html:31
 msgid "Личный кабинет"
-msgstr ""
+msgstr "Gabinete personal"
 
 #: templates/profile/profile.html:37 templates/profile/profile.html:38
 msgid "Мои данные"
-msgstr ""
+msgstr "Mis datos"
 
 #: templates/profile/profile.html:41 templates/profile/profile.html:42
 msgid "Мои заказы"
