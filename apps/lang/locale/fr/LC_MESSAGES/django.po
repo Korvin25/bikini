@@ -1050,55 +1050,55 @@ msgstr "Mis datos"
 
 #: templates/profile/profile.html:41 templates/profile/profile.html:42
 msgid "Мои заказы"
-msgstr ""
+msgstr "Mis pedidos"
 
 #: templates/profile/profile.html:54
 msgid "Как к вам обращаться"
-msgstr ""
+msgstr "Cómo contactarte"
 
 #: templates/profile/profile.html:56
 msgid "Фамилия, Имя, Отчество"
-msgstr ""
+msgstr "Apellido, Nombre, Patronímico"
 
 #: templates/profile/profile.html:244 templates/profile/profile.html:250
 msgid "Изменить"
-msgstr ""
+msgstr "Cambiar"
 
 #: templates/profile/profile.html:250
 msgid "Я хочу получать информацию о скидках и новинках"
-msgstr ""
+msgstr "Quiero recibir información sobre descuentos y novedades"
 
 #: templates/profile/profile.html:262
 msgid "Старый пароль"
-msgstr ""
+msgstr "Contraseña antigua"
 
 #: templates/profile/profile.html:267 templates/profile/set_password.html:46
 msgid "Новый пароль"
-msgstr ""
+msgstr "Nueva contraseña"
 
 #: templates/profile/profile.html:275 templates/profile/set_password.html:57
 msgid "Сохранить"
-msgstr ""
+msgstr "Guardar"
 
 #: templates/profile/profile.html:289 templates/profile/profile.html:300
 msgid "Дата заказа"
-msgstr ""
+msgstr "Fecha del pedido"
 
 #: templates/profile/profile.html:290 templates/profile/profile.html:306
 msgid "Номер заказа"
-msgstr ""
+msgstr "Número de orden"
 
 #: templates/profile/profile.html:293 templates/profile/profile.html:322
 msgid "Статус"
-msgstr ""
+msgstr "Estatus"
 
 #: templates/profile/profile.html:335
 msgid "У вас пока нет заказов"
-msgstr ""
+msgstr "Todavía no tienes pedidos"
 
 #: templates/profile/profile.html:335
 msgid "Перейти к каталогу"
-msgstr ""
+msgstr "Ir al directorio"
 
 #: templates/profile/set_password.html:4 templates/profile/set_password.html:8
 #: templates/profile/set_password.html:11
@@ -1106,20 +1106,20 @@ msgstr ""
 #: templates/profile/set_password.html:32
 #: templates/profile/set_password.html:34
 msgid "Сброс пароля"
-msgstr ""
+msgstr "Restablecer contraseña"
 
 #: templates/profile/set_password.html:43
 msgid "Введите свой новый пароль"
-msgstr ""
+msgstr "Ingrese su nueva contraseña"
 
 #: templates/profile/set_password.html:50
 msgid "Новый пароль (еще раз)"
-msgstr ""
+msgstr "Nueva contraseña (una vez más)"
 
 #: templates/video/include/videos.html:9
 msgid "перейти"
-msgstr ""
+msgstr "pasar"
 
 #: templates/video/video.html:47
 msgid "Купить товар из этого видео"
-msgstr ""
+msgstr "Comprar el artículo de este video"
