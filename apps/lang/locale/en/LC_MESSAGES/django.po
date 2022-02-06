@@ -163,7 +163,7 @@ msgid "Заявки на участие в конкурсе больше не п
 msgstr "Applications for participation in the contest are no longer accepted."
 
 #: apps/contests/forms.py:41
-msgid "Вы уже принимаете участие в конурсе."
+msgid "Вы уже принимаете участие в конкурсе."
 msgstr "You are already taking part in the contest."
 
 #: apps/contests/models.py:63 templates/contests/participant.html:24
@@ -662,7 +662,7 @@ msgid "Контактный телефон"
 msgstr "Contact phone number"
 
 #: templates/cart/cart.html:462
-msgid "мя, Фамилия, Отчество"
+msgid "Имя, Фамилия, Отчество"
 msgstr "Name, Surname, Patronymic"
 
 #: templates/cart/cart.html:494

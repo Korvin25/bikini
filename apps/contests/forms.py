@@ -38,5 +38,5 @@ class ContestApplyForm(forms.ModelForm):
         profile = self.cleaned_data.get('profile')
         contest = self.cleaned_data.get('contest')
         if contest and profile.id in contest.participants_profiles:
-            raise forms.ValidationError(_('Вы уже принимаете участие в конурсе.'))
+            raise forms.ValidationError(_('Вы уже принимаете участие в конкурсе.'))
         return profile
