@@ -64,7 +64,7 @@
         {% endif %}
 
         {% comment %} {% include 'blog/include/sidebar_instagram.html' %} {% endcomment %}
-        {% if social_widgets|length %}
+        {% comment %} {% if social_widgets|length %}
           <div class="soc_block_text" style="width: 100%">
             <div>
               <div class="w_inner_box" style="width: 100%">
@@ -133,7 +133,7 @@
               </div>
             </div>
           </div>
-        {% endif %}
+        {% endif %} {% endcomment %}
       </div>
     
       <div id="main_content" class="content_blog">
