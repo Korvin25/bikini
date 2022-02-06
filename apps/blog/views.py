@@ -12,6 +12,7 @@ from django.views.generic import TemplateView, DetailView
 from ..core.http_utils import get_object_from_slug_and_kwargs
 from ..lk.email import admin_send_blog_comment_email
 from .models import Category, Post, GalleryPhoto, PostComment
+from ..settings.models import Settings
 
 
 class PostListView(TemplateView):
@@ -102,6 +103,21 @@ class PostListView(TemplateView):
         category = self.get_category()
         posts = self.get_queryset()
         gallery = self.get_gallery()
+        social_widgets = []
+        SettingsObj = Settings.get_solo()
+
+        for key in ['ig', 'vk', 'fb', 'tw']:
+            code = getattr(SettingsObj, '{}_widget'.format(key), '')
+            if code:
+                icon = {'ig': 'INS'}.get(key, key.upper())
+                label = {
+                    'ig': __('Instagram'),
+                    'vk': __('ВКонтакте'),
+                    'fb': __('FaceBook'),
+                    'tw': __('Twitter'),
+                }.get(key, key)
+                social_widgets.append({'key': key, 'icon': icon, 'label': label, 'code': code})
+
         context = {
             'category': category,
             'posts': posts,
@@ -111,6 +127,7 @@ class PostListView(TemplateView):
             'months_columns': self.months_columns,
             'month_str': self.month_str,
             'gallery': gallery,
+            'social_widgets': social_widgets,
         }
         context.update(super(PostListView, self).get_context_data(**kwargs))
         return context
