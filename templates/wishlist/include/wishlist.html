@@ -42,9 +42,9 @@
                 </div>
               {% endif %}
               {% if product_option.in_stock %}
-                <button class="js-wishlist-cart-button to_cart_list" data-type="add" type="submit">В корзину</button>
+                <button class="js-wishlist-cart-button to_cart_list" data-type="add" type="submit">{% trans "В корзину" %}</button>
               {% else %}
-                <button class="js-wishlist-cart-button to_cart_list" data-type="order" type="submit">Под заказ</button>
+                <button class="js-wishlist-cart-button to_cart_list" data-type="order" type="submit">{% trans "Под заказ" %}</button>
               {% endif %}
             </div>
           </form>
@@ -52,10 +52,10 @@
       {% endfor %}
     </div>
   {% else %}
-    <h3 style="margin-bottom: 250px;">Товаров в списке желаемых покупок нет. <a href="{% url 'women' %}">Вернуться в каталог</a></h3>
+    <h3 style="margin-bottom: 250px;">Товаров в списке желаемых покупок нет. <a href="{% url 'women' %}">{% trans "Вернуться в каталог" %}</a></h3>
   {% endif %}
 </div>
 {% if wishlist|length %}
   <br />
-  <div style="text-align:center;"><a class="bt_red bt_list_products" href="{% url 'wishlist:home' %}">Перейти на страницу желаемых покупок</a></div>
+  <div style="text-align:center;"><a class="bt_red bt_list_products" href="{% url 'wishlist:home' %}">{% trans "Перейти на страницу желаемых покупок" %}</a></div>
 {% endif %}

@@ -17,10 +17,10 @@
       
       <div class="blog_title">
         <ul class="breadcrumb">
-          <li><a href="{% url 'home' %}">Главная</a></li>
-          <li><span>Список желаемых покупок</span></li>
+          <li><a href="{% url 'home' %}">{% trans "Главная" %}</a></li>
+          <li><span>{% trans "Список желаемых покупок" %}</span></li>
         </ul>
-        <h1 class="title_block">Список желаемых покупок</h1>
+        <h1 class="title_block">{% trans "Список желаемых покупок" %}</h1>
       </div>
       
       <div id="main_content" class="content_video list_push">
@@ -91,9 +91,9 @@
                       </div>
                     {% endif %}
                     {% if product_option.in_stock %}
-                      <button class="js-wishlist-cart-button to_cart_list" data-type="add" type="submit">В корзину</button>
+                      <button class="js-wishlist-cart-button to_cart_list" data-type="add" type="submit"{% trans "В корзину" %}></button>
                     {% else %}
-                      <button class="js-wishlist-cart-button to_cart_list" data-type="order" type="submit">Под заказ</button>
+                      <button class="js-wishlist-cart-button to_cart_list" data-type="order" type="submit">{% trans "Под заказ" %}</button>
                     {% endif %}
                   </div>
                 </form>
@@ -101,7 +101,7 @@
             {% endfor %}
           </div>
         {% else %}
-          <h3 style="margin-bottom: 250px;">Товаров в списке желаемых покупок нет. <a href="{% url 'women' %}">Вернуться в каталог</a></h3>
+          <h3 style="margin-bottom: 250px;">Товаров в списке желаемых покупок нет. <a href="{% url 'women' %}">{% trans "Вернуться в каталог" %}</a></h3>
         {% endif %}
       </div>
       
