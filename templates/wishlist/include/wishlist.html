@@ -52,7 +52,7 @@
       {% endfor %}
     </div>
   {% else %}
-    <h3 style="margin-bottom: 250px;">Товаров в списке желаемых покупок нет. <a href="{% url 'women' %}">{% trans "Вернуться в каталог" %}</a></h3>
+    <h3 style="margin-bottom: 250px;">{% trans "Товаров в списке желаемых покупок нет" %}. <a href="{% url 'women' %}">{% trans "Вернуться в каталог" %}</a></h3>
   {% endif %}
 </div>
 {% if wishlist|length %}
