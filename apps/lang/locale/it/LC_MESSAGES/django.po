@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-07 13:06+0300\n"
+"POT-Creation-Date: 2022-02-07 16:30+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -279,6 +279,33 @@ msgstr ""
 
 #: apps/lk/views.py:20
 msgid "Ваш пароль изменен!"
+msgstr ""
+
+
+#: templates/404.html:20 templates/blog/category.html:17
+#: templates/blog/home.html:21 templates/blog/post.html:27
+#: templates/cart/cart.html:44 templates/cart/cart.html:50
+#: templates/cart/certificate.html:19 templates/cart/certificate.html:25
+#: templates/catalog/product.html:31 templates/catalog/product.html:41
+#: templates/catalog/products.html:20 templates/catalog/products.html:130
+#: templates/catalog/products_men.html:16
+#: templates/catalog/products_men.html:23
+#: templates/catalog/products_men_sale.html:16
+#: templates/catalog/products_men_sale.html:24
+#: templates/catalog/products_women.html:16
+#: templates/catalog/products_women.html:23
+#: templates/catalog/products_women_sale.html:16
+#: templates/catalog/products_women_sale.html:24
+#: templates/contests/participant.html:23 templates/page.html:26
+#: templates/profile/profile.html:44 templates/profile/profile.html:50
+#: templates/profile/set_password.html:23
+#: templates/profile/set_password.html:30 templates/video/video.html:21
+#: templates/video/videos.html:20 templates/wishlist/wishlist.html:20
+msgid "Главная"
+msgstr ""
+
+#: templates/404.html:25
+msgid "Такой страницы не существует"
 msgstr ""
 
 #: templates/blocks/currency_change.html:4
