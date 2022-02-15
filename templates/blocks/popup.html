@@ -26,6 +26,17 @@
         border-color: #fff;
         border: 2px solid;
     }
+
+    #popap1 .wrap_window_popup {
+        display: flex;
+        flex-wrap: wrap;
+        width: 50%;
+        justify-content: space-around;
+    }
+    #popap1 .popup_row_but {
+        margin: 10px;
+    }
+
     @media screen and (max-width: 720px){
         #popap1 {
             margin-left: 0 !important;
@@ -39,6 +50,9 @@
         #popap1 .close_popup {
             top: -60px;
         }
+        #popap1 .wrap_window_popup {
+            width: 310px;
+        }
     }
 </style>
 
@@ -46,7 +60,7 @@
     <div class="window_popup_but" id="popap1">
         <h3 class="popap1__title">Select the language of the site</h3>
         <div class="wrap_window_popup">
-            {% for lang_code, lang_name in LANGUAGES|slice:":3" %}
+            {% for lang_code, lang_name in LANGUAGES|slice:":4" %}
                 <div class="popup_row_but js-show-popup">
                     <form action="{% url 'set_language' %}" method="post" id="i18n_{{ lang_code }}1">
                         {% csrf_token %}
