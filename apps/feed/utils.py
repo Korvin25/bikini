@@ -240,7 +240,7 @@ class GenerateFeed:
 
                 if categorys_product[0].title in ['Стринги', 'Прозрачные трусики', 'Трусики']:
                     self.sub_element(el_item, 'param', mapping.VOLUME_HIPS_MAP[size]).attrib= {
-                        u'name': u'Объем чашки',
+                        u'name': u'Размер трусов',
                         u'unit': u'RU'
                     }
 
