@@ -5,7 +5,7 @@ from datetime import datetime
 from functools import reduce
 
 from apps.catalog.models import AttributeOption, Category
-from apps.feed.mapping import COLORS_MAP_YANDEX, COLORS_MAP, SIZES_FAMELE_MAP
+from apps.feed import mapping
 from apps.settings.models import Settings
 
 reload(sys)  
@@ -101,7 +101,7 @@ class GenerateFeed:
                 u'name': u'Пол',
             }
 
-        self.sub_element(el_item, 'param', COLORS_MAP_YANDEX[color]).attrib= {
+        self.sub_element(el_item, 'param', mapping.COLORS_MAP_YANDEX[color]).attrib= {
                 u'name': u'Цвет',
             }
 
@@ -165,15 +165,15 @@ class GenerateFeed:
         for color in colors:
             if not sizes and not shueze_sizes: # если нет размера, в основносм это аксесуары
                 i += 1
-                self.get_offer_ozon(vendor_code, i, price, instock, COLORS_MAP[color])
+                self.get_offer_ozon(vendor_code, i, price, instock, mapping.COLORS_MAP[color])
 
             for size in sizes:
                 i += 1
-                self.get_offer_ozon(vendor_code, i, price, instock, COLORS_MAP[color], SIZES_FAMELE_MAP[size])
+                self.get_offer_ozon(vendor_code, i, price, instock, mapping.COLORS_MAP[color], mapping.SIZES_FAMELE_MAP[size])
 
             for shueze_size in shueze_sizes: # обувь
                 i += 1
-                self.get_offer_ozon(vendor_code, i, price, instock, COLORS_MAP[color], shueze_size)
+                self.get_offer_ozon(vendor_code, i, price, instock, mapping.COLORS_MAP[color], shueze_size)
 
     def create_yandex_item(self, item):
         letters = 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI,AJ,AK,AL,AM,AN,AO,AP,AQ,AR,AS,AT,AU,AV,AW,AX,AY,AZ'.split(',')
@@ -218,6 +218,46 @@ class GenerateFeed:
                         u'unit': u'INT'
                     }
 
+                if categorys_product[0].title in ['Микро бикини', 'Мини бикини', 'Макси бикини', 'Купальники', 'Экстрим бикини', 'Прозрачные купальники', 'Женское белье', 'Прозрачное белье', 'Одежда для фитнеса']:
+                    self.sub_element(el_item, 'param', mapping.DRESS_CHEST_MAP[size]).attrib= {
+                        u'name': u'Обхват груди',
+                        u'unit': u'RU'
+                    }
+                    self.sub_element(el_item, 'param', mapping.DRESS_HIP_GIRTH_MAP[size]).attrib= {
+                        u'name': u'Обхват бедер',
+                        u'unit': u'RU'
+                    }
+
+                if categorys_product[0].title in ['Верх купальника', 'Бюстгалтеры', 'Майки и футболки']:
+                    self.sub_element(el_item, 'param', mapping.CUP_VOLME_MAP[size]).attrib= {
+                        u'name': u'Объем чашки',
+                        u'unit': u'RU'
+                    }
+                    self.sub_element(el_item, 'param', mapping.CUP_HEIGHT_MAP[size]).attrib= {
+                        u'name': u'Высота чашки',
+                        u'unit': u'RU'
+                    }
+
+                if categorys_product[0].title in ['Стринги', 'Прозрачные трусики', 'Трусики']:
+                    self.sub_element(el_item, 'param', mapping.VOLUME_HIPS_MAP[size]).attrib= {
+                        u'name': u'Объем чашки',
+                        u'unit': u'RU'
+                    }
+
+                if categorys_product[0].title in ['Пляжная одежда', 'Платья', 'Вечерняя одежда', 'Одежда для дома', 'Спортивные костюмы']:
+                    self.sub_element(el_item, 'param', mapping.DRESS_CHEST_MAP[size]).attrib= {
+                        u'name': u'Обхват груди',
+                        u'unit': u'RU'
+                    }
+                    self.sub_element(el_item, 'param', mapping.DRESS_WAIST_MAP[size]).attrib= {
+                        u'name': u'Обхват талии',
+                        u'unit': u'RU'
+                    }
+                    self.sub_element(el_item, 'param', mapping.GROWTH_FOR_DRESSES_MAP[size]).attrib= {
+                        u'name': u'Рост',
+                        u'unit': u'RU'
+                    }
+             
             for shueze_size in shueze_sizes: # обувь
                 i += 1
                 el_item = self.get_offer_yandex(item_id, letters, i, name, vendorCode, url, price, categoryId, text, picture, photos, famile, color)
