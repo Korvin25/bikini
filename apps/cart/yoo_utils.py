@@ -50,7 +50,7 @@ def yoo_update_cart_with_payment(cart, payment=None, force=False, logger=None):
                     "products": [
                         {
                             "name": item.product.title, 
-                            "price": item.product.price_rub, 
+                            "price": float(item.product.price_rub), 
                             "quantity": item.count
                         } 
                         for item in cart.cart_items
@@ -63,7 +63,6 @@ def yoo_update_cart_with_payment(cart, payment=None, force=False, logger=None):
                     'apikey': settings.LIFE_PAY_API_KEY,
                     'login': settings.LIFE_PAY_API_LOGIN,
                     'purchase': json.dumps(purchase),
-                    'test': 1,
                 }
                 req = requests.post(url, headers=headers, data=data)
                 if logger: logger.info('  (cart id {} / payment {}) updating cart... Удаленная фискализация: {}'.format(cart.id, payment.id, req))
