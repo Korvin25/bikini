@@ -50,7 +50,7 @@ class CartAdmin(admin.ModelAdmin):
                        'delivery_method', 'payment_method', 'additional_info',)
         }),
         ('YooKassa', {
-            'fields': ('yoo_id', 'yoo_status', 'yoo_paid', 'yoo_redirect_url', 'yoo_test',)
+            'fields': ('yoo_id', 'life_pay_id', 'yoo_status', 'yoo_paid', 'yoo_redirect_url', 'yoo_test',)
         }),
         ('PayPal', {
             'fields': ('paypal_txn_id', 'paypal_status', 'paypal_paid', 'paypal_ipn_obj',)
@@ -66,7 +66,7 @@ class CartAdmin(admin.ModelAdmin):
     readonly_fields += ['country', 'city', 'postal_code', 'address', 'phone', 'name',
                         # 'delivery_method', 'payment_method',
                         'checked_out', 'checkout_date', 'payment_date',
-                        'yoo_id', 'yoo_status', 'yoo_paid', 'yoo_redirect_url', 'yoo_test',
+                        'yoo_id', 'life_pay_id', 'yoo_status', 'yoo_paid', 'yoo_redirect_url', 'yoo_test',
                         'paypal_txn_id', 'paypal_status', 'paypal_paid', 'paypal_ipn_obj',
                         'ym_client_id', 'ym_source', 'ym_source_detailed',
                         'additional_info',]
