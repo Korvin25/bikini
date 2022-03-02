@@ -74,7 +74,7 @@ class GenerateFeed:
             'instock': instock,
         }
 
-    def get_offer_yandex(self, item_id, letters, i, name, vendorCode, url, price, categoryId, text, picture, photos, famile, color):
+    def get_offer_yandex(self, item_id, letters, i, name, vendorCode, url, price, categoryId, text, picture, photos, famile, color, count):
         el_item = self.sub_element(self.offers, 'offer ')
         el_item.attrib = {
             'id': item_id + letters[i-1],
@@ -88,6 +88,7 @@ class GenerateFeed:
         self.sub_element(el_item, 'currencyId', 'RUR')
         self.sub_element(el_item, 'price', price)
         self.sub_element(el_item, 'categoryId', categoryId)
+        self.sub_element(el_item, 'count', count)
         self.sub_element(el_item, 'description', text)
         self.sub_element(el_item, 'country_of_origin', u'Россия')
         self.sub_element(el_item, 'weight', self.weight)
@@ -202,17 +203,18 @@ class GenerateFeed:
         url = self.site_link + item.get_absolute_url()
         vendorCode = item.vendor_code
         name = item.title
+        count = str(item.in_stock_counts['in_stock__min'])
         i=0
         
         for color in colors:
             if not sizes and not shueze_sizes: # если нет размера, в основносм это аксесуары
                 i += 1
-                self.get_offer_yandex(item_id, letters, i, name, vendorCode, url, price, categoryId, text, picture, photos, famile, color)
+                self.get_offer_yandex(item_id, letters, i, name, vendorCode, url, price, categoryId, text, picture, photos, famile, color, count)
                 
 
             for size in sizes:
                 i += 1
-                el_item = self.get_offer_yandex(item_id, letters, i, name, vendorCode, url, price, categoryId, text, picture, photos, famile, color)
+                el_item = self.get_offer_yandex(item_id, letters, i, name, vendorCode, url, price, categoryId, text, picture, photos, famile, color, count)
                 self.sub_element(el_item, 'param', size).attrib= {
                         u'name': u'Размер',
                         u'unit': u'INT'
@@ -260,7 +262,7 @@ class GenerateFeed:
              
             for shueze_size in shueze_sizes: # обувь
                 i += 1
-                el_item = self.get_offer_yandex(item_id, letters, i, name, vendorCode, url, price, categoryId, text, picture, photos, famile, color)
+                el_item = self.get_offer_yandex(item_id, letters, i, name, vendorCode, url, price, categoryId, text, picture, photos, famile, color, count)
                 self.sub_element(el_item, 'param', shueze_size).attrib= {
                         u'name': u'Размер',
                         u'unit': u'RU'
