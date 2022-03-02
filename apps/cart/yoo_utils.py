@@ -45,32 +45,10 @@ def yoo_update_cart_with_payment(cart, payment=None, force=False, logger=None):
 
             try:
                 # -- Удаленная фискализация --
-                url = u'https://sapi.life-pay.ru/cloud-print/create-receipt'
-                purchase =  {
-                    "products": [
-                        {
-                            "name": item.product.title, 
-                            "price": float(item.product.price_rub), 
-                            "quantity": item.count
-                        } 
-                        for item in cart.cart_items
-                    ]
-                }
-
-
-                headers = {}
-                data = {
-                    'apikey': settings.LIFE_PAY_API_KEY,
-                    'login': settings.LIFE_PAY_API_LOGIN,
-                    'purchase': json.dumps(purchase),
-                }
-                req = requests.post(url, headers=headers, data=data)
-                if logger: logger.info('  (cart id {} / payment {}) updating cart... Удаленная фискализация: {}'.format(cart.id, payment.id, req))
-
+                res = cart.life_pay_post_request()
+                if logger: logger.info('  (cart id {} / payment {}) updating cart... Удаленная фискализация: {}'.format(cart.id, payment.id, res))
             except Exception as e:
                 if logger: logger.info('  (cart id {} / payment {}) updating cart... Удаленная фискализация: {}'.format(cart.id, payment.id, e))
-
-
 
         if logger: logger.info('  (cart id {} / payment {}) done! new status: {}'.format(cart.id, payment.id, cart.yoo_status))
         return cart.yoo_status

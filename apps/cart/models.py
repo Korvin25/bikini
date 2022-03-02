@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 
 from decimal import Decimal
+import json
+import requests
 import logging
 
 from django.contrib.postgres.fields import JSONField
@@ -375,6 +377,31 @@ class Cart(models.Model):
     #     return '<a href="/admin/cart/cart/{}/change/" target="_blank">{}</a>'.format(self.id, self.title)
     # title_with_link.allow_tags = True
     # title_with_link.short_description = 'Заказ'
+
+    def life_pay_post_request(self):
+        """Удаленная фискализация.
+        """
+        url = u'https://sapi.life-pay.ru/cloud-print/create-receipt'
+        purchase =  {
+            "products": [
+                {
+                    "name": item.product.title, 
+                    "price": float(item.product.price_rub), 
+                    "quantity": item.count
+                } 
+                for item in self.cart_items
+            ]
+        }
+        headers = {}
+        data = {
+            'apikey': settings.LIFE_PAY_API_KEY,
+            'login': settings.LIFE_PAY_API_LOGIN,
+            'purchase': purchase,
+            'card_amount': sum(i['price'] for i in purchase['products']),
+            # 'test': 1
+        }
+        req = requests.post(url, headers=headers, data=json.dumps(data))
+        return req.json()
 
     def show_profile(self):
         return self.profile or ''
