@@ -399,6 +399,7 @@ class Cart(models.Model):
             'login': settings.LIFE_PAY_API_LOGIN,
             'purchase': purchase,
             'card_amount': sum(i['price'] for i in purchase['products']),
+            'ext_id': str(self.id),
             # 'test': 1
         }
         req = requests.post(url, headers=headers, data=json.dumps(data))
