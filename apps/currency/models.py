@@ -10,7 +10,7 @@ from solo.models import SingletonModel
 
 
 class EUR(SingletonModel):
-    rate = models.DecimalField('Курс евро', max_digits=4, decimal_places=2, default=Decimal('71.18'))
+    rate = models.DecimalField('Курс евро', max_digits=6, decimal_places=2, default=Decimal('71.18'))
     update_dt = models.DateTimeField('Дата последнего обновления', editable=False, auto_now=True)
     celery_task_id = models.CharField(max_length=255, null=True, blank=True, editable=False)
 
@@ -27,7 +27,7 @@ class EUR(SingletonModel):
 
 
 class USD(SingletonModel):
-    rate = models.DecimalField('Курс доллара', max_digits=4, decimal_places=2, default=Decimal('61.98'))
+    rate = models.DecimalField('Курс доллара', max_digits=6, decimal_places=2, default=Decimal('61.98'))
     update_dt = models.DateTimeField('Дата последнего обновления', editable=False, auto_now=True)
     celery_task_id = models.CharField(max_length=255, null=True, blank=True, editable=False)
 
