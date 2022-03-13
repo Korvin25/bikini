@@ -403,6 +403,16 @@ class Cart(models.Model):
                 } 
             )
         
+        for item in self.cart_items:
+            if float(item.wrapping_price_rub):
+                purchase['products'].append(
+                {
+                    "name": u'Подарочная упаковка', 
+                    "price": float(item.wrapping_price_rub), 
+                    "quantity": 1,
+                } 
+            )
+
         headers = {}
         data = {
             'apikey': settings.LIFE_PAY_API_KEY,
