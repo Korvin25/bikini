@@ -387,21 +387,36 @@ class Cart(models.Model):
             "products": [
                 {
                     "name": item.product.title, 
-                    "price": float(item.product.price_rub), 
+                    "price": float(item.product.price_rub) if not item.product.sale_price_rub else float(item.product.sale_price_rub), 
                     "quantity": item.count
                 } 
                 for item in self.cart_items
             ]
         }
+        
+        if self.show_delivery_cost_c() != u'0':
+            purchase['products'].append(
+                {
+                    "name": u'Стоимость доставки', 
+                    "price": float(self.show_delivery_cost_c()), 
+                    "quantity": 1,
+                } 
+            )
+        
         headers = {}
         data = {
             'apikey': settings.LIFE_PAY_API_KEY,
             'login': settings.LIFE_PAY_API_LOGIN,
             'purchase': purchase,
-            'card_amount': sum(i['price'] for i in purchase['products']),
+            'card_amount': float(self.summary_c),
             'ext_id': str(self.id),
+            'mode': 'email',
+            'customer_email': self.profile.email,
             # 'test': 1
         }
+        if self.phone:
+            data['customer_phone'] = self.phone
+
         req = requests.post(url, headers=headers, data=json.dumps(data))
         return req.json()
 
