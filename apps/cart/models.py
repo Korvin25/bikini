@@ -388,7 +388,8 @@ class Cart(models.Model):
                 {
                     "name": item.product.title, 
                     "price": float(item.product.price_rub) if not item.product.sale_price_rub else float(item.product.sale_price_rub), 
-                    "quantity": item.count
+                    "quantity": item.count,
+                    "item_type": 1,
                 } 
                 for item in self.cart_items
             ]
@@ -400,6 +401,7 @@ class Cart(models.Model):
                     "name": u'Стоимость доставки', 
                     "price": float(self.show_delivery_cost_c()), 
                     "quantity": 1,
+                    "item_type": 4,
                 } 
             )
         
@@ -410,6 +412,7 @@ class Cart(models.Model):
                     "name": u'Подарочная упаковка', 
                     "price": float(item.wrapping_price_rub), 
                     "quantity": 1,
+                    "item_type": 1,
                 } 
             )
 
