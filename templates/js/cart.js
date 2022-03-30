@@ -257,10 +257,11 @@ function sendSomeForm(url, form_data, send_type, $to_disable, $form, $item_div, 
             }
             {% include 'js/ajax_setup.js' %}
             if (yametrics_enabled) {
-              if ($form.hasClass('js-step1-login-form')) {
+              var form_reg = $('.js-step1-form');
+              if (form_reg.hasClass('js-step1-login-form')) {
                 yaCounter{{ YM_COUNTER }}.reachGoal('zakaz_login', {}, yaGoalCallback);
               }
-              else if ($form.hasClass('js-step1-registration-form')) {
+              else if (form_reg.hasClass('js-step1-registration-form')) {
                 yaCounter{{ YM_COUNTER }}.reachGoal('zakaz_registration', {}, yaGoalCallback);
               }
             };
