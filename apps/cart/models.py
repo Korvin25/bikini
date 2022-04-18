@@ -421,7 +421,7 @@ class Cart(models.Model):
             'apikey': settings.LIFE_PAY_API_KEY,
             'login': settings.LIFE_PAY_API_LOGIN,
             'purchase': purchase,
-            'card_amount': float(self.summary_c),
+            'card_amount': float(self.summary),
             'ext_id': str(self.id),
             'mode': 'email',
             'customer_email': self.profile.email,
