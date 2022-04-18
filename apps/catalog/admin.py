@@ -356,7 +356,8 @@ class ProductPhotoInline(ProductPhotoAdmin):
 
 
 @admin.register(Product)
-class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
+class ProductAdmin(SalmonellaMixin, TabbedTranslationAdmin):
+# class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
     change_categories_template = 'admin/catalog/product/change_categories.html'
     change_attributes_template = 'admin/catalog/product/change_attributes.html'
 
@@ -500,10 +501,10 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
         return urls + super_urls
 
     actions = ['update_data', ]
-    list_display = ('id', 'title', 'slug', 'list_categories', 'show', 'has_attrs', 'show_at_homepage',
+    list_display = ('order', 'id', 'title', 'slug', 'list_categories', 'show', 'has_attrs', 'show_at_homepage',
                     'order_at_homepage', 'add_dt', 'vendor_code', 'get_in_stock', 'show_sale_percent',)
     list_display_links = ('id', 'title',)
-    list_editable = ('order_at_homepage', 'vendor_code')
+    list_editable = ('order_at_homepage', 'vendor_code', 'order')
     list_filter = ('show', HasAttrsFilter, InStockFilter, 'show_at_homepage', 'add_dt', 'categories',
                    'is_on_sale', 'show_only_on_sale',)
     suit_list_filter_horizontal = ('show', 'show_at_homepage', 'categories', 'is_on_sale',)
