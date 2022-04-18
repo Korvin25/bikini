@@ -597,4 +597,6 @@ SITE_EMAIL = 'ivan@adving.ru'
 WEIDHT = '0.400'
 DIMENSIONS = '30.000/40.000/8.000'
 
+FILE_UPLOAD_PERMISSIONS = 0755
+
 HOST = 'https://bikinimini.ru'
