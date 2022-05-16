@@ -52,6 +52,8 @@ def yoo_update_cart_with_payment(cart, payment=None, force=False, logger=None):
                 if logger: logger.info('  (cart id {} / payment {}) updating cart... Удаленная фискализация: {}'.format(cart.id, payment.id, res))
             except Exception as e:
                 if logger: logger.info('  (cart id {} / payment {}) updating cart... Удаленная фискализация: {}'.format(cart.id, payment.id, e))
+        else:
+            cart.send_order_emails()
 
         if logger: logger.info('  (cart id {} / payment {}) done! new status: {}'.format(cart.id, payment.id, cart.yoo_status))
         return cart.yoo_status

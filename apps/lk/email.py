@@ -58,7 +58,7 @@ def email_admin(subject, email_key, obj=None, settings_key='feedback_email', **k
 
 
 def admin_send_order_email(obj, **kwargs):
-    subject = 'Bikinimini.ru: Заказ № {}'.format(obj.number)
+    subject = 'Bikinimini.ru: Заказ № {}. Статус: {}'.format(obj.number, obj.show_status())
     email_key = 'order'
     admin_slug = 'cart/cart'
     email_admin(subject, email_key, obj, admin_slug=admin_slug, settings_key='orders_email', **kwargs)

@@ -576,7 +576,7 @@ class Cart(models.Model):
     def send_order_emails(self):
         admin_send_order_email(self)
         profile = self.profile
-        if profile and profile.has_email:
+        if profile and profile.has_email and self.show_status() == 'оплачен / новый':
             send_order_email(profile, obj=self)
 
     def update_in_stock(self, send_email=True):
@@ -669,6 +669,8 @@ def show_me_the_money(sender, **kwargs):
                 cart.send_order_emails()
                 # -- остатки на складе --
                 cart.update_in_stock()
+            else:
+                cart.send_order_emails()
 
             l_paypal.info('  done!')
             l_paypal.info('------/')
