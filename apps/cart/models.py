@@ -574,9 +574,13 @@ class Cart(models.Model):
     # -- штуки после покупки
 
     def send_order_emails(self):
-        admin_send_order_email(self)
+        status = self.show_status()
+        
+        if not status == 'не оплачен / новый' and not status == 'новый':
+            admin_send_order_email(self)
+
         profile = self.profile
-        if profile and profile.has_email and self.show_status() == 'оплачен / новый':
+        if profile and profile.has_email and status == 'оплачен / новый':
             send_order_email(profile, obj=self)
 
     def update_in_stock(self, send_email=True):
