@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Profile
+from .models import Profile, Mailing
 
 
 class ProfileForm(forms.ModelForm):
@@ -101,3 +101,10 @@ class SetPasswordForm(forms.ModelForm):
         if commit:
             profile.save()
         return profile
+
+
+class MailingForm(forms.ModelForm):
+
+    class Meta:
+        model = Mailing
+        exclude = []

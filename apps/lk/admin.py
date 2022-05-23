@@ -7,15 +7,31 @@ from django.contrib.auth.models import Group
 from django.utils.safestring import mark_safe
 
 from rangefilter.filter import DateTimeRangeFilter
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin
 
 from ..analytics.admin_utils import CountryFilter, TrafficSourceFilter, traffic_source_to_str
 from ..cart.models import Cart
 from .admin_forms import UserCreationForm, UserChangeForm
-from .models import Profile
+from .models import Profile, Mailing
 
 
 admin.site.unregister(Group)
 
+
+class MailingResource(resources.ModelResource):
+    
+    class Meta:
+        model = Mailing
+        fields = ('email', 'name',)
+
+
+class ProfileResource(resources.ModelResource):
+    
+    class Meta:
+        model = Profile
+        fields = ('email', 'name',)
+        
 
 class CartInline(admin.TabularInline):
     model = Cart
@@ -40,7 +56,7 @@ class CartInline(admin.TabularInline):
 
 
 @admin.register(Profile)
-class ProfileAdmin(UserAdmin):
+class ProfileAdmin(ImportExportModelAdmin, UserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
     list_display = ('id', 'email', 'name', 'lang', 'country', 'city', 'show_traffic_source',
@@ -107,6 +123,7 @@ class ProfileAdmin(UserAdmin):
     readonly_fields = ['date_joined', ]
     readonly_fields += ['ym_client_id', 'ym_source', 'ym_source_detailed', ]
     ordering = ('-id',)
+    resource_class = ProfileResource
 
     def get_queryset(self, *args, **kwargs):
         qs = super(ProfileAdmin, self).get_queryset(*args, **kwargs)
@@ -116,3 +133,15 @@ class ProfileAdmin(UserAdmin):
     def show_traffic_source(self, obj):
         return traffic_source_to_str(obj)
     show_traffic_source.short_description = mark_safe('Источник&nbsp;трафика')
+
+    def has_import_permission(self, request):
+        return False
+
+
+@admin.register(Mailing)
+class MailingAdmin(ImportExportModelAdmin):
+    list_display = ('email', 'name',)
+    resource_class = MailingResource
+
+    def has_import_permission(self, request):
+        return False

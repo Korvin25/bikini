@@ -371,3 +371,16 @@ class WishListItem(models.Model):
         self.hash = hash
         self.save()
         return hash
+
+
+class Mailing(models.Model):
+    email = models.EmailField(_('Email'), unique=True)
+    name = models.CharField(_('Полное имя'), max_length=511)
+
+    class Meta:
+        ordering = ['id', ]
+        verbose_name = 'Рассылка'
+        verbose_name_plural = 'Рассылки'
+
+    def __unicode__(self):
+        return '{}'.format(self.email)

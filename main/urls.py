@@ -21,7 +21,7 @@ from apps.content.sitemap import sitemaps
 from apps.content.views import HomepageView, VideoListView, VideoDetailView, PageView, robots_txt
 from apps.currency.views import SetCurrencyView
 from apps.lk.views import (ProfileHomeView, ProfileResetPasswordView, ProfileSetPasswordView,
-                           ProfileFormView, ProfileSetPasswordFormView,)
+                           ProfileFormView, ProfileSetPasswordFormView, MailingView)
 from apps.views import PhotoUploadView
 
 
@@ -89,6 +89,7 @@ urlpatterns += i18n_patterns(
     url(r'^profile/$', ProfileHomeView.as_view(), name='profile'),
     url(r'^profile/reset_password/(?P<signature>[^/]+)/$', ProfileResetPasswordView.as_view(), name='profile_reset_password'),
     url(r'^profile/set_password/$', ProfileSetPasswordView.as_view(), name='profile_set_password'),
+    url(r'^mailing/$', MailingView.as_view(), name='mailing'),
 
     url(r'^women/$', ProductsView.as_view(with_category=False, sale_category=False, sex='female'), name='women'),
     url(r'^muzhskie-bikini/$', ProductsView.as_view(with_category=False, sale_category=False, sex='male'), name='men'),

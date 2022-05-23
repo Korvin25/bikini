@@ -63,6 +63,7 @@ INSTALLED_APPS = (
     'djcelery_email',
     'easy_thumbnails',
     'el_pagination',
+    'import_export',
     'embed_video',
     'filer',
     'modeltranslation',

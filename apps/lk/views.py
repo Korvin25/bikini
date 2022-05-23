@@ -6,14 +6,14 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, JsonResponse
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext as __
-from django.views.generic import TemplateView, UpdateView, View
+from django.views.generic import TemplateView, UpdateView, View, FormView
 
 from ..cart.cart import Cart
 from ..cart.models import Cart as CartModel
 from ..core.mixins import JSONFormMixin
 from ..geo.models import Country
 from .auth.utils import update_wishlist
-from .forms import ProfileForm, SetPasswordForm
+from .forms import ProfileForm, SetPasswordForm, MailingForm
 from .models import Profile
 
 
@@ -101,6 +101,17 @@ class ProfileSetPasswordView(ProfileMixin, TemplateView):
         if not self.profile.signature:
             return HttpResponseRedirect(reverse('profile'))
         return super(ProfileSetPasswordView, self).get(request, *args, **kwargs)
+
+
+
+class MailingView(FormView):
+    template_name = 'profile/mailing.html'
+    form_class = MailingForm
+    success_url = '/'
+
+    def form_valid(self, form):
+        form.save()
+        return HttpResponseRedirect('/')
 
 
 class ProfileFormView(ProfileMixin, JSONFormMixin, UpdateView):
