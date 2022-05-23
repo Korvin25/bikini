@@ -12,6 +12,7 @@ from ..cart.cart import Cart
 from ..cart.models import Cart as CartModel
 from ..core.mixins import JSONFormMixin
 from ..geo.models import Country
+from ..settings.models import Settings
 from .auth.utils import update_wishlist
 from .forms import ProfileForm, SetPasswordForm, MailingForm
 from .models import Profile
@@ -112,6 +113,13 @@ class MailingView(FormView):
     def form_valid(self, form):
         form.save()
         return HttpResponseRedirect('/')
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'settings': Settings.objects.first(),
+        }
+        context.update(super(MailingView, self).get_context_data(**kwargs))
+        return context
 
 
 class ProfileFormView(ProfileMixin, JSONFormMixin, UpdateView):

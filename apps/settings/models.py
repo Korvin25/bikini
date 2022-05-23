@@ -11,6 +11,7 @@ from ..core.regions_utils import region_field, get_region_seo_suffix
 
 
 class Settings(SingletonModel):
+    title_mailing = models.CharField('Title для mailing', max_length=255, default='')
     feedback_email = models.TextField('Email для отправки уведомлений с сайта',
                                       default='v.valych@yandex.ru\r\nBikinimini@inbox.ru\r\nalen-rybakova@yandex.ru',
                                       help_text='можно несколько; каждый на новой строке')

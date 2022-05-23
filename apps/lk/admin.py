@@ -23,7 +23,7 @@ class MailingResource(resources.ModelResource):
     
     class Meta:
         model = Mailing
-        fields = ('email', 'name',)
+        fields = ('email', 'name', 'phone')
 
 
 class ProfileResource(resources.ModelResource):
@@ -140,7 +140,7 @@ class ProfileAdmin(ImportExportModelAdmin, UserAdmin):
 
 @admin.register(Mailing)
 class MailingAdmin(ImportExportModelAdmin):
-    list_display = ('email', 'name',)
+    list_display = ('email', 'name', 'phone')
     resource_class = MailingResource
 
     def has_import_permission(self, request):
