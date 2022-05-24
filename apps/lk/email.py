@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.core.mail import EmailMessage, EmailMultiAlternatives, get_connection
 from django.core.urlresolvers import reverse
-from django.template.loader import get_template, render_to_string
+from django.template.loader import get_template
 from django.utils import translation
 from django.utils.translation import ugettext as _
 
@@ -82,19 +82,6 @@ def admin_send_low_in_stock_email(options, extra_products, **kwargs):
     subject = 'Bikinimini.ru: Некоторые товары заканчиваются на складе'
     email_key = 'low_in_stock'
     email_admin(subject, email_key, options=options, extra_products=extra_products, **kwargs)
-
-
-def email_user_mailing(instance):
-        from_email = settings.DEFAULT_FROM_EMAIL
-        user_to = [instance.email,]
-        subject = 'Вы стали участником конкурса. Ваш №{}'.format(instance.id)
-        payload = {'context': instance}
-        text_message = render_to_string('email/to_user/email_user_mailing.txt', payload)
-        html_message = render_to_string('email/to_user/email_user_mailing.html', payload)
-        msg = EmailMultiAlternatives(
-                subject, text_message, from_email, user_to)
-        msg.attach_alternative(html_message, 'text/html')
-        msg.send()
 
 
 def email_user(subject, email_key, profile=None, obj=None, language_to=None, mandrill=False, dummy=False, **kwargs):

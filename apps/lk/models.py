@@ -6,11 +6,14 @@ import uuid
 
 from django.conf import settings
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
 from ..currency.utils import currency_price
 from ..geo.models import Country
@@ -390,8 +393,17 @@ class Mailing(models.Model):
 @receiver(post_save, sender=Mailing)
 def send_email_user(sender, instance, **kwargs):
     try:
-        from .email import email_user_mailing
-        email_user_mailing(instance)
+        from_email = settings.DEFAULT_FROM_EMAIL
+        user_to = [instance.email,]
+        subject = 'Вы стали участником конкурса. Ваш №{}'.format(instance.id)
+        payload = {'context': instance}
+        text_message = render_to_string('email/to_user/email_user_mailing.txt', payload)
+        html_message = render_to_string('email/to_user/email_user_mailing.html', payload)
+        msg = EmailMultiAlternatives(
+                subject, text_message, from_email, user_to)
+        msg.attach_alternative(html_message, 'text/html')
+        msg.send()
+        
     except Exception as e:
         print('При попытке отправить письмо произошла ошибка')
         print('ERROR:', e)
