@@ -60,7 +60,7 @@ class SettingsAdmin(ImageThumbAdminMixin, SingletonModelAdmin, TabbedTranslation
             'fields': ('feedback_email', 'orders_email',)
         }),
         ('Настройки mailing', {
-            'fields': ('title_mailing', 'mailing_banner',)
+            'fields': ('title_mailing', 'mailing_banner', 'mailing_text')
         }),
         ('Контент на страницах', {
             'fields': ('title_mailing', 'title_suffix', 'telegram_login', 'whatsapp_phone', 'phone',)

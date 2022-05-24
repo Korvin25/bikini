@@ -42,6 +42,7 @@
               </div>
               
               <div class="table_cell row_cell sell_sert_form">
+                <div class="text_sert">{{ settings.mailing_text|safe }}</div>
                 <form action="{% url 'mailing' %}" method="post">
                   {% csrf_token %}
                   <div class="title_normal">

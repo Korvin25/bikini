@@ -46,6 +46,7 @@ class Settings(SingletonModel):
     catalog_special_order = models.CharField('Порядок отображения', choices=CATALOG_SPECIAL_ORDER_CHOICES, max_length=15, default='banner_first',)
     percent_marketplays = models.IntegerField('Процент на который увеличить цену для маркетплейс', blank=True, null=True, default=20)
     mailing_banner = ThumbnailerImageField('Баннер в mailing', null=True, blank=True, upload_to='b/mailing/')
+    mailing_text = RichTextUploadingField('Описание', blank=True, null=True)
 
     class Meta:
         verbose_name = 'Настройки'
