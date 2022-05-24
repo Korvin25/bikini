@@ -59,6 +59,9 @@ class SettingsAdmin(ImageThumbAdminMixin, SingletonModelAdmin, TabbedTranslation
         ('Email для обратной связи', {
             'fields': ('feedback_email', 'orders_email',)
         }),
+        ('Настройки mailing', {
+            'fields': ('title_mailing', 'mailing_banner',)
+        }),
         ('Контент на страницах', {
             'fields': ('title_mailing', 'title_suffix', 'telegram_login', 'whatsapp_phone', 'phone',)
         }),
