@@ -1,0 +1,3 @@
+Имя: {{ context.name }} 
+E-mail: {{ context.email }}
+Телефон: {{ context.phone }}

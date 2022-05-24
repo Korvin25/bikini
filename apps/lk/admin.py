@@ -140,7 +140,9 @@ class ProfileAdmin(ImportExportModelAdmin, UserAdmin):
 
 @admin.register(Mailing)
 class MailingAdmin(ImportExportModelAdmin):
-    list_display = ('email', 'name', 'phone')
+    list_display = ('id', 'email', 'name', 'phone')
+    search_fields = ('id', 'email', 'name', 'phone')
+    list_display_links = ('id', 'email',)
     resource_class = MailingResource
 
     def has_import_permission(self, request):
