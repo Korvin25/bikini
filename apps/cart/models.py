@@ -732,8 +732,20 @@ class CartItem(models.Model):
     def __unicode__(self):
         return '{} units of {}'.format(self.count, self.title)
 
+    def update_price(self, *args, **kwargs):
+        option = self.option
+        if not self.option_price_rub == option.price_rub:
+            self.option_price_rub = self.price_rub = option.price_rub
+        if not self.option_price_eur == option.price_eur:
+            self.option_price_eur = self.price_eur = option.price_eur
+        if not self.option_price_usd == option.price_usd:
+            self.option_price_usd = self.price_usd = option.price_usd
+        super(CartItem, self).save(*args, **kwargs)
+        self.cart.get_summary()
+
     @property
     def option_price(self):
+        self.update_price()
         return currency_price(self, 'option_price')
 
     @property
@@ -746,10 +758,12 @@ class CartItem(models.Model):
 
     @property
     def price(self):
+        self.update_price()
         return currency_price(self)
 
     @property
     def option_price_c(self):
+        self.update_price()
         return currency_price(self, 'option_price', currency=self.cart.currency)
 
     @property
@@ -762,6 +776,7 @@ class CartItem(models.Model):
 
     @property
     def price_c(self):
+        self.update_price()
         return currency_price(self, currency=self.cart.currency)
 
     @property
@@ -811,6 +826,7 @@ class CartItem(models.Model):
         self.wrapping_price_usd = Decimal(price_usd)
 
     def get_base_price(self, with_discount=True, currency=None):
+        self.update_price()
         if currency is None:
             option_price = currency_price(self, 'option_price')
             extra_price = currency_price(self, 'extra_price')
