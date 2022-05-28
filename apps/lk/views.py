@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-import email
 
 from django.contrib.auth import login, update_session_auth_hash
 from django.core.urlresolvers import reverse
