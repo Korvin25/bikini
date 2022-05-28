@@ -140,8 +140,8 @@ class ProfileAdmin(ImportExportModelAdmin, UserAdmin):
 
 @admin.register(Mailing)
 class MailingAdmin(ImportExportModelAdmin):
-    list_display = ('id', 'email', 'name', 'phone')
-    search_fields = ('id', 'email', 'name', 'phone')
+    list_display = ('id', 'email', 'name', 'phone', 'city')
+    search_fields = ('id', 'email', 'name', 'phone', 'city')
     list_display_links = ('id', 'email',)
     resource_class = MailingResource
 

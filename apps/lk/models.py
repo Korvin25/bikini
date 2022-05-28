@@ -377,6 +377,7 @@ class Mailing(models.Model):
     email = models.EmailField(_('Email'), unique=True)
     name = models.CharField(_('Имя Фамилия'), max_length=511)
     phone = models.CharField(_('Телефон'), max_length=30, null=True, blank=True)
+    city = models.CharField(_('Город'), max_length=30, null=True, blank=True)
 
     class Meta:
         ordering = ['-id', ]

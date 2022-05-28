@@ -1,3 +1,4 @@
 Имя: {{ context.name }} 
 E-mail: {{ context.email }}
 Телефон: {{ context.phone }}
+Город: {{ context.city }}
