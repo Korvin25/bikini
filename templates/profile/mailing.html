@@ -16,12 +16,20 @@
     <div class="main_content main_cut">
 
       {% if mailing_true %}
-      <h2>Вы стали участником конкурса. Ваш №{{ mailing.id }}</h2>
-      <p>Имя: {{ mailing.name }} </p>
-      <p>E-mail: {{ mailing.email }}</p>
-      <p>Телефон: {{ mailing.phone }}</p>
-      <p>Город: {{ mailing.city }}</p>
-      
+	 <center>
+	 <br><br><br>
+ 	<a title="МиниБикини" href="https://bikinimini.ru/"><img class="alignleft" src="https://bikinimini.ru/media/promo_banner/pictures/222.png" style="width: 400px;" alt="" /></a>
+	<br>
+	<h2>ВЫ СТАЛИ УЧАСТНИКОМ КОНКУРСА.</h2><br>
+	<h2><span style="color: #ff0000;">Ваш уникальный номер участника -  {{ mailing.id }}</span></h2><br>
+	<b>ВАШИ ДАННЫЕ:</b>
+	<br>
+	<p>Имя: {{ mailing.name }}</p>
+	<p>E-mail: {{ mailing.email }}</p>
+	<p>Телефон: {{ mailing.phone }}</p>
+	<p>Город: {{ mailing.city }}</p>
+	<br><br><br>
+      	</center>
       {% else %}
       
       <div id="main_content" class="wrapp_content">
