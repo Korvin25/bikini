@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import email
 
 from django.contrib.auth import login, update_session_auth_hash
 from django.core.urlresolvers import reverse
@@ -7,6 +8,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext as __
 from django.views.generic import TemplateView, UpdateView, View, FormView
+from django.shortcuts import render
 
 from ..cart.cart import Cart
 from ..cart.models import Cart as CartModel
@@ -15,7 +17,7 @@ from ..geo.models import Country
 from ..settings.models import Settings
 from .auth.utils import update_wishlist
 from .forms import ProfileForm, SetPasswordForm, MailingForm
-from .models import Profile
+from .models import Profile, Mailing
 
 
 translated_strings = (_('Ваш пароль изменен!'),)
@@ -112,7 +114,10 @@ class MailingView(FormView):
 
     def form_valid(self, form):
         form.save()
-        return HttpResponseRedirect('/')
+        return render(self.request, self.template_name, {
+            'mailing_true': True,
+            'mailing': Mailing.objects.get(email=form.cleaned_data.get('email'))
+        })
 
     def get_context_data(self, **kwargs):
         context = {

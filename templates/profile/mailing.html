@@ -14,6 +14,15 @@
 {% block content %}
   <main>
     <div class="main_content main_cut">
+
+      {% if mailing_true %}
+      <h2>Вы стали участником конкурса. Ваш №{{ mailing.id }}</h2>
+      <p>Имя: {{ mailing.name }} </p>
+      <p>E-mail: {{ mailing.email }}</p>
+      <p>Телефон: {{ mailing.phone }}</p>
+      <p>Город: {{ mailing.city }}</p>
+      
+      {% else %}
       
       <div id="main_content" class="wrapp_content">
         <h1 class="title_block">{{ settings.title_mailing }}</h1>
@@ -74,7 +83,7 @@
             </div>
           </div>
       </div>
-      
+      {% endif %}
     </div>
   </main>
 {% endblock %}
