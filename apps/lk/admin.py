@@ -23,7 +23,7 @@ class MailingResource(resources.ModelResource):
     
     class Meta:
         model = Mailing
-        fields = ('email', 'name', 'phone')
+        fields = ('email', 'name', 'phone', 'city')
 
 
 class ProfileResource(resources.ModelResource):
