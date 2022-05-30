@@ -576,12 +576,13 @@ class Cart(models.Model):
     def send_order_emails(self):
         status = self.show_status()
         
-        if not status == 'не оплачен / новый' and not status == 'новый':
+        if not status == 'не оплачен / новый':
             admin_send_order_email(self)
 
         profile = self.profile
-        if profile and profile.has_email and status == 'оплачен / новый':
-            send_order_email(profile, obj=self)
+        if profile and profile.has_email: 
+            if status == 'оплачен / новый' or status == 'новый':
+                send_order_email(profile, obj=self)
 
     def update_in_stock(self, send_email=True):
         _options = []
