@@ -72,6 +72,7 @@ class GenerateFeed:
         outlets = self.sub_element(el_item, 'outlets')
         self.sub_element(outlets, 'outlet').attrib = {
             'instock': instock,
+            'warehouse_name': 'FBS-1',
         }
 
     def get_offer_yandex(self, item_id, letters, i, name, vendorCode, url, price, categoryId, text, picture, photos, famile, color, count):

@@ -28,7 +28,7 @@ def yandex_rss(request):
     return HttpResponse(html_unescape(feed.to_xml()), content_type='text/xml')
 
 
-def aliexpress_rss(request):\
+def aliexpress_rss(request):
 
     feed = GenerateFeed(**PARAMS)
 
