@@ -99,7 +99,7 @@ class CartView(TemplateView):
             if item.count == 0:
                 item.delete()
         cart_items = cart.cart.cartitem_set.all().select_related('product', 'option')
-        return cart_items
+        return cart_items.filter(product__show=True)
 
     def _get_certificate_items(self):
         cart = self.cart

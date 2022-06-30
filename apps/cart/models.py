@@ -284,7 +284,7 @@ class Cart(models.Model):
         return super(Cart, self).save(*args, **kwargs)
 
     def count(self):
-        count_list = self.cartitem_set.all().values_list('count', flat=True)
+        count_list = self.cartitem_set.filter(product__show=True).values_list('count', flat=True)
         result = sum(count_list) + self.certificatecartitem_set.count()
         return result
     count.allow_tags = True
@@ -292,7 +292,7 @@ class Cart(models.Model):
 
     def get_summary(self):
         # сумма всех товаров в корзине
-        prices = self.cartitem_set.all().values('price_rub', 'price_eur', 'price_usd')
+        prices = self.cartitem_set.filter(product__show=True).values('price_rub', 'price_eur', 'price_usd')
         result_rub = sum([price['price_rub'] for price in prices])
         result_eur = sum([price['price_eur'] for price in prices])
         result_usd = sum([price['price_usd'] for price in prices])
@@ -351,7 +351,7 @@ class Cart(models.Model):
 
     @property
     def has_items_with_discount(self):
-        discounts = self.cartitem_set.all().values_list('discount', flat=True)
+        discounts = self.cartitem_set.filter(product__show=True).values_list('discount', flat=True)
         with_discount = bool(sum(discounts))
         return with_discount
 
@@ -512,7 +512,7 @@ class Cart(models.Model):
 
     @property
     def cart_items(self):
-        return self.cartitem_set.select_related('product', 'option').all()
+        return self.cartitem_set.filter(product__show=True).select_related('product', 'option').all()
 
     @property
     def certificate_items(self):
@@ -588,7 +588,7 @@ class Cart(models.Model):
         _options = []
         _extra_products = []
 
-        items = self.cartitem_set.all()
+        items = self.cartitem_set.filter(product__show=True)
         for item in items:
             count = item.count
 
