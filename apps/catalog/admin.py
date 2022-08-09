@@ -10,6 +10,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, render_to_response
 from django.template.context_processors import csrf
 from django.utils.safestring import mark_safe
+from django.conf import settings
 
 from adminsortable2.admin import SortableAdminMixin
 # from jet.admin import CompactInline
@@ -360,6 +361,17 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
     change_categories_template = 'admin/catalog/product/change_categories.html'
     change_attributes_template = 'admin/catalog/product/change_attributes.html'
 
+    def update_ozon(modeladmin, request, queryset):
+        for product in queryset:
+            from ..feed.ozon_seller import OzonSeller
+            try:
+                if product.show_at_yandex:
+                    ozon_api = OzonSeller(settings.OZON_CLIENT_ID, settings.OZON_API_KEY)
+                    ozon_api.update_product(product)
+            except:
+                print('Error update ozon - product', product.id)
+    update_ozon.short_description = "Отправить/обновить на Озон"
+
     def update_data(self, request, queryset):
         opts = Product._meta
         form = None
@@ -499,7 +511,7 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
         super_urls = super(ProductAdmin, self).get_urls()
         return urls + super_urls
 
-    actions = ['update_data', ]
+    actions = ['update_data', 'update_ozon']
     list_display = ('id', 'title', 'slug', 'list_categories', 'show', 'has_attrs', 'show_at_homepage',
                     'order_at_homepage', 'add_dt', 'vendor_code', 'get_in_stock', 'show_sale_percent',)
     list_display_links = ('id', 'title',)
