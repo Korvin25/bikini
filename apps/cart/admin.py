@@ -53,7 +53,7 @@ class CartAdmin(admin.ModelAdmin):
             'fields': ('yoo_id', 'life_pay_id', 'yoo_status', 'yoo_paid', 'yoo_redirect_url', 'yoo_test',)
         }),
         ('RoboKassa', {
-            'fields': ('robokassa_id', 'robokassa_status', 'robokassa_paid', 'robokassa_url', 'robokassa_token')
+            'fields': ('robokassa_id', 'robokassa_status', 'robokassa_paid', 'robokassa_url',)
         }),
         ('PayPal', {
             'fields': ('paypal_txn_id', 'paypal_status', 'paypal_paid', 'paypal_ipn_obj',)
@@ -72,7 +72,7 @@ class CartAdmin(admin.ModelAdmin):
                         'yoo_id', 'life_pay_id', 'yoo_status', 'yoo_paid', 'yoo_redirect_url', 'yoo_test',
                         'paypal_txn_id', 'paypal_status', 'paypal_paid', 'paypal_ipn_obj',
                         'ym_client_id', 'ym_source', 'ym_source_detailed',
-                        'additional_info', 'robokassa_id', 'robokassa_status', 'robokassa_paid', 'robokassa_url', 'robokassa_token']
+                        'additional_info', 'robokassa_id', 'robokassa_status', 'robokassa_paid', 'robokassa_url',]
     search_fields = ['id', 'country', 'city', 'profile__name',
                      'ym_source', 'ym_source_detailed', 'ym_client_id', ]
 
