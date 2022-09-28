@@ -3,7 +3,7 @@ from django.conf.urls import url
 
 from .paypal_views import paypal_form
 from .views import (Step0View, Step2View, Step3View, UpdateCartView, CartAjaxView,
-                    YooKassaWebhookView, YooKassaCartView, PayPalWebhookView, PayPalCartView)
+                    YooKassaWebhookView, YooKassaCartView, PayPalWebhookView, PayPalCartView, RoboKassaCartView, RoboKassaSuccessView, RoboKassaFailView)
 
 
 urlpatterns = [
@@ -25,4 +25,10 @@ urlpatterns = [
     url(r'^paypal/webhook/$', PayPalWebhookView.as_view(), name='paypal_webhook'),
     url(r'^paypal/(?P<pk>\d+)/$', PayPalCartView.as_view(), name='paypal'),
     url(r'^paypal/form/$', paypal_form, name='paypal_form'),
+
+    # robokassa
+    url(r'^robokassa/result/$', RoboKassaCartView.as_view(), name='robokassa'),
+    url(r'^robokassa/success/$', RoboKassaSuccessView.as_view(), name='robokassa_success'),
+    url(r'^robokassa/fail/$', RoboKassaFailView.as_view(), name='robokassa_fail'),
+
 ]

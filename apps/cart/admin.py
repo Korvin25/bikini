@@ -32,7 +32,7 @@ class PaymentMethodAdmin(SortableAdminMixin, TabbedTranslationAdmin):
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'profile', 'checked_out', 'is_order_with_discount', 'yoo_paid', 'paypal_paid',
+    list_display = ('__unicode__', 'profile', 'checked_out', 'is_order_with_discount', 'yoo_paid', 'robokassa_paid', 'paypal_paid',
                     'checkout_date', 'show_delivery_method', 'show_payment_method',
                     'admin_show_summary', 'show_status', 'count', 'country', 'city', 'show_traffic_source', 'show_num_orders',)
     list_display_links = ('__unicode__', 'profile',)
@@ -52,6 +52,9 @@ class CartAdmin(admin.ModelAdmin):
         ('YooKassa', {
             'fields': ('yoo_id', 'life_pay_id', 'yoo_status', 'yoo_paid', 'yoo_redirect_url', 'yoo_test',)
         }),
+        ('RoboKassa', {
+            'fields': ('robokassa_id', 'robokassa_status', 'robokassa_paid', 'robokassa_url', 'robokassa_token')
+        }),
         ('PayPal', {
             'fields': ('paypal_txn_id', 'paypal_status', 'paypal_paid', 'paypal_ipn_obj',)
         }),
@@ -69,7 +72,7 @@ class CartAdmin(admin.ModelAdmin):
                         'yoo_id', 'life_pay_id', 'yoo_status', 'yoo_paid', 'yoo_redirect_url', 'yoo_test',
                         'paypal_txn_id', 'paypal_status', 'paypal_paid', 'paypal_ipn_obj',
                         'ym_client_id', 'ym_source', 'ym_source_detailed',
-                        'additional_info',]
+                        'additional_info', 'robokassa_id', 'robokassa_status', 'robokassa_paid', 'robokassa_url', 'robokassa_token']
     search_fields = ['id', 'country', 'city', 'profile__name',
                      'ym_source', 'ym_source_detailed', 'ym_client_id', ]
 

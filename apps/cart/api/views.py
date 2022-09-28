@@ -1,22 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
+from __future__ import print_function, unicode_literals
 
 import json
 import logging
 import time
 import uuid
-
-from django.conf import settings
-# from django.contrib.auth import login
-from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponse, JsonResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404
-from django.utils import timezone
-from django.utils.decorators import method_decorator
-from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import ugettext as __
-from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import View, UpdateView
 
 from apps.analytics.conf import SESSION_YM_CLIENT_ID_KEY
 from apps.analytics.utils import update_traffic_source
@@ -29,11 +17,24 @@ from apps.core.mixins import JSONFormMixin
 from apps.core.templatetags.core_tags import to_price
 from apps.currency.utils import get_currency
 from apps.hash_utils import make_hash_from_cartitem
-from apps.third_party.yookassa import Payment as YooPayment
 from apps.third_party.yookassa import Configuration as YooConfiguration
+from apps.third_party.yookassa import Payment as YooPayment
 from apps.third_party.yookassa.domain.notification import WebhookNotification
 from apps.utils import absolute, get_error_message
+from django.conf import settings
+# from django.contrib.auth import login
+from django.core.urlresolvers import reverse
+from django.http import (Http404, HttpResponse, HttpResponseRedirect,
+                         JsonResponse)
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
+from django.utils.decorators import method_decorator
+from django.utils.translation import ugettext as __
+from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import UpdateView, View
 
+from .robokassa import generate_payment_link, result_payment
 
 translated_strings = (_('Корзина пуста'), _('Неправильный формат запроса'), _('Неправильный id товара'),
                       _('Выберите способы оставки и оплаты'), _('Выберите способ доставки'), _('Выберите способ оплаты'))
@@ -44,6 +45,7 @@ YooConfiguration.secret_key = settings.YOOKASSA_SECRET_KEY
 
 l_yookassa = logging.getLogger('yookassa')
 l_paypal = logging.getLogger('paypal')
+l_robokassa = logging.getLogger('robokassa')
 
 
 class EmptyCartError(Exception):
@@ -224,7 +226,7 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
             # -- главная развилка по типу оплаты --
             payment_type = cart.payment_type
             if payment_type == 'yookassa':
-                # 1/3: yookassa
+                # 1/4: yookassa
                 try:
                     # создаем платеж
                     _return_url = reverse('cart_api:yookassa', kwargs={'pk': cart.id})
@@ -263,7 +265,7 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
                     return JsonResponse(data, status=400)
 
             elif payment_type == 'paypal':
-                # 2/3: paypal
+                # 2/4: paypal
                 try:
                     # получаем форму
                     form_data = get_paypal_form(self.request, cart)
@@ -287,9 +289,40 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
                     cart.save()
                     data = {'result': 'error', 'error': err_message}
                     return JsonResponse(data, status=400)
-
+            elif payment_type == 'robokassa':
+                # 3/4: robokassa
+                try:
+                    CURRENCY = {x: y for x, y in CartModel.CURRENCY_CHOICES}
+                    redirect_url = generate_payment_link(
+                        settings.ROBOKASSA_LOGIN,         # Merchant login
+                        settings.ROBOKASSA_PASSWORD_1,        # Merchant password
+                        cart.summary,                       # Cost of goods, RU
+                        cart.id,                            # Invoice number
+                        'Покупка на сайте bikinimini.ru №{}'.format(cart.id),   # Description of the purchase
+                        cart.profile.email,                  # Invoice number
+                        CURRENCY[cart.currency],
+                        is_test=0,
+                        )
+                    cart.robokassa_id = cart.id
+                    cart.robokassa_status = 'pending'
+                    cart.robokassa_url = redirect_url.decode('utf-8')
+                    cart.save()
+                    data.update({
+                        'result': 'redirect',
+                        'redirect_url': redirect_url,
+                    })
+                except Exception as exc:
+                    try:
+                        err_message = get_error_message(exc)
+                    except Exception:
+                        err_message = 'Неизвестная ошибка'
+                    cart.robokassa_paid = False
+                    cart.robokassa_status = 'error'
+                    cart.save()
+                    data = {'result': 'error', 'error': err_message}
+                    return JsonResponse(data, status=400)
             else:
-                # 3/3: наличные
+                # 4/4: наличные
                 # -- отправка имейлов --
                 cart.send_order_emails()
                 # -- остатки на складе --
@@ -515,4 +548,61 @@ class PayPalCartView(View):
                         cart.save()
                         l_paypal.info('------- [by return view] cart id {}: paypal_status: "cancelled"! -----/'.format(cart_id))
 
+        return HttpResponseRedirect(return_url)
+
+
+class RoboKassaCartView(View):
+
+    def get(self, request, *args, **kwargs):
+        # получаем объект cart
+        pk = request.GET.get('InvId', None)
+        cart = CartModel.objects.get(id=pk)
+
+        result, signature = result_payment(settings.ROBOKASSA_PASSWORD_2, request.get_full_path())
+        if result != "bad sign":
+            cart.payment_date = timezone.now()
+            cart.robokassa_paid = True
+            cart.robokassa_status = 'succeeded'
+            cart.robokassa_token = signature
+            cart.save()
+            # -- отправка имейлов --
+            cart.send_order_emails()
+            # -- остатки на складе --
+            cart.update_in_stock()
+
+            l_robokassa.info('------- [by ResultURL] cart id {}: robokassa_status: "succeeded"! -----/'.format(cart.id))
+            
+            return HttpResponse(result)
+        cart.robokassa_paid = False
+        cart.save()
+        l_robokassa.info('------- [by ResultURL] cart id {}: bad sign! -----/'.format(cart.id))
+        return HttpResponse(result)
+
+
+class RoboKassaSuccessView(View):
+    def get(self, request, *args, **kwargs):
+        # получаем объект cart
+        pk = request.GET.get('InvId', None)
+        cart = get_object_or_404(CartModel, id=pk)
+        if cart:
+            if request.user == cart.profile:
+                return_url = '{}?tab=orders&order_id={}'.format(reverse('profile'), cart.id)
+            l_robokassa.info('------- [SuccessURL] cart id {}: robokassa_status: "succeeded"! -----/'.format(cart.id))
+
+        return HttpResponseRedirect(return_url)
+
+
+class RoboKassaFailView(View):
+    def get(self, request, *args, **kwargs):
+        # получаем объект cart
+        pk = request.GET.get('InvId', None)
+        cart = get_object_or_404(CartModel, id=pk)
+        if cart:
+            if request.user == cart.profile:
+                cart.robokassa_paid = False
+                cart.robokassa_status = 'error'
+                cart.save()
+                return_url = '{}?tab=orders&order_id={}'.format(reverse('profile'), cart.id)
+
+        l_robokassa.info('------- [by FailURL] cart id {}: robokassa_status: "error"! -----/'.format(cart.id))
         return HttpResponseRedirect(return_url)

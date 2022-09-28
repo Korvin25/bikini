@@ -431,7 +431,10 @@
               <div style="margin-top: 30px;">
                 {% if order.yoo_status == 'pending' and order.yoo_redirect_url %}
                   <p>{% trans 'Для оплаты заказа перейдите, пожалуйста' %}, <a href="{{ order.yoo_redirect_url|default_if_none:'' }}">{% trans 'на сайт ЮКасса' %}</a></p>
-
+                
+                {% elif order.robokassa_status == 'pending'%}
+                <p>{% trans 'В данный момент мы ожидаем подтверждения оплаты со стороны Robokassa' %}</a></p>
+                  
                 {% elif order.paypal_status == 'pending' %}
                   <p>{% trans 'Для оплаты заказа вернитесь, пожалуйста, на сайт PayPal' %}</p>
 

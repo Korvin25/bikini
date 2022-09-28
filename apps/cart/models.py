@@ -81,6 +81,7 @@ class DeliveryMethod(models.Model):
 class PaymentMethod(models.Model):
     PAYMENT_TYPES = (
         ('yookassa', 'YooKassa'),
+        ('robokassa', 'Robokassa'),
         ('paypal', 'PayPal'),
         ('offline', 'наличные'),
     )
@@ -218,6 +219,12 @@ class Cart(models.Model):
     paypal_ipn_obj = models.ForeignKey(PayPalIPN, null=True, blank=True)
     paypal_approve_token = models.CharField('PayPal: Токен подтверждения', max_length=31, blank=True, default='')
     paypal_cancel_token = models.CharField('PayPal: Токен отмены', max_length=31, blank=True, default='')
+
+    robokassa_id = models.CharField('RoboKassa: ID платежа', max_length=31, null=True, blank=True)
+    robokassa_status = models.CharField('RoboKassa: Статус платежа', max_length=15, null=True, blank=True, default='', choices=YOO_STATUS_CHOICES)           
+    robokassa_paid = models.NullBooleanField('RoboKassa: Оплачен?', default=None)
+    robokassa_url = models.CharField('RoboKassa: URL', max_length=1000, null=True, blank=True)
+    robokassa_token = models.CharField('RoboKassa: Токен', max_length=310, blank=True, default='')
 
     # --- яндекс.метрика ---
     TRAFFIC_SOURCE_CHOICES = (
@@ -526,6 +533,7 @@ class Cart(models.Model):
     def payment_status(self):
         return {
             'yookassa': self.yoo_status,
+            'robokassa': self.robokassa_status,
             'paypal': self.paypal_status,
         }.get(self.payment_type, '')
 
@@ -543,6 +551,7 @@ class Cart(models.Model):
     def is_paid(self):
         return {
             'yookassa': self.yoo_paid,
+            'robokassa': self.robokassa_paid,
             'paypal': self.paypal_paid,
         }.get(self.payment_type, None)
 
@@ -559,8 +568,16 @@ class Cart(models.Model):
             }.get(self.yoo_status, '')
             _paypal_status = self.get_paypal_status_display()
             # 2
+            # 3
+            _robo_status = {
+                'error': 'ошибка',
+                'pending': 'не оплачен',
+                'succeeded': 'оплачен',
+                'canceled': 'оплата отменена',
+            }.get(self.robokassa_status, '')
             status_str = {
                 'yookassa': _yoo_status,
+                'robokassa': _robo_status,
                 'paypal': _paypal_status,
             }.get(payment_type, '')
             # 3
