@@ -224,7 +224,7 @@ class Cart(models.Model):
     robokassa_status = models.CharField('RoboKassa: Статус платежа', max_length=15, null=True, blank=True, default='', choices=YOO_STATUS_CHOICES)           
     robokassa_paid = models.NullBooleanField('RoboKassa: Оплачен?', default=None)
     robokassa_url = models.CharField('RoboKassa: URL', max_length=1000, null=True, blank=True)
-    robokassa_token = models.CharField('RoboKassa: Токен', max_length=310, blank=True, default='')
+    robokassa_token = models.CharField('RoboKassa: Токен', max_length=310, blank=True, default='', null=True,)
 
     # --- яндекс.метрика ---
     TRAFFIC_SOURCE_CHOICES = (
