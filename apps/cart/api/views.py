@@ -563,7 +563,7 @@ class RoboKassaCartView(View):
             cart.payment_date = timezone.now()
             cart.robokassa_paid = True
             cart.robokassa_status = 'succeeded'
-            cart.robokassa_token = signature
+            # cart.robokassa_token = signature
             cart.save()
             # -- отправка имейлов --
             cart.send_order_emails()
