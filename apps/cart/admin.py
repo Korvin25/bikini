@@ -26,7 +26,6 @@ class DeliveryMethodAdmin(SortableAdminMixin, TabbedTranslationAdmin):
 class PaymentMethodAdmin(SortableAdminMixin, TabbedTranslationAdmin):
     list_display = ('title', 'short_title', 'payment_type', 'show_languages',
                     'is_enabled', 'show_delivery_methods',)
-    list_editable = ('short_title',)
     filter_horizontal = ['delivery_methods',]
 
 
