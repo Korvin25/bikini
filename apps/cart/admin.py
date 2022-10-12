@@ -48,8 +48,11 @@ class CartAdmin(admin.ModelAdmin):
             'fields': ('country', 'city', 'postal_code', 'address', 'phone', 'name',
                        'delivery_method', 'payment_method', 'additional_info',)
         }),
+        ('Life Pay: ID', {
+            'fields': ('life_pay_id',)
+        }),
         ('YooKassa', {
-            'fields': ('yoo_id', 'life_pay_id', 'yoo_status', 'yoo_paid', 'yoo_redirect_url', 'yoo_test',)
+            'fields': ('yoo_id', 'yoo_status', 'yoo_paid', 'yoo_redirect_url', 'yoo_test',)
         }),
         ('RoboKassa', {
             'fields': ('robokassa_id', 'robokassa_status', 'robokassa_paid', 'robokassa_url', 'robokassa_signature')

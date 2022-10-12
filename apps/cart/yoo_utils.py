@@ -20,6 +20,18 @@ def yoo_get_payment(cart):
         pass
 
 
+def life_pay_post(cart, logger):
+    try:
+        # -- Удаленная фискализация --
+        res = cart.life_pay_post_request()
+        if res['code'] == 0:
+            cart.life_pay_id = res['data']['uuid']
+            cart.save()
+        if logger: logger.info('  (cart id {}) updating cart... Удаленная фискализация: {}'.format(cart.id, res))
+    except Exception as e:
+        if logger: logger.info('  (cart id {}) updating cart... Удаленная фискализация: {}'.format(cart.id, e))
+
+
 def yoo_update_cart_with_payment(cart, payment=None, force=False, logger=None):
     if payment is None:
         payment = yoo_get_payment(cart)
@@ -42,16 +54,8 @@ def yoo_update_cart_with_payment(cart, payment=None, force=False, logger=None):
             cart.send_order_emails()
             # -- остатки на складе --
             cart.update_in_stock()
-
-            try:
-                # -- Удаленная фискализация --
-                res = cart.life_pay_post_request()
-                if res['code'] == 0:
-                    cart.life_pay_id = res['data']['uuid']
-                    cart.save()
-                if logger: logger.info('  (cart id {} / payment {}) updating cart... Удаленная фискализация: {}'.format(cart.id, payment.id, res))
-            except Exception as e:
-                if logger: logger.info('  (cart id {} / payment {}) updating cart... Удаленная фискализация: {}'.format(cart.id, payment.id, e))
+            # -- Удаленная фискализация --
+            life_pay_post(cart, logger, payment)
         else:
             cart.send_order_emails()
 

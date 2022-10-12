@@ -12,7 +12,7 @@ from apps.cart.cart import Cart
 from apps.cart.forms import CartCheckoutForm
 from apps.cart.models import Cart as CartModel
 from apps.cart.paypal_utils import get_paypal_form
-from apps.cart.yoo_utils import yoo_update_cart_with_payment
+from apps.cart.yoo_utils import yoo_update_cart_with_payment, life_pay_post
 from apps.core.mixins import JSONFormMixin
 from apps.core.templatetags.core_tags import to_price
 from apps.currency.utils import get_currency
@@ -569,6 +569,8 @@ class RoboKassaCartView(View):
             cart.send_order_emails()
             # -- остатки на складе --
             cart.update_in_stock()
+            # -- Удаленная фискализация --
+            life_pay_post(cart, l_robokassa)
 
             l_robokassa.info('------- [by ResultURL] cart id {}: robokassa_status: "succeeded"! -----/'.format(cart.id))
             
