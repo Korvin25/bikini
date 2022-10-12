@@ -55,7 +55,7 @@ def yoo_update_cart_with_payment(cart, payment=None, force=False, logger=None):
             # -- остатки на складе --
             cart.update_in_stock()
             # -- Удаленная фискализация --
-            life_pay_post(cart, logger, payment)
+            life_pay_post(cart, logger)
         else:
             cart.send_order_emails()
 
