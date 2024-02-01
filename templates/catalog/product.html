@@ -297,6 +297,12 @@
               {% trans 'Цены в' as transCurrencyChangeLabel %}
               {% include 'blocks/currency_change.html' with currency_change_label=transCurrencyChangeLabel currency_change_style="margin-top: 20px;" %}
 
+              {% if product.installment %}
+              <br>
+              <br>
+              <span class="txt_price_to" title="">Рассрочка %</span>
+              {% endif %}
+
             </div>
           </div>
         <!-- FORM chars ITEM <<< -->
@@ -372,6 +378,9 @@
                     <img src="{{ also_p.cover_thumb }}" alt="{{ also_p.title }}" />
                   </a>
                   {% if also_p.is_on_sale %}<span class="product-label product-label_discount" title="">-{{ also_p.sale_percent }}%</span>{% endif %}
+                  {% if product.installment %}
+                  <span class="product-label_installment product-label_discount" title="">Рассрочка %</span>
+                  {% endif %}
                 </div>
                 <h3><a href="{{ also_p_url }}">{{ also_p.title }}</a></h3>
                 <h4>{{ also_p.subtitle }}</h4>

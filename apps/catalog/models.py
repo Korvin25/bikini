@@ -440,6 +440,7 @@ class GiftWrapping(models.Model):
 
 class Product(MetatagModel):
     categories = models.ManyToManyField(Category, verbose_name='Категории', related_name='products')
+    installment = models.BooleanField('Доступна рассрочка', default=False)
     title = models.CharField('Название', max_length=255)
     subtitle = models.CharField('Подзаголовок', max_length=255, blank=True)
     ozone_type = models.CharField('Тип Ozon', max_length=255, blank=True, null=True, help_text='Нужен для того чтобы, более точно передать тип товара в Ozon, eсли не заполнено, то передается название первой рубрики, которой принадлежит товар.')

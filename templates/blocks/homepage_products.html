@@ -1,15 +1,21 @@
 {% load core_tags currency_tags %}
-{% load i18n %}
+{% load i18n static %}
 
 <div class="item_list_wrapp" itemscope="" itemtype="http://schema.org/ItemList">
   {% for product in products %}
     {% with product.get_absolute_url as product_url %}
     <div class="product_list">
+      {% comment %} <img src='{% static "i/installment.png" %}' style="position: absolute;z-index: 1;top: 4%;right: 22px;width: 75px;"> {% endcomment %}
       <div class="photo_list">
         <a href="{{ product_url }}">
           <img src="{{ product.cover_thumb }}" alt="{{ product.title }}" />
         </a>
-        {% if product.is_on_sale %}<span class="product-label product-label_discount" title="">-{{ product.sale_percent }}%</span>{% endif %}
+        {% if product.is_on_sale %}
+        <span class="product-label product-label_discount" title="">-{{ product.sale_percent }}%</span>
+        {% endif %}
+        {% if product.installment %}
+        <span class="product-label_installment product-label_discount" title="">Рассрочка %</span>
+        {% endif %}
       </div>
       <h3><a href="{{ product_url }}">{{ product.title }}</a></h3>
       <h4>{{ product.subtitle }}</h4>

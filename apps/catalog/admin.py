@@ -553,7 +553,7 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
         }),
         ('Настройки показа на сайте', {
             'classes': ('suit-tab suit-tab-default',),
-            'fields': ('show', 'show_at_homepage', 'order_at_homepage', 'add_dt',),
+            'fields': ('installment', 'show', 'show_at_homepage', 'order_at_homepage', 'add_dt',),
         }),
         ('Сопутствующие товары', {
             'classes': ('suit-tab suit-tab-also',),

@@ -67,7 +67,7 @@
         <label data-attr-slug="{{ attr.slug }}" for="{{ attr.slug }}_{{ option.id }}" title="{{ option.title }}">
           <input class="js-not-checkbox js-attr-checkbox js-attr-style{% if extra_product_id %} js-extra-product-attr{% endif %}" data-attr-slug="{{ attr.slug }}" data-option-id="{{ option.id }}"{% if choose_option %} data-attr-type="{{ attr.attr_type }}"{% endif %} type="checkbox"{% if is_chosen %} checked="checked"{% endif %} name="{{ attr.slug }}" id="{{ attr.slug }}_{{ option.id }}" value="{{ option.id }}" />
           <span>
-          <img src="{{ option|get_photo_url:product }}" />
+          {% comment %} <img src="{{ option|get_photo_url:product }}" /> {% endcomment %}
           </span>
         </label>
         </li>

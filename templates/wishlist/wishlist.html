@@ -41,6 +41,9 @@
                         <img src="{{ product.cover_thumb }}" alt="{{ product.title }}">
                       </a>
                       {% if product.is_on_sale %}<span class="product-label product-label_discount" title="">-{{ product.sale_percent }}%</span>{% endif %}
+                      {% if product.installment %}
+                      <span class="product-label_installment product-label_discount" title="">Рассрочка %</span>
+                      {% endif %}
                     </div>
                     <h3>
                       <a href="{{ product_url }}">{{ product.title }}</a>
