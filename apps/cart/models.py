@@ -593,7 +593,7 @@ class Cart(models.Model):
     def send_order_emails(self):
         status = self.show_status()
         
-        if not status == 'не оплачен / новый':
+        if not status == 'не оплачен / новый' or status == 'ошибка':
             admin_send_order_email(self)
 
         profile = self.profile
