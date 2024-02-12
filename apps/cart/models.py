@@ -911,9 +911,9 @@ class CartItem(models.Model):
             list_option_price_rub = [[item.id, item.option_price_rub] for item in self.cart.cart_items]
             list_option_price_rub.sort(key=lambda x: x[1])
             if list_option_price_rub and self.id == list_option_price_rub[0][0] and self.count:
-                self.price_rub = self.option_price_rub * self.count - self.option_price_rub
-                self.price_eur = self.option_price_eur * self.count - self.option_price_eur
-                self.price_usd = self.option_price_usd * self.count - self.option_price_usd
+                self.price_rub = self.get_base_price(currency='rub') * self.count - self.option_price_rub + self.wrapping_price_rub
+                self.price_eur = self.get_base_price(currency='eur') * self.count - self.option_price_eur + self.wrapping_price_eur
+                self.price_usd = self.get_base_price(currency='usd') * self.count - self.option_price_usd + self.wrapping_price_usd
 
     @property
     def total_price_without_discount(self):
