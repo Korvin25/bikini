@@ -493,6 +493,32 @@ $('input[name="gift_wrapping"]').click(function() {
   $input.change();
 });
 
+let promotionCheck = document.querySelector('.promotion');
+
+if (promotionCheck) {
+  // Находим все элементы с классом "item-summary-span"
+  const elements = document.getElementsByClassName("item-summary-span");
+
+  // Вычисляем сумму элементов
+  let summ = 0;
+  for (let i = 0; i < elements.length; i++) {
+    summ += parseFloat(elements[i].innerText);
+  }
+
+  const cartSummaryElement = document.getElementById("js-cart-summary-check");
+
+  // Получаем значение из элемента
+  const cartSummaryValue = cartSummaryElement.innerText;
+  cartSummaryValueStr = cartSummaryValue.replace(/\s/g, '');
+
+  if (summ !== parseFloat(cartSummaryValueStr)) {
+    // Обновляем страницу 
+    setTimeout(() => {
+      window.location.href = '/cart/';
+    }, 10); 
+  } 
+}
+
 $('input[name="item-count"]').change('keyup input', function() {
   var $input = $(this),
       $item_div = $input.parents('.js-item-div'),

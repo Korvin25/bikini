@@ -87,7 +87,7 @@ def currency_simple(value, currency):
 
 @register.filter
 def with_js_cart_summary(value, currency):
-    html_value = '<span class="js-cart-summary">{}</span>'.format(value)
+    html_value = '<span id="js-cart-summary-check" class="js-cart-summary">{}</span>'.format(value)
     return with_currency(html_value, currency, pure_value=value)
 
 
