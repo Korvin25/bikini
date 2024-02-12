@@ -253,6 +253,8 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
                         'result': 'redirect',
                         'redirect_url': redirect_url,
                     })
+                    # -- отправка имейлов --
+                    cart.send_order_emails()
                 except Exception as exc:
                     try:
                         err_message = get_error_message(exc)
@@ -262,6 +264,8 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
                     cart.yoo_status = 'error'
                     cart.save()
                     data = {'result': 'error', 'error': err_message}
+                    # -- отправка имейлов --
+                    cart.send_order_emails()
                     return JsonResponse(data, status=400)
 
             elif payment_type == 'paypal':
@@ -279,6 +283,8 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
                         'result': 'paypal_form',
                         'paypal_form': form_data['form_html'],
                     })
+                    # -- отправка имейлов --
+                    cart.send_order_emails()
                 except Exception as exc:
                     try:
                         err_message = get_error_message(exc)
@@ -288,6 +294,8 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
                     cart.paypal_status = 'error'
                     cart.save()
                     data = {'result': 'error', 'error': err_message}
+                    # -- отправка имейлов --
+                    cart.send_order_emails()
                     return JsonResponse(data, status=400)
             elif payment_type == 'robokassa':
                 # 3/4: robokassa
@@ -311,6 +319,8 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
                         'result': 'redirect',
                         'redirect_url': redirect_url,
                     })
+                    # -- отправка имейлов --
+                    cart.send_order_emails()
                 except Exception as exc:
                     try:
                         err_message = get_error_message(exc)
@@ -320,6 +330,8 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
                     cart.robokassa_status = 'error'
                     cart.save()
                     data = {'result': 'error', 'error': err_message}
+                    # -- отправка имейлов --
+                    cart.send_order_emails()
                     return JsonResponse(data, status=400)
             else:
                 # 4/4: наличные

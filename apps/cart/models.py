@@ -892,7 +892,6 @@ class CartItem(models.Model):
         price_usd = 0
 
         if self.count:
-            print(self.wrapping_price_rub, self.count)
             price_rub = self.get_base_price(currency='rub')*self.count + self.wrapping_price_rub
             price_eur = self.get_base_price(currency='eur')*self.count + self.wrapping_price_eur
             price_usd = self.get_base_price(currency='usd')*self.count + self.wrapping_price_usd
