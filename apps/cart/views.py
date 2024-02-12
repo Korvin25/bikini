@@ -9,6 +9,7 @@ from django.http import HttpResponseRedirect
 from ..catalog.models import Attribute, GiftWrapping, SpecialOffer
 from ..core.templatetags.core_tags import to_int_or_float
 from ..geo.models import Country
+from ..settings.models import Settings
 from .cart import Cart
 from .models import DeliveryMethod, PaymentMethod, CartItem, CertificateCartItem
 
@@ -18,6 +19,7 @@ class CartView(TemplateView):
 
     def get_context_data(self, **kwargs):
         self.cart = Cart(self.request)
+        self.cart.cart.save() # при обновлении всегда перещитываем корзину
         cart_items = self._get_cart_items()
         certificate_items = self._get_certificate_items()
         self._color_stuff(cart_items)
@@ -76,7 +78,7 @@ class CartView(TemplateView):
             _update = True
         if _update:
             cart_obj.save()
-
+            
         context = {
             'cart_items': cart_items,
             'certificate_items': certificate_items,
@@ -88,6 +90,7 @@ class CartView(TemplateView):
             'shipping_data': shipping_data,
             'delivery_methods': delivery_methods,
             'payment_methods': payment_methods,
+            'four_products_free': Settings.objects.first().four_products_free,
         }
         context.update(super(CartView, self).get_context_data(**kwargs))
         return context

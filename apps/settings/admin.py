@@ -80,7 +80,9 @@ class SettingsAdmin(ImageThumbAdminMixin, SingletonModelAdmin, TabbedTranslation
         ('Процент для маркетплейс', {
             'fields': ('percent_marketplays',)
         }),
-
+        ('Акции', {
+            'fields': ('four_products_free',)
+        }),
     )
 
 

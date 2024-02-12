@@ -455,6 +455,17 @@ $('.minus').click(function () {
   count = count < 0 ? 0 : count;
   $input.val(count);
   $input.change();
+  let inputs = document.querySelectorAll('input[name="item-count"]');
+  let promotion = document.querySelector('.promotion');
+  let sum = 0;
+  inputs.forEach(input => {
+    sum += parseInt(input.value);
+  });
+  if (sum == 3 && promotion) {
+    setTimeout(() => {
+      window.location.href = '/cart/';
+    }, 1000);;
+  }
   return false;
 });
 
@@ -463,6 +474,17 @@ $('.plus').click(function () {
   var count = parseInt($input.val()) + 1;
   $input.val(count);
   $input.change();
+  let inputs = document.querySelectorAll('input[name="item-count"]');
+  let promotion = document.querySelector('.promotion');
+  let sum = 0;
+  inputs.forEach(input => {
+    sum += parseInt(input.value);
+  });
+  if (sum == 4 && promotion) {
+    setTimeout(() => {
+      window.location.href = '/cart/';
+    }, 1000);
+  }
   return false;
 });
 
