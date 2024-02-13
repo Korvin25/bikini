@@ -493,9 +493,7 @@ $('input[name="gift_wrapping"]').click(function() {
   $input.change();
 });
 
-let promotionCheck = document.querySelector('.promotion');
 
-if (promotionCheck) {
   // Находим все элементы с классом "item-summary-span"
   const elements = document.getElementsByClassName("item-summary-span");
 
@@ -517,7 +515,7 @@ if (promotionCheck) {
       window.location.href = '/cart/';
     }, 10); 
   } 
-}
+
 
 $('input[name="item-count"]').change('keyup input', function() {
   var $input = $(this),

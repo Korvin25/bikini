@@ -766,6 +766,12 @@ class CartItem(models.Model):
         four_products_free = Settings.objects.first().four_products_free
         list_option_price_rub = [[item.id, item.option_price_rub, item.count] for item in self.cart.cart_items]
         list_option_price_rub.sort(key=lambda x: x[1])
+
+        if list_option_price_rub and self.id == list_option_price_rub[0][0] and self.count:
+            self.promotion = False
+            self.price_rub = self.option_price_rub * self.count + self.wrapping_price_rub
+            self.price_eur = self.option_price_eur * self.count + self.wrapping_price_eur
+            self.price_usd = self.option_price_usd * self.count + self.wrapping_price_usd
         
         if list_option_price_rub and self.id == list_option_price_rub[0][0] and four_products_free and list_option_price_rub[0][2] == 1:
             self.option_price_rub = self.price_rub = option.price_rub + self.wrapping_price_rub
@@ -778,6 +784,7 @@ class CartItem(models.Model):
                 self.price_rub = self.option_price_rub * self.count - self.option_price_rub + self.wrapping_price_rub
                 self.price_eur = self.option_price_eur * self.count - self.option_price_eur + self.wrapping_price_eur
                 self.price_usd = self.option_price_usd * self.count - self.option_price_usd + self.wrapping_price_usd
+
 
         super(CartItem, self).save(*args, **kwargs)
         self.cart.get_summary()
