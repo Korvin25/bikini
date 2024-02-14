@@ -30,7 +30,7 @@ class ProfileResource(resources.ModelResource):
     
     class Meta:
         model = Profile
-        fields = ('email', 'name',)
+        fields = ('email', 'name', 'city', 'country', 'postal_code', 'address', 'phone')
         
 
 class CartInline(admin.TabularInline):
