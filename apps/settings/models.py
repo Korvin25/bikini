@@ -42,6 +42,7 @@ class Settings(SingletonModel):
         ('text_first', 'Текст, баннер'),
     )
     catalog_special_banner = ThumbnailerImageField('Баннер с акциями', null=True, blank=True, upload_to='b/catalog/', help_text='Будет выводиться в размере 851x315 px')
+    catalog_special_banner_mobil = ThumbnailerImageField('Баннер с акциями на мобилку', null=True, blank=True, upload_to='b/catalog/')
     catalog_special_text = RichTextUploadingField('Текст с акциями', default='', null=True, blank=True)
     catalog_special_order = models.CharField('Порядок отображения', choices=CATALOG_SPECIAL_ORDER_CHOICES, max_length=15, default='banner_first',)
     percent_marketplays = models.IntegerField('Процент на который увеличить цену для маркетплейс', blank=True, null=True, default=20)
@@ -87,6 +88,11 @@ class Settings(SingletonModel):
     def catalog_special_banner_url(self):
         banner = self.catalog_special_banner
         return banner['catalog_special_banner'].url if banner else ''
+
+    @property
+    def catalog_special_banner_mobil_url(self):
+        banner = self.catalog_special_banner_mobil
+        return banner.url if banner else ''
 
     def get_catalog_special_text(self):
         return self.catalog_special_text.replace('<h2>', '<h2 class="title_block">')

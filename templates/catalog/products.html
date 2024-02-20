@@ -148,14 +148,23 @@
             <div class="text_preview_inner" style="margin-top: 30px;">
               {% if settings.catalog_special_banner and settings.catalog_special_text %}
                 {% if settings.catalog_special_order == 'banner_first' %}
-                  <img class="catalog_special_b _margin_bottom" src="{{ settings.catalog_special_banner_url }}"/>
+                  <picture>
+                    <source media="(max-width: 480px)" srcset="{{ settings.catalog_special_banner_mobil_url }}">
+                    <img class="catalog_special_b _margin_bottom" src="{{ settings.catalog_special_banner_url }}">
+                  </picture>
                   {{ settings.get_catalog_special_text|safe }}
                 {% else %}
                   {{ settings.get_catalog_special_text|safe }}
-                  <img class="catalog_special_b _margin_top" src="{{ settings.catalog_special_banner_url }}"/>
+                  <picture>
+                    <source media="(max-width: 480px)" srcset="{{ settings.catalog_special_banner_mobil_url }}">
+                    <img class="catalog_special_b _margin_top" src="{{ settings.catalog_special_banner_url }}">
+                  </picture>
                 {% endif %}
               {% elif settings.catalog_special_banner %}
-                <img class="catalog_special_b" src="{{ settings.catalog_special_banner_url }}"/>
+                <picture>
+                  <source media="(max-width: 480px)" srcset="{{ settings.catalog_special_banner_mobil_url }}">
+                  <img class="catalog_special_b" src="{{ settings.catalog_special_banner_url }}">
+                </picture>
               {% elif settings.get_catalog_special_text %}
                 {{ settings.get_catalog_special_text|safe }}
               {% endif %}
