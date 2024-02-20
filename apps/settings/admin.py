@@ -75,7 +75,7 @@ class SettingsAdmin(ImageThumbAdminMixin, SingletonModelAdmin, TabbedTranslation
             'fields': ('cookies_notify', 'cookies_alert', 'cookies_cart',)
         }),
         ('Акции в каталоге', {
-            'fields': ('catalog_special_banner', 'catalog_special_text', 'catalog_special_order',)
+            'fields': ('catalog_special_banner', 'catalog_special_banner_mobil', 'catalog_special_text', 'catalog_special_order',)
         }),
         ('Процент для маркетплейс', {
             'fields': ('percent_marketplays',)
