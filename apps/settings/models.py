@@ -92,7 +92,7 @@ class Settings(SingletonModel):
     @property
     def catalog_special_banner_mobil_url(self):
         banner = self.catalog_special_banner_mobil
-        return banner.url if banner else ''
+        return banner['catalog_special_banner_mobil'].url if banner else ''
 
     def get_catalog_special_text(self):
         return self.catalog_special_text.replace('<h2>', '<h2 class="title_block">')
