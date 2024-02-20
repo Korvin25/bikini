@@ -448,7 +448,7 @@ THUMBNAIL_ALIASES = {
 
         'footer_banner': {'size': (1407, 408), 'crop': True, 'upscale': True, 'quality': 100},
         'catalog_special_banner': {'size': (851, 315), 'crop': True, 'upscale': True, 'quality': 100},
-        'catalog_special_banner_mobil': {'size': (300, 483), 'crop': True, 'upscale': True, 'quality': 100},
+        'catalog_special_banner_mobil': {'size': (300, 483), 'quality': 100},
         'mailing_banner': {'size': (541, 800), 'crop': True, 'upscale': True, 'quality': 100},
 
         'attribute_option': {'size': (37, 37), 'crop': True, 'quality': 100, 'upscale': True},
