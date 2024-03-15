@@ -769,9 +769,9 @@ class CartItem(models.Model):
 
         if list_option_price_rub and self.id == list_option_price_rub[0][0] and self.count:
             self.promotion = False
-            self.price_rub = self.option_price_rub * self.count + self.wrapping_price_rub
-            self.price_eur = self.option_price_eur * self.count + self.wrapping_price_eur
-            self.price_usd = self.option_price_usd * self.count + self.wrapping_price_usd
+            self.price_rub = self.get_base_price(currency='rub') * self.count + self.wrapping_price_rub
+            self.price_eur = self.get_base_price(currency='eur') * self.count + self.wrapping_price_eur
+            self.price_usd = self.get_base_price(currency='usd') * self.count + self.wrapping_price_usd
         
         if list_option_price_rub and self.id == list_option_price_rub[0][0] and four_products_free and list_option_price_rub[0][2] == 1:
             self.option_price_rub = self.price_rub = option.price_rub + self.wrapping_price_rub
@@ -781,10 +781,16 @@ class CartItem(models.Model):
         if self.cart.count() > 3 and four_products_free:
             if list_option_price_rub and self.id == list_option_price_rub[0][0] and self.count:
                 self.promotion = True
-                self.price_rub = self.option_price_rub * self.count - self.option_price_rub + self.wrapping_price_rub
-                self.price_eur = self.option_price_eur * self.count - self.option_price_eur + self.wrapping_price_eur
-                self.price_usd = self.option_price_usd * self.count - self.option_price_usd + self.wrapping_price_usd
-
+                self.price_rub = self.get_base_price(currency='rub') * self.count - self.option_price_rub + self.wrapping_price_rub
+                self.price_eur = self.get_base_price(currency='rub') * self.count - self.option_price_eur + self.wrapping_price_eur
+                self.price_usd = self.get_base_price(currency='rub') * self.count - self.option_price_usd + self.wrapping_price_usd
+        
+        if self.price_rub  < 0:
+            self.price_rub -= self.price_rub
+        if self.price_eur  < 0:
+            self.price_eur -= self.price_eur
+        if self.price_usd  < 0:
+            self.price_usd -= self.price_usd
 
         super(CartItem, self).save(*args, **kwargs)
         self.cart.get_summary()
@@ -872,14 +878,12 @@ class CartItem(models.Model):
         self.wrapping_price_usd = Decimal(price_usd)
 
     def get_base_price(self, with_discount=True, currency=None):
-        self.update_price()
         if currency is None:
             option_price = currency_price(self, 'option_price')
             extra_price = currency_price(self, 'extra_price')
         else:
             option_price = getattr(self, 'option_price_{}'.format(currency))
             extra_price = getattr(self, 'extra_price_{}'.format(currency))
-
         if with_discount and self.discount:
             discount_price = option_price*self.discount // 100
             option_price = Decimal(to_int_or_float(option_price - discount_price))
@@ -918,6 +922,8 @@ class CartItem(models.Model):
 
     @property
     def total_price_without_discount(self):
+        print(to_int_or_float((self.base_price_without_discount*self.count + self.wrapping_price) if self.count
+                               else 0))
         return to_int_or_float((self.base_price_without_discount*self.count + self.wrapping_price) if self.count
                                else 0)
 
