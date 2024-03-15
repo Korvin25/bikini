@@ -135,7 +135,7 @@
                 <div class="table_cell td_summ">
                   {% if four_products_free %}<div class="promotion"></div>{% endif %}
                   <div class="tb_title">{% trans 'Стоимость' %}</div>
-                  {% if item.discount %}
+                  {% if item.discount and not item.promotion %}
                     <div class="txt_price_to">{% trans 'Цена для вас' %}:</div>
                     <div class="product_price sale_price">{% prefix_currency currency item.total_price_without_discount %}<s class="item-base-summary-span" style="font-family: NeoRegular;">{{ item.total_price_without_discount }}</s>{% postfix_currency currency item.total_price_without_discount %}</div>
                     <div class="product_price" style="color: #8c2c34;">{% prefix_currency currency item.price|to_int_or_float %}<span class="js-cart-price item-summary-span">{{ item.price|to_int_or_float }}</span>{% postfix_currency currency item.price|to_int_or_float %}</div>
