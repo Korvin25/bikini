@@ -26,10 +26,44 @@
       {% endblock %}
 
       <div class="sec_block">
-        
+        <style>
+          #category, #filter {
+            cursor: pointer;
+          }
+          #filter_button, #filter_button_clean {
+            margin-left: 50%;
+            margin-right: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+          }
+          @media screen and (max-width: 590px) {
+            #category_list, #filter_list {
+              display: none;
+            }
+            #filter_list {
+              padding: 0;
+            }
+            .swimsuit_top {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              justify-items: center; 
+              align-items: center; 
+              gap: 10px; 
+              padding:0 !important;
+            }
+            #filter_list .filtr_title {
+              text-align: center;
+              font-size: 19px;
+              margin-top: 25px;
+            }
+            #filter_list .check_box {
+              text-align: center;
+            }
+          }
+        </style>
         <div class="sec_menu">
-          <ul>
-            <li class="title_sec_block">{% trans 'Категории' %}</li>
+          <h3 id="category" class="title_sec_block">{% trans 'Категории' %}</h3>
+          <ul id="category_list">
             {% if show_sale_category %}
               <li{% if is_sale_category %} class="title_sec_block"{% endif %}><a href="{% if sex == 'female' %}{% url 'women_sale' %}{% else %}{% url 'men_sale' %}{% endif %}"><strong>{% trans 'SALE' %}</strong></a></li>
             {% endif %}
@@ -41,11 +75,11 @@
         </div>
         
         <div class="sec_filtr">
-          <form method="get" action="{{ request.path }}" class="sec_filtr_wrapp js-filter-form" data-container-id="products_div">
+          <h3 id="filter" class="title_sec_block">{% trans 'Фильтр' %}</h3>
+          <form id="filter_list" method="get" action="{{ request.path }}" class="sec_filtr_wrapp js-filter-form" data-container-id="products_div">
             {% if page_obj.number > 1 %}
               <input type="hidden" name="page" value="{{ page_obj.number }}"/>
             {% endif %}
-            <div class="title_sec_block">{% trans 'Фильтр' %}</div>
             {% for attr in attrs.color %}
               <div class="filtr_title">{{ attr.title }}:</div>
               <div class="check_box check_mini">
@@ -87,7 +121,7 @@
 
             {% for attr in attrs.style %}
               <div class="filtr_title">{{ attr.title }}:</div>
-              <div class="check_box check_mini check_photo">
+              <div class="check_box check_mini check_photo swimsuit_top">
                 {% for option in attr.options.all %}
                   {% if option.id in attrs_options %}
                     <label for="{{ attr.slug }}_{{ option.id }}">
@@ -116,8 +150,8 @@
               </div>
             {% endfor %}
 
-            <button class="bt_red js-form-button">{% trans 'Показать' %}</button>
-            <button class="reset_frm js-form-reset js-form-button">{% trans 'Сбросить' %}</button>
+            <button id="filter_button" class="bt_red js-form-button">{% trans 'Показать' %}</button>
+            <button id="filter_button_clean" class="reset_frm js-form-reset js-form-button">{% trans 'Сбросить' %}</button>
           </form>
         </div>
         

@@ -474,7 +474,7 @@ header,main,nav,footer {display:block;}
             .sec_menu ~ .sec_filtr,.sec_banner_block {margin-top:18px;}
             .sec_filtr {background-color:#313131;overflow: hidden;/* width: 257px; */}
             
-            .sec_filtr_wrapp {padding: 14px 28px 14px 28px;text-align: center;}
+            .sec_filtr_wrapp {padding: 0 29px;text-align: center;}
                 .sec_filtr_wrapp .title_sec_block {padding-top:0;padding-left:0;padding-right:0;text-align: left;}
 
                 .filtr_title {font-size:15px;margin-top:15px;margin-bottom: 3px;text-align: left;}
@@ -2328,35 +2328,6 @@ header,main,nav,footer {display:block;}
         
         .main_cut #touch_breadcrumb, .main_cut h1.title_block {margin-left: 0;}
         
-        .sec_filtr .filtr_title, 
-        .sec_filtr .check_box, 
-        .sec_filtr button  {display:none !important;}
-        
-        .sec_filtr .title_sec_block {cursor:pointer;}
-        .sec_filtr .title_sec_block:hover ~ .title_sec_block,
-        .sec_filtr .title_sec_block:hover ~ .check_box,
-        .sec_filtr .title_sec_block:focus ~ .title_sec_block,
-        .sec_filtr .title_sec_block:focus ~ .check_box,
-        .sec_filtr .title_sec_block:active ~ .title_sec_block, 
-        .sec_filtr .title_sec_block:active ~ .check_box {
-            display:block !important;
-        }
-        
-        .sec_filtr:hover .title_sec_block,
-        .sec_filtr:hover .check_box,
-        .sec_filtr:focus .title_sec_block,
-        .sec_filtr:focus .check_box,
-        .sec_filtr:active .title_sec_block, 
-        .sec_filtr:active .check_box {
-            display:block !important;
-        }
-        
-        .sec_filtr:hover button,
-        .sec_filtr:focus button,
-        .sec_filtr:active button {
-            display:inline-block !important;
-        }
-        
         .photo_list {max-height: 330px;}
         .photo_list img {max-width: unset;width: 330px;margin-left: -27px;}
     }
@@ -2469,7 +2440,7 @@ header,main,nav,footer {display:block;}
         .sec_filtr_wrapp .bt_red, .sec_filtr_wrapp .reset_frm {margin-left: 30px;float: left;}
         .sec_filtr_wrapp .reset_frm {margin-left: 0;text-align:center;}
         
-        .sec_filtr_wrapp {padding: 14px 28px 14px 20px;text-align: center;}
+        .sec_filtr_wrapp {text-align: center;}
 
         .sec_filtr_wrapp .bt_red, .sec_filtr_wrapp .reset_frm {
             margin-left: 30px;

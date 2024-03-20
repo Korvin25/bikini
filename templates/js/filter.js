@@ -117,3 +117,22 @@ $('.js-form-reset').click(function(e){
 
     $form.submit();
 })
+
+
+$("#category").click(function () {
+    if ($("#category_list").is(":hidden")) {
+        $("#category_list").show("slow");
+    } else {
+        $("#category_list").hide("slow");
+    }
+    return false;
+});
+
+$("#filter").click(function () {
+    if ($("#filter_list").is(":hidden")) {
+        $("#filter_list").show("slow");
+    } else {
+        $("#filter_list").hide("slow");
+    }
+    return false;
+});
