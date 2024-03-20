@@ -247,7 +247,7 @@
                     <label for="payment_method_{{ method.id }}" class="radio_input js-payment-method-label" data-payment-method-id="{{ method.id }}">
                       <div class="shell_cell_row">
                         <div class="input_cell"><input type="radio" name="payment_method_id" value="{{ method.id }}" id="payment_method_{{ method.id }}" data-delivery-ids="{{ method.delivery_ids }}" class="check_radio js-choose-cart-method"{% if shipping_data.payment_method_id == method.id or payment_methods.count == 1 %} checked="checked"{% endif %}/></div>
-                        <p><strong class="no_dash"><span>{{ method.title }}</span></strong></p>
+                        <p><strong class="no_dash"><span>{{ method.title|safe }}</span></strong></p>
                       </div>
                     </label>
                   {% endfor %}

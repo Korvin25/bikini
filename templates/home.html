@@ -20,6 +20,25 @@
 {% block content %}
   <main>
     <div class="main_content">
+
+      {% if settings.catalog_special_banner_mobil_url %}
+      <style>
+        @media screen and (min-width: 480px) {
+          .banner_mobil {
+            display: none;
+          }
+        }
+        .banner_mobil__img {
+          width: 100%;
+        }
+      </style>
+      <div class="banner_mobil">
+        <picture>
+          <img class="banner_mobil__img" src="{{ settings.catalog_special_banner_mobil_url }}">
+        </picture>
+      </div>
+      {% endif %}
+
       <h2 class="title_block">{% trans 'Популярные товары' %}</h2>
       {% include 'blocks/homepage_products.html' %}
     </div>
