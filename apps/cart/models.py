@@ -766,6 +766,10 @@ class CartItem(models.Model):
         four_products_free = Settings.objects.first().four_products_free
         list_option_price_rub = [[item.id, item.get_base_price(currency='rub'), item.count] for item in self.cart.cart_items]
         list_option_price_rub.sort(key=lambda x: x[1])
+        
+        self.price_rub = self.get_base_price(currency='rub') * self.count + self.wrapping_price_rub
+        self.price_eur = self.get_base_price(currency='eur') * self.count + self.wrapping_price_eur
+        self.price_usd = self.get_base_price(currency='usd') * self.count + self.wrapping_price_usd
 
         if list_option_price_rub and self.id == list_option_price_rub[0][0] and self.count:
             self.promotion = False
