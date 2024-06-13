@@ -36,18 +36,17 @@ def get_country_data(request):
         'is_eu': False,
     }
 
-    if not redis.get(IPDATA_UNAVAILABLE_REDIS_KEY):
-        ip = get_real_ip(request)
-        if ip:
-            try:
-                url = '{}{}?api-key={}'.format(IPDATA_API_URL, ip, IPDATA_API_KEY)
-                data = _request(url)
-            except RequestError as err:  # noqa
-                redis.setex(IPDATA_UNAVAILABLE_REDIS_KEY, 1800, 'true')
-                # TODO: logging
-            else:
-                country_data['country_code'] = data['country_code']
-                country_data['for_currency'] = EU_CODE if data['is_eu'] else data['country_code']
-                country_data['is_eu'] = data['is_eu']
+    # if not redis.get(IPDATA_UNAVAILABLE_REDIS_KEY):
+    #     ip = get_real_ip(request)
+    #     if ip:
+    #         try:
+    #             url = '{}{}?api-key={}'.format(IPDATA_API_URL, ip, IPDATA_API_KEY)
+    #             data = _request(url)
+    #         except RequestError as err:  # noqa
+    #             redis.setex(IPDATA_UNAVAILABLE_REDIS_KEY, 1800, 'true')
+    #         else:
+    #             country_data['country_code'] = data['country_code']
+    #             country_data['for_currency'] = EU_CODE if data['is_eu'] else data['country_code']
+    #             country_data['is_eu'] = data['is_eu']
 
     return country_data
