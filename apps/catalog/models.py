@@ -457,6 +457,7 @@ class Product(MetatagModel):
     order = models.PositiveSmallIntegerField(default=0, blank=False, null=False, verbose_name=mark_safe('&nbsp;&nbsp;&nbsp;&nbsp;'))
     show = models.BooleanField('Показывать на сайте', default=True)
     show_at_yandex = models.BooleanField('Добавить в маркетплейс', default=True)
+    retailcrm = models.BooleanField('Добавить в retailcrm', default=True)
     show_at_homepage = models.BooleanField('Показывать на главной', default=False)
     order_at_homepage = models.IntegerField('Порядок на главной', default=10)
     add_dt = models.DateTimeField('Дата добавления', auto_now_add=True)

@@ -6,6 +6,7 @@ from functools import reduce
 
 from apps.catalog.models import AttributeOption, Category
 from apps.feed import mapping
+from django.utils.html import strip_tags
 from apps.settings.models import Settings
 
 reload(sys)  
@@ -59,6 +60,138 @@ class GenerateFeed:
 
     def wrap_in_cdata(self, text):
         return u'<![CDATA[ {}]]>'.format(text)
+
+    def get_offer_retailcrm(self, item_id, letters, i, name, vendorCode, url, price, categoryId, text, picture, photos, famile, color, count):
+        el_item = self.sub_element(self.offers, 'offer ')
+        el_item.attrib = {
+            'type': 'product',
+            'id': item_id + letters[i-1],
+            'productId': item_id,
+        }
+
+        self.sub_element(el_item, 'name', name)
+        self.sub_element(el_item, 'productName', name)
+        self.sub_element(el_item, 'vendor', 'Anastasiya Ivanovskaia')
+        self.sub_element(el_item, 'vendorCode', vendorCode)
+        self.sub_element(el_item, 'url', url)
+        self.sub_element(el_item, 'currencyId', 'RUR')
+        self.sub_element(el_item, 'price', price)
+        self.sub_element(el_item, 'categoryId', categoryId)
+        self.sub_element(el_item, 'count', count)
+        # self.sub_element(el_item, 'description', text)
+
+        self.sub_element(el_item, 'picture', picture)
+        for photo in photos:
+            self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
+
+        self.sub_element(el_item, 'param', famile).attrib= {
+                u'name': u'Пол',
+                u'code': u'female',
+            }
+
+        self.sub_element(el_item, 'param', mapping.COLORS_MAP_YANDEX[color]).attrib= {
+                u'name': u'Цвет',
+                u'code': u'color',
+            }
+
+        self.sub_element(el_item, 'param', text).attrib= {
+                u'name': u'Описание',
+                u'code': u'description',
+            }
+
+        return el_item
+
+    def create_retailcrm_item(self, item):
+        letters = 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,AB,AC,AD,AE,AF,AG,AH,AI,AJ,AK,AL,AM,AN,AO,AP,AQ,AR,AS,AT,AU,AV,AW,AX,AY,AZ'.split(',')
+        name = item.title + u' от Анастасии Ивановской'
+        colors_id = item.attrs.get('color', [])
+        sizes_id = item.attrs.get('bottom_size', []) + item.attrs.get('top_size', [])  + item.attrs.get('size', []) + item.attrs.get('razmer_kupalnika', []) + item.attrs.get('size_yubka_dop', [])
+        shueze_size_id =  item.attrs.get('shueze_size', []) 
+        colors = [c.title for c in AttributeOption.objects.filter(pk__in=colors_id)]
+        sizes = [s.title for s in AttributeOption.objects.filter(pk__in=sizes_id)]
+        shueze_sizes = [sh.title for sh in AttributeOption.objects.filter(pk__in=shueze_size_id)]
+        sizes = list(set(sizes))
+        price = item.price_rub
+        percent_marketplays = Settings.objects.first().percent_marketplays
+        if percent_marketplays:
+            tmp_percent = price * percent_marketplays / 100
+            price += tmp_percent
+        price = str(price)
+        item_id = str(item.id)
+        famile = u'женский' if item.categories.first().sex == 'female' else u'мужской'
+        photos = item.photos.all()[:9]
+        picture = self.site_link + item.photo_f.url
+        text = strip_tags(item.text) 
+        categorys_product = item.categories.all()
+        categorys_product = categorys_product.exclude(title=u"Happy new year")
+        categoryId = str(categorys_product[0].id)
+        url = self.site_link + item.get_absolute_url()
+        vendorCode = item.vendor_code
+        name = item.title
+        count = str(item.in_stock_counts['in_stock__min'])
+        i=0
+        
+        for color in colors:
+            if not sizes and not shueze_sizes: # если нет размера, в основносм это аксесуары
+                i += 1
+                self.get_offer_retailcrm(item_id, letters, i, name, vendorCode, url, price, categoryId, text, picture, photos, famile, color, count)
+                
+
+            for size in sizes:
+                i += 1
+                el_item = self.get_offer_retailcrm(item_id, letters, i, name, vendorCode, url, price, categoryId, text, picture, photos, famile, color, count)
+                self.sub_element(el_item, 'param', size).attrib= {
+                        u'name': u'Размер',
+                        u'code': u'INT'
+                    }
+
+                if categorys_product[0].title in ['Микро бикини', 'Мини бикини', 'Макси бикини', 'Купальники', 'Экстрим бикини', 'Прозрачные купальники', 'Женское белье', 'Прозрачное белье', 'Одежда для фитнеса']:
+                    self.sub_element(el_item, 'param', mapping.DRESS_CHEST_MAP[size]).attrib= {
+                        u'name': u'Обхват груди',
+                        u'code': u'СМ'
+                    }
+                    self.sub_element(el_item, 'param', mapping.DRESS_HIP_GIRTH_MAP[size]).attrib= {
+                        u'name': u'Обхват бедер',
+                        u'code': u'СМ'
+                    }
+
+                if categorys_product[0].title in ['Верх купальника', 'Бюстгалтеры', 'Майки и футболки']:
+                    self.sub_element(el_item, 'param', mapping.CUP_VOLME_MAP[size]).attrib= {
+                        u'name': u'Объем чашки',
+                        u'code': u'СМ'
+                    }
+                    self.sub_element(el_item, 'param', mapping.CUP_HEIGHT_MAP[size]).attrib= {
+                        u'name': u'Высота чашки',
+                        u'code': u'СМ'
+                    }
+
+                if categorys_product[0].title in ['Стринги', 'Прозрачные трусики', 'Трусики']:
+                    self.sub_element(el_item, 'param', mapping.VOLUME_HIPS_MAP[size]).attrib= {
+                        u'name': u'Размер трусов',
+                        u'code': u'СМ'
+                    }
+
+                if categorys_product[0].title in ['Пляжная одежда', 'Платья', 'Вечерняя одежда', 'Одежда для дома', 'Спортивные костюмы']:
+                    self.sub_element(el_item, 'param', mapping.DRESS_CHEST_MAP[size]).attrib= {
+                        u'name': u'Обхват груди',
+                        u'code': u'СМ'
+                    }
+                    self.sub_element(el_item, 'param', mapping.DRESS_WAIST_MAP[size]).attrib= {
+                        u'name': u'Обхват талии',
+                        u'code': u'СМ'
+                    }
+                    self.sub_element(el_item, 'param', mapping.GROWTH_FOR_DRESSES_MAP[size]).attrib= {
+                        u'name': u'Рост',
+                        u'code': u'СМ'
+                    }
+             
+            for shueze_size in shueze_sizes: # обувь
+                i += 1
+                el_item = self.get_offer_retailcrm(item_id, letters, i, name, vendorCode, url, price, categoryId, text, picture, photos, famile, color, count)
+                self.sub_element(el_item, 'param', shueze_size).attrib= {
+                        u'name': u'Размер',
+                        u'code': u'RU'
+                    }
 
     def get_offer_ozon(self, vendor_code, i, price, instock, color_ozon, size=None):
         el_item = self.sub_element(self.offers, 'offer ')
