@@ -148,47 +148,47 @@ class GenerateFeed:
                 el_item = self.get_offer_retailcrm(item_id, letters, i, name, vendorCode, url, price, categoryId, text, picture, photos, famile, color, count)
                 self.sub_element(el_item, 'param', size).attrib= {
                         u'name': u'Размер',
-                        u'code': u'INT'
+                        u'code': u'size'
                     }
 
                 if categorys_product[0].title in ['Микро бикини', 'Мини бикини', 'Макси бикини', 'Купальники', 'Экстрим бикини', 'Прозрачные купальники', 'Женское белье', 'Прозрачное белье', 'Одежда для фитнеса']:
                     self.sub_element(el_item, 'param', mapping.DRESS_CHEST_MAP[size]).attrib= {
                         u'name': u'Обхват груди',
-                        u'code': u'СМ'
+                        u'code': u'size'
                     }
                     self.sub_element(el_item, 'param', mapping.DRESS_HIP_GIRTH_MAP[size]).attrib= {
                         u'name': u'Обхват бедер',
-                        u'code': u'СМ'
+                        u'code': u'size'
                     }
 
                 if categorys_product[0].title in ['Верх купальника', 'Бюстгалтеры', 'Майки и футболки']:
                     self.sub_element(el_item, 'param', mapping.CUP_VOLME_MAP[size]).attrib= {
                         u'name': u'Объем чашки',
-                        u'code': u'СМ'
+                        u'code': u'size'
                     }
                     self.sub_element(el_item, 'param', mapping.CUP_HEIGHT_MAP[size]).attrib= {
                         u'name': u'Высота чашки',
-                        u'code': u'СМ'
+                        u'code': u'size'
                     }
 
                 if categorys_product[0].title in ['Стринги', 'Прозрачные трусики', 'Трусики']:
                     self.sub_element(el_item, 'param', mapping.VOLUME_HIPS_MAP[size]).attrib= {
                         u'name': u'Размер трусов',
-                        u'code': u'СМ'
+                        u'code': u'size'
                     }
 
                 if categorys_product[0].title in ['Пляжная одежда', 'Платья', 'Вечерняя одежда', 'Одежда для дома', 'Спортивные костюмы']:
                     self.sub_element(el_item, 'param', mapping.DRESS_CHEST_MAP[size]).attrib= {
                         u'name': u'Обхват груди',
-                        u'code': u'СМ'
+                        u'code': u'size'
                     }
                     self.sub_element(el_item, 'param', mapping.DRESS_WAIST_MAP[size]).attrib= {
                         u'name': u'Обхват талии',
-                        u'code': u'СМ'
+                        u'code': u'size'
                     }
                     self.sub_element(el_item, 'param', mapping.GROWTH_FOR_DRESSES_MAP[size]).attrib= {
                         u'name': u'Рост',
-                        u'code': u'СМ'
+                        u'code': u'size'
                     }
              
             for shueze_size in shueze_sizes: # обувь
