@@ -89,10 +89,16 @@ class GenerateFeed:
                 u'code': u'female',
             }
 
-        self.sub_element(el_item, 'param', mapping.COLORS_MAP_YANDEX[color]).attrib= {
-                u'name': u'Цвет',
-                u'code': u'color',
-            }
+        try:
+            self.sub_element(el_item, 'param', mapping.COLORS_MAP_YANDEX[color]).attrib= {
+                    u'name': u'Цвет',
+                    u'code': u'color',
+                }
+        except:
+            self.sub_element(el_item, 'param', color).attrib= {
+                    u'name': u'Цвет',
+                    u'code': u'color',
+                }
 
         self.sub_element(el_item, 'param', text).attrib= {
                 u'name': u'Описание',
@@ -236,9 +242,14 @@ class GenerateFeed:
                 u'name': u'Пол',
             }
 
-        self.sub_element(el_item, 'param', mapping.COLORS_MAP_YANDEX[color]).attrib= {
-                u'name': u'Цвет',
-            }
+        try:
+            self.sub_element(el_item, 'param', mapping.COLORS_MAP_YANDEX[color]).attrib= {
+                    u'name': u'Цвет',
+                }
+        except:
+            self.sub_element(el_item, 'param', color).attrib= {
+                    u'name': u'Цвет',
+                }
 
         return el_item
 
