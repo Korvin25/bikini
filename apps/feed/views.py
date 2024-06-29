@@ -22,7 +22,7 @@ def retailcrm_rss(request):
 
     feed = GenerateFeed(**PARAMS)
 
-    for product in Product.objects.filter(retailcrm=True):
+    for product in Product.objects.filter(retailcrm=True, show=True):
         feed.create_retailcrm_item(product)
 
     return HttpResponse(html_unescape(feed.to_xml()), content_type='text/xml')
