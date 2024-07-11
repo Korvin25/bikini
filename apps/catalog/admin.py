@@ -12,6 +12,8 @@ from django.template.context_processors import csrf
 from django.utils.safestring import mark_safe
 from django.conf import settings
 
+from import_export import resources, fields
+from import_export.admin import ImportExportModelAdmin
 from adminsortable2.admin import SortableAdminMixin
 # from jet.admin import CompactInline
 from modeltranslation.admin import TabbedTranslationAdmin, TranslationInlineModelAdmin, TranslationStackedInline
@@ -40,6 +42,33 @@ def _pop(_list, name):
     if name in _list:
         _list.pop(_list.index(name))
     return _list
+
+
+class ProductOptionResource(resources.ModelResource):
+    a1 = fields.Field(attribute='vendor_code', column_name='Артикул')
+    a3 = fields.Field(attribute='title', column_name='Название варианта')
+    a5 = fields.Field(attribute='price', column_name='Цена')
+    a4 = fields.Field(attribute='color', column_name='Цвет варианта')
+    a6 = fields.Field(attribute='size', column_name='Размеры')
+    a2 = fields.Field(attribute='in_stock', column_name='Количество')
+
+    class Meta:
+        model = ProductOption
+        fields = ('a1', 'a2', 'a3', 'a4', 'a5', 'a6')
+
+    def dehydrate_a4(self, instanse):
+        colors_id = instanse.attrs.get('color', [])
+        colors = [c.title for c in AttributeOption.objects.filter(pk__in=colors_id)]
+        if colors:
+            return ', '.join(colors)
+        return ''
+
+    def dehydrate_a6(self, instanse):
+        sizes_id = instanse.attrs.get('bottom_size', []) + instanse.attrs.get('top_size', [])  + instanse.attrs.get('size', []) + instanse.attrs.get('razmer_kupalnika', []) + instanse.attrs.get('size_yubka_dop', []) + instanse.attrs.get('shueze_size', [])
+        sizes = [s.title for s in AttributeOption.objects.filter(pk__in=sizes_id)]
+        if sizes:
+            return ', '.join(sizes)
+        return ''
 
 
 # === Атрибуты (справочники) ===
@@ -354,6 +383,11 @@ class ProductPhotoInline(ProductPhotoAdmin):
 #     suit_classes = 'suit-tab suit-tab-video'
 #     min_num = 0
 #     extra = 1
+
+
+@admin.register(ProductOption)
+class ProductOptionAdmin(ImportExportModelAdmin):
+    resource_class = ProductOptionResource
 
 
 @admin.register(Product)
