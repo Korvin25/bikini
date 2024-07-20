@@ -301,6 +301,39 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
                 # 3/4: robokassa
                 try:
                     CURRENCY = {x: y for x, y in CartModel.CURRENCY_CHOICES}
+                    receipt = {
+                        "sno":"usn_income",
+                        "items": [
+                            {
+                            "name": item.product.title,
+                            "quantity": item.count,
+                            "cost": float(item.product.price_rub) if not item.product.sale_price_rub else float(item.product.sale_price_rub),
+                            "sum": float(item.product.price_rub) * item.count if not item.product.sale_price_rub else float(item.product.sale_price_rub),
+                            "tax": "none"
+                            }
+                            for item in cart.cart_items
+                        ]
+                    }
+                    wrapping_price_rub_robokassa = {
+                        'wrapping_price_rub': 0,
+                        'wrapping_price_rub_count': 0,
+                    }
+                    for item in cart.cart_items:
+                        if item.wrapping_price_rub > 0:
+                            wrapping_price_rub_robokassa['wrapping_price_rub_count'] += 1
+                            wrapping_price_rub_robokassa['wrapping_price_rub'] = float(item.wrapping_price_rub)
+
+                    if wrapping_price_rub_robokassa['wrapping_price_rub_count'] > 0:
+                        receipt['items'].append(
+                            {
+                            "name": "Подарочная упаковка",
+                            "quantity": wrapping_price_rub_robokassa['wrapping_price_rub_count'],
+                            "cost": wrapping_price_rub_robokassa['wrapping_price_rub'],
+                            "sum": wrapping_price_rub_robokassa['wrapping_price_rub'] * wrapping_price_rub_robokassa['wrapping_price_rub_count'],
+                            "tax": "none"
+                            }
+                        )
+
                     redirect_url = generate_payment_link(
                         settings.ROBOKASSA_LOGIN,         # Merchant login
                         settings.ROBOKASSA_PASSWORD_1,        # Merchant password
@@ -309,6 +342,7 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
                         'Покупка на сайте bikinimini.ru №{}'.format(cart.id),   # Description of the purchase
                         cart.profile.email,                  # Invoice number
                         CURRENCY[cart.currency],
+                        json.dumps(receipt),
                         is_test=0,
                         )
                     cart.robokassa_id = cart.id

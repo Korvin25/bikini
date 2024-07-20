@@ -47,6 +47,7 @@ def generate_payment_link(
     description,  # Description of the purchase
     email,
     currency,
+    receipt,
     is_test = 0,
     robokassa_payment_url = 'https://auth.robokassa.ru/Merchant/Index.aspx',
 ):
@@ -58,6 +59,7 @@ def generate_payment_link(
             cost,
             number,
             currency,
+            receipt,
             merchant_password_1
         )
 
@@ -70,12 +72,14 @@ def generate_payment_link(
             'Email': email,
             'IsTest': is_test,
             'OutSumCurrency': currency,
+            'Receipt': receipt
         }
     else:
         signature = calculate_signature(
             merchant_login,
             cost,
             number,
+            receipt,
             merchant_password_1
         )
 
@@ -87,6 +91,7 @@ def generate_payment_link(
             'SignatureValue': signature,
             'Email': email,
             'IsTest': is_test,
+            'Receipt': receipt
         }
     return '{}?{}'.format(robokassa_payment_url, urlencode(data))
 
