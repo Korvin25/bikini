@@ -333,6 +333,16 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
                             "tax": "none"
                             }
                         )
+                    if cart.delivery_method.price_rub > 0:
+                        receipt['items'].append(
+                            {
+                            "name": "Доставка",
+                            "quantity": 1,
+                            "cost": float(cart.delivery_method.price_rub),
+                            "sum": float(cart.delivery_method.price_rub),
+                            "tax": "none"
+                            }
+                        )
 
                     redirect_url = generate_payment_link(
                         settings.ROBOKASSA_LOGIN,         # Merchant login
