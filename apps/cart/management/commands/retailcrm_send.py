@@ -11,41 +11,10 @@ class Command(BaseCommand):
     help = 'Отправить все заказы в срм'
 
     def handle(self, *args, **options):
-        carts = CartModel.objects.prefetch_related('profile', 'cartitem_set', 'certificatecartitem_set').filter(checked_out=True)[:3]
+        carts = CartModel.objects.prefetch_related('profile', 'cartitem_set', 'certificatecartitem_set').filter(checked_out=True)[:10]
 
         client = retailcrm.v5('https://bikinimini.retailcrm.ru', 'WauoN85ORs7QLJe0SFvjC4GzZpYXoIu1')
         site = 'bikinimini'
-
-        STATUS = {
-            '': 'new',
-            'pending': 'new',
-            'succeeded': 'paid',
-            'canceled': 'new',
-            'error': 'cancel-other',
-            'active': 'активен',
-            'created': 'создан',
-            'pending': 'ozhidaet-oplatu',
-            'processed': 'ozhidaet-oplatu', 
-            'in-progress': 'ozhidaet-oplatu',
-            'completed': 'paid',
-            'paid': 'paid',
-            'cancelled': 'cancel-other',
-            'denied': 'cancel-other',
-            'refused': 'cancel-other',
-            'declined': 'оcancel-other',
-            'cleared': 'cancel-other',
-            'failed': 'cancel-other',
-            'expired': 'исcancel-otherек',
-            'refunded': 'cancel-other',
-            'partially_refunded': 'cancel-other',
-            'reversed': 'cancel-other',
-            'canceled_reversal': 'cancel-other',
-            'rewarded': 'cancel-other',
-            'unclaimed': 'cancel-other',
-            'uncleared': 'cancel-other',
-            'voided': 'cancel-other',
-            'error': 'cancel-other',
-        }
 
         for cart in carts:
             items = cart.cart_items
@@ -57,7 +26,7 @@ class Command(BaseCommand):
                     'phone': cart.profile.phone,
                     'email': cart.profile.email,
                     'createdAt': cart.creation_date.strftime('%Y-%m-%d %H:%M:%S'),
-                    'status': STATUS[cart.payment_status],
+                    'status': get_status(cart.payment_status),
                     'delivery': {
                         'code':cart.delivery_method.code_retailcrm,
                         'address': {
@@ -69,7 +38,7 @@ class Command(BaseCommand):
                     },
                     'items': [
                                 {
-                                    'externalId': item.option.vendor_code,
+                                    'externalId': item.product.vendor_code,
                                     'initialPrice': float(item.option.price),
                                     'productName': item.option.title,
                                     'quantity': item.count,
@@ -88,3 +57,36 @@ class Command(BaseCommand):
                 if result.is_successful():
                     cart.retailcrm = result.get_response()['id']
                     cart.save()
+
+
+def get_status(status):
+    STATUS = {
+        'pending': 'novyi',
+        'succeeded': 'paid',
+        'canceled': 'novyi',
+        'error': 'cancel-other',
+        'processed': 'ozhidaet-oplatu', 
+        'in-progress': 'ozhidaet-oplatu',
+        'completed': 'paid',
+        'paid': 'paid',
+        'cancelled': 'cancel-other',
+        'denied': 'cancel-other',
+        'refused': 'cancel-other',
+        'declined': 'оcancel-other',
+        'cleared': 'cancel-other',
+        'failed': 'cancel-other',
+        'expired': 'исcancel-otherек',
+        'refunded': 'cancel-other',
+        'partially_refunded': 'cancel-other',
+        'reversed': 'cancel-other',
+        'canceled_reversal': 'cancel-other',
+        'rewarded': 'cancel-other',
+        'unclaimed': 'cancel-other',
+        'uncleared': 'cancel-other',
+        'voided': 'cancel-other',
+        'error': 'cancel-other',
+    }
+    try:
+        return STATUS[status]
+    except:
+        return 'new'
