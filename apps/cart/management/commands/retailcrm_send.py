@@ -11,7 +11,7 @@ class Command(BaseCommand):
     help = 'Отправить все заказы в срм'
 
     def handle(self, *args, **options):
-        carts = CartModel.objects.prefetch_related('profile', 'cartitem_set', 'certificatecartitem_set').filter(checked_out=True)[:10]
+        carts = CartModel.objects.prefetch_related('profile', 'cartitem_set', 'certificatecartitem_set').filter(checked_out=True)[:5]
 
         client = retailcrm.v5('https://bikinimini.retailcrm.ru', 'WauoN85ORs7QLJe0SFvjC4GzZpYXoIu1')
         site = 'bikinimini'
@@ -38,7 +38,8 @@ class Command(BaseCommand):
                     },
                     'items': [
                                 {
-                                    'externalId': item.product.vendor_code,
+                                    # 'externalId': item.product.vendor_code,
+                                    'id': item.product.vendor_code,
                                     'initialPrice': float(item.option.price),
                                     'productName': item.option.title,
                                     'quantity': item.count,
