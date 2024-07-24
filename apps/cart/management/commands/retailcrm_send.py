@@ -17,6 +17,7 @@ class Command(BaseCommand):
         site = 'bikinimini'
 
         STATUS = {
+            '': 'new',
             'pending': 'new',
             'succeeded': 'paid',
             'canceled': 'new',
