@@ -39,7 +39,7 @@ class Command(BaseCommand):
                     'items': [
                                 {
                                     # 'externalId': item.product.vendor_code,
-                                    'id': item.product.vendor_code,
+                                    'article': item.product.vendor_code,
                                     'initialPrice': float(item.option.price),
                                     'productName': item.option.title,
                                     'quantity': item.count,
