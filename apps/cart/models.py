@@ -154,6 +154,7 @@ class Cart(models.Model):
     payment_method = models.ForeignKey(PaymentMethod, verbose_name=_('Способ оплаты'), null=True, blank=True)
     additional_info = models.TextField(_('Дополнительная информация'), blank=True)
 
+    retailcrm = models.CharField('RetailCRM', max_length=100, blank=True, null=True)
     status = models.PositiveSmallIntegerField('Статус доставки', choices=STATUS_CHOICES, default=0)
     summary_rub = models.DecimalField('Сумма, руб.', max_digits=9, decimal_places=2, default=0)
     summary_eur = models.DecimalField('Сумма, eur.', max_digits=9, decimal_places=2, default=0)

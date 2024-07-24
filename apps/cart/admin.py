@@ -42,7 +42,7 @@ class CartAdmin(admin.ModelAdmin):
     list_per_page = 200
     fieldsets = (
         ('Общее', {
-            'fields': ('id', 'profile_with_link', 'checked_out', 'checkout_date', 'payment_date', 'status',)
+            'fields': ('id', 'profile_with_link', 'checked_out', 'checkout_date', 'payment_date', 'status', 'retailcrm')
         }),
         ('Данные из формы', {
             'fields': ('country', 'city', 'postal_code', 'address', 'phone', 'name',
@@ -67,7 +67,7 @@ class CartAdmin(admin.ModelAdmin):
             'fields': ('show_items',)
         }),
     )
-    readonly_fields = ['id', 'profile_with_link', 'show_items',]
+    readonly_fields = ['id', 'profile_with_link', 'show_items', 'retailcrm']
     readonly_fields += ['country', 'city', 'postal_code', 'address', 'phone', 'name',
                         # 'delivery_method', 'payment_method',
                         'checked_out', 'checkout_date', 'payment_date',
