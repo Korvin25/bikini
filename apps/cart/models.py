@@ -40,6 +40,7 @@ LANGUAGE_CHOICES = [(x, x.upper()) for x in ALL_LANGUAGES]
 
 class DeliveryMethod(models.Model):
     title = models.CharField('Название', max_length=511)
+    code_retailcrm = models.CharField('Символьный код типов доставок из retailcrm', max_length=511, blank=True, null=True)
     short_title = models.CharField('Краткое название', max_length=63, blank=True, help_text='для вывода в личном кабинете')
     price_rub = models.DecimalField('Стоимость, руб.', max_digits=9, decimal_places=2, default=0)
     price_eur = models.DecimalField('Стоимость, eur.', max_digits=9, decimal_places=2, default=0)

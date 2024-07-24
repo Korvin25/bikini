@@ -11,26 +11,54 @@ class Command(BaseCommand):
     help = 'Отправить все заказы в срм'
 
     def handle(self, *args, **options):
-        carts = CartModel.objects.prefetch_related('profile', 'cartitem_set', 'certificatecartitem_set').filter(checked_out=True)[:1]
+        carts = CartModel.objects.prefetch_related('profile', 'cartitem_set', 'certificatecartitem_set').filter(checked_out=True)[:3]
 
         client = retailcrm.v5('https://bikinimini.retailcrm.ru', 'WauoN85ORs7QLJe0SFvjC4GzZpYXoIu1')
         site = 'bikinimini'
+
+        STATUS = {
+            'pending': 'new',
+            'succeeded': 'paid',
+            'canceled': 'new',
+            'error': 'cancel-other',
+            'active': 'активен',
+            'created': 'создан',
+            'pending': 'ozhidaet-oplatu',
+            'processed': 'ozhidaet-oplatu', 
+            'in-progress': 'ozhidaet-oplatu',
+            'completed': 'paid',
+            'paid': 'paid',
+            'cancelled': 'cancel-other',
+            'denied': 'cancel-other',
+            'refused': 'cancel-other',
+            'declined': 'оcancel-other',
+            'cleared': 'cancel-other',
+            'failed': 'cancel-other',
+            'expired': 'исcancel-otherек',
+            'refunded': 'cancel-other',
+            'partially_refunded': 'cancel-other',
+            'reversed': 'cancel-other',
+            'canceled_reversal': 'cancel-other',
+            'rewarded': 'cancel-other',
+            'unclaimed': 'cancel-other',
+            'uncleared': 'cancel-other',
+            'voided': 'cancel-other',
+            'error': 'cancel-other',
+        }
 
         for cart in carts:
             items = cart.cart_items
 
             if items:
                 order = {
-                    'orderMethod': 'call-request',
+                    'orderMethod': 'shopping-cart',
                     'firstName': cart.profile.name,
                     'phone': cart.profile.phone,
                     'email': cart.profile.email,
                     'createdAt': cart.creation_date.strftime('%Y-%m-%d %H:%M:%S'),
-                    'status': cart.payment_status,
+                    'status': STATUS[cart.payment_status],
                     'delivery': {
-                        'service': {
-                            'name': cart.delivery_method.title
-                        },
+                        'code':cart.delivery_method.code_retailcrm,
                         'address': {
                             'index': cart.postal_code,
                             'countryIso': cart.country.title,
@@ -50,8 +78,8 @@ class Command(BaseCommand):
                             ]
                     }
 
-                print(order)
-                print(cart.id)
+                # print(order)
+                # print(cart.id)
                 result = client.order_create(order, site)
 
                 print(result.get_response())
