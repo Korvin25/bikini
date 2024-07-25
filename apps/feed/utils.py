@@ -104,11 +104,6 @@ class GenerateFeed:
 
     def create_retailcrm_item(self, item, combinations):
         price = item.price_rub
-        percent_marketplays = Settings.objects.first().percent_marketplays
-        if percent_marketplays:
-            tmp_percent = price * percent_marketplays / 100
-            price += tmp_percent
-        price = str(price)
         famile = u'женский' if item.categories.first().sex == 'female' else u'мужской'
         photos = item.photos.all()[:9]
         picture = self.site_link + item.photo_f.url
