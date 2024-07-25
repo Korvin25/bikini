@@ -104,5 +104,6 @@ def get_article(item):
     combinations = AttributeOption.objects.filter(pk__in=combination_id)
     letters = ['{}-{}'.format(i.attribute.slug, i.title) for i in combinations]
     letters = '-'.join(letters)
+    letters = item.product.vendor_code + '-' + letters
     letters = slugify(letters)
     return letters
