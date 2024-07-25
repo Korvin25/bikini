@@ -12,7 +12,7 @@ class Command(BaseCommand):
     help = 'Отправить все заказы в срм'
 
     def handle(self, *args, **options):
-        carts = CartModel.objects.prefetch_related('profile', 'cartitem_set', 'certificatecartitem_set').filter(checked_out=True)[:5]
+        carts = CartModel.objects.prefetch_related('profile', 'cartitem_set', 'certificatecartitem_set').filter(checked_out=True)[:1]
 
         client = retailcrm.v5('https://bikinimini.retailcrm.ru', 'WauoN85ORs7QLJe0SFvjC4GzZpYXoIu1')
         site = 'bikinimini'
