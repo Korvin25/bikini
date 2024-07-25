@@ -44,7 +44,7 @@ class Command(BaseCommand):
                                 'externalId': get_article(item),
                             },
                             'properties': get_properties(item),
-                            # 'article': get_article(item),
+                            'article': get_article(item),
                             'initialPrice': float(item.option.price),
                             'productName': item.option.title,
                             'quantity': item.count,
@@ -55,7 +55,7 @@ class Command(BaseCommand):
 
                 result = client.order_create(order, site)
 
-                print(result.get_response())
+                print(order)
 
                 if result.is_successful():
                     cart.retailcrm = result.get_response()['id']
