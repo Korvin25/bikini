@@ -40,10 +40,10 @@ class Command(BaseCommand):
                     'items': [
                         {
                             'offer': {
-                                'externalId': item.product.vendor_code,
+                                'externalId': 612,
                             },
                             'properties': get_properties(item),
-                            'article': item.product.vendor_code,
+                            'article': 612,
                             'initialPrice': float(item.option.price),
                             'productName': item.option.title,
                             'quantity': item.count,
