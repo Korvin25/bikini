@@ -46,10 +46,10 @@ class Command(BaseCommand):
                             },
                             'properties': get_properties(item),
                             'article': get_article(item),
-                            'initialPrice': float(item.option_price_c), 
+                            'initialPrice': float(item.option.price), 
                             'productName': item.option.title,
                             'quantity': item.count,
-                            'discountManualPercent': float(item.discount),
+                            'discountManualAmount': float((item.option_price_c * item.discount)/100)
                         }
                         for item in items
                     ]
