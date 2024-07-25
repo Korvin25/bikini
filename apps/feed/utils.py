@@ -67,6 +67,7 @@ class GenerateFeed:
             'type': 'product',
             'id': item_id + letters[i-1],
             'productId': item_id,
+            'quantity': count,
         }
 
         self.sub_element(el_item, 'name', name)
@@ -83,6 +84,11 @@ class GenerateFeed:
         self.sub_element(el_item, 'picture', picture)
         for photo in photos:
             self.sub_element(el_item, 'picture', self.site_link + photo.photo_f.url)
+
+        self.sub_element(el_item, 'param', item_id).attrib= {
+                u'name': u'Артикул',
+                u'code': u'article',
+            }
 
         self.sub_element(el_item, 'param', famile).attrib= {
                 u'name': u'Пол',
@@ -136,7 +142,7 @@ class GenerateFeed:
         name = item.title
         count = str(item.in_stock_counts['in_stock__min'])
         i=0
-        
+
         for color in colors:
             if not sizes and not shueze_sizes: # если нет размера, в основносм это аксесуары
                 i += 1
@@ -154,41 +160,41 @@ class GenerateFeed:
                 if categorys_product[0].title in ['Микро бикини', 'Мини бикини', 'Макси бикини', 'Купальники', 'Экстрим бикини', 'Прозрачные купальники', 'Женское белье', 'Прозрачное белье', 'Одежда для фитнеса']:
                     self.sub_element(el_item, 'param', mapping.DRESS_CHEST_MAP[size]).attrib= {
                         u'name': u'Обхват груди',
-                        u'code': u'size'
+                        u'code': u'size_bust'
                     }
                     self.sub_element(el_item, 'param', mapping.DRESS_HIP_GIRTH_MAP[size]).attrib= {
                         u'name': u'Обхват бедер',
-                        u'code': u'size'
+                        u'code': u'size_hips'
                     }
 
                 if categorys_product[0].title in ['Верх купальника', 'Бюстгалтеры', 'Майки и футболки']:
                     self.sub_element(el_item, 'param', mapping.CUP_VOLME_MAP[size]).attrib= {
                         u'name': u'Объем чашки',
-                        u'code': u'size'
+                        u'code': u'size_cup_volume'
                     }
                     self.sub_element(el_item, 'param', mapping.CUP_HEIGHT_MAP[size]).attrib= {
                         u'name': u'Высота чашки',
-                        u'code': u'size'
+                        u'code': u'size_cup_height'
                     }
 
                 if categorys_product[0].title in ['Стринги', 'Прозрачные трусики', 'Трусики']:
                     self.sub_element(el_item, 'param', mapping.VOLUME_HIPS_MAP[size]).attrib= {
                         u'name': u'Размер трусов',
-                        u'code': u'size'
+                        u'code': u'size_panties'
                     }
 
                 if categorys_product[0].title in ['Пляжная одежда', 'Платья', 'Вечерняя одежда', 'Одежда для дома', 'Спортивные костюмы']:
                     self.sub_element(el_item, 'param', mapping.DRESS_CHEST_MAP[size]).attrib= {
                         u'name': u'Обхват груди',
-                        u'code': u'size'
+                        u'code': u'size_bust'
                     }
                     self.sub_element(el_item, 'param', mapping.DRESS_WAIST_MAP[size]).attrib= {
                         u'name': u'Обхват талии',
-                        u'code': u'size'
+                        u'code': u'size_waist'
                     }
                     self.sub_element(el_item, 'param', mapping.GROWTH_FOR_DRESSES_MAP[size]).attrib= {
                         u'name': u'Рост',
-                        u'code': u'size'
+                        u'code': u'height'
                     }
              
             for shueze_size in shueze_sizes: # обувь
