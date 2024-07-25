@@ -30,7 +30,8 @@ class Command(BaseCommand):
                     'createdAt': cart.creation_date.strftime('%Y-%m-%d %H:%M:%S'),
                     'status': get_status(cart.payment_status),
                     'delivery': {
-                        'code':cart.delivery_method.code_retailcrm,
+                        'cost': float(cart.delivery_method.price_rub),
+                        'code': cart.delivery_method.code_retailcrm,
                         'address': {
                             'index': cart.postal_code,
                             'countryIso': cart.country.title,
