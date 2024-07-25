@@ -24,7 +24,7 @@ def retailcrm_rss(request):
 
     feed = GenerateFeed(**PARAMS)
 
-    for product in Product.objects.filter(retailcrm=True, show=True)[:2]:
+    for product in Product.objects.filter(retailcrm=True, show=True):
         for combinations_id in itertools.product(*product.attrs.values()):
             combinations = AttributeOption.objects.filter(pk__in=combinations_id)
             feed.create_retailcrm_item(product, combinations)
