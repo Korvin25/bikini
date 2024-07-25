@@ -48,6 +48,7 @@ class Command(BaseCommand):
                             'initialPrice': float(item.option.price),
                             'productName': item.option.title,
                             'quantity': item.count,
+                            'discountManualPercent': float(item.discount)
                         }
                         for item in items
                     ]
