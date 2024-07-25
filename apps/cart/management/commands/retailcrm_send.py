@@ -79,23 +79,10 @@ def get_status(status):
 def get_properties(item):
     properties = [
             {
-                'name': u'Пол',
-                'value': u'женский' if item.product.categories.first().sex == 'female' else u'мужской',
-            },
-            {
                 'name': u'Подарочная упаковка',
                 'value': u'Да' if item.with_wrapping else u'Нет',
             },
         ]
-    for key, value in item.attrs.items():
-        atribute = AttributeOption.objects.get(pk=value)
-        properties.append(
-              {
-                'name': atribute.attribute.admin_title,
-                'value': atribute.title,
-            }
-        )
-    
     return properties
 
 
