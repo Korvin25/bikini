@@ -49,7 +49,7 @@ class Command(BaseCommand):
                             'initialPrice': float(item.option.price),
                             'productName': item.option.title,
                             'quantity': item.count,
-                            # 'discountManualAmount': float((item.option_price_c * item.discount)/100)
+                            'discountManualAmount': float((item.option_price_c * item.discount)/100),
                         }
                         for item in items
                     ]
