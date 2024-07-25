@@ -164,7 +164,7 @@ class OzonSeller():
 
                     lists["items"].append(param_dict)
 
-            # response = requests.post(self.url, data=json.dumps(lists), headers=self.headers)
-            # print("product id:", product.id, response, response.json())
+            response = requests.post(self.url, data=json.dumps(lists), headers=self.headers)
+            print("product id:", product.id, response, response.json())
         except Exception as e:
             print('Error ', e)
