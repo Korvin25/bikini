@@ -55,8 +55,6 @@ class Command(BaseCommand):
 
                 result = client.order_create(order, site)
 
-                print(order)
-
                 if result.is_successful():
                     retailcrm_id = result.get_response()['id']
                     print(retailcrm_id)
@@ -75,7 +73,7 @@ def get_status(status):
     try:
         return STATUS[status]
     except:
-        return 'new'
+        return 'novyi'
 
 
 def get_properties(item):
@@ -85,6 +83,15 @@ def get_properties(item):
                 'value': u'Да' if item.with_wrapping else u'Нет',
             },
         ]
+    for key, value in item.attrs.items():
+        atribute = AttributeOption.objects.get(pk=value)
+        properties.append(
+              {
+                'name': atribute.attribute.admin_title,
+                'value': atribute.title,
+            }
+        )
+    
     return properties
 
 
