@@ -13,7 +13,7 @@ from apps.feed.views import PARAMS
 
 
 class Command(BaseCommand):
-    help = u'Обновить и добавить товары на Озон'
+    help = u'Сохранить фид для срм'
 
     def handle(self, *args, **options):
 
