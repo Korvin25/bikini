@@ -58,7 +58,9 @@ class Command(BaseCommand):
                 print(order)
 
                 if result.is_successful():
-                    cart.retailcrm = result.get_response()['id']
+                    retailcrm_id = result.get_response()['id']
+                    print(retailcrm_id)
+                    cart.retailcrm = retailcrm_id
                     cart.save()
 
 
