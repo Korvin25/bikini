@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import retailcrm
+from uuslug import slugify
 from django.core.management.base import BaseCommand
 
 from apps.cart.models import Cart as CartModel
@@ -12,7 +13,7 @@ class Command(BaseCommand):
     help = 'Отправить все заказы в срм'
 
     def handle(self, *args, **options):
-        carts = CartModel.objects.prefetch_related('profile', 'cartitem_set', 'certificatecartitem_set').filter(checked_out=True)[:1]
+        carts = CartModel.objects.prefetch_related('profile', 'cartitem_set', 'certificatecartitem_set').filter(checked_out=True)[:3]
 
         client = retailcrm.v5('https://bikinimini.retailcrm.ru', 'WauoN85ORs7QLJe0SFvjC4GzZpYXoIu1')
         site = 'bikinimini'
@@ -40,20 +41,18 @@ class Command(BaseCommand):
                     'items': [
                         {
                             'offer': {
-                                'externalId': '612B',
+                                'externalId': get_article(item),
                             },
-                            # 'properties': get_properties(item),
-                            'article': '612B',
+                            'properties': get_properties(item),
+                            # 'article': get_article(item),
                             'initialPrice': float(item.option.price),
                             'productName': item.option.title,
                             'quantity': item.count,
                         }
                         for item in items
                     ]
-                    }
+                }
 
-                # print(order)
-                # print(cart.id)
                 result = client.order_create(order, site)
 
                 print(result.get_response())
@@ -68,27 +67,8 @@ def get_status(status):
         'pending': 'novyi',
         'succeeded': 'paid',
         'canceled': 'novyi',
-        'error': 'cancel-other',
-        'processed': 'ozhidaet-oplatu', 
-        'in-progress': 'ozhidaet-oplatu',
         'completed': 'paid',
         'paid': 'paid',
-        'cancelled': 'cancel-other',
-        'denied': 'cancel-other',
-        'refused': 'cancel-other',
-        'declined': 'оcancel-other',
-        'cleared': 'cancel-other',
-        'failed': 'cancel-other',
-        'expired': 'исcancel-otherек',
-        'refunded': 'cancel-other',
-        'partially_refunded': 'cancel-other',
-        'reversed': 'cancel-other',
-        'canceled_reversal': 'cancel-other',
-        'rewarded': 'cancel-other',
-        'unclaimed': 'cancel-other',
-        'uncleared': 'cancel-other',
-        'voided': 'cancel-other',
-        'error': 'cancel-other',
     }
     try:
         return STATUS[status]
@@ -117,3 +97,12 @@ def get_properties(item):
         )
     
     return properties
+
+
+def get_article(item):
+    combination_id = [value for key, value in item.attrs.items()]
+    combinations = AttributeOption.objects.filter(pk__in=combination_id)
+    letters = ['{}-{}'.format(i.attribute.slug, i.title) for i in combinations]
+    letters = '-'.join(letters)
+    letters = slugify(letters)
+    return letters

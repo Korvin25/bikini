@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from apps.catalog.models import Product
+import itertools
+
+from apps.catalog.models import AttributeOption, Product
 from apps.feed.utils import GenerateFeed, html_unescape
 from django.http import HttpResponse
 from django.conf import settings
@@ -22,8 +24,10 @@ def retailcrm_rss(request):
 
     feed = GenerateFeed(**PARAMS)
 
-    for product in Product.objects.filter(retailcrm=True, show=True):
-        feed.create_retailcrm_item(product)
+    for product in Product.objects.filter(retailcrm=True, show=True)[:2]:
+        for combinations_id in itertools.product(*product.attrs.values()):
+            combinations = AttributeOption.objects.filter(pk__in=combinations_id)
+            feed.create_retailcrm_item(product, combinations)
 
     return HttpResponse(html_unescape(feed.to_xml()), content_type='text/xml')
     
