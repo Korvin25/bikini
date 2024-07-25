@@ -42,7 +42,7 @@ class Command(BaseCommand):
                             'offer': {
                                 'externalId': '612B',
                             },
-                            'properties': get_properties(item),
+                            # 'properties': get_properties(item),
                             'article': '612B',
                             'initialPrice': float(item.option.price),
                             'productName': item.option.title,
