@@ -103,7 +103,7 @@ class GenerateFeed:
         return el_item
 
     def create_retailcrm_item(self, item, combinations):
-        price = item.price_rub
+        price = str(item.price_rub)
         famile = u'женский' if item.categories.first().sex == 'female' else u'мужской'
         photos = item.photos.all()[:9]
         picture = self.site_link + item.photo_f.url
