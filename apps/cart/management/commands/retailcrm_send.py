@@ -5,6 +5,7 @@ import retailcrm
 from django.core.management.base import BaseCommand
 
 from apps.cart.models import Cart as CartModel
+from apps.catalog.models import AttributeOption
 
 
 class Command(BaseCommand):
@@ -37,16 +38,18 @@ class Command(BaseCommand):
                         }
                     },
                     'items': [
-                                {
-                                    # 'externalId': item.product.vendor_code,
-                                    'article': item.product.vendor_code,
-                                    'initialPrice': float(item.option.price),
-                                    'productName': item.option.title,
-                                    'quantity': item.count,
-                                    'comment': 'Подарочная упаковка: {}'.format('Да' if item.with_wrapping else 'Нет')
-                                }
-                                for item in items
-                            ]
+                        {
+                            'offer': {
+                                'externalId': item.product.vendor_code,
+                            },
+                            'properties': get_properties(item),
+                            'article': item.product.vendor_code,
+                            'initialPrice': float(item.option.price),
+                            'productName': item.option.title,
+                            'quantity': item.count,
+                        }
+                        for item in items
+                    ]
                     }
 
                 # print(order)
@@ -91,3 +94,26 @@ def get_status(status):
         return STATUS[status]
     except:
         return 'new'
+
+
+def get_properties(item):
+    properties = [
+            {
+                'name': u'Пол',
+                'value': u'женский' if item.product.categories.first().sex == 'female' else u'мужской',
+            },
+            {
+                'name': u'Подарочная упаковка',
+                'value': u'Да' if item.with_wrapping else u'Нет',
+            },
+        ]
+    for key, value in item.attrs.items():
+        atribute = AttributeOption.objects.get(pk=value)
+        properties.append(
+              {
+                'name': atribute.attribute.admin_title,
+                'value': atribute.title,
+            }
+        )
+    
+    return properties
