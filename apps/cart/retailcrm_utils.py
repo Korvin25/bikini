@@ -7,23 +7,28 @@ from uuslug import slugify
 from ..catalog.models import AttributeOption, GiftWrapping
 
 
-def send_retailcrm(carts, command=False):
+def send_retailcrm(carts):
     client = retailcrm.v5('https://bikinimini.retailcrm.ru', 'WauoN85ORs7QLJe0SFvjC4GzZpYXoIu1')
     site = 'bikinimini'
-    if command:
-        for cart in carts:
-            items = cart.cart_items
-            if items:
+    
+    if not isinstance(carts, list):
+        carts = [carts]
+
+    for cart in carts:
+        items = cart.cart_items
+        if items:
+            if cart.retailcrm:
+                order = get_order(cart, items, cart.retailcrm)
+                result = client.order_edit(order, 'externalId', site)
+            else:
                 order = get_order(cart, items)
                 result = client.order_create(order, site)
-                
+
                 if result.is_successful():
                     retailcrm_id = result.get_response()['id']
                     print(retailcrm_id)
                     cart.retailcrm = retailcrm_id
                     cart.save()
-    else:
-        pass
 
 
 def get_status(status):
@@ -33,6 +38,7 @@ def get_status(status):
         'canceled': 'novyi',
         'completed': 'paid',
         'paid': 'paid',
+        'error': 'oshibka',
     }
     try:
         return STATUS[status]
@@ -47,6 +53,7 @@ def get_status_payments(status):
         'canceled': 'not-paid',
         'completed': 'paid',
         'paid': 'paid',
+        'error': 'oshibka',
     }
     try:
         return STATUS[status]
@@ -83,7 +90,7 @@ def get_article(item):
     return letters
 
 
-def get_order(cart, items):
+def get_order(cart, items, uid_type=None):
     order = {
         'orderMethod': 'shopping-cart',
         'firstName': cart.profile.name,
@@ -121,6 +128,9 @@ def get_order(cart, items):
             for item in items
         ]
     }
+
+    if uid_type:
+        order['externalId'] = uid_type
 
     with_wrapping = {
         'initialPrice': float(GiftWrapping.objects.first().price_rub),
