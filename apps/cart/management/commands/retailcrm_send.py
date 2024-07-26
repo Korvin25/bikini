@@ -6,7 +6,7 @@ from uuslug import slugify
 from django.core.management.base import BaseCommand
 
 from apps.cart.models import Cart as CartModel
-from apps.catalog.models import AttributeOption
+from apps.catalog.models import AttributeOption, GiftWrapping
 
 
 class Command(BaseCommand):
@@ -39,6 +39,11 @@ class Command(BaseCommand):
                             'street': cart.address,
                         }
                     },
+                    'payments': {
+                        'amount': float(cart.summary_c),
+                        'type': cart.show_status,
+                        'status': cart.payment_status,
+                    },
                     'items': [
                         {
                             'offer': {
@@ -46,7 +51,7 @@ class Command(BaseCommand):
                             },
                             'properties': get_properties(item),
                             'article': get_article(item),
-                            'initialPrice': float(item.option.price),
+                            'initialPrice': float(item.option_price_c),
                             'productName': item.option.title,
                             'quantity': item.count,
                             'discountManualAmount': float((item.option_price_c * item.discount)/100),
@@ -54,6 +59,19 @@ class Command(BaseCommand):
                         for item in items
                     ]
                 }
+
+                with_wrapping = {
+                    'initialPrice': float(GiftWrapping.objects.first().price_rub),
+                    'productName': u'Подарочная упаковка',
+                    'quantity': 0,
+                }
+
+                for item in items:
+                    if item.with_wrapping:
+                        with_wrapping['quantity'] += 1
+
+                if with_wrapping['quantity'] > 0:
+                    order['items'].append(with_wrapping)
 
                 result = client.order_create(order, site)
 
