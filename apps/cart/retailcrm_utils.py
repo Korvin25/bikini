@@ -96,7 +96,7 @@ def get_order(cart, items, uid_type=None):
         'firstName': cart.profile.name,
         'phone': cart.profile.phone,
         'email': cart.profile.email,
-        'createdAt': cart.creation_date.strftime('%Y-%m-%d %H:%M:%S'),
+        'createdAt': cart.checkout_date.strftime('%Y-%m-%d %H:%M:%S'),
         'status': get_status(cart.payment_status),
         'delivery': {
             'cost': float(cart.delivery_method.price_rub),
@@ -112,6 +112,7 @@ def get_order(cart, items, uid_type=None):
             'amount': float(cart.summary_c),
             'type': cart.payment_method.code_retailcrm,
             'status': get_status_payments(cart.payment_status),
+            'paidAt': cart.payment_date.strftime('%Y-%m-%d %H:%M:%S') if cart.payment_date else '',
         }],
         'items': [
             {
