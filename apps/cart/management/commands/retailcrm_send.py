@@ -11,6 +11,6 @@ class Command(BaseCommand):
     help = 'Отправить все заказы в срм'
 
     def handle(self, *args, **options):
-        carts = CartModel.objects.prefetch_related('profile', 'cartitem_set', 'certificatecartitem_set').filter(checked_out=True)[:100]
+        carts = CartModel.objects.prefetch_related('profile', 'cartitem_set', 'certificatecartitem_set').filter(checked_out=True, retailcrm__isnull=True)
 
         send_retailcrm(carts, command=True)
