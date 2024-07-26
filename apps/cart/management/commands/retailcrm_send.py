@@ -41,7 +41,7 @@ class Command(BaseCommand):
                     },
                     'payments': {
                         'amount': float(cart.summary_c),
-                        'type': cart.show_status,
+                        'type': cart.show_status(),
                         'status': cart.payment_status,
                     },
                     'items': [
@@ -59,7 +59,7 @@ class Command(BaseCommand):
                         for item in items
                     ]
                 }
-
+                print(GiftWrapping.objects.first().price_rub)
                 with_wrapping = {
                     'initialPrice': float(GiftWrapping.objects.first().price_rub),
                     'productName': u'Подарочная упаковка',
@@ -73,6 +73,7 @@ class Command(BaseCommand):
                 if with_wrapping['quantity'] > 0:
                     order['items'].append(with_wrapping)
 
+                print(order)
                 result = client.order_create(order, site)
 
                 if result.is_successful():
