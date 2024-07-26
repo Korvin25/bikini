@@ -15,7 +15,10 @@ def send_retailcrm(carts):
         carts = [carts]
 
     for cart in carts:
+        print('cart: {}'.format(cart.id)))
         items = cart.cart_items
+        print(items)
+
         if items:
             if cart.retailcrm:
                 order = get_order(cart, items, cart.retailcrm)
