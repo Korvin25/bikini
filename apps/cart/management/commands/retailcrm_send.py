@@ -41,7 +41,6 @@ class Command(BaseCommand):
                     },
                     'payments': {
                         'amount': float(cart.summary_c),
-                        'type': cart.show_status(),
                         'status': cart.show_status(),
                     },
                     'items': [
