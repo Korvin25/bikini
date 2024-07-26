@@ -23,6 +23,7 @@ def send_retailcrm(carts):
             if cart.retailcrm:
                 order = get_order(cart, items, cart.retailcrm)
                 result = client.order_edit(order, 'externalId', site)
+                print(result.get_response())
             else:
                 order = get_order(cart, items)
                 result = client.order_create(order, site)
@@ -104,6 +105,7 @@ def get_order(cart, items, uid_type=None):
         'createdAt': cart.checkout_date.strftime('%Y-%m-%d %H:%M:%S') if cart.checkout_date else cart.creation_date.strftime('%Y-%m-%d %H:%M:%S'),
         'status': get_status(cart.payment_status),
         'customerComment': cart.additional_info,
+        'managerComment': 'На сайте: https://bikinimini.ru/admin/cart/cart/{}/change/'.format(cart.id),
         'delivery': {
             'cost': float(cart.delivery_method.price_rub),
             'code': cart.delivery_method.code_retailcrm,
