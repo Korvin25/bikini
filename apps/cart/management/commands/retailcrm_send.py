@@ -41,7 +41,8 @@ class Command(BaseCommand):
                     },
                     'payments': {
                         'amount': float(cart.summary_c),
-                        'status': cart.show_status(),
+                        'type': cart.payment_method.code_retailcrm,
+                        'status': get_status_payments(cart.payment_status),
                     },
                     'items': [
                         {
@@ -94,6 +95,20 @@ def get_status(status):
         return STATUS[status]
     except:
         return 'novyi'
+
+
+def get_status_payments(status):
+    STATUS = {
+        'pending': 'not-paid',
+        'succeeded': 'paid',
+        'canceled': 'not-paid',
+        'completed': 'paid',
+        'paid': 'paid',
+    }
+    try:
+        return STATUS[status]
+    except:
+        return 'not-paid'
 
 
 def get_properties(item):

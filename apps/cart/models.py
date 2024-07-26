@@ -89,6 +89,7 @@ class PaymentMethod(models.Model):
     )
     title = models.CharField('Название', max_length=511)
     short_title = models.CharField('Краткое название', max_length=63, blank=True, help_text='для вывода в личном кабинете')
+    code_retailcrm = models.CharField('Символьный код типов доставок из retailcrm', max_length=511, blank=True, null=True)
     delivery_methods = models.ManyToManyField(DeliveryMethod, verbose_name='Способы доставки',
                                               blank=True, related_name='payment_methods')
     payment_type = models.CharField('Тип оплаты', max_length=15, choices=PAYMENT_TYPES, default='offline')
