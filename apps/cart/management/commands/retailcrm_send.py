@@ -42,7 +42,7 @@ class Command(BaseCommand):
                     'payments': {
                         'amount': float(cart.summary_c),
                         'type': cart.show_status(),
-                        'status': cart.payment_status,
+                        'status': cart.show_status(),
                     },
                     'items': [
                         {
@@ -73,9 +73,9 @@ class Command(BaseCommand):
                 if with_wrapping['quantity'] > 0:
                     order['items'].append(with_wrapping)
 
-                
-                result = client.order_create(order, site)
 
+                result = client.order_create(order, site)
+                print(result.get_response())
                 if result.is_successful():
                     retailcrm_id = result.get_response()['id']
                     print(retailcrm_id)
