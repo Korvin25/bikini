@@ -85,16 +85,16 @@ class Command(BaseCommand):
 
 def get_status(status):
     STATUS = {
-        'pending': 'novyi',
-        'succeeded': 'paid',
-        'canceled': 'novyi',
-        'completed': 'paid',
-        'paid': 'paid',
+        'pending': 'Не оплачен',
+        'succeeded': 'Оплачен',
+        'canceled': 'Не оплачен',
+        'completed': 'Оплачен',
+        'paid': 'Оплачен',
     }
     try:
         return STATUS[status]
     except:
-        return 'novyi'
+        return 'Не оплачен'
 
 
 def get_status_payments(status):
