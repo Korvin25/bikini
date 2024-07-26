@@ -118,7 +118,7 @@ def get_order(cart, items, uid_type=None):
             'amount': float(cart.summary_c),
             'type': cart.payment_method.code_retailcrm,
             'status': get_status_payments(cart.payment_status),
-            'paidAt': cart.payment_date.strftime('%Y-%m-%d %H:%M:%S') if cart.payment_date else '',
+            # 'paidAt': cart.payment_date.strftime('%Y-%m-%d %H:%M:%S') if cart.payment_date else '',
         }],
         'items': [
             {
