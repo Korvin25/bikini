@@ -4,8 +4,7 @@ from __future__ import unicode_literals
 import retailcrm
 from uuslug import slugify
 
-# from apps.catalog.models import AttributeOption, GiftWrapping
-from apps.catalog.models import AttributeOption, GiftWrapping
+from ..catalog.models import AttributeOption, GiftWrapping
 
 
 def send_retailcrm(carts, command=False):
