@@ -98,6 +98,7 @@ def get_order(cart, items, uid_type=None):
         'email': cart.profile.email,
         'createdAt': cart.checkout_date.strftime('%Y-%m-%d %H:%M:%S'),
         'status': get_status(cart.payment_status),
+        'customerComment': cart.additional_info,
         'delivery': {
             'cost': float(cart.delivery_method.price_rub),
             'code': cart.delivery_method.code_retailcrm,
