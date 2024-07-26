@@ -39,11 +39,11 @@ class Command(BaseCommand):
                             'street': cart.address,
                         }
                     },
-                    'payments': {
+                    'payments': [{
                         'amount': float(cart.summary_c),
-                        # 'type': cart.payment_method.code_retailcrm,
-                        # 'status': get_status_payments(cart.payment_status),
-                    },
+                        'type': cart.payment_method.code_retailcrm,
+                        'status': get_status_payments(cart.payment_status),
+                    }],
                     'items': [
                         {
                             'offer': {
@@ -99,16 +99,16 @@ def get_status(status):
 
 def get_status_payments(status):
     STATUS = {
-        'pending': 'Не оплачен',
-        'succeeded': 'Оплачен',
-        'canceled': 'Не оплачен',
-        'completed': 'Оплачен',
-        'paid': 'Оплачен',
+        'pending': 'not-paid',
+        'succeeded': 'paid',
+        'canceled': 'not-paid',
+        'completed': 'paid',
+        'paid': 'paid',
     }
     try:
         return STATUS[status]
     except:
-        return 'Не оплачен'
+        return 'not-paid'
 
 
 def get_properties(item):
