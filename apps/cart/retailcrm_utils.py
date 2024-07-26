@@ -15,7 +15,7 @@ def send_retailcrm(carts):
         carts = [carts]
 
     for cart in carts:
-        print('cart: {}'.format(cart.id)))
+        print('cart: {}'.format(cart.id))
         items = cart.cart_items
         print(items)
 
