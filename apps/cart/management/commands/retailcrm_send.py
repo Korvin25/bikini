@@ -85,6 +85,20 @@ class Command(BaseCommand):
 
 def get_status(status):
     STATUS = {
+        'pending': 'novyi',
+        'succeeded': 'paid',
+        'canceled': 'novyi',
+        'completed': 'paid',
+        'paid': 'paid',
+    }
+    try:
+        return STATUS[status]
+    except:
+        return 'novyi'
+
+
+def get_status_payments(status):
+    STATUS = {
         'pending': 'Не оплачен',
         'succeeded': 'Оплачен',
         'canceled': 'Не оплачен',
@@ -95,20 +109,6 @@ def get_status(status):
         return STATUS[status]
     except:
         return 'Не оплачен'
-
-
-def get_status_payments(status):
-    STATUS = {
-        'pending': 'not-paid',
-        'succeeded': 'paid',
-        'canceled': 'not-paid',
-        'completed': 'paid',
-        'paid': 'paid',
-    }
-    try:
-        return STATUS[status]
-    except:
-        return 'not-paid'
 
 
 def get_properties(item):
