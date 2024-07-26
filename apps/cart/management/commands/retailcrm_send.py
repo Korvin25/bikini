@@ -41,7 +41,7 @@ class Command(BaseCommand):
                     },
                     'payments': {
                         'amount': float(cart.summary_c),
-                        'type': cart.payment_method.code_retailcrm,
+                        'type': cart.payment_method.title,
                         'status': get_status_payments(cart.payment_status),
                     },
                     'items': [
