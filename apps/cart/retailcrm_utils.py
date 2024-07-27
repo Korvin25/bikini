@@ -102,7 +102,7 @@ def get_order(cart, items, uid_type=None):
         'firstName': cart.profile.name,
         'phone': cart.profile.phone,
         'email': cart.profile.email,
-        'createdAt': cart.checkout_date.strftime('%Y-%m-%d %H:%M:%S') if cart.checkout_date else cart.creation_date.strftime('%Y-%m-%d %H:%M:%S'),
+        # 'createdAt': cart.checkout_date.strftime('%Y-%m-%d %H:%M:%S') if cart.checkout_date else cart.creation_date.strftime('%Y-%m-%d %H:%M:%S'),
         'status': get_status(cart.payment_status),
         'customerComment': cart.additional_info,
         'managerComment': 'На сайте: https://bikinimini.ru/admin/cart/cart/{}/change/'.format(cart.id),
