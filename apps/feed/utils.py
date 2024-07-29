@@ -103,7 +103,7 @@ class GenerateFeed:
 
         return el_item
 
-    def create_retailcrm_item(self, item, combinations):
+    def create_retailcrm_item(self, item, combinations, combinations_iter):
         price = str(item.price_rub)
         famile = u'женский' if item.categories.first().sex == 'female' else u'мужской'
         photos = item.photos.all()[:9]
@@ -117,7 +117,7 @@ class GenerateFeed:
         name = item.title
         count = item.in_stock_counts['in_stock__min']
 
-        count = math.ceil(int(count) / len(combinations))
+        count = math.ceil(int(count) / (len(combinations) * combinations_iter))
         count = str(count)
 
         letters = ['{}-{}'.format(i.attribute.slug, i.title) for i in combinations]
