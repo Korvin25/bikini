@@ -19,10 +19,9 @@ class Command(BaseCommand):
 
         feed = GenerateFeed(**PARAMS)
         for product in Product.objects.filter(retailcrm=True, show=True):
-            combinations_iter = itertools.product(*product.attrs.values())
-            for combinations_id in combinations_iter:
+            for combinations_id in itertools.product(*product.attrs.values()):
                 combinations = AttributeOption.objects.filter(pk__in=combinations_id)
-                feed.create_retailcrm_item(product, combinations, len(combinations_iter))
+                feed.create_retailcrm_item(product, combinations)
 
     
         tree = et.ElementTree(feed.el_root)

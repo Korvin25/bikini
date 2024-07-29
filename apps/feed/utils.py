@@ -117,7 +117,7 @@ class GenerateFeed:
         name = item.title
         count = item.in_stock_counts['in_stock__min']
 
-        count = math.ceil(int(count) / (len(combinations) * combinations_iter))
+        count = math.ceil(int(count) / len(combinations))
         count = str(count)
 
         letters = ['{}-{}'.format(i.attribute.slug, i.title) for i in combinations]
