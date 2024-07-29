@@ -18,13 +18,17 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         feed = GenerateFeed(**PARAMS)
-        for product in Product.objects.filter(retailcrm=True, show=True):
+        for product in Product.objects.filter(retailcrm=True, show=True)[0:2]:
+            combinations_count = 0
+            for combinations_id in itertools.product(*product.attrs.values()):
+                combinations_count += 1
+
             for combinations_id in itertools.product(*product.attrs.values()):
                 combinations = AttributeOption.objects.filter(pk__in=combinations_id)
-                feed.create_retailcrm_item(product, combinations)
+                feed.create_retailcrm_item(product, combinations, combinations_count)
 
     
         tree = et.ElementTree(feed.el_root)
-        # Запись дерева элементов в файл
+        # # Запись дерева элементов в файл
         tree.write(os.path.join(settings.STATIC_ROOT, 'retailcrm.xml'))
 
