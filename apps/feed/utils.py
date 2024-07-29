@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys  
+import math
 import xml.etree.ElementTree as et
 from datetime import datetime
 from functools import reduce
@@ -114,8 +115,11 @@ class GenerateFeed:
         url = self.site_link + item.get_absolute_url()
         vendorCode = item.vendor_code
         name = item.title
-        count = str(item.in_stock_counts['in_stock__min'])
-        
+        count = item.in_stock_counts['in_stock__min']
+
+        count = math.ceil(int(count) / len(combinations))
+        count = str(count)
+
         letters = ['{}-{}'.format(i.attribute.slug, i.title) for i in combinations]
         letters = '-'.join(letters)
         letters = slugify(letters)
