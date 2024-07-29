@@ -17,7 +17,6 @@ def send_retailcrm(carts):
     for cart in carts:
         print('cart: {}'.format(cart.id))
         items = cart.cart_items
-        print(items)
         print('retailcrm: {}'.format(cart.retailcrm))
         if items:
             if cart.retailcrm:
@@ -140,6 +139,7 @@ def get_order(cart, items, uid_type=None):
 
     if uid_type:
         order['externalId'] = uid_type
+        order['by'] = 'id'
 
     with_wrapping = {
         'initialPrice': float(GiftWrapping.objects.first().price_rub),
