@@ -97,6 +97,7 @@ def get_article(item):
 
 def get_order(cart, items, uid_type=None):
     order = {
+        'externalId': str(cart.id),
         'orderMethod': 'shopping-cart',
         'firstName': cart.profile.name,
         'phone': cart.profile.phone,
@@ -138,8 +139,8 @@ def get_order(cart, items, uid_type=None):
     }
 
     if uid_type:
-        order['externalId'] = uid_type
-        order['by'] = 'id'
+        order['externalId'] = str(cart.id)
+        order['by'] = 'externalId'
 
     with_wrapping = {
         'initialPrice': float(GiftWrapping.objects.first().price_rub),
