@@ -18,7 +18,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         feed = GenerateFeed(**PARAMS)
-        for product in Product.objects.filter(retailcrm=True, show=True)[0:2]:
+        for product in Product.objects.filter(retailcrm=True, show=True):
             combinations_count = 0
             for combinations_id in itertools.product(*product.attrs.values()):
                 combinations_count += 1
