@@ -23,10 +23,22 @@ def send_retailcrm(carts):
                 order = get_order(cart, items, cart.retailcrm)
                 result = client.order_edit(order, 'externalId', site)
                 print(result.get_response())
-                retailcrm_id = result.get_response()['id']
-                print(retailcrm_id)
-                cart.retailcrm = retailcrm_id
-                cart.save()
+                if result.is_successful():
+                    retailcrm_id = result.get_response()['id']
+                    print(retailcrm_id)
+                    cart.retailcrm = retailcrm_id
+                    cart.save()
+                else:
+                    result = client.order_create(order, site)
+                    if result.is_successful():
+                        retailcrm_id = result.get_response()['id']
+                        print(retailcrm_id)
+                        cart.retailcrm = retailcrm_id
+                        cart.save()
+                    else:
+                        print(order['payments'][0]['status'])
+                        print(result.get_response())
+                
             else:
                 order = get_order(cart, items)
                 result = client.order_create(order, site)
