@@ -59,7 +59,7 @@ def get_status_payments(status):
         'canceled': 'not-paid',
         'completed': 'paid',
         'paid': 'paid',
-        'error': 'oshibka',
+        'error': 'oshibka-1',
     }
     try:
         return STATUS[status]
