@@ -22,6 +22,7 @@ def send_retailcrm(carts):
             if cart.retailcrm:
                 order = get_order(cart, items, cart.retailcrm)
                 result = client.order_edit(order, 'externalId', site)
+                print(result.get_response())
                 retailcrm_id = result.get_response()['id']
                 print(retailcrm_id)
                 cart.retailcrm = retailcrm_id
