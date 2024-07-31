@@ -16,4 +16,4 @@ class Command(BaseCommand):
         print('-----Start-----')
         print('carts: {}'.format(len(carts)))
         send_retailcrm(list(carts))
-        print('-----Finish-----')
+        print('-----Finish-----Count: {}'.format(len(carts)))
