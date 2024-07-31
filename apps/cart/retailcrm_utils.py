@@ -33,7 +33,7 @@ def send_retailcrm(carts):
                     cart.retailcrm = retailcrm_id
                     cart.save()
                 else:
-                    print(order['payments'][0].status')
+                    print(order['payments'][0].status)
                     print(result.get_response())
 
 
