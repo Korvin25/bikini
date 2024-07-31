@@ -5,6 +5,7 @@ import retailcrm
 from uuslug import slugify
 
 from ..catalog.models import AttributeOption, GiftWrapping
+from ..lk.email import admin_send_order_error_retailcrm_email
 
 
 def send_retailcrm(carts):
@@ -22,7 +23,11 @@ def send_retailcrm(carts):
             if cart.retailcrm:
                 order = get_order(cart, items, cart.retailcrm)
                 result = client.order_edit(order, 'externalId', site)
-                print(result.get_response())
+                if result.is_successful():
+                    print(result.get_response())
+                else:
+                    admin_send_order_error_retailcrm_email(cart, order, result, u'Ошибка при обновлении статуса заказа в RetailCRM')
+                    print(result.get_response())
             else:
                 order = get_order(cart, items)
                 result = client.order_create(order, site)
@@ -33,7 +38,7 @@ def send_retailcrm(carts):
                     cart.retailcrm = retailcrm_id
                     cart.save()
                 else:
-                    print(order['payments'][0]['status'])
+                    admin_send_order_error_retailcrm_email(cart, order, result, u'Ошибка при отправке заказа в RetailCRM')
                     print(result.get_response())
 
 

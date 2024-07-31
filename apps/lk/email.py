@@ -64,6 +64,42 @@ def admin_send_order_email(obj, **kwargs):
     email_admin(subject, email_key, obj, admin_slug=admin_slug, settings_key='orders_email', **kwargs)
 
 
+def admin_send_order_error_retailcrm_email(cart, order, result, title, settings_key='feedback_email'):
+    subject = title
+    email_key = 'order_error_retailcrm'
+    request = CrequestMiddleware.get_request()
+
+    from_email = settings.DEFAULT_FROM_EMAIL
+    to = (Settings.get_feedback_emails() if settings_key=='feedback_email'
+          else Settings.get_orders_emails() if settings_key=='orders_email'
+          else [])
+    to = to or [admin[1] for admin in settings.ADMINS]
+
+    site = ''
+    try:
+        site = request.get_host()
+    except AttributeError:
+        site = DEFAULT_SITENAME
+    else:
+        if not site:
+            site = DEFAULT_SITENAME
+
+    template_text = get_template('email/to_admin/{}.txt'.format(email_key))
+    template_html = get_template('email/to_admin/{}.html'.format(email_key))
+    url_retailcrm = None
+    if cart.retailcrm:
+        url_retailcrm = 'https://bikinimini.retailcrm.ru/orders/{}/edit'.format(cart.retailcrm)
+    context = {'url_admin': 'https://bikinimini.ru/admin/cart/cart/{}/change/'.format(cart.id), 'subject': subject, 'site': site, 'order': order, 'result': result, 'url_retailcrm': url_retailcrm}
+    text_content = template_text.render(context)
+    html_content = template_html.render(context)
+
+    # admin_backend = get_connection(settings.ADMIN_EMAIL_BACKEND)
+    message = EmailMultiAlternatives(subject, text_content, from_email, to)
+    message.attach_alternative(html_content, "text/html")
+    # msg = message.send()
+    message.send()
+
+
 def admin_send_callback_order_email(obj, **kwargs):
     subject = 'Bikinimini.ru: Заказ обратного звонка'
     email_key = 'callback_order'

@@ -1,0 +1,5 @@
+{{ title }}
+Order data: {{ order }}
+Result data: {{ result }}
+Url admin: {{ url_admin }}
+{% if url_retailcrm %} Url RetailCRM: {{ url_retailcrm }}{% endif %}
