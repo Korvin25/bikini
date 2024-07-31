@@ -19,7 +19,7 @@ def send_retailcrm(carts):
         items = cart.cart_items
         print('retailcrm: {}'.format(cart.retailcrm))
         if items:
-            if cart.retailcrm:
+            if cart.retailcrm and not cart.retailcrm == 'Old Cart':
                 order = get_order(cart, items, cart.retailcrm)
                 result = client.order_edit(order, 'externalId', site)
                 print(result.get_response())
