@@ -18,6 +18,7 @@ def send_retailcrm(carts):
         print('cart: {}'.format(cart.id))
         items = cart.cart_items
         print('retailcrm: {}'.format(cart.retailcrm))
+        print(items)
         if items:
             if cart.retailcrm:
                 order = get_order(cart, items, cart.retailcrm)
