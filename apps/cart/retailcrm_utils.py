@@ -110,6 +110,11 @@ def get_article(item):
     letters = slugify(letters)
     return letters
 
+def get_customer_comment(comment, address):
+    if len(address) < 255:
+        return comment
+    else:
+        return u'Комментарий клиента: "{}". Адрес: {}'.format(comment, address)
 
 def get_order(cart, items, uid_type=None):
     order = {
@@ -120,7 +125,7 @@ def get_order(cart, items, uid_type=None):
         'email': cart.profile.email,
         'createdAt': cart.checkout_date.strftime('%Y-%m-%d %H:%M:%S') if cart.checkout_date else cart.creation_date.strftime('%Y-%m-%d %H:%M:%S'),
         'status': get_status(cart.payment_status),
-        'customerComment': cart.additional_info,
+        'customerComment': get_customer_comment(cart.additional_info, cart.address),
         'managerComment': 'На сайте: https://bikinimini.ru/admin/cart/cart/{}/change/'.format(cart.id),
         'delivery': {
             'cost': float(cart.delivery_method.price_rub),
@@ -129,7 +134,7 @@ def get_order(cart, items, uid_type=None):
                 'index': cart.postal_code,
                 'countryIso': cart.country.title,
                 'city': cart.city,
-                'street': cart.address,
+                'street': cart.address if len(cart.address) < 255 else u'Адрес в поле "Комментрий клиента", так-как на сайте заполнен адресс длинее 255 символов',
             }
         },
         'payments': [{
