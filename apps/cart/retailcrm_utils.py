@@ -18,28 +18,11 @@ def send_retailcrm(carts):
         print('cart: {}'.format(cart.id))
         items = cart.cart_items
         print('retailcrm: {}'.format(cart.retailcrm))
-        print(items)
         if items:
             if cart.retailcrm:
                 order = get_order(cart, items, cart.retailcrm)
                 result = client.order_edit(order, 'externalId', site)
                 print(result.get_response())
-                if result.is_successful():
-                    retailcrm_id = result.get_response()['id']
-                    print(retailcrm_id)
-                    cart.retailcrm = retailcrm_id
-                    cart.save()
-                else:
-                    result = client.order_create(order, site)
-                    if result.is_successful():
-                        retailcrm_id = result.get_response()['id']
-                        print(retailcrm_id)
-                        cart.retailcrm = retailcrm_id
-                        cart.save()
-                    else:
-                        print(order['payments'][0]['status'])
-                        print(result.get_response())
-                
             else:
                 order = get_order(cart, items)
                 result = client.order_create(order, site)
@@ -124,7 +107,7 @@ def get_order(cart, items, uid_type=None):
         'firstName': cart.profile.name,
         'phone': cart.profile.phone,
         'email': cart.profile.email,
-        'createdAt': cart.checkout_date.strftime('%Y-%m-%d %H:%M:%S') if cart.checkout_date else cart.creation_date.strftime('%Y-%m-%d %H:%M:%S'),
+        # 'createdAt': cart.checkout_date.strftime('%Y-%m-%d %H:%M:%S') if cart.checkout_date else cart.creation_date.strftime('%Y-%m-%d %H:%M:%S'),
         'status': get_status(cart.payment_status),
         'customerComment': get_customer_comment(cart.additional_info, cart.address),
         'managerComment': 'На сайте: https://bikinimini.ru/admin/cart/cart/{}/change/'.format(cart.id),
