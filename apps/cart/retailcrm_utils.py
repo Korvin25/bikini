@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import imp
 
 import retailcrm
 from uuslug import slugify
 
 from ..catalog.models import AttributeOption, GiftWrapping
 from ..lk.email import admin_send_order_error_retailcrm_email
-
+from ..cart.templatetags.cart_tags import get_extra_product
 
 def send_retailcrm(carts):
     client = retailcrm.v5('https://bikinimini.retailcrm.ru', 'WauoN85ORs7QLJe0SFvjC4GzZpYXoIu1')
@@ -89,7 +90,19 @@ def get_properties(item):
     
     return properties
 
-
+def get_properties_extra(attrs):
+    properties = []
+    for key, value in attrs.items():
+        atribute = AttributeOption.objects.get(pk=value)
+        properties.append(
+              {
+                'name': atribute.attribute.admin_title,
+                'value': atribute.title,
+            }
+        )
+    
+    return properties
+    
 def get_article(item):
     combination_id = [value for key, value in item.attrs.items()]
     combinations = AttributeOption.objects.filter(pk__in=combination_id)
@@ -159,6 +172,16 @@ def get_order(cart, items, uid_type=None):
     }
 
     for item in items:
+        for extra_product_id, attrs in item.extra_products.items():
+            extra_product = get_extra_product(extra_product_id)
+            extra_product_item = {
+                'properties': get_properties_extra(attrs),
+                'initialPrice': float(item.extra_price_c),
+                'productName': 'Дополнительный товар к "{}": {}'.format(item.option.title, extra_product.title),
+                'quantity': item.count,
+            }
+            order['items'].append(extra_product_item)
+
         if item.with_wrapping:
             with_wrapping['quantity'] += 1
 
