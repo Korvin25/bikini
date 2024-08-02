@@ -155,7 +155,7 @@ def get_order(cart, items, uid_type=None):
                 'initialPrice': float(item.option_price_c),
                 'productName': item.option.title,
                 'quantity': item.count,
-                'discountManualAmount': math.ceil(float((item.option_price_c * item.discount)/100)),
+                'discountManualAmount': math.floor(float((item.option_price_c * item.discount)/100)),
             }
             for item in items
         ]
