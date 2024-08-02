@@ -11,7 +11,7 @@ class Command(BaseCommand):
     help = 'Отправить все заказы в срм'
 
     def handle(self, *args, **options):
-        carts = CartModel.objects.prefetch_related('profile', 'cartitem_set', 'certificatecartitem_set').filter(checked_out=True, id__in=[7592759])[0:1]
+        carts = CartModel.objects.prefetch_related('profile', 'cartitem_set', 'certificatecartitem_set').filter(checked_out=True, retailcrm__isnull=True)
         # carts = CartModel.objects.prefetch_related('profile', 'cartitem_set', 'certificatecartitem_set').filter(checked_out=True, retailcrm='Old Cart')
         print('-----Start-----')
         print('carts: {}'.format(len(carts)))
