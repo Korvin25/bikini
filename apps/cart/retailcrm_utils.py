@@ -6,8 +6,36 @@ import retailcrm
 from uuslug import slugify
 
 from ..catalog.models import AttributeOption, GiftWrapping
-from ..lk.email import admin_send_order_error_retailcrm_email
+from ..lk.email import admin_send_order_error_retailcrm_email, admin_send_collback_error_retailcrm_email
 from ..cart.templatetags.cart_tags import get_extra_product
+
+
+def send_retailcrm_callback_order(item):
+    client = retailcrm.v5('https://bikinimini.retailcrm.ru', 'WauoN85ORs7QLJe0SFvjC4GzZpYXoIu1')
+    site = 'bikinimini'
+    
+    order =  {
+        'orderMethod': 'shopping-cart',
+        'firstName': item.profile.name if item.profile else item.name,
+        'phone': item.profile.phone if item.profile else item.phone,
+        'email': item.profile.email if item.profile else '',
+        'customerComment': 'Имя из формы: {} \nТелефон из формы: {}'.format(item.name, item.phone),
+        'items': [
+            {
+                'productName': 'Клиент заказал обратный звонок',
+            }
+        ]
+    }
+    
+    result = client.order_create(order, site)
+
+    if result.is_successful():
+        retailcrm_id = result.get_response()['id']
+        print(retailcrm_id)
+    else:
+        admin_send_collback_error_retailcrm_email(item, result, u'Ошибка при отправке запросса на обратный звонок в RetailCRM')
+        print(result.get_response())
+    
 
 def send_retailcrm(carts):
     client = retailcrm.v5('https://bikinimini.retailcrm.ru', 'WauoN85ORs7QLJe0SFvjC4GzZpYXoIu1')

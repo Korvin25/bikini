@@ -10,6 +10,7 @@ from ..core.mixins import JSONFormMixin
 from ..lk.email import admin_send_callback_order_email
 from .forms import CallbackOrderForm
 from .models import CallbackOrder
+from ..cart.retailcrm_utils import send_retailcrm_callback_order
 
 
 translated_strings = (_('Спасибо! Мы обязательно вам перезвоним.'),)
@@ -39,6 +40,7 @@ class CallbackOrderFormView(JSONFormMixin, CreateView):
             order.save()
 
         admin_send_callback_order_email(order)
+        send_retailcrm_callback_order(order)
 
         success_message = __('Спасибо! Мы обязательно вам перезвоним.')
         data = {'result': 'ok', 'order_id': order.id, 'success_message': success_message}
