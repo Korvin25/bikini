@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
         feed = GenerateFeed(**PARAMS)
         for product in Product.objects.filter(retailcrm=True, show=True, vendor_code="674"):
-            print(product)
+            print(product, product.attrs.values())
             combinations_count = 0
             for combinations_id in itertools.product(*product.attrs.values()):
                 combinations_count += 1
