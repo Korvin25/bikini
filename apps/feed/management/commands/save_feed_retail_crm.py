@@ -26,6 +26,7 @@ class Command(BaseCommand):
 
             for combinations_id in itertools.product(*product.attrs.values()):
                 combinations = AttributeOption.objects.filter(pk__in=combinations_id)
+                print(product, combinations, combinations_count)
                 feed.create_retailcrm_item(product, combinations, combinations_count)
 
     
