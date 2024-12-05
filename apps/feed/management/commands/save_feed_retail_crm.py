@@ -18,7 +18,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         feed = GenerateFeed(**PARAMS)
-        for product in Product.objects.filter(retailcrm=True, show=True, vendor_code="674"):
+        for product in Product.objects.filter(retailcrm=True, show=True):
             input_lists = product.attrs.values()
             filtered_lists = [lst for lst in input_lists if lst]
             
@@ -28,7 +28,6 @@ class Command(BaseCommand):
             
             for combinations_id in itertools.product(*filtered_lists):
                 combinations = AttributeOption.objects.filter(pk__in=combinations_id)
-                print(product, combinations, combinations_count)
                 feed.create_retailcrm_item(product, combinations, combinations_count)
 
     
