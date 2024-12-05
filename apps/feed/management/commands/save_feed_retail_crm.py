@@ -23,7 +23,7 @@ class Command(BaseCommand):
             combinations_count = 0
             for combinations_id in itertools.product(*product.attrs.values()):
                 combinations_count += 1
-
+            print(combinations_count)
             for combinations_id in itertools.product(*product.attrs.values()):
                 combinations = AttributeOption.objects.filter(pk__in=combinations_id)
                 print(product, combinations, combinations_count)
