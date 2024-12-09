@@ -266,7 +266,6 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
 .uk-subnav {
     display: flex;
     flex-wrap: wrap;
-    padding: 20px 0 18px 0;
     list-style: none;
         margin-bottom: 20px;
         background-color: #313131;
@@ -278,7 +277,7 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
 }
 .uk-subnav>* {
     flex: none;
-    /*padding-right: 20px;*/
+    margin: 20px 0 18px 0;
     position: relative;
 }
 .uk-subnav-pill>*>:first-child {
