@@ -204,6 +204,7 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
     width: 90%;
     float: left;
     line-height: 1.6 !important;
+    padding-bottom: 20px;
 }
 .parent{
     display: grid;
@@ -281,7 +282,7 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
     position: relative;
 }
 .uk-subnav-pill>*>:first-child {
-    padding: 21px 10px 20px 10px;
+    padding: 21px 10px 19px 10px;
     color: #fff;
 }
 .uk-switcher>:not(.uk-active) {
@@ -318,12 +319,6 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
     }
 }
 /* fixes */
-.parent a {
-    height: 71px;
-}
-.wrap {
-    height: 31px;
-}
 .uk-accordion-content { margin-top: 15px; padding-bottom: 20px; }
 .uk-accordion-content h3:first-child { margin-top: 5px; }
 .marbot { margin-top: 40px; margin-bottom: 60px; }
