@@ -280,6 +280,7 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
     flex: none;
     margin: 20px 0 18px 0;
     position: relative;
+    display: contents;
 }
 .uk-subnav-pill>*>:first-child {
     padding: 21px 10px 19px 10px;
@@ -307,9 +308,6 @@ select.country_select.errr { border-color: #8c2c34; background-color: #ffe6e8; }
     }
     .uk-subnav-pill>*>:first-child {
         font-size: 12px;
-    }
-    .uk-subnav {
-        padding: 18px 0 18px 0;
     }
     .uk-open .tit {
         width: 80%;
