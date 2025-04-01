@@ -147,6 +147,7 @@ def get_customer_comment(comment, address):
         return u'Комментарий клиента: "{}". Адрес: {}'.format(comment, address)
 
 def get_order(cart, items, uid_type=None):
+    address = '{} {}'.format(cart.country.title, cart.address)
     order = {
         'externalId': str(cart.id),
         'orderMethod': 'shopping-cart',
@@ -155,16 +156,16 @@ def get_order(cart, items, uid_type=None):
         'email': cart.profile.email,
         # 'createdAt': cart.checkout_date.strftime('%Y-%m-%d %H:%M:%S') if cart.checkout_date else cart.creation_date.strftime('%Y-%m-%d %H:%M:%S'),
         'status': get_status(cart.payment_status),
-        'customerComment': get_customer_comment(cart.additional_info, cart.address),
+        'customerComment': get_customer_comment(cart.additional_info, address),
         'managerComment': 'На сайте: https://bikinimini.ru/admin/cart/cart/{}/change/'.format(cart.id),
         'delivery': {
             'cost': float(cart.delivery_method.price_rub),
             'code': cart.delivery_method.code_retailcrm,
             'address': {
                 'index': cart.postal_code,
-                'countryIso': cart.country.title,
+                # 'countryIso': cart.country.title,
                 'city': cart.city,
-                'street': cart.address if len(cart.address) < 255 else u'Адрес в поле "Комментрий клиента", так-как на сайте заполнен адресс длинее 255 символов',
+                'street': address if len(address) < 255 else u'Адрес в поле "Комментрий клиента", так-как на сайте заполнен адресс длинее 255 символов',
             }
         },
         'payments': [{
