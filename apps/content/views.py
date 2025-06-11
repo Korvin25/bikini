@@ -78,7 +78,9 @@ class PageView(DetailView):
 def robots_txt(request):
     txt = Settings.get_robots_txt()
     txt = txt or '\r\n'.join(['User-agent: *',
-                              'Disallow: ',
+                              'Allow: /',
+                              'Disallow: /de/',
+                              'Disallow: /es/',
                               'Host: {host}',
                               'Sitemap: {scheme}://{host}/sitemap.xml',])
     txt = txt.format(host=request.get_host(), scheme=request.scheme)
