@@ -39,7 +39,7 @@
   <div class="list_top_menu_wrapp">
     <ul class="list_menu_lev1">
       <li><a href="{% url 'certificate' %}">{% trans 'Подарочный сертификат' %}</a></li>
-      <li><a href="{% url 'blog:home' %}"><img src="/static/i/logo_mini.png" alt="desinger" />{% trans 'desinger' %}</a></li>
+      {% comment %} <li><a href="{% url 'blog:home' %}"><img src="/static/i/logo_mini.png" alt="desinger" />{% trans 'desinger' %}</a></li> {% endcomment %}
       <li><a href="{% url 'videos' %}">{% trans 'Видео' %}</a></li>
       <li><a href="{% url 'wishlist:home' %}" class="js-show-wishlist-button">{% trans 'Список желаемых покупок' %}&nbsp;&nbsp;<img src="/static/i/desir.png" alt="" />&nbsp;&nbsp;<span class="disc_number js-wishlist-count">{{ wishlist|length }}</span></a></li>
     </ul>
