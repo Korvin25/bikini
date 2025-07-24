@@ -77,7 +77,7 @@ class VideoAdmin(AdminVideoMixin, TabbedTranslationAdmin):
 
     def save_model(self, request, obj, form, change):
         s = super(VideoAdmin, self).save_model(request, obj, form, change)
-        obj.update_video_cover()
+        # obj.update_video_cover()
         return s
 
     def get_queryset(self, *args, **kwargs):
