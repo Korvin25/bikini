@@ -394,7 +394,7 @@
                     {% video v.video '100%x453' %}
                   {% else %}
                     <video width="100%" height="453" controls poster="{{ v.get_cover_url }}">
-                      <source src="{{ v.video_file.url }}" type="video/mp4">
+                      <source src="{% if v.video_file %}{{ v.video_file.url }}{% endif %}" type="video/mp4">
                       Ваш браузер не поддерживает видео тег.
                     </video>
                   {% endif %}
