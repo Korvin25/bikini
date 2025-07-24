@@ -112,7 +112,7 @@
                                 </div>
                             </a>
                         {% else %}
-                            <a href="{{ video.video_file.url }}" data-fancybox="gallery" data-caption="{{ product.title }} / {% trans 'Видео' %} №{{ forloop.counter }}">
+                            <a href="{% if video.video_file %}{{ video.video_file.url }}{% endif %}" data-fancybox="gallery" data-caption="{{ product.title }} / {% trans 'Видео' %} №{{ forloop.counter }}">
                                 <div class="product_video_image" style="background-image:url({{ video.get_cover_url }}); background-size: cover;">
                                     <div class="play play_preview"></div>
                                 </div>
