@@ -24,15 +24,25 @@ from ..settings.models import SEOSetting, MetatagModel
 
 
 class Video(MetatagModel):
+    VIDEO_SOURCE_CHOICES = (
+        ('youtube', 'YouTube'),
+        ('file', 'Файл'),
+    )
+    
     title = models.CharField('Название', max_length=255)
     slug = models.SlugField('В URL', max_length=127)
-    video = EmbedVideoField('Ссылка на видео')
+    video_source = models.CharField('Источник видео', max_length=10, 
+                                   choices=VIDEO_SOURCE_CHOICES, default='youtube')
+    # Поле для YouTube ссылки
+    video = EmbedVideoField('Ссылка на YouTube', blank=True, null=True)
+    # Поле для загрузки видеофайла
+    video_file = models.FileField('Видеофайл', upload_to='videos/uploaded/', 
+                                blank=True, null=True)
+    # Обложки
     video_cover = ThumbnailerImageField('Обложка с YouTube', upload_to='videos/yt/covers/',
-                                        null=True, blank=True)
+                                      null=True, blank=True)
     cover = ThumbnailerImageField('Обложка', upload_to='videos/covers/', null=True, blank=True)
     text = RichTextUploadingField('Текст', blank=True, null=True)
-    # text = RichTextField('Текст', blank=True, null=True)
-    # text = HTMLField('Текст', blank=True, null=True)
     product = models.ForeignKey(Product, verbose_name='Товар', related_name='videos', null=True, blank=True)
     products = models.ManyToManyField(Product, verbose_name='Товары', related_name='video_set', blank=True)
     post = models.ForeignKey(Post, verbose_name='Пост в блоге', related_name='videos', null=True, blank=True)
@@ -59,14 +69,30 @@ class Video(MetatagModel):
 
     def get_absolute_url(self):
         return reverse('video', kwargs={'slug': self.slug, 'pk': self.pk})
+    
+    def get_video_url(self):
+        """Возвращает URL видео в зависимости от источника"""
+        if self.video_source == 'youtube':
+            return self.video
+        elif self.video_source == 'file' and self.video_file:
+            return self.video_file.url
+        return None
 
     def get_cover_url(self):
-        cover_url = (self.cover['video_preview'].url if self.cover
-                     else self.get_video_cover())
-        request = CrequestMiddleware.get_request()
-        if cover_url and request and request.scheme == 'https':
-            cover_url = cover_url.replace('http://', 'https://', 1)
-        return cover_url
+        """Возвращает URL обложки"""
+        if self.cover:
+            return self.cover.url
+        elif self.video_cover:
+            return self.video_cover.url
+        return None
+
+    # def get_cover_url(self):
+    #     cover_url = (self.cover['video_preview'].url if self.cover
+    #                  else self.get_video_cover())
+    #     request = CrequestMiddleware.get_request()
+    #     if cover_url and request and request.scheme == 'https':
+    #         cover_url = cover_url.replace('http://', 'https://', 1)
+    #     return cover_url
 
     def get_backend(self):
         backend = detect_backend(self.video)
