@@ -112,32 +112,11 @@
                                 </div>
                             </a>
                          {% elif video.video_source == 'file' and video.video_file %}
-
-                            {% if video.video_file.url|lower|slice:'-4:' == '.mov' %}
-                              <!-- Для MOV используем специальную обработку -->
-                              <a href="javascript:;" 
-                                data-fancybox="gallery" 
-                                data-src="#video-{{ video.id }}" 
-                                data-caption="{{ product.title }} / {% trans 'Видео' %} №{{ forloop.counter }}">
-                                  <div class="product_video_image" style="background-image:url({{ video.preview_url }}); background-size: cover;">
-                                      <div class="play play_preview"></div>
-                                  </div>
-                              </a>
-                              <!-- Скрытый контейнер с HTML5 плеером -->
-                              <div style="display: none;" id="video-{{ video.id }}">
-                                  <video controls width="800" height="450">
-                                      <source src="{% if video.video_file %}{{ video.video_file.url }}{% endif %}" type="video/quicktime">
-                                      Ваш браузер не поддерживает видео.
-                                  </video>
-                              </div>
-                            {% else %}
-                              <!-- Для MP4 и других поддерживаемых форматов -->
-                              <a href="{% if video.video_file %}{{ video.video_file.url }}{% endif %}" data-fancybox="gallery" data-caption="{{ product.title }} / {% trans 'Видео' %} №{{ forloop.counter }}">
-                                  <div class="product_video_image" style="background-image:url({{ video.preview_url }}); background-size: cover;">
-                                      <div class="play play_preview"></div>
-                                  </div>
-                              </a>
-                            {% endif %}
+                            <a href="{% if video.video_file %}{{ video.video_file.url }}{% endif %}" data-fancybox="gallery" data-caption="{{ product.title }} / {% trans 'Видео' %} №{{ forloop.counter }}">
+                                <div class="product_video_image" style="background-image:url({{ video.get_cover_url }}); background-size: cover;">
+                                    <div class="play play_preview"></div>
+                                </div>
+                            </a>
                         {% endif %}
                     </li>
                     {% endwith %}
@@ -478,23 +457,5 @@
       // updateShownCheckboxes(options, ['color', 'size']);
       chooseOption(true, true);
     });
-
-    $(document).ready(function() {
-    // Инициализация Fancybox с обработкой MOV
-    $('[data-fancybox]').fancybox({
-        afterLoad: function(instance, current) {
-            // Если это MOV видео, заменяем содержимое на видео-плеер
-            if (current.src.includes('.mov') || current.src.includes('.MOV')) {
-                current.content = $('<video>', {
-                    'controls': '',
-                    'width': '100%',
-                    'src': current.src,
-                    'type': 'video/quicktime'
-                });
-            }
-        }
-    });
-});
-
   </script>
 {% endblock %}
