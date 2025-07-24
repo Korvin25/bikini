@@ -161,7 +161,7 @@
                       {% elif obj.item_type == 'video' %}
                       {% with obj as video %}
                         <li class="js-photo-thumb" data-attrs="{{ product.empty_attrs_json }}" data-order="{{ forloop.counter }}" data-video="true">
-                          <div style="background-image:url({{ video.thumb_url }}); background-size: cover; width:70px; height:70px;"/>
+                          <div style="background-image:url({% if video.video_source == 'youtube' %}{{ video.thumb_url }}{% else %}{{ video.get_cover_url }}{% endif %}); background-size: cover; width:70px; height:70px;"/>
                             <div class="play play_thumb"></div>
                           </div>
                         </li>
