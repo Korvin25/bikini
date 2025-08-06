@@ -10,8 +10,8 @@
     <ul class="bt_contacts">
       <li class="bt_phone"><a href="tel:{{ settings.phone|to_phone }}">{{ settings.phone|safe }}</a></li>
       {# <li class="bt_soc"><a href="viber://chat?number={{ settings.phone|to_viber }}"><img src="/static/i/soc_viber.png" alt="{% trans 'Viber' %}" />{% trans '' %}</a></li> #}
-      <li class="bt_soc"><a href="tg://resolve?domain={{ settings.telegram_login|to_telegram }}"><img src="/static/i/soc_telegram.png" alt="{% trans 'Telegram' %}">{% trans '' %}</a></li>
-      <li class="bt_soc"><a href="whatsapp://send?phone={{ settings.whatsapp_phone|to_phone }}"><img src="/static/i/soc_whatsapp.png" alt="{% trans 'Whatsapp' %}" />{% trans '' %}</a></li>
+      <li class="bt_soc"><a href="tg://resolve?domain={{ settings.telegram_login|to_telegram }}"><img src="/static/i/icons8-телеграм.svg" alt="{% trans 'Telegram' %}">{% trans '' %}</a></li>
+      <li class="bt_soc"><a href="whatsapp://send?phone={{ settings.whatsapp_phone|to_phone }}"><img src="/static/i/icons8-whatsapp.svg" alt="{% trans 'Whatsapp' %}" />{% trans '' %}</a></li>
       <!-- <li class="bt_soc"><a href="{{ settings.instagram }}"><img src="/static/i/inst.png" alt="{% trans 'Instagram' %}" />{% trans 'Instagram' %}</a></li> -->
       <li class="clr_butt_head clr_butt_head0"></li>
       
