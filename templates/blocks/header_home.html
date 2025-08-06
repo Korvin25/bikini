@@ -19,8 +19,8 @@
       <li class="clr_butt_head"></li>
       <li class="butt_categories_head">
         <ul class="cat_row_top">
-          <li><a href="{% url 'men' %}" title="{% trans 'Мужчинам' %}">{% trans 'Мужчинам' %}</a></li>
           <li><a href="{% url 'women' %}" title="{% trans 'Женщинам' %}">{% trans 'Женщинам' %}</a></li>
+          <li><a href="{% url 'men' %}" title="{% trans 'Мужчинам' %}">{% trans 'Мужчинам' %}</a></li>
         </ul>
       </li>
       <li class="bt_cart"><a href="{% url 'cart' %}"><img src="/static/i/cart_icon.png" alt="{% trans 'Корзина' %}" /><strong>{% trans 'Корзина' %}</strong> <span title="{% trans 'Кол-во' %}" class="js-cart-count">{{ cart.count }}</span></a></li>
