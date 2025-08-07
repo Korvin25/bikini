@@ -21,6 +21,12 @@
   <main>
     <div class="main_content">
 
+      <div class="cat_row_top_main">
+        {% for cat in categories|slice:'0:6' %}
+        <div class="cat_row_top_main_block"><a href="{{ cat.get_absolute_url }}">{{ cat.title }}</a></div>
+        {% endfor %}
+      </div>
+
       {% if settings.catalog_special_banner_mobil_url %}
       <style>
         @media screen and (min-width: 480px) {

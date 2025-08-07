@@ -8,7 +8,7 @@ from django.views.generic import TemplateView, DetailView
 from el_pagination.views import AjaxListView
 
 from ..banners.models import PromoBanner
-from ..catalog.models import Product
+from ..catalog.models import Product, Category
 from ..core.http_utils import get_object_from_slug_and_kwargs
 from ..settings.models import Settings
 from .models import Video, Page
@@ -38,11 +38,14 @@ class HomepageView(TemplateView):
                     'tw': __('Twitter'),
                 }.get(key, key)
                 social_widgets.append({'key': key, 'icon': icon, 'label': label, 'code': code})
+                
+        categories = Category.objects.filter(sex='female', is_shown=True)
 
         context = {
             'promo_banner': banner,
             'products': products,
             'social_widgets': social_widgets,
+            'categories': categories,
         }
         context.update(super(HomepageView, self).get_context_data(**kwargs))
         return context

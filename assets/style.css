@@ -198,7 +198,44 @@ header,main,nav,footer {display:block;}
 /* >>> MAIN */
     main {background-color:#fff;}
     
-        .main_content {padding: 35px 0 0 0;}
+        .main_content {
+            padding: 35px 0 0 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .cat_row_top_main {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .cat_row_top_main_block {
+            background-color: #000;
+            border-radius: 21px;
+            -webkit-border-radius: 21px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .cat_row_top_main a {
+            font-family: 'NeoMedium';
+            display: block;
+            color: #fff;
+            font-size: 15px;
+            line-height: 15px;
+            padding: 12px 21px 10px 21px;
+            background-color: #e1312f;
+            border-radius: 21px;
+            -webkit-border-radius: 21px;
+            border-bottom: 3px solid #8c2c34;
+            vertical-align: middle;
+            -moz-transition: .30s ease-in-out;
+            -o-transition: .30s ease-in-out;
+            transition: .30s ease-in-out;
+            -webkit-transition: .30s ease-in-out;
+        }
+        .cat_row_top_main a:hover {
+            opacity: 0.65;
+        }
+
             .title_block {font-size:30px;text-transform:uppercase;color:#323232;padding-top:35px;margin-bottom:26px;text-align: center;}
             
     /* >>> CATALOG */
