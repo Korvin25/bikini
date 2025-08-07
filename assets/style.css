@@ -2224,7 +2224,7 @@ header,main,nav,footer {display:block;}
         .text_head_block p {max-width:100%;}
         .bt_contacts ~ div.clr {margin-top:40px !important;}
         
-        .bt_req_call {margin-top:10px}
+        .bt_req_call {margin-top:10px; display: none !important;}
         
         .item_list_wrapp {margin-left: -11px;}
         .product_list {margin-left: 11px;width: 290px;}
