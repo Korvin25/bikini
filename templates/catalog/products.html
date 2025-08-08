@@ -29,6 +29,8 @@
         <style>
           #category, #filter {
             cursor: pointer;
+            z-index: 1;
+            position: inherit;
           }
           #filter_button, #filter_button_clean {
             margin-left: 50%;
@@ -60,9 +62,43 @@
               text-align: center;
             }
           }
+          .mobile-burger {
+            display: none;
+          }
+
+          @media (max-width: 768px) {
+            .mobile-burger {
+              display: block;
+              padding: 10px 0;
+              position: absolute;
+              top: 10px;
+              right: 10px;
+            }
+            
+            .burger-icon {
+              background: none;
+              border: none;
+              cursor: pointer;
+              padding: 5px;
+            }
+            
+            .burger-icon svg {
+              display: block;
+              width: 24px;
+              height: 24px;
+            }
+          }
         </style>
+
         <div class="sec_menu">
           <h3 id="category" class="title_sec_block">{% trans 'Категории' %}</h3>
+          <div class="mobile-burger">
+            <button class="burger-icon" aria-label="Открыть меню">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
+              </svg>
+            </button>
+          </div>
           <ul id="category_list">
             {% if show_sale_category %}
               <li{% if is_sale_category %} class="title_sec_block"{% endif %}><a href="{% if sex == 'female' %}{% url 'women_sale' %}{% else %}{% url 'men_sale' %}{% endif %}"><strong>{% trans 'SALE' %}</strong></a></li>
@@ -76,6 +112,13 @@
         
         <div class="sec_filtr">
           <h3 id="filter" class="title_sec_block">{% trans 'Фильтр' %}</h3>
+          <div class="mobile-burger">
+            <button class="burger-icon" aria-label="Открыть меню">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
+              </svg>
+            </button>
+          </div>
           <form id="filter_list" method="get" action="{{ request.path }}" class="sec_filtr_wrapp js-filter-form" data-container-id="products_div">
             {% if page_obj.number > 1 %}
               <input type="hidden" name="page" value="{{ page_obj.number }}"/>
