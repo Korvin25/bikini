@@ -45,6 +45,10 @@ msgstr "Wrong item ID"
 msgid "Выберите способы оставки и оплаты"
 msgstr "Choose delivery and payment methods"
 
+#: templates/catalog/product.html:94
+msgid "Каталог"
+msgstr "Catalog"
+
 #: apps/cart/api/views.py:39
 msgid "Выберите способ доставки"
 msgstr "Choose your delivery method"
