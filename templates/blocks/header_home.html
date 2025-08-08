@@ -13,6 +13,7 @@
       <li class="bt_soc"><a href="tg://resolve?domain={{ settings.telegram_login|to_telegram }}"><img src="/static/i/icons8-телеграм.svg" alt="{% trans 'Telegram' %}">{% trans '' %}</a></li>
       <li class="bt_soc"><a href="whatsapp://send?phone={{ settings.whatsapp_phone|to_phone }}"><img src="/static/i/icons8-whatsapp.svg" alt="{% trans 'Whatsapp' %}" />{% trans '' %}</a></li>
       <!-- <li class="bt_soc"><a href="{{ settings.instagram }}"><img src="/static/i/inst.png" alt="{% trans 'Instagram' %}" />{% trans 'Instagram' %}</a></li> -->
+      <li class="bt_soc"><a href="https://www.instagram.com/bikini_mini_ivanovskaya"><img src="/static/i/icons8-instagram-48.svg" alt="{% trans 'Instagram' %}" /></a></li>
       <li class="clr_butt_head clr_butt_head0"></li>
       
       <li class="bt_req_call"><a rel="leanModal1" name="callback" href="#callback"{% if ENABLE_METRICS and settings.ym_code %} onclick="yaCounter{{ YM_COUNTER }}.reachGoal('button_callback'); return true;"{% endif %}><strong>{% trans 'Заказать звонок' %}</strong></a></li>
@@ -43,11 +44,11 @@
             </em>
           </p>
         {% endif %}        
-        <a rel="nofollow" href="{{ promo_banner.link|add_subdomain }}" title="{{ promo_banner.link_text }}" target="_blank" class="text_link_cat">{{ promo_banner.link_text }}</a>
+        <a rel="nofollow" href="{{ promo_banner.link|add_subdomain }}" title="{{ promo_banner.link_text }}" class="text_link_cat">{{ promo_banner.link_text }}</a>
       </div>
       {% comment %}
         <div class="arrow_text_head">
-          <a rel="nofollow" href="{{ promo_banner.link|add_subdomain }}" title="{{ promo_banner.link_text }}" target="_blank" class="link_arrow_text">{{ promo_banner.link_text }}</a>
+          <a rel="nofollow" href="{{ promo_banner.link|add_subdomain }}" title="{{ promo_banner.link_text }}" class="link_arrow_text">{{ promo_banner.link_text }}</a>
         </div>
       {% endcomment %}
     <!--///-->
