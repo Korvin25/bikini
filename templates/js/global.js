@@ -104,7 +104,10 @@ function sendHeaderAuthForm(url, form_data, $to_disable, $form) {
 
       if (result == 'ok') {
         if (next) { window.location = next; }
-        else { window.location.reload(); }
+        else {
+          console.log('reload global.js str. 109')
+           window.location.reload();
+         }
       }
       else {
         if (error) { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', error); }
@@ -217,7 +220,10 @@ function sendUsualForm(url, form_data, $to_disable, $form) {
             $error_messages.append('<div class="err-message" style="color: green !important;">' + success_message + '<br/></div>');
           } else { $form.html('<p style="color: green;">'+success_message+'</p>'); }
         }
-        else { window.location.reload(); }
+        else { 
+          console.log('reload global.js str. 224')
+          window.location.reload(); 
+        }
       }
       else {
         if (error) { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', error); }
