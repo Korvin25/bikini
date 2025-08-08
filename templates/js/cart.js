@@ -494,7 +494,7 @@ $('input[name="gift_wrapping"]').click(function() {
 });
 
 
-  // Находим все элементы с классом "item-summary-span"
+  {% comment %} // Находим все элементы с классом "item-summary-span"
   const elements = document.getElementsByClassName("item-summary-span");
 
   // Вычисляем сумму элементов
@@ -514,7 +514,7 @@ $('input[name="gift_wrapping"]').click(function() {
     setTimeout(() => {
       window.location.href = '/cart/';
     }, 10); 
-  } 
+  }  {% endcomment %}
 
 
 $('input[name="item-count"]').change('keyup input', function() {
