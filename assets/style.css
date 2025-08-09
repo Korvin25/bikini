@@ -1830,6 +1830,7 @@ header,main,nav,footer {display:block;}
     }
     
     @media screen and (max-width: 549px) {
+        .cat_row_top_main_block {width: 45%;}
         .foot_form_cut_row {float:none;}
         .rows_cut_block .foot_form_cut_row .title_block {text-align:center;display:block;float: none;}
         .rows_cut_block .block_curr_down {float:none;margin-left:0 !important;margin-top: 35px;margin-bottom: 25px;}
