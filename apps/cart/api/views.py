@@ -127,10 +127,12 @@ class Step0View(CartStepBaseView):
             data = {'result': 'error', 'error': __('Выберите способ оплаты')}
             status = 400
         else:
-            if request.user.is_anonymous():
-                data = {'result': 'ok', 'popup': '#step1'}
-            else:
-                data = {'result': 'ok', 'popup': '#step3'}
+            # возможность оформить корзину без регистрации
+            data = {'result': 'ok', 'popup': '#step3'}
+            # if request.user.is_anonymous():
+            #     data = {'result': 'ok', 'popup': '#step1'}
+            # else:
+            #     data = {'result': 'ok', 'popup': '#step3'}
         return JsonResponse(data, status=status)
 
 
@@ -188,32 +190,38 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
             cart.save()
             super(Step3View, self).form_valid(form)
 
-            profile = cart.profile
+            # Для авторизованных пользователей
+            if self.request.user.is_authenticated:
+                try:
+                    profile = cart.profile
+                    # Обновляем профиль данными из формы, кроме email
+                    for k in self.mapping.keys():
+                        key = {'country': 'country_id'}.get(k, k)
+                        if not getattr(profile, key, None) or key in ['delivery_method_id', 'payment_method_id']:
+                            setattr(profile, key, getattr(cart, key))
+                        if not profile.has_email and form.cleaned_data.get('email'):
+                            profile.email = form.cleaned_data['email']
+                            profile.has_email = True
+                    profile.orders_num = profile.orders_num + 1
+                    profile.save()
 
-            # -- проставляем поля --
-            for k in self.mapping.keys():
-                key = {'country': 'country_id'}.get(k, k)
-                if not getattr(profile, key, None) or key in ['delivery_method_id', 'payment_method_id']:
-                    setattr(profile, key, getattr(cart, key))
-                if not profile.has_email and form.cleaned_data.get('email'):
-                    profile.email = form.cleaned_data['email']
-                    profile.has_email = True
-            profile.orders_num = profile.orders_num + 1
-            profile.save()
+                    # Убираем скидки из профиля
+                    profile.discount_code = ''
+                    profile.discount_used = False
+                    profile.save()
+
+                except Exception as e:
+                    # Если не удалось обновить профиль, продолжаем без этого
+                    pass
 
             # -- аналитика --
             cart.ym_client_id = self.request.session.get(SESSION_YM_CLIENT_ID_KEY)
-            if not cart.ym_client_id:
+            if not cart.ym_client_id and self.request.user.is_authenticated:
                 for key in ['ym_client_id', 'ym_source', 'ym_source_detailed']:
                     setattr(cart, key, getattr(profile, key, None))
             cart.save()
             if cart.ym_client_id and not cart.ym_source:
                 update_traffic_source(cart)
-
-            # -- убираем скидки из профиля --
-            profile.discount_code = ''
-            profile.discount_used = False
-            profile.save()
 
             # -- начинаем собирать ответ на фронт --
             data = {
@@ -353,13 +361,16 @@ class Step3View(JSONFormMixin, CheckCartMixin, UpdateView):
                             }
                         )
 
+                    # Используем email из формы для платежа
+                    email_for_payment = cart.email if cart.email else (profile.email if self.request.user.is_authenticated else '')
+
                     redirect_url = generate_payment_link(
-                        settings.ROBOKASSA_LOGIN,         # Merchant login
-                        settings.ROBOKASSA_PASSWORD_1,        # Merchant password
-                        cart.summary,                       # Cost of goods, RU
-                        cart.id,                            # Invoice number
-                        'Покупка на сайте bikinimini.ru №{}'.format(cart.id),   # Description of the purchase
-                        cart.profile.email,                  # Invoice number
+                        settings.ROBOKASSA_LOGIN,
+                        settings.ROBOKASSA_PASSWORD_1,
+                        cart.summary,
+                        cart.id,
+                        'Покупка на сайте bikinimini.ru №{}'.format(cart.id),
+                        email_for_payment,
                         CURRENCY[cart.currency],
                         json.dumps(receipt),
                         is_test=0,

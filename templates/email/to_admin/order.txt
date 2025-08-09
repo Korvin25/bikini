@@ -1,7 +1,9 @@
 {% load core_tags currency_tags %}{{ subject }}
 
-Дата оформления: {{ obj.checkout_date|date:"d.m.Y H:i:s" }}{% if obj.profile %}
-Профиль: {{ obj.profile }}{% endif %}
+Дата оформления: {{ obj.checkout_date|date:"d.m.Y H:i:s" }}
+{% if obj.profile %}
+Профиль: {{ obj.profile }}
+{% endif %}
 
 
 Данные для доставки
@@ -10,8 +12,13 @@
 Город: {{ obj.city }}{% if obj.postal_code %}
 Почтовый индекс: {{ obj.postal_code }}{% endif %}
 Адрес: {{ obj.address|safe }}
-Телефон: {{ obj.phone }}{% if obj.profile and obj.profile.has_email %}
-Email: {{ obj.profile.email }}{% endif %}
+Телефон: {{ obj.phone }}
+{% if obj.profile and obj.profile.has_email %}
+Email: {{ obj.profile.email }}
+{% endif %}
+{% if not obj.profile %}
+Email:</strong> {{ obj.email }}<br/>
+{% endif %}
 
 Способ доставки: {{ obj.delivery_method }}{% if obj.delivery_method.price %} ({{ obj.delivery_method_price_c|to_price|currency_light:obj.currency }}){% endif %}
 Способ оплаты: {{ obj.payment_method }}

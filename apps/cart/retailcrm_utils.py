@@ -151,9 +151,9 @@ def get_order(cart, items, uid_type=None):
     order = {
         'externalId': str(cart.id),
         'orderMethod': 'shopping-cart',
-        'firstName': cart.profile.name,
-        'phone': cart.profile.phone,
-        'email': cart.profile.email,
+        'firstName': cart.name,
+        'phone': cart.phone,
+        'email': cart.email,
         # 'createdAt': cart.checkout_date.strftime('%Y-%m-%d %H:%M:%S') if cart.checkout_date else cart.creation_date.strftime('%Y-%m-%d %H:%M:%S'),
         'status': get_status(cart.payment_status),
         'customerComment': get_customer_comment(cart.additional_info, address),

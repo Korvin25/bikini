@@ -151,6 +151,7 @@ class Cart(models.Model):
     address = models.TextField(_('Адрес'), null=True, blank=True)
     phone = models.CharField(_('Телефон'), max_length=30, null=True, blank=True)
     name = models.CharField(_('Полное имя'), max_length=511, null=True, blank=True)
+    email = models.EmailField(_("Email"), max_length=254, null=True, blank=True)
 
     delivery_method = models.ForeignKey(DeliveryMethod, verbose_name=_('Способ доставки'), null=True, blank=True)
     payment_method = models.ForeignKey(PaymentMethod, verbose_name=_('Способ оплаты'), null=True, blank=True)
@@ -599,11 +600,15 @@ class Cart(models.Model):
         
         # if not status == 'не оплачен / новый' or status == 'ошибка':
         admin_send_order_email(self)
-
-        profile = self.profile
-        if profile and profile.has_email: 
-            if status == 'оплачен / новый' or status == 'новый':
-                send_order_email(profile, obj=self)
+        
+        # profile = self.profile
+        # if profile and profile.has_email: 
+        #     if status == 'оплачен / новый' or status == 'новый':
+        #         send_order_email(profile, obj=self)
+        
+    
+        if status == 'оплачен / новый' or status == 'новый':
+            send_order_email(self)
 
     def update_in_stock(self, send_email=True):
         _options = []

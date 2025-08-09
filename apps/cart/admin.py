@@ -45,7 +45,7 @@ class CartAdmin(admin.ModelAdmin):
             'fields': ('id', 'profile_with_link', 'checked_out', 'checkout_date', 'payment_date', 'status', 'retailcrm')
         }),
         ('Данные из формы', {
-            'fields': ('country', 'city', 'postal_code', 'address', 'phone', 'name',
+            'fields': ('country', 'city', 'postal_code', 'address', 'phone', 'name', 'email',
                        'delivery_method', 'payment_method', 'additional_info',)
         }),
         ('Life Pay: ID', {
@@ -68,7 +68,7 @@ class CartAdmin(admin.ModelAdmin):
         }),
     )
     readonly_fields = ['id', 'profile_with_link', 'show_items', 'retailcrm']
-    readonly_fields += ['country', 'city', 'postal_code', 'address', 'phone', 'name',
+    readonly_fields += ['country', 'city', 'postal_code', 'address', 'phone', 'name', 'email',
                         # 'delivery_method', 'payment_method',
                         'checked_out', 'checkout_date', 'payment_date',
                         'yoo_id', 'life_pay_id', 'yoo_status', 'yoo_paid', 'yoo_redirect_url', 'yoo_test',

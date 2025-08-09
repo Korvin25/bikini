@@ -171,7 +171,10 @@ def email_user(subject, email_key, profile=None, obj=None, language_to=None, man
     request = CrequestMiddleware.get_request()
 
     from_email = settings.DEFAULT_FROM_EMAIL
-    to = [profile.email]
+    if profile:
+        to = [profile.email]
+    elif obj.email:
+        to = [obj.email]
 
     site = ''
     try:
@@ -259,7 +262,7 @@ def send_reset_password_email(profile, signature):
     email_user(subject, email_key, profile, signature=signature, reset_password_link=reset_password_link)
 
 
-def send_order_email(profile, obj, **kwargs):
+def send_order_email(obj, **kwargs):
     subject = 'Ваш заказ на Bikinimini.ru: № %s' % unicode(obj.number)
     email_key = 'order'
-    email_user(subject, email_key, profile, obj=obj, **kwargs)
+    email_user(subject, email_key, obj=obj, **kwargs)

@@ -16,7 +16,7 @@ class CartCheckoutForm(forms.ModelForm):
 
     class Meta:
         model = Cart
-        fields = ('country', 'city', 'postal_code', 'address', 'phone', 'name',)
+        fields = ('country', 'city', 'postal_code', 'address', 'phone', 'name', 'email')
 
     def __init__(self, *args, **kwargs):
         super(CartCheckoutForm, self).__init__(*args, **kwargs)
@@ -26,11 +26,12 @@ class CartCheckoutForm(forms.ModelForm):
         self.fields['address'].required = True
         self.fields['phone'].required = True
         self.fields['name'].required = True
+        self.fields['email'].required = True
 
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if email:
-            same_profile = Profile.objects.filter(email__iexact=email).first()
-            if same_profile and self.instance.profile != same_profile:
-                raise forms.ValidationError(_('Такой email уже занят.'))
-        return email
+    # def clean_email(self):
+    #     email = self.cleaned_data.get('email')
+    #     if email:
+    #         same_profile = Profile.objects.filter(email__iexact=email).first()
+    #         if same_profile and self.instance.profile != same_profile:
+    #             raise forms.ValidationError(_('Такой email уже занят.'))
+    #     return email

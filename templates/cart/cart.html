@@ -588,7 +588,7 @@
   </div>
   {% endcomment %}
 
-  <div class="window_popup no_float" id="step3" style="display:none;">
+<div class="window_popup no_float" id="step3" style="display:none;">
     <div class="close_popup js-call-close"><img src="/static/i/close_icon.png" alt="{% trans 'Закрыть' %}" /></div>
     <div class="wrap_window_popup bg_wrapp_window">
       <div class="popup_row">
@@ -601,9 +601,16 @@
               <div class="row_form_popup">
                 <label class="lbl_box">
                   <p>{% trans 'Страна' %}:<span class="orange_text">*</span></p>
-                  <select required name="country" value="{{ shipping_data.country }}" class="country_select">
+                  <select required name="country" class="country_select">
                     {% for country in countries %}
-                      <option value="{{ country.id }}"{% if country.id == shipping_data.country %} selected="selected"{% endif %}>{{ country.title }}</option>
+                      <option value="{{ country.id }}"
+                        {% if country.id == shipping_data.country %}
+                          selected="selected"
+                        {% elif request.user.is_authenticated and request.user.profile.country and country.id == request.user.profile.country.id %}
+                          selected="selected"
+                        {% endif %}>
+                        {{ country.title }}
+                      </option>
                     {% endfor %}
                   </select>
                 </label>
@@ -612,7 +619,9 @@
               <div class="row_form_popup">
                 <label class="lbl_box">
                   <p>{% trans 'Город' %}:<span class="orange_text">*</span></p>
-                  <input required type="text" value="{{ shipping_data.city }}" name="city" class="input_text" />
+                  <input required type="text" 
+                         value="{% firstof shipping_data.city request.user.profile.city|default:'' %}" 
+                         name="city" class="input_text" />
                 </label>
               </div>
             </div>
@@ -621,16 +630,19 @@
               <div class="row_form_popup">
                 <label class="lbl_box">
                   <p>{% trans 'Почтовый индекс' %}:</p>
-                  <input type="text" value="{{ shipping_data.postal_code }}" name="postal_code" class="input_text" />
+                  <input type="text" 
+                         value="{% firstof shipping_data.postal_code request.user.profile.postal_code|default:'' %}" 
+                         name="postal_code" class="input_text" />
                 </label>
               </div>
-              <div class="row_form_popup"></div>
             </div>
 
             <div class="rows_popup_input">
               <label class="lbl_box">
                 <p class="popup_form_label">{% trans 'Адрес' %}:<span class="orange_text">*</span></p>
-                <textarea required name="address" class="input_text no_hover_border" style="padding: 12px 2.25% 0; width: 95.45%; height: 135px;">{{ shipping_data.address }}</textarea>
+                <textarea required name="address" class="input_text no_hover_border" style="padding: 12px 2.25% 0; width: 95.45%; height: 135px;">
+                  {% firstof shipping_data.address request.user.profile.address|default:'' %}
+                </textarea>
               </label>
             </div>            
             
@@ -638,26 +650,28 @@
               <div class="row_form_popup">
                 <label class="lbl_box">
                   <p>{% trans 'Контактный телефон' %}:<span class="orange_text">*</span></p>
-                  <input required type="text" value="{{ shipping_data.phone }}" name="phone" class="input_text" />
+                  <input required type="text" 
+                         value="{% firstof shipping_data.phone request.user.profile.phone|default:'' %}" 
+                         name="phone" class="input_text" />
                 </label>
               </div>
               
               <div class="row_form_popup">
                 <label class="lbl_box">
                   <p>{% trans 'Имя, Фамилия, Отчество' %}:<span class="orange_text">*</span></p>
-                  <input required type="text" value="{{ shipping_data.name }}" name="name" class="input_text" />
+                  <input required type="text" 
+                         value="{% firstof shipping_data.name request.user.profile.name|default:'' %}" 
+                         name="name" class="input_text" />
                 </label>
               </div>
             </div>
 
-            {% if not shipping_data.email %}
-              <div class="rows_popup_input js-email-cart-input" style="margin-bottom: 15px; display: none;">
+              <div class="rows_popup_input js-email-cart-input" style="margin-bottom: 15px; {%if request.user.is_authenticated %} display: none;{% endif %}">
                 <label class="lbl_box">
-                  <p class="popup_form_label">{% trans 'Ваш e-mail' %}:</p>
-                  <input type="email" style="margin-top: 5px;" value="{{ shipping_data.email }}" name="email" class="input_text" />
+                  <p class="popup_form_label">{% trans 'Ваш e-mail' %}:<span class="orange_text">*</span></p>
+                  <input type="email" required style="margin-top: 5px;" value="{% firstof shipping_data.email request.user.email|default:'' %}" name="email" class="input_text" />
                 </label>
               </div>
-            {% endif %}
 
             <div class="row_form_popup">
               <label class="lbl_box check_popup_row">
@@ -673,8 +687,6 @@
           </form>
         </div>
       </div>
-      
-      
     </div>
   </div>
 

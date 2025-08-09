@@ -931,7 +931,7 @@ header,main,nav,footer {display:block;}
             
             .or_block {display: inline-block;position: absolute;top: 170px;z-index: 10;left: 50%;margin-left: -15px;font-size:14px;width:30px;white-space:nowrap;text-align:center;text-transform:uppercase;height:11px;}
             
-            .input_text {display:block;background:#EBF1F4;border:1px solid #dee8ed;border-radius:3px;-webkit-border-radius:3px;/*line-height:38px;*/height:38px;padding:0 5%;width:89.5%;}
+            .input_text {display:block;background:#EBF1F4;border:1px solid #dee8ed;border-radius:3px;-webkit-border-radius:3px;/*line-height:38px;*/height:38px;padding:0 12px;width:89.5%;}
             
         .rows_order_block .bg_wrapp_window:before,.no_float .bg_wrapp_window:before {display:none;}
             .rows_order_block .popup_row, .rows_order_block .row_info,.no_float .popup_row {float:none;width:100%;}
