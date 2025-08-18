@@ -266,7 +266,10 @@
               
               {% include 'blocks/currency_change.html' %}
             </div>
-            <button class="bt_red js-step0-button js-disabled-if-not-cart{% if not cart.count %} _disabled{% endif %}">{% trans 'Оформить заказ' %}</button>
+            {%if not request.user.is_authenticated %}
+            <button class="bt_red js-step0-button-not-authenticated js-disabled-if-not-cart{% if not cart.count %} _disabled{% endif %} bt_not_authenticated">{% trans 'Оформить заказ' %}</button>
+            {% endif %}
+            <button class="bt_red js-step0-button js-disabled-if-not-cart{% if not cart.count %} _disabled{% endif %}">{%if request.user.is_authenticated %}{% trans 'Оформить заказ' %}{% else %}{% trans 'Вход / регистрация' %}{% endif %}</button>
           </div>
           
         </div>

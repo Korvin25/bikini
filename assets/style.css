@@ -1777,7 +1777,8 @@ header,main,nav,footer {display:block;}
         .content_konkurs .text_item {width:290px;}
     }
     
-    
+    .rows_cut_block .foot_form_cut .bt_not_authenticated {margin-left: 15px;width: 216px;margin-bottom: 15px;}
+
     @media screen and (max-width: 709px) {
         .rows_cut_block .tb_model, .rows_cut_block .td_title     {width: 254px;}
         .rows_cut_block .row_info {float:none;width:100%;}
@@ -1787,8 +1788,15 @@ header,main,nav,footer {display:block;}
         .rows_cut_block .foot_form_cut .bt_red {float:none;margin-top: 0;margin-bottom: 36px;}
         
         .content_konkurs .text_item {width:270px;}
+
+        .rows_cut_block .foot_form_cut .bt_not_authenticated {margin-left: 0;}
     }
-    
+
+        @media screen and (max-width: 442px) {
+        .rows_cut_block .foot_form_cut .bt_not_authenticated {margin-bottom: 15px;}
+    }
+
+
     @media screen and (max-width: 689px) {
         .content_konkurs .text_item {width:255px;}
     }

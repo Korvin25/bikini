@@ -398,6 +398,27 @@ $('.js-step0-button').click(function() {
   sendSomeForm(url, form_data, 'step0', $button);
 });
 
+$('.js-step0-button-not-authenticated').click(function() {
+  var $button = $(this),
+      $cart_parent = $('.js-cart-parent'),
+      url = $cart_parent.attr('data-step0-url'),
+      is_authenticated_user = $cart_parent.attr('data-is-authenticated-user'),
+      additional_info = $('[name="additional_info"]').val() || '',
+      delivery_method_id = $('[name="delivery_method_id"]:checked:visible').val() || 0,
+      payment_method_id = $('[name="payment_method_id"]:checked:visible').val() || 0,
+      // delivery_method_id = $('[name="delivery_method_id"]:checked:enabled').val() || 0,
+      // payment_method_id = $('[name="payment_method_id"]:checked:enabled').val() || 0,
+      form_data;
+
+  form_data = {
+    'additional_info': additional_info,
+    'delivery_method_id': delivery_method_id,
+    'payment_method_id': payment_method_id,
+    'flag_is_authenticated_user': true,
+  };
+  sendSomeForm(url, form_data, 'step0', $button);
+});
+
 
 $('.js-step1-login-form').on('submit', function(e) {
   e.preventDefault();

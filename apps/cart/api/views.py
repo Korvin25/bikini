@@ -126,13 +126,14 @@ class Step0View(CartStepBaseView):
         elif not payment_method:
             data = {'result': 'error', 'error': __('Выберите способ оплаты')}
             status = 400
-        else:
+        elif 'flag_is_authenticated_user' in self.DATA:
             # возможность оформить корзину без регистрации
             data = {'result': 'ok', 'popup': '#step3'}
-            # if request.user.is_anonymous():
-            #     data = {'result': 'ok', 'popup': '#step1'}
-            # else:
-            #     data = {'result': 'ok', 'popup': '#step3'}
+        elif not 'flag_is_authenticated_user' in self.DATA:
+            if request.user.is_anonymous():
+                data = {'result': 'ok', 'popup': '#step1'}
+            else:
+                data = {'result': 'ok', 'popup': '#step3'}
         return JsonResponse(data, status=status)
 
 
