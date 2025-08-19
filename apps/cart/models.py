@@ -647,7 +647,7 @@ class Cart(models.Model):
     def get_specials(self):
         profile = self.profile
         specials = (SpecialOffer.get_offers(summary=self.clean_cost_rub)
-                    if not profile.is_anonymous() and profile.can_get_discount
+                    if profile and profile.can_get_discount
                     else SpecialOffer.objects.none())
         return specials
 
