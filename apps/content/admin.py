@@ -10,7 +10,7 @@ from paypal.standard.ipn.models import PayPalIPN
 
 from .admin_filer import CustomFolderAdmin, CustomFileAdmin, CustomImageAdmin
 from .admin_forms import MenuItemAdminForm
-from .models import Video, Page, PageAccordionSection, Menu, MenuItem
+from .models import Video, Page, PageAccordionSection, Menu, MenuItem, Slide
 from .translation import *  # noqa
 
 
@@ -24,6 +24,15 @@ admin.site.unregister(PayPalIPN)
 admin.site.register(Folder, CustomFolderAdmin)
 admin.site.register(File, CustomFileAdmin)
 admin.site.register(Image, CustomImageAdmin)
+
+
+@admin.register(Slide)
+class SlideAdmin(admin.ModelAdmin):
+    list_display = ['alt_text',  'is_active', 'image', 'created_at']
+    list_filter = ['is_active', 'created_at']
+    list_editable = ['is_active']
+    readonly_fields = ['created_at', 'updated_at']
+
 
 
 @admin.register(Video)

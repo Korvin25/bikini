@@ -335,7 +335,7 @@ header,main,nav,footer {display:block;}
     
     
     /* <<< TEXT BACKGROUND RED */
-        .text_preview_wrapp {background-color:#e1312f;background-image: url(i/bg_text_red.png);background-position: 50% 0;padding: 120px 0 45px;color: #fff;}
+        .text_preview_wrapp {background-color:#e1312f;background-image: url(i/bg_text_red.png);background-position: 50% 0;padding: 20px;color: #fff;}
             .text_preview_inner {}
             .text_preview_inner .title_block {color:#fff;margin-bottom:25px;}
             .text_preview_inner p {padding:0;margin:0 0 20px;font-size:14px;line-height:22px;}

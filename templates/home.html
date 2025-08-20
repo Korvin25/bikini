@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n core_tags %}
+{% load i18n core_tags admin_tags %}
 
 {% block meta_title %}{{ seo_settings.home.get_meta_title }}{% endblock %}
 {% block meta_desc %}{{ seo_settings.home.get_meta_desc }}{% endblock %}
@@ -48,7 +48,192 @@
       <h2 class="title_block">{% trans 'Популярные товары 2025' %}</h2>
       {% include 'blocks/homepage_products.html' %}
     </div>
-    
+
+    {% get_slider as slides %}
+    {% if slides %}
+    <div class="text_preview_wrapp">
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+        
+        <style>
+            .slider-container {
+                position: relative;
+                width: 100%;
+                margin: 40px auto;
+                margin-bottom: 0;
+            }
+            
+            .photo-slider {
+                width: 100%;
+            }
+            
+            .slide {
+                outline: none;
+                padding: 0 15px;
+                height: 440px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                overflow: hidden;
+                border-radius: 12px;
+            }
+            
+            .slide-inner {
+                position: relative;
+                width: 325px;
+                height: 440px;
+                border-radius: 10px;
+                overflow: hidden;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            
+            .slide img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.5s ease;
+            }
+            
+            /* Эффект параллакса при наведении */
+            .slide:hover .slide-inner {
+                transform: translateY(-5px);
+                box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+            }
+            
+            /* Стили для стрелок */
+            .slick-prev, .slick-next {
+                width: 50px;
+                height: 50px;
+                z-index: 10;
+            }
+            
+            .slick-prev {
+                left: 25px;
+            }
+            
+            .slick-next {
+                right: 25px;
+            }
+            
+            .slick-prev:before, .slick-next:before {
+                font-size: 40px;
+                color: #fff;
+                text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            }
+            
+            /* Адаптивность */
+            @media (max-width: 768px) {
+                .slick-prev {
+                    left: 10px;
+                }
+                
+                .slick-next {
+                    right: 10px;
+                }
+                
+                .slide {
+                    height: 380px;
+                    padding: 0 10px;
+                }
+                
+                .slide-inner {
+                    width: 280px;
+                    height: 380px;
+                }
+            }
+            
+            @media (max-width: 576px) {
+                .slide {
+                    height: 350px;
+                }
+                
+                .slide-inner {
+                    width: 260px;
+                    height: 350px;
+                }
+                
+                .slick-prev, .slick-next {
+                    width: 40px;
+                    height: 40px;
+                }
+                
+                .slick-prev:before, .slick-next:before {
+                    font-size: 24px;
+                }
+            }
+            
+            .slider-title {
+                text-align: center;
+                font-size: 32px;
+                margin-bottom: 30px;
+                color: #333;
+                font-weight: 600;
+            }
+        </style>
+
+        <div class="slider-container">
+            <div class="photo-slider">
+                {% for slide in slides %}
+                <div class="slide">
+                    <div class="slide-inner">
+                        <img src="{{ slide.slide_cover_thumb }}" alt="{{ slide.alt_text }}">
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+        
+        <script>
+            $(document).ready(function(){
+                $('.photo-slider').slick({
+                    slidesToShow: Math.max(1, Math.floor($(window).width() / 355)),
+                    slidesToScroll: 1,
+                    autoplay: true,
+                    autoplaySpeed: 3000,
+                    infinite: true,
+                    arrows: true,
+                    dots: false,
+                    centerMode: false,
+                    responsive: [
+                        {
+                            breakpoint: 1200,
+                            settings: {
+                                slidesToShow: Math.max(1, Math.floor(1200 / 355))
+                            }
+                        },
+                        {
+                            breakpoint: 992,
+                            settings: {
+                                slidesToShow: Math.max(1, Math.floor(992 / 355))
+                            }
+                        },
+                        {
+                            breakpoint: 768,
+                            settings: {
+                                slidesToShow: Math.max(1, Math.floor(768 / 355))
+                            }
+                        },
+                        {
+                            breakpoint: 576,
+                            settings: {
+                                slidesToShow: 1
+                            }
+                        }
+                    ]
+                });
+                
+                // Обновление слайдера при изменении размера окна
+                $(window).on('resize', function() {
+                    $('.photo-slider').slick('slickSetOption', 'slidesToShow', Math.max(1, Math.floor($(window).width() / 355)), true);
+                });
+            });
+        </script>
+    </div>
+    {% endif %}
     <div class="text_preview_wrapp">
       <div class="text_preview_inner">
         {% if seo_settings.home.get_seo_text %}

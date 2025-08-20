@@ -13,6 +13,7 @@ from django.db import models
 from ckeditor_uploader.fields import RichTextUploadingField
 from crequest.middleware import CrequestMiddleware
 from easy_thumbnails.fields import ThumbnailerImageField
+from easy_thumbnails.files import get_thumbnailer
 from embed_video.fields import EmbedVideoField
 from embed_video.backends import detect_backend
 import requests
@@ -21,6 +22,39 @@ import requests
 from ..blog.models import Post
 from ..catalog.models import Product
 from ..settings.models import SEOSetting, MetatagModel
+
+
+class Slide(models.Model):
+    image = ThumbnailerImageField(
+        "Изображение",
+        upload_to='slides/',
+        help_text="Рекомендуемый размер: 325x440px"
+    )
+    alt_text = models.CharField(
+        "Альтернативный текст",
+        max_length=255,
+        help_text="Описание изображения для SEO и доступности"
+    )
+
+    is_active = models.BooleanField(
+        "Активный",
+        default=True,
+        help_text="Показывать ли слайд на сайте"
+    )
+    created_at = models.DateTimeField("Дата создания", auto_now_add=True)
+    updated_at = models.DateTimeField("Дата обновления", auto_now=True)
+
+    class Meta:
+        verbose_name = "Слайд"
+        verbose_name_plural = "Слайды"
+        ordering = ['created_at']
+
+    def __str__(self):
+        return self.alt_text or "Слайд #{}".format(self.id)
+
+    @property
+    def slide_cover_thumb(self):
+        return get_thumbnailer(self.image)['slide_cover'].url
 
 
 class Video(MetatagModel):
