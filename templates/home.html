@@ -70,7 +70,7 @@
             .slide {
                 outline: none;
                 padding: 0 15px;
-                height: 440px;
+                height: 400px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -81,8 +81,8 @@
             
             .slide-inner {
                 position: relative;
-                width: 325px;
-                height: 440px;
+                width: 400px;
+                height: 400px;
                 border-radius: 10px;
                 overflow: hidden;
                 box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
@@ -139,19 +139,20 @@
                 }
                 
                 .slide-inner {
-                    width: 280px;
+                    width: 380px;
                     height: 380px;
                 }
             }
             
             @media (max-width: 576px) {
                 .slide {
-                    height: 350px;
+                    height: auto;
                 }
                 
                 .slide-inner {
-                    width: 260px;
-                    height: 350px;
+                    width: auto;
+                    height: auto;
+                    margin: auto;
                 }
                 
                 .slick-prev, .slick-next {
@@ -172,13 +173,14 @@
                 font-weight: 600;
             }
         </style>
+        <h2 class="title_block" style="color:#fff;">{% trans 'Селебрити о нас' %}</h2>
 
         <div class="slider-container">
             <div class="photo-slider">
                 {% for slide in slides %}
                 <div class="slide">
                     <div class="slide-inner">
-                        <img src="{{ slide.slide_cover_thumb }}" alt="{{ slide.alt_text }}">
+                        <img src="{{ slide.slide_cover_square_thumb }}" alt="{{ slide.alt_text }}">
                     </div>
                 </div>
                 {% endfor %}

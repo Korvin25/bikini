@@ -55,6 +55,10 @@ class Slide(models.Model):
     @property
     def slide_cover_thumb(self):
         return get_thumbnailer(self.image)['slide_cover'].url
+    
+    @property
+    def slide_cover_square_thumb(self):
+        return get_thumbnailer(self.image)['slide_cover_square'].url
 
 
 class Video(MetatagModel):
