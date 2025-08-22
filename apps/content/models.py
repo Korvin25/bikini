@@ -43,11 +43,12 @@ class Slide(models.Model):
     )
     created_at = models.DateTimeField("Дата создания", auto_now_add=True)
     updated_at = models.DateTimeField("Дата обновления", auto_now=True)
+    order = models.IntegerField('Порядок', default=10)
 
     class Meta:
         verbose_name = "Слайд"
         verbose_name_plural = "Слайды"
-        ordering = ['created_at']
+        ordering = ['order', 'id', ]
 
     def __str__(self):
         return self.alt_text or "Слайд #{}".format(self.id)

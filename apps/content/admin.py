@@ -7,6 +7,7 @@ from embed_video.admin import AdminVideoMixin
 from filer.models import Folder, File, Image
 from modeltranslation.admin import TabbedTranslationAdmin, TranslationStackedInline
 from paypal.standard.ipn.models import PayPalIPN
+from adminsortable2.admin import SortableAdminMixin
 
 from .admin_filer import CustomFolderAdmin, CustomFileAdmin, CustomImageAdmin
 from .admin_forms import MenuItemAdminForm
@@ -27,7 +28,7 @@ admin.site.register(Image, CustomImageAdmin)
 
 
 @admin.register(Slide)
-class SlideAdmin(admin.ModelAdmin):
+class SlideAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = ['alt_text',  'is_active', 'image', 'created_at']
     list_filter = ['is_active', 'created_at']
     list_editable = ['is_active']
