@@ -250,7 +250,7 @@
     <h2 class="title_block" style="color:#fff;">{% trans 'Селебрити о нас' %}</h2>
 
     <!-- Модальное окно -->
-    <div id="imageModal" class="modal">
+    <div id="imageModal" class="modal" style="display: none;">
         <span class="close-modal">&times;</span>
         <img class="modal-content" id="modalImage">
         <div id="modalCaption" class="modal-caption"></div>
@@ -319,6 +319,9 @@
             var modal = document.getElementById("imageModal");
             var modalImg = document.getElementById("modalImage");
             var captionText = document.getElementById("modalCaption");
+            
+            // Убедимся, что модальное окно изначально скрыто
+            modal.style.display = "none";
             
             // Обработчик клика по слайду
             $('.slide').on('click', function() {
