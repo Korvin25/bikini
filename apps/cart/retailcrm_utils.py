@@ -140,14 +140,19 @@ def get_article(item):
     letters = slugify(letters)
     return letters
 
-def get_customer_comment(comment, address):
+def get_customer_comment(cart, address):
+    comment = ''
+    if cart.is_one_click:
+        comment += u'Быстрый заказ. Примечание: Уточнить размер, цвет и доставку. '
     if len(address) < 255:
-        return comment
+        comment += cart.additional_info
     else:
-        return u'Комментарий клиента: "{}". Адрес: {}'.format(comment, address)
+        comment += u'Комментарий клиента: "{}". Адрес: {}'.format(cart.additional_info, address)
+
+    return comment
 
 def get_order(cart, items, uid_type=None):
-    address = '{} {}'.format(cart.country.title, cart.address)
+    address = '{} {}'.format(cart.country.title if cart.country else '', cart.address)
     order = {
         'externalId': str(cart.id),
         'orderMethod': 'shopping-cart',
@@ -156,11 +161,11 @@ def get_order(cart, items, uid_type=None):
         'email': cart.email,
         # 'createdAt': cart.checkout_date.strftime('%Y-%m-%d %H:%M:%S') if cart.checkout_date else cart.creation_date.strftime('%Y-%m-%d %H:%M:%S'),
         'status': get_status(cart.payment_status),
-        'customerComment': get_customer_comment(cart.additional_info, address),
+        'customerComment': get_customer_comment(cart, address),
         'managerComment': 'На сайте: https://bikinimini.ru/admin/cart/cart/{}/change/'.format(cart.id),
         'delivery': {
-            'cost': float(cart.delivery_method.price_rub),
-            'code': cart.delivery_method.code_retailcrm,
+            'cost': float(cart.delivery_method.price_rub if cart.delivery_method else 0),
+            'code': cart.delivery_method.code_retailcrm  if cart.delivery_method else 0,
             'address': {
                 'index': cart.postal_code,
                 # 'countryIso': cart.country.title,

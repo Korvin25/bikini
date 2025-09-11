@@ -1,0 +1,331 @@
+{% load i18n core_tags staticfiles %}
+<style>
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.7);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-content {
+        background: white;
+        padding: 20px;
+        border-radius: 5px;
+        z-index: 1001;
+        position: relative;
+    }
+    
+    .error {
+        color: red;
+        margin-bottom: 10px;
+        padding: 5px;
+        background-color: #ffeeee;
+        border: 1px solid #ffcccc;
+    }
+
+    .info-text {
+        background-color: #f9f9f9;
+        padding: 12px 15px;
+        border-left: 3px solid #ff6600;
+        margin: 15px 0;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+    
+    .popup_form_label {
+        color: #3d697a !important;
+        font-size: 12px;
+    }
+    
+    /* Стили для отображения информации о продукте */
+    .product-info {
+        display: flex;
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        border: 1px solid #eee;
+    }
+    
+    .product-image {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        margin-right: 15px;
+        border-radius: 4px;
+    }
+    
+    .product-details {
+        flex: 1;
+    }
+    
+    .product-name {
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 5px;
+        color: #333;
+    }
+    
+    .product-price {
+        font-size: 18px;
+        color: #e74c3c;
+        font-weight: bold;
+    }
+    
+    .product-old-price {
+        font-size: 14px;
+        color: #999;
+        text-decoration: line-through;
+        margin-right: 10px;
+    }
+</style>
+
+<!-- Модальное окно быстрой покупки -->
+<div id="quick-purchase-modal" class="modal" style="display: none;">
+    <div class="window_popup no_float">
+        <div class="close-btn close_popup js-call-close"><img src="/static/i/close_icon.png" alt="Закрыть"></div>
+        <div class="wrap_window_popup bg_wrapp_window">
+            <div class="popup_row">
+                <div class="popup_row_wrapp">
+                    <h2 class="title_popup">Быстрая покупка</h2>
+                    
+                    <!-- Блок с информацией о продукте -->
+                    <div class="product-info" id="quick-purchase-product-info">
+                        <img src="" alt="Изображение товара" class="product-image" id="product-image">
+                        <div class="product-details">
+                            <div class="product-name" id="product-name"></div>
+                            <div class="product-price-container">
+                                <span class="product-price" id="product-price"></span>
+                                <span class="product-old-price" id="product-old-price" style="display: none;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form id="quick-purchase-form" class="js-step3-form">
+                        <div class="error-messages"></div>
+                        
+                        <div class="rows_popup_input">
+                            <div class="row_form_popup">
+                                <label class="lbl_box">
+                                    <p>Контактный телефон:<span class="quick_orange_text">*</span></p>
+                                    <input type="text" name="phone" placeholder="+7 (XXX) XXX-XX-XX" required class="input_text" id="quick_phone-input" />
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="rows_popup_input">
+                            <label class="lbl_box">
+                                <p class="popup_form_label">Адрес доставки (как сказать курьеру):<span class="quick_orange_text">*</span></p>
+                                <textarea name="address" id="quick_address_text" required class="input_text no_hover_border" style="padding: 12px 2.25% 0; width: 95.45%; height: 135px;" placeholder="Введите полный адрес доставки"></textarea>
+                            </label>
+                        </div>
+                        
+                        <div class="info-text">
+                            После оплаты менеджер свяжется с вами, чтобы уточнить размер, цвет и согласовать доставку.
+                        </div>
+                        
+                        <input type="hidden" name="product_id" id="quick-purchase-product-id">
+                        <input type="hidden" name="product_currency" id="quick-purchase-product-currency">
+                        
+                        <div class="row_form_popup">
+                            <label class="lbl_box check_popup_row">
+                                <input class="check_form" type="checkbox" checked name="agree" id="quick_agree" style="margin-right: 5px;" required="required">
+                                <p style="float: none;">{% trans 'Я cогласен на обработку персональных данных' %} <a href="/agree/" target="_blank">{% trans 'Читать' %}</a></p>
+                            </label>
+                        </div>
+                        
+                        <div class="row_form_popup row_pop_butt">
+                            <button type="submit" class="bt_red">Оплатить</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    const modal = $('#quick-purchase-modal');
+    const closeBtn = modal.find('.close-btn');
+    const form = $('#quick-purchase-form');
+    const productIdInput = $('#quick-purchase-product-id');
+    const productCurrencyInput = $('#quick-purchase-product-currency');
+    const errorContainer = $('.error-messages');
+    
+    // Элементы для отображения информации о продукте
+    const productInfoContainer = $('#quick-purchase-product-info');
+    const productImage = $('#product-image');
+    const productName = $('#product-name');
+    const productPrice = $('#product-price');
+    const productOldPrice = $('#product-old-price');
+
+    // Инициализация маски для телефона
+    $('#quick_phone-input').mask('+7 (000) 000-00-00');
+
+    // Обработчик клика по кнопке быстрой покупки
+    $('.quick-purchase-btn').on('click', function() {
+        const productId = $(this).data('product-id');
+        const productNameValue = $(this).data('product-name');
+        const productPriceValue = $(this).data('product-price');
+        const productOldPriceValue = $(this).data('product-old-price');
+        const productImageUrl = $(this).data('product-image');
+        const productCurrency = $(this).data('product-currency');
+        
+        console.log('Opening modal for product:', productId, productNameValue, productPriceValue, productCurrency);
+        
+        // Заполняем информацию о продукте
+        productIdInput.val(productId);
+        productCurrencyInput.val(productCurrency); // Сохраняем валюту в скрытом поле
+        productName.text(productNameValue);
+        
+        // Форматируем цену с учетом валюты
+        const formattedPrice = formatPrice(productPriceValue) + ' ' + getCurrencySymbol(productCurrency);
+        productPrice.text(formattedPrice);
+        
+        // Если есть старая цена, показываем ее
+        if (productOldPriceValue && productOldPriceValue !== productPriceValue) {
+            const formattedOldPrice = formatPrice(productOldPriceValue) + ' ' + getCurrencySymbol(productCurrency);
+            productOldPrice.text(formattedOldPrice).show();
+        } else {
+            productOldPrice.hide();
+        }
+        
+        // Устанавливаем изображение продукта
+        if (productImageUrl) {
+            productImage.attr('src', productImageUrl);
+        } else {
+            productImage.attr('src', '/static/images/ai.png'); // Заглушка, если нет изображения
+        }
+        
+        modal.show();
+
+        // Яндекс.Метрика
+        if (typeof ym !== 'undefined') {
+            ym(26447493, 'reachGoal', 'quick_order_click', {
+                product_id: productId,
+                product_name: productNameValue,
+                price: productPriceValue,
+                currency: productCurrency, // Добавляем валюту в метрику
+                source: 'listing'
+            });
+        }
+    });
+
+    // Функция для форматирования цены
+    function formatPrice(price) {
+        return parseInt(price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+
+    // Функция для получения символа валюты
+    function getCurrencySymbol(currencyCode) {
+        switch(currencyCode) {
+            case 'eur': return '€';
+            case 'usd': return '$';
+            case 'rub': 
+            default: return '₽';
+        }
+    }
+
+    // Закрытие модального окна
+    closeBtn.on('click', function() {
+        modal.hide();
+    });
+
+    $(window).on('click', function(event) {
+        if ($(event.target).is(modal)) {
+            modal.hide();
+        }
+    });
+
+    // Обработка отправки формы
+    form.on('submit', function(event) {
+        event.preventDefault();
+        
+        // Валидация формы
+        const phone = $('#quick_phone-input').val();
+        const address = $('#quick_address_text').val();
+        const agreement = $('#quick_agree').is(':checked');
+        
+        errorContainer.empty();
+        
+        if (!phone || phone.replace(/\D/g, '').length !== 11) {
+            errorContainer.append('<div class="error">Введите корректный номер телефона</div>');
+            return;
+        }
+        
+        if (!address || address.trim().length < 5) {
+            errorContainer.append('<div class="error">Введите полный адрес доставки</div>');
+            return;
+        }
+        
+        if (!agreement) {
+            errorContainer.append('<div class="error">Необходимо согласие с условиями</div>');
+            return;
+        }
+
+        const formData = new FormData(this);
+        
+        $.ajax({
+            url: "{% url 'quick_order_create' %}",
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            success: function(data) {
+                if (data.payment_url) {
+                    // Яндекс.Метрика
+                    if (typeof ym !== 'undefined') {
+                        // Получаем product_id и валюту из формы перед отправкой
+                        const productId = $('#quick-purchase-product-id').val();
+                        const productCurrency = $('#quick-purchase-product-currency').val();
+                        ym(26447493, 'reachGoal', 'quick_order_submit', {
+                            product_id: productId,
+                            currency: productCurrency, // Добавляем валюту
+                            source: 'listing'
+                        });
+                    }
+                    
+                    // Редирект на оплату
+                    window.location.href = data.payment_url;
+                } else if (data.errors) {
+                    // Показ ошибок сервера
+                    errorContainer.empty();
+                    for (const error in data.errors) {
+                        errorContainer.append('<div class="error">' + data.errors[error] + '</div>');
+                    }
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                errorContainer.html('<div class="error">Произошла ошибка. Попробуйте еще раз.</div>');
+            }
+        });
+    });
+
+    // Функция для получения CSRF токена
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+});
+</script>

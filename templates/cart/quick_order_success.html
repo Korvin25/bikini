@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Спасибо за заказ!</h1>
+    <p>Мы свяжемся с вами, чтобы уточнить размер, цвет и условия доставки.</p>
+    <p>Номер вашего заказа: {{ order.id }}</p>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  ym(26447493, 'reachGoal', 'quick_order_payment', {
+    product_id: {{ order.product.id }},
+    price: {{ order.price_amount }},
+    payment_status: 'success'
+  });
+});
+</script>
+{% endblock %}

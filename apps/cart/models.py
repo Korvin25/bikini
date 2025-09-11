@@ -159,6 +159,7 @@ class Cart(models.Model):
 
     retailcrm = models.CharField('RetailCRM', max_length=100, blank=True, null=True)
     status = models.PositiveSmallIntegerField('Статус доставки', choices=STATUS_CHOICES, default=0)
+    is_one_click = models.BooleanField('Покупка в 1 клик', default=False, help_text='Нужно связаться с покупателем, чтобы уточнить размер, цвет и условия доставки')
     summary_rub = models.DecimalField('Сумма, руб.', max_digits=9, decimal_places=2, default=0)
     summary_eur = models.DecimalField('Сумма, eur.', max_digits=9, decimal_places=2, default=0)
     summary_usd = models.DecimalField('Сумма, usd.', max_digits=9, decimal_places=2, default=0)

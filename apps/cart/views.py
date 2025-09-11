@@ -1,17 +1,106 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.utils import timezone
+import json
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.views.generic import TemplateView, View
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
+from django.shortcuts import get_object_or_404
+from django.views.generic import TemplateView, View, CreateView
 
-from ..catalog.models import Attribute, GiftWrapping, SpecialOffer
+from .retailcrm_utils import send_retailcrm
+
+from ..catalog.models import Attribute, GiftWrapping, SpecialOffer, Product
 from ..core.templatetags.core_tags import to_int_or_float
 from ..geo.models import Country
+from ..lk.email import email_admin
 from ..settings.models import Settings
+from .api.robokassa import generate_payment_link
+from .api.views import CheckCartMixin
 from .cart import Cart
+from .forms import OneClickForm
 from .models import DeliveryMethod, PaymentMethod, CartItem, CertificateCartItem
+
+
+class OneClickCreateView(CheckCartMixin, CreateView):
+    model = Cart
+    form_class = OneClickForm
+
+    def form_valid(self, form):
+        
+        product = get_object_or_404(Product, pk=self.request.POST.get('product_id'))
+        currency = self.request.POST.get('product_currency', 'rub')
+        CURRENCY = {
+            'rub': 'RUB',
+            'eur': 'EUR',
+            'usd': 'USD'
+        }
+
+        self.object = form.save(commit=False)
+        self.object.is_one_click = True
+        self.object.currency = currency
+        self.object.save()
+
+        cart_item = CartItem.objects.create(
+            cart=self.object,
+            product=product,
+            option=product.options.first(),
+            discount=0 if not product.is_on_sale else product.sale_percent,
+            count=1
+        )
+        cart_item.update_price()
+
+        self.object.get_summary()
+        self.object.save()
+
+        self.check_cart(cart_item)
+
+        receipt = {
+            "items": [
+                {
+                    "name": product.title,
+                    "quantity": 1,
+                    "sum": float(self.object.summary),
+                    "tax": "none"
+                }
+            ]
+        }
+        
+        payment_url = generate_payment_link(
+            merchant_login=settings.ROBOKASSA_LOGIN,
+            merchant_password_1=settings.ROBOKASSA_PASSWORD_1,
+            cost=float(self.object.summary),
+            number=self.object.id,
+            description='Быстрый заказ #{}'.format(self.object.id),
+            email=None,
+            currency=CURRENCY[currency],
+            receipt=json.dumps(receipt),
+            is_test=0,
+        )
+
+        self.object.payment_method = PaymentMethod.objects.get(is_enabled=True, payment_type='robokassa')
+        self.object.robokassa_id = self.object.id
+        self.object.robokassa_status = 'pending'
+        self.object.robokassa_url = payment_url.decode('utf-8')
+        self.object.checked_out = True
+        self.object.checkout_date = timezone.now()
+        self.object.save()
+
+        admin_send_one_click_order_email(self.object, status='NEW')
+        send_retailcrm(self.object)
+
+        return JsonResponse({'payment_url': payment_url})
+
+    def form_invalid(self, form):
+        return JsonResponse({'errors': form.errors}, status=400)
+
+
+def admin_send_one_click_order_email(obj, **kwargs):
+    status = kwargs.get('status', 'NEW')
+    subject = '[OneClick Order {}] #{}: {}'.format(status, obj.id, obj.cart_items.first().product.title)
+    email_key = 'quick_order'
+    email_admin(subject, email_key, obj, settings_key='orders_email', **kwargs)
 
 
 class CartView(TemplateView):

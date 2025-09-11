@@ -12,8 +12,8 @@ from django.views.generic import TemplateView, RedirectView
 # from solid_i18n.urls import solid_i18n_patterns
 
 from apps.analytics.views import SetYMClientIDView
-from apps.cart.api.views import YooKassaWebhookView, PayPalWebhookView
-from apps.cart.views import CartView, CartGetDiscountView
+from apps.cart.api.views import (YooKassaWebhookView, PayPalWebhookView)
+from apps.cart.views import CartView, CartGetDiscountView, OneClickCreateView
 from apps.cart.certificate.views import CertificateView
 from apps.catalog.views import ProductsView, ProductView, ProductWithDiscountView
 from apps.catalog.api_views import IncreaseInStockView, ChangeProductView
@@ -71,6 +71,7 @@ urlpatterns += i18n_patterns(
 
     # -- api --
     url(r'^api/cart/', include('apps.cart.api.urls', namespace='cart_api')),
+    url(r'^api/quick_order/create/$', OneClickCreateView.as_view(), name='quick_order_create'),
     url(r'^api/certificate/', include('apps.cart.certificate.urls', namespace='certificate_api')),
     url(r'^api/auth/', include('apps.lk.auth.urls', namespace='auth')),
     url(r'^api/profile/edit/', ProfileFormView.as_view(), name='profile-edit'),

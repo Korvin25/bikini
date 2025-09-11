@@ -240,7 +240,7 @@
                 {% endfor %}
               {% endif %}
 
-              <div class="row_chars_item" style="width: 150%; max-width:none;">
+              <div class="row_chars_item" style="width: 150%; max-width:none; margin-bottom: 10px;">
                 <script type="text/javascript" >
                   // ПЛЮС - МИНУС
                   $(document).ready(function() {
@@ -295,14 +295,6 @@
 
                 <input type="hidden" name="price-item" id="price-hidd-val" value="{{ price|to_price }}">
                 <div class="button-div"{% if discount %} style="clear: both;"{% endif %}>
-                  {% if not have_option %}
-                    <button class="js-cart-button to_cart_list _disabled" data-type="none" type="submit">{% trans 'Такого товара нет в наличии' %}</button>
-                  {% elif count > maximum_in_stock %}
-                    <button class="js-cart-button to_cart_list" data-type="order" type="submit">{% trans 'Под заказ' %}</button>
-                  {% else %}
-                    <button class="js-cart-button to_cart_list" data-type="add" type="submit">{% trans 'В корзину' %}</button>
-                  {% endif %}
-                  
                   <label for="pak" class="check_pr_input checke_lab js-hide-if-not-option"{% if not have_option %} style="display: none;"{% endif %}>
                     <input type="checkbox" class="js-gift-wrapping-trigger"{% if with_wrapping %} checked="checked"{% endif %} data-wrapping-price="{{ gift_wrapping_price|to_price }}" name="gift_wrapping" id="pak" value="1" />
                     <abbr class="abbr_check">{% trans 'Подарочная<br />упаковка' %}</abbr>
@@ -310,6 +302,25 @@
                   </label>
                 </div>
               </div>
+              <div class="product_buttons-cart">
+                {% if not have_option %}
+                  <button class="btn btn-primary" disabled>{% trans 'Нет в наличии' %}</button>
+                {% else %}
+                  {% if count > maximum_in_stock %}
+                      <button class="js-cart-button btn btn-secondary to_cart_list" data-type="order" type="submit">{% trans 'Под заказ' %}</button>
+                  {% else %}
+                      <button class="js-cart-button btn btn-secondary to_cart_list" data-type="add" type="submit">{% trans 'В корзину' %}</span></button>
+                      <button class="btn btn-primary quick-purchase-btn" style="padding-left: 6px;" 
+                        data-product-id="{{ product.id }}" 
+                        data-product-name="{{ product.title }}" 
+                        data-product-price="{% if product.is_on_sale %}{{ product.get_sale_price }}{% else %}{{ product.get_price }}{% endif %}"
+                        data-product-old-price="{% if product.is_on_sale %}{{ product.get_price }}{% endif %}"
+                        data-product-image="{{ product.cover_thumb }}"
+                        data-product-currency="{{ currency }}"
+                        >⚡ Быстрая покупка</button>
+                  {% endif %}
+                {% endif %}
+                </div>
 
               {% trans 'Цены в' as transCurrencyChangeLabel %}
               {% include 'blocks/currency_change.html' with currency_change_label=transCurrencyChangeLabel currency_change_style="margin-top: 20px;" %}
@@ -450,12 +461,12 @@
 {% endblock %}
 
 {% block extra_js %}
-  <script type="text/javascript">
+<script type="text/javascript">
     window.data = {{ data_json|safe }};
     $(function(){
       options = filterOptions(['style']);
       // updateShownCheckboxes(options, ['color', 'size']);
       chooseOption(true, true);
     });
-  </script>
+</script>
 {% endblock %}

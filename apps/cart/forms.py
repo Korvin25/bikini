@@ -35,3 +35,12 @@ class CartCheckoutForm(forms.ModelForm):
     #         if same_profile and self.instance.profile != same_profile:
     #             raise forms.ValidationError(_('Такой email уже занят.'))
     #     return email
+
+class OneClickForm(forms.ModelForm):
+    class Meta:
+        model = Cart
+        fields = ('phone', 'address')
+        widgets = {
+            'phone': forms.TextInput(attrs={'placeholder': 'Ваш телефон'}),
+            'address_text': forms.Textarea(attrs={'placeholder': 'Адрес доставки (как сказать курьеру)'}),
+        }

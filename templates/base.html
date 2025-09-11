@@ -41,6 +41,7 @@
     <script src="/static/js/js.cookie.min.js"></script>
     {# <script src="/static/js/jquery.cookie.js"></script> #}
     {% block head_js %}{% endblock %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
     <!--[if IE]><script src="/static/js/html5shiv.js"></script><![endif]-->
   </head>
@@ -122,6 +123,8 @@
     </script>
 
     {% block extra_js %}{% endblock %}
+
+    {% include 'blocks/quick_purchase.html' %}
 
     {% include 'blocks/cookie_notice.html' %}
     <script type="text/javascript">

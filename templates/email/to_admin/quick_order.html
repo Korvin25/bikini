@@ -1,0 +1,8 @@
+<p><strong>Новый быстрый заказ #{{ obj.id }}</strong></p>
+<p><strong>Статус:</strong> {{ obj.get_status_display }}</p>
+<p><strong>Товар:</strong> {{ obj.cart_items.0.title }}</p>
+<p><strong>Цена:</strong>{% if not obj.cart_items.0.is_on_sale %}{{ obj.cart_items.0.get_price }}{% else %}{{ obj.cart_items.0.get_sale_price }}{% endif %} {{obj.summary}} {{ obj.currency }}</p>
+<p><strong>Телефон:</strong> {{ obj.phone }}</p>
+<p><strong>Адрес:</strong> {{ obj.address }}</p>
+<p><strong>Время:</strong> {{ obj.creation_date }}</p>
+<p><strong>Примечание:</strong> Уточнить размер, цвет и доставку.</p>

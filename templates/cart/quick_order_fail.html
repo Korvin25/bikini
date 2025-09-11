@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Ошибка оплаты</h1>
+    <p>К сожалению, ваш заказ не был оплачен.</p>
+    <p>Пожалуйста, попробуйте еще раз или свяжитесь с нами.</p>
+    <p>Номер вашего заказа: {{ order.id }}</p>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  ym(26447493, 'reachGoal', 'quick_order_payment', {
+    product_id: {{ order.product.id }},
+    price: {{ order.price_amount }},
+    payment_status: 'fail'
+  });
+});
+</script>
+{% endblock %}

@@ -27,7 +27,17 @@
           {{ product.get_price|with_currency:currency|abbr_to_span|safe }}
         {% endif %}
       </div>
-      <a href="{{ product_url }}" class="to_cart_list">{% trans 'В корзину' %}</a>
+       <div class="product_buttons">
+            <a href="{{ product_url }}" class="to_cart_list to_cart_list_span"><span>{% trans 'В корзину' %}</span></a>
+            <button class="btn btn-primary quick-purchase-btn" style="padding-left: 6px;" 
+            data-product-id="{{ product.id }}" 
+            data-product-name="{{ product.title }}" 
+            data-product-price="{% if product.is_on_sale %}{{ product.get_sale_price }}{% else %}{{ product.get_price }}{% endif %}"
+            data-product-old-price="{% if product.is_on_sale %}{{ product.get_price }}{% endif %}"
+            data-product-image="{{ product.cover_thumb }}"
+            data-product-currency="{{ currency }}"
+            >⚡ Быстрая покупка</button>
+        </div>
     </div>
     {% endwith %}
   {% endfor %}

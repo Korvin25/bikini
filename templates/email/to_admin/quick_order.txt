@@ -1,0 +1,10 @@
+Новый быстрый заказ #{{ obj.id }}
+
+Статус: {{ obj.get_status_display }}
+Товар: {{ obj.cart_items.0.title }}
+Цена: {% if not obj.cart_items.0.is_on_sale %}{{ obj.cart_items.0.get_price }}{% else %}{{ obj.cart_items.0.get_sale_price }}{% endif %} {{obj.summary}} {{ obj.currency }}
+Телефон: {{ obj.phone }}
+Адрес: {{ obj.address }}
+Время: {{ obj.creation_date }}
+
+Примечание: Уточнить размер, цвет и доставку.

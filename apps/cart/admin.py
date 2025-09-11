@@ -31,7 +31,7 @@ class PaymentMethodAdmin(SortableAdminMixin, TabbedTranslationAdmin):
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'profile', 'checked_out', 'is_order_with_discount', 'yoo_paid', 'robokassa_paid', 'paypal_paid',
+    list_display = ('__unicode__', 'profile', 'is_one_click', 'checked_out', 'is_order_with_discount', 'yoo_paid', 'robokassa_paid', 'paypal_paid',
                     'checkout_date', 'show_delivery_method', 'show_payment_method',
                     'admin_show_summary', 'show_status', 'count', 'country', 'city', 'show_traffic_source', 'show_num_orders',)
     list_display_links = ('__unicode__', 'profile',)
@@ -42,7 +42,7 @@ class CartAdmin(admin.ModelAdmin):
     list_per_page = 200
     fieldsets = (
         ('Общее', {
-            'fields': ('id', 'profile_with_link', 'checked_out', 'checkout_date', 'payment_date', 'status', 'retailcrm')
+            'fields': ('is_one_click','id', 'profile_with_link', 'checked_out', 'checkout_date', 'payment_date', 'status', 'retailcrm')
         }),
         ('Данные из формы', {
             'fields': ('country', 'city', 'postal_code', 'address', 'phone', 'name', 'email',
@@ -67,7 +67,7 @@ class CartAdmin(admin.ModelAdmin):
             'fields': ('show_items',)
         }),
     )
-    readonly_fields = ['id', 'profile_with_link', 'show_items', 'retailcrm']
+    readonly_fields = ['is_one_click', 'id', 'profile_with_link', 'show_items', 'retailcrm']
     readonly_fields += ['country', 'city', 'postal_code', 'address', 'phone', 'name', 'email',
                         # 'delivery_method', 'payment_method',
                         'checked_out', 'checkout_date', 'payment_date',
