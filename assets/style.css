@@ -259,7 +259,7 @@ header,main,nav,footer {display:block;}
                 .photo_list a {
                     text-decoration:none;
                     display:block;
-                    /* height:313px; */
+                    height:313px;
                     vertical-align:middle;
                 }
                 .photo_list img {
@@ -2386,6 +2386,9 @@ header,main,nav,footer {display:block;}
             max-width: unset;
             /* width: 330px;
             margin-left: -27px; */
+        }
+        .photo_list a {
+            height: 368px;
         }
 
     }
