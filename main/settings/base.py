@@ -457,7 +457,8 @@ THUMBNAIL_ALIASES = {
         'product_style': {'size': (134, 134), 'crop': True, 'quality': 100, 'upscale': True},
 
         # 'product_cover': {'size': (220, 220), 'crop': True, 'quality': 100},
-        'product_cover': {'size': (600, 600), 'crop': True, 'quality': 100},
+        # 'product_cover': {'size': (600, 600), 'crop': True, 'quality': 100},
+        'product_cover': {'size': (300, 400), 'crop': True, 'quality': 100},
         'special_offer_cover': {'size': (200, 200), 'crop': True, 'quality': 100},
         'cart_product_cover': {'size': (86, 86), 'crop': True, 'quality': 100},
         'slide_cover': {'size': (325, 440), 'crop': True, 'quality': 100},
