@@ -256,7 +256,7 @@ header,main,nav,footer {display:block;}
                     margin: 7px auto 11px;
                     max-height: 330px;
                 }
-                .photo_list a {text-decoration:none;display:block;height:100%;vertical-align:middle;}
+                .photo_list a {text-decoration:none;display:block;height:313px;vertical-align:middle;}
                 .photo_list img {
                     display: block;
                     width: 100%;
