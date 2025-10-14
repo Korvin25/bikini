@@ -15,7 +15,7 @@ from apps.analytics.views import SetYMClientIDView
 from apps.cart.api.views import (YooKassaWebhookView, PayPalWebhookView)
 from apps.cart.views import CartView, CartGetDiscountView, OneClickCreateView
 from apps.cart.certificate.views import CertificateView
-from apps.catalog.views import ProductsView, ProductView, ProductWithDiscountView
+from apps.catalog.views import ProductsView, ProductView,  ProductWithDiscountView, ReviewListView
 from apps.catalog.api_views import IncreaseInStockView, ChangeProductView
 from apps.content.sitemap import sitemaps
 from apps.content.views import HomepageView, VideoListView, VideoDetailView, PageView, robots_txt
@@ -104,6 +104,7 @@ urlpatterns += i18n_patterns(
         ProductWithDiscountView.as_view(sex='female'), name='women_product_with_discount'),
     url(r'^muzhskie-bikini/(?P<category_slug>[^/]+)/(?P<slug>[^/]+)-(?P<pk>\d+)/discount/(?P<category_id>\d+)/(?P<code>[^/]+)/$',
         ProductWithDiscountView.as_view(sex='male'), name='men_product_with_discount'),
+    url(r'^reviews/$', ReviewListView.as_view(), name='reviews'),
 
     url(r'^video/$', VideoListView.as_view(), name='videos'),
     url(r'^video/(?P<slug>[^/]+)-(?P<pk>\d+)/$', VideoDetailView.as_view(), name='video'),

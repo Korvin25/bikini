@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from decimal import Decimal
 import json
+import datetime
 
 from django.contrib.postgres.fields import JSONField
 from django.core.urlresolvers import reverse
@@ -1021,3 +1022,36 @@ class SpecialOffer(models.Model):
 #             ozon_api.update_product(instance)
 #     except:
 #         print('Error update ozon - product', instance.id)
+
+
+class Review(models.Model):
+    STATUS_CHOICES = (
+        ('draft', 'Черновик'),
+        ('published', 'Опубликован'),
+        ('hidden', 'Скрыт'),
+    )
+    status = models.CharField('Статус', max_length=10, choices=STATUS_CHOICES, default='draft')
+    review_date = models.DateField('Дата отзыва', default=datetime.date.today)
+    screenshot = ThumbnailerImageField('Скриншот', upload_to='reviews/', blank=True, null=True,
+                                       resize_source=dict(size=(800, 800), crop='smart', quality=80))
+    text = models.TextField('Текст отзыва', blank=True)
+    products = models.ManyToManyField(Product, verbose_name='Товары', related_name='reviews', blank=True)
+    is_pinned = models.BooleanField('Закрепить', default=False)
+    author = models.CharField('Автор', max_length=255, blank=True)
+    original_url = models.URLField('Ссылка на оригинал', blank=True)
+
+    class Meta:
+        ordering = ['-is_pinned', '-review_date']
+        verbose_name = 'отзыв'
+        verbose_name_plural = 'Отзывы'
+
+    def __str__(self):
+        return 'Отзыв от {self.review_date} ({self.get_status_display})'.format(self=self)
+    
+    @property
+    def get_status_display(self):
+        return dict(self.STATUS_CHOICES).get(self.status, '')
+    
+    @property
+    def review_screenshot_thumb(self):
+        return get_thumbnailer(self.screenshot)['review_screenshot_thumb'].url

@@ -487,6 +487,8 @@ THUMBNAIL_ALIASES = {
         'participant_photo_preview': {'size': (403, 0), 'crop': False, 'quality': 100, 'upscale': True},
         'participant_photo_thumb': {'size': (154, 147), 'crop': True, 'quality': 100, 'upscale': True},
         'participant_photo_big': {'size': (1000, 1000), 'crop': False, 'quality': 100, 'upscale': True},
+
+        'review_screenshot_thumb': {'size': (600, 800), 'crop': True, 'quality': 100, 'upscale': True},
     },
 }
 

@@ -34,7 +34,7 @@ from .models import (Attribute, AttributeOption, ExtraProduct, Category,
                      Certificate, GiftWrapping,
                      Product, ProductOption, ProductExtraOption, ProductPhoto,
                      ProductTab, ProductTabSection,
-                     SpecialOfferCategory, SpecialOffer,)
+                     SpecialOfferCategory, SpecialOffer, Review)
 from .translation import *  # noqa
 
 
@@ -450,7 +450,7 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
         try:
             obj = Product.objects.get(pk=id)
         except (Product.DoesNotExist, ValueError) as e:
-            print e
+            print(e)
             raise Http404
         form = ChangeCategoriesForm(request.POST, instance=obj) if request.POST else ChangeCategoriesForm(instance=obj)
 
@@ -494,7 +494,7 @@ class ProductAdmin(SortableAdminMixin, SalmonellaMixin, TabbedTranslationAdmin):
         try:
             obj = Product.objects.get(pk=id)
         except (Product.DoesNotExist, ValueError) as e:
-            print e
+            print(e)
             raise Http404
         form = ChangeAttributesForm(request.POST, instance=obj) if request.POST else ChangeAttributesForm(instance=obj)
 
@@ -778,3 +778,49 @@ class SpecialOfferAdmin(admin.ModelAdmin):
     def get_queryset(self, *args, **kwargs):
         qs = super(SpecialOfferAdmin, self).get_queryset(*args, **kwargs)
         return qs.select_related('product', 'category')
+
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('author', 'review_date', 'status', 'is_pinned', 'short_text')
+    list_filter = ('status', 'is_pinned', 'review_date')
+    list_editable = ('status', 'is_pinned')
+    actions = ['make_published', 'make_draft', 'make_hidden', 'pin', 'unpin']
+    search_fields = ('text', 'author', 'products__title')
+    raw_id_fields = ('products',)
+
+    fieldsets = (
+        (None, {
+            'fields': ('status', 'review_date', 'is_pinned')
+        }),
+        ('Содержимое', {
+            'fields': ('author', 'text', 'screenshot', 'original_url')
+        }),
+        ('Связи', {
+            'fields': ('products',)
+        }),
+    )
+
+    def short_text(self, obj):
+        return obj.text[:100] + '...' if len(obj.text) > 100 else obj.text
+    short_text.short_description = 'Текст отзыва'
+
+    def make_published(self, request, queryset):
+        queryset.update(status='published')
+    make_published.short_description = "Опубликовать выбранные отзывы"
+
+    def make_draft(self, request, queryset):
+        queryset.update(status='draft')
+    make_draft.short_description = "Перевести в черновики выбранные отзывы"
+
+    def make_hidden(self, request, queryset):
+        queryset.update(status='hidden')
+    make_hidden.short_description = "Скрыть выбранные отзывы"
+
+    def pin(self, request, queryset):
+        queryset.update(is_pinned=True)
+    pin.short_description = "Закрепить выбранные отзывы"
+
+    def unpin(self, request, queryset):
+        queryset.update(is_pinned=False)
+    unpin.short_description = "Открепить выбранные отзывы"

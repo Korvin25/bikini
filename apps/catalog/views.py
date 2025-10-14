@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.views.generic import ListView
+
 from collections import OrderedDict
 from decimal import Decimal
 import json
@@ -16,7 +18,7 @@ from ..core.http_utils import get_object_from_slug_and_kwargs
 from ..currency.utils import get_currency
 from ..lk.wishlist.utils import get_wishlist_from_request
 from ..settings.models import SEOSetting
-from .models import Attribute, Category, GiftWrapping, Product, ProductOption, ProductTab, SpecialOffer
+from .models import Attribute, Category, GiftWrapping, Product, ProductOption, ProductTab, SpecialOffer, Review
 
 
 PRODUCTS_PAGINATE = getattr(settings, 'PRODUCTS_PAGINATE', 12)
@@ -279,6 +281,49 @@ class ProductsView(PaginationMixin, ListView):
         context.update(super(ProductsView, self).get_context_data(**kwargs))
         context = self._update_context_with_pages(context)
         return context
+
+
+class ReviewListView(PaginationMixin, ListView):
+    model = Review
+    template_name = 'catalog/reviews.html'
+    context_object_name = 'reviews'
+    paginate_by = 4
+
+    def get_queryset(self, **kwargs):
+        qs = Review.objects.filter(status='published').order_by('-is_pinned', '-review_date')
+        self.qs = qs
+        return qs
+
+    def _update_context_with_pages(self, context):
+        page_obj = context['page_obj']
+        pages = []
+        state = 'before'
+        for page in page_obj.pages():
+            if page:
+                pages.append(page)
+                state = ('before' if page < page_obj.number
+                         else 'after' if page > page_obj.number
+                         else 'current')
+            elif state == 'before':
+                pages.append('prev')
+            else:
+                pages.append('next')
+        context['pages'] = pages
+        return context
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'paginate_by': self.paginate_by,
+            'seo': {
+                'title': 'Отзывы о товарах Анастасии Ивановской — реальные отзывы клиентов',
+                'h1': 'Отзывы клиентов',
+                'meta_desc': 'Реальные отзывы наших клиентов о товарах. Посмотрите скриншоты и комментарии, чтобы сделать правильный выбор.',
+            }
+        }
+        context.update(super(ReviewListView, self).get_context_data(**kwargs))
+        context = self._update_context_with_pages(context)
+        return context
+
 
 
 class ProductView(TemplateView):
@@ -564,6 +609,7 @@ class ProductView(TemplateView):
         self.get_data_json()
         self.get_from_wishlist()
         self.get_photos_and_videos()
+        reviews = product.reviews.filter(status='published').order_by('-is_pinned', '-review_date')[:8]
         context = {
             'product': product,
             'category': category,
@@ -591,6 +637,7 @@ class ProductView(TemplateView):
             'wishlist_data': self.wishlist_data,
             'with_wrapping': self.with_wrapping,
             'tabs': ProductTab.objects.all().prefetch_related('sections'),
+            'reviews': reviews,
         }
         context.update(super(ProductView, self).get_context_data(**kwargs))
         return context

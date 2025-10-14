@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block meta_title %}{{ seo.title }}{% endblock %}
+{% block meta_desc %}{{ seo.meta_desc }}{% endblock %}
+
+{% block content %}
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        overflow: auto;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .modal-content {
+        display: block;
+        max-width: 90%;
+        max-height: 90%;
+        margin: auto;
+        border-radius: 8px;
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+    }
+    
+    .close-modal {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        color: #fff;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+    
+    .close-modal:hover {
+        color: #ccc;
+    }
+    
+    .modal-caption {
+        color: #fff;
+        text-align: center;
+        padding: 15px;
+        font-size: 18px;
+        background: rgba(0, 0, 0, 0.7);
+        border-radius: 0 0 8px 8px;
+        margin-top: -5px;
+        position: absolute;
+        top: 0;
+    }
+     @keyframes modalFadeIn {
+        from {opacity: 0;}
+        to {opacity: 1;}
+    }
+    
+    .modal {
+        animation: modalFadeIn 0.3s;
+    }
+</style>
+  <main>
+    <div id="imageModal" class="modal" style="display: none;">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div id="modalCaption" class="modal-caption"></div>
+    </div>
+    <div class="main_content">
+      
+      <ul id="touch_breadcrumb" class="breadcrumb">
+        <li><a href="{% url 'home' %}">{% trans 'Главная' %}</a></li>
+        <li>Отзывы</li>
+      </ul>
+    
+      <div id="main_content" class="wrapp_content">
+        <ul class="breadcrumb">
+          <li><a href="{% url 'home' %}">{% trans 'Главная' %}</a></li>
+          <li>Отзывы</li>
+        </ul>
+
+    <h1 class="title_block">{{ seo.h1 }}</h1>
+
+    <div class="reviews_list">
+        {% for review in reviews %}
+          <div class="review_item">
+            <div class="review_item__photo">
+                {% if review.screenshot %}
+                  <a href="#" class="review-image-link" data-original-src="{{ review.screenshot.url }}">
+                      <img src="{{ review.review_screenshot_thumb }}" alt="Скриншот отзыва">
+                  </a>
+                {% endif %}
+              </div>
+              <div class="review_item__content">
+              <div class="review_item__author">
+                {{ review.author|default:"Аноним" }}
+              </div>
+              <div class="review_item__text">
+                {{ review.text|linebreaksbr }}
+              </div>
+              {% if review.products.exists %}
+                <div class="review_item__products">
+                  <span>ТОВАРЫ:</span>
+                    {% for product in review.products.all %}
+                      <a href="{{ product.get_absolute_url }}">{{ product.title }}</a>
+                    {% endfor %}
+                </div>
+              {% endif %}
+              {% if review.original_url %}
+              <div class="review_item__full">
+                <a href="{{ review.original_url }}">
+                  <img src="{% static 'i/icons8-instagram-48.svg' %}" alt="">
+                  <span>Открыть полный отзыв</span>
+                </a>
+              </div>
+              {% endif %}
+              
+            </div>
+          </div>
+        {% empty %}
+            <p>Пока нет ни одного отзыва.</p>
+        {% endfor %}
+    </div>
+
+    <div class="js-pagination-container product_list" style="width: auto !important; border: none; display: block;">
+      {% if page_obj.pages|length > 1 %}
+        <div class="pagination_container">
+          <div class="pagination_pages_block">
+            {% for page in pages %}
+              {% if page == 'prev' %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="pagination_item _icon js-page" data-page="{{ page_obj.previous_page_number }}">&lsaquo;</a>
+              {% elif page == 'next' %}
+                <a href="?page={{ page_obj.next_page_number }}" class="pagination_item _icon js-page" data-page="{{ page_obj.next_page_number }}">&rsaquo;</a>
+              {% elif page %}
+                {% ifequal page page_obj.number %}
+                  <span class="pagination_item _current">{{ page }}</span>
+                {% else %}
+                  <a href="?page={{ page }}" class="pagination_item js-page" data-page="{{ page }}">{{ page }}</a>
+                {% endifequal %}
+              {% else %}
+                <span class="pagination_item disabled">...</span>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <div class="pagination_more_block">
+            {% if page_obj.has_next %}
+              <a href="?page={{ page_obj.next_page_number }}" class="yet_items js-load-more" data-page="{{ page_obj.next_page_number }}">
+                <span>{% trans 'Загрузить ещё' %}</span>
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+</div>
+  </main>
+<script>
+    $(document).ready(function(){
+        var modal = document.getElementById("imageModal");
+        var modalImg = document.getElementById("modalImage");
+        var captionText = document.getElementById("modalCaption");
+
+        modal.style.display = "none";
+
+        $('.review-image-link').on('click', function(e) {
+            e.preventDefault();
+            var originalSrc = $(this).data('original-src');
+            
+            modal.style.display = "flex";
+            modalImg.src = originalSrc;
+            captionText.innerHTML = '';
+        });
+
+        $('.close-modal').on('click', function() {
+            modal.style.display = "none";
+        });
+
+        modal.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+
+        $(document).on('keydown', function(event) {
+            if (event.key === "Escape" && modal.style.display === "flex") {
+                modal.style.display = "none";
+            }
+        });
+    });
+</script>
+{% endblock %}
