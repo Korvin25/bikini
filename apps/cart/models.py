@@ -28,9 +28,8 @@ from ..geo.models import Country
 from ..hash_utils import make_hash_from_cartitem
 from ..lk.email import admin_send_order_email, admin_send_low_in_stock_email, send_order_email
 from ..math_utils import round_decimal
-from ..utils import get_error_message
+from ..utils import get_error_message, admin_send_one_click_order_email
 from ..settings.models import Settings
-from .views import admin_send_one_click_order_email
 
 
 l_paypal = logging.getLogger('paypal')

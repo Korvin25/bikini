@@ -11,6 +11,8 @@ from django.utils import timezone
 
 from crequest.middleware import CrequestMiddleware
 
+from .lk.email import email_admin
+
 
 DEFAULT_SCHEME = settings.DEFAULT_SCHEME
 DEFAULT_SITENAME = settings.DEFAULT_SITENAME
@@ -90,3 +92,10 @@ def get_a_token(length=20, charset=None):
         'digits': DIGITS_CHARS,
     }.get(charset, TOKEN_CHARS)
     return ''.join([random.choice(CHARS) for x in range(length)])
+
+
+def admin_send_one_click_order_email(obj, **kwargs):
+    status = kwargs.get('status', 'NEW')
+    subject = '[OneClick Order {}] #{}: {}'.format(status, obj.id, obj.cart_items.first().product.title)
+    email_key = 'quick_order'
+    email_admin(subject, email_key, obj, settings_key='orders_email', **kwargs)

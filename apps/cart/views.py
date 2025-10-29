@@ -14,8 +14,8 @@ from .retailcrm_utils import send_retailcrm
 from ..catalog.models import Attribute, GiftWrapping, SpecialOffer, Product
 from ..core.templatetags.core_tags import to_int_or_float
 from ..geo.models import Country
-from ..lk.email import email_admin
 from ..settings.models import Settings
+from ..utils import admin_send_one_click_order_email
 from .api.robokassa import generate_payment_link
 from .api.views import CheckCartMixin
 from .cart import Cart
@@ -95,12 +95,6 @@ class OneClickCreateView(CheckCartMixin, CreateView):
     def form_invalid(self, form):
         return JsonResponse({'errors': form.errors}, status=400)
 
-
-def admin_send_one_click_order_email(obj, **kwargs):
-    status = kwargs.get('status', 'NEW')
-    subject = '[OneClick Order {}] #{}: {}'.format(status, obj.id, obj.cart_items.first().product.title)
-    email_key = 'quick_order'
-    email_admin(subject, email_key, obj, settings_key='orders_email', **kwargs)
 
 
 class CartView(TemplateView):
