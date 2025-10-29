@@ -30,6 +30,7 @@ from ..lk.email import admin_send_order_email, admin_send_low_in_stock_email, se
 from ..math_utils import round_decimal
 from ..utils import get_error_message
 from ..settings.models import Settings
+from .views import admin_send_one_click_order_email
 
 
 l_paypal = logging.getLogger('paypal')
@@ -600,8 +601,11 @@ class Cart(models.Model):
         status = self.show_status()
         
         # if not status == 'не оплачен / новый' or status == 'ошибка':
-        admin_send_order_email(self)
-        
+        if not self.is_one_click:
+            admin_send_order_email(self)
+        if self.is_one_click and not status == 'не оплачен / новый' or status == 'ошибка':
+            admin_send_one_click_order_email(self, status=status)
+
         # profile = self.profile
         # if profile and profile.has_email: 
         #     if status == 'оплачен / новый' or status == 'новый':
