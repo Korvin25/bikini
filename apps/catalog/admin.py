@@ -782,7 +782,8 @@ class SpecialOfferAdmin(admin.ModelAdmin):
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('author', 'review_date', 'status', 'is_pinned', 'short_text')
+    list_display = ('id', 'author', 'review_date', 'status', 'is_pinned', 'short_text')
+    list_display_links = ('id',)
     list_filter = ('status', 'is_pinned', 'review_date')
     list_editable = ('status', 'is_pinned')
     actions = ['make_published', 'make_draft', 'make_hidden', 'pin', 'unpin']
