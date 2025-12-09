@@ -466,7 +466,7 @@ THUMBNAIL_ALIASES = {
         
         'admin_product_photo': {'size': (140, 140), 'crop': True, 'quality': 100},
         # 'product_photo_preview': {'size': (387, 396), 'crop': True, 'quality': 100, 'upscale': True},
-        'product_photo_preview': {'size': (500, 512), 'crop': True, 'quality': 100, 'upscale': True},
+        'product_photo_preview': {'size': (500, 667), 'crop': True, 'quality': 100, 'upscale': True},
         # 'product_photo_preview': {'size': (1000, 1024), 'crop': True, 'quality': 100, 'upscale': True},
         'product_photo_thumb': {'size': (70, 70), 'crop': True, 'quality': 100, 'upscale': True},
         'product_photo_big': {'size': (1000, 1000), 'crop': False, 'quality': 100, 'upscale': True},
