@@ -5682,7 +5682,8 @@ div.errr~.err_r {
 
     .C_navigation,
     .nom_img_med_wrap ul li {
-        height: 500px;
+        /* height: 500px; */
+        height: 667px;
     }
 
 }
