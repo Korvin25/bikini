@@ -8772,6 +8772,136 @@ div.errr~.err_r {
     height: 24px;
 }
 
+
+.reviews_list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.review_item {
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.review_item:hover {
+    border-color: #dee2e6;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.review_item__photo {
+    margin-bottom: 16px;
+}
+
+.review_item__photo img {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.review_item__photo:hover img {
+    transform: scale(1.02);
+    border-color: #dee2e6;
+}
+
+.review_item__content {
+    margin-left: 0;
+}
+
+.review_item__author {
+    font-size: 16px;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.review_item__text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #495057;
+    margin-bottom: 16px;
+}
+
+.review_item__products {
+    margin-bottom: 16px;
+    padding: 8px 0;
+}
+
+.review_item__products span {
+    font-weight: 600;
+    color: #495057;
+    margin-right: 8px;
+    font-size: 13px;
+}
+
+.review_item__products a {
+    display: inline-block;
+    margin: 4px 8px 4px 0;
+    padding: 4px 8px;
+    background: #f8f9fa;
+    color: #495057;
+    text-decoration: none;
+    border-radius: 4px;
+    border: 1px solid #e9ecef;
+    font-size: 13px;
+    transition: all 0.2s ease;
+}
+
+.review_item__products a:hover {
+    background: #e9ecef;
+    border-color: #dee2e6;
+}
+
+.review_item__full {
+    text-align: right;
+}
+
+.review_item__full a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #f8f9fa;
+    color: #495057;
+    text-decoration: none;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.review_item__full a:hover {
+    background: #e9ecef;
+    border-color: #dee2e6;
+}
+
+.review_item__full img {
+    width: 16px;
+    height: 16px;
+}
+
+@media (min-width: 768px) {
+    .reviews_list {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (min-width: 1200px) {
+    .reviews_list {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
 .pagination_container {
     margin-top: 15px;
 }
