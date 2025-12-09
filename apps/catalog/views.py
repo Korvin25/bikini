@@ -287,7 +287,7 @@ class ReviewListView(PaginationMixin, ListView):
     model = Review
     template_name = 'catalog/reviews.html'
     context_object_name = 'reviews'
-    paginate_by = 4
+    paginate_by = 24
 
     def get_queryset(self, **kwargs):
         qs = Review.objects.filter(status='published').order_by('-is_pinned', '-review_date')
