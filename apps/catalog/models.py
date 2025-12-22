@@ -1032,8 +1032,7 @@ class Review(models.Model):
     )
     status = models.CharField('Статус', max_length=10, choices=STATUS_CHOICES, default='draft')
     review_date = models.DateField('Дата отзыва', default=datetime.date.today)
-    screenshot = ThumbnailerImageField('Скриншот', upload_to='reviews/', blank=True, null=True,
-                                       resize_source=dict(size=(800, 800), crop='smart', quality=80))
+    screenshot = ThumbnailerImageField('Скриншот', upload_to='reviews/', blank=True, null=True)
     text = models.TextField('Текст отзыва', blank=True)
     products = models.ManyToManyField(Product, verbose_name='Товары', related_name='reviews', blank=True)
     is_pinned = models.BooleanField('Закрепить', default=False)
