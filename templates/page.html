@@ -29,45 +29,45 @@
             {% endblock %}
             <h1 class="title_block">{{ page.get_h1 }}</h1>
         </div>
-        <style>
-            /* узкая колонка на десктопе */
-            @media (min-width:1200px){
-              .about-narrow{max-width:70%;margin:0 auto;}
-            }
-
-            /* мобильные и планшеты — добавляем отступы */
-            @media (max-width:1199px){
-              .about-narrow{
-                padding-left:15px;
-                padding-right:15px;
-              }
-            }
-
-            /* ряд фото: 3-2-1 */
-            .about-narrow .photo-row{
-              display:flex;flex-wrap:wrap;gap:20px;margin:16px 0 24px;
-            }
-            @media (min-width:900px){
-              .about-narrow .photo-row figure{flex:0 0 calc((100% - 40px)/3);}
-            }
-            @media (min-width:600px) and (max-width:899px){
-              .about-narrow .photo-row figure{flex:0 0 calc((100% - 20px)/2);}
-            }
-            @media (max-width:599px){
-              .about-narrow .photo-row figure{flex:0 0 100%;}
-            }
-            .about-narrow .photo-row figure{margin:0}
-            .about-narrow .photo-row img{
-              width:100%;
-              height:auto;
-              aspect-ratio:3/4;      /* портретное соотношение */
-              object-fit:cover;      /* аккуратное кадрирование внутри 3:4 */
-              display:block;
-              border-radius:4px;
-            }
-        </style>
         <div id="main_content" class="content_video list_push cnt_left">
             <div class="text_preview_left txt_black text_light_page">
+                <style>
+                  /* узкая колонка на десктопе */
+                  @media (min-width:1200px){
+                    .about-narrow{max-width:70%;margin:0 auto;}
+                  }
+
+                  /* мобильные и планшеты — добавляем отступы */
+                  @media (max-width:1199px){
+                    .about-narrow{
+                      padding-left:15px;
+                      padding-right:15px;
+                    }
+                  }
+
+                  /* ряд фото: 3-2-1 */
+                  .about-narrow .photo-row{
+                    display:flex;flex-wrap:wrap;gap:20px;margin:16px 0 24px;
+                  }
+                  @media (min-width:900px){
+                    .about-narrow .photo-row figure{flex:0 0 calc((100% - 40px)/3);}
+                  }
+                  @media (min-width:600px) and (max-width:899px){
+                    .about-narrow .photo-row figure{flex:0 0 calc((100% - 20px)/2);}
+                  }
+                  @media (max-width:599px){
+                    .about-narrow .photo-row figure{flex:0 0 100%;}
+                  }
+                  .about-narrow .photo-row figure{margin:0}
+                  .about-narrow .photo-row img{
+                    width:100%;
+                    height:auto;
+                    aspect-ratio:3/4;      /* портретное соотношение */
+                    object-fit:cover;      /* аккуратное кадрирование внутри 3:4 */
+                    display:block;
+                    border-radius:4px;
+                  }
+              </style>
                 {{ page.text|safe }}
                 {% if page.accordion_sections.count %}
                   <div class="wrap-accordion" uk-accordion="multiple: true">
