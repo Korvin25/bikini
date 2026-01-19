@@ -29,6 +29,20 @@
             {% endblock %}
             <h1 class="title_block">{{ page.get_h1 }}</h1>
         </div>
+        <style>
+            /* узкая колонка на десктопе */
+            @media (min-width:1200px){
+              #main_content{max-width:70%;margin:0 auto;}
+            }
+
+            /* мобильные и планшеты — добавляем отступы */
+            @media (max-width:1199px){
+              #main_content{
+                padding-left:15px;
+                padding-right:15px;
+              }
+            }
+        </style>
         <div id="main_content" class="content_video list_push cnt_left">
             <div class="text_preview_left txt_black text_light_page">
                 {{ page.text|safe }}
