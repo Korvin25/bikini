@@ -71,7 +71,7 @@
               </style>
                 {{ page.text|safe }}
                 {% if page.accordion_sections.count %}
-                  <div class="wrap-accordion" uk-accordion="multiple: true">
+                  <div class="wrap-accordion about-narrow" uk-accordion="multiple: true">
                     {% for section in page.accordion_sections.all %}
                       <div class="parent">
                         <a class="uk-accordion-title" href="#">
