@@ -70,7 +70,7 @@ class PostGalleryInline(admin.StackedInline):
 
 class PostVideoInline(TranslationInlineModelAdmin, admin.StackedInline):
     model = Video
-    fields = ('title', 'slug', 'video', 'cover', 'text', 'show_at_list')
+    fields = ('title', 'slug', 'video_source', 'video_file', 'video', 'cover', 'text', 'show_at_list')
     prepopulated_fields = {'slug': ('title',)}
     suit_classes = 'suit-tab suit-tab-video'
     min_num = 0
