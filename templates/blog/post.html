@@ -47,7 +47,13 @@
                       <div class="play_movie js-play-movie"></div>
                     </div>
                     <div class="js-hidden-movie" style="display: none;">
-                      {% video v.video '324x149' %}
+                      {% if v.video_source == 'youtube' and v.video %}
+                        {% video v.video '324x149' %}
+                      {% elif v.video_source == 'file' and v.video_file %}
+                        <video width="324" height="149" controls>
+                          <source src="{{ v.video_file.url }}">
+                        </video>
+                      {% endif %}
                     </div>
                   </div>
                 {% endfor %}
