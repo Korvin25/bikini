@@ -473,8 +473,8 @@ THUMBNAIL_ALIASES = {
 
         'video_preview': {'size': (352, 183), 'crop': True, 'quality': 100, 'upscale': True},
 
-        'blog_cover_list': {'size': (10000, 10000), 'crop': False, 'quality': 100, 'upscale': False},
-        'blog_cover_detail': {'size': (10000, 10000), 'crop': False, 'quality': 100, 'upscale': False},
+        'blog_cover_list': {'size': (792, 387), 'crop': True, 'quality': 100, 'upscale': True},
+        'blog_cover_detail': {'size': (1000, 500), 'crop': False, 'quality': 100, 'upscale': False},
         # 'blog_gallery_thumb': {'size': (95, 95), 'crop': True, 'quality': 100, 'upscale': True},
         'blog_gallery_thumb': {'size': (160, 160), 'crop': True, 'quality': 100, 'upscale': True},
 
