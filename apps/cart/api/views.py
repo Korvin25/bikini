@@ -641,6 +641,9 @@ class RoboKassaCartView(View):
 
         result, signature = result_payment(settings.ROBOKASSA_PASSWORD_2, request.get_full_path())
         if result != "bad sign":
+            if cart.robokassa_paid:
+                return HttpResponse(result)
+
             cart.payment_date = timezone.now()
             cart.robokassa_paid = True
             cart.robokassa_status = 'succeeded'
