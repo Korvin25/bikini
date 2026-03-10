@@ -113,6 +113,8 @@ urlpatterns += i18n_patterns(
     url(r'^contests/', include('apps.contests.urls', namespace='contests')),
     url(r'^wishlist/', include('apps.lk.wishlist.urls', namespace='wishlist')),
 
+    url(r'^polzovatelskoe-soglashenie/$', RedirectView.as_view(url='/personal-info/', permanent=True)),
+
     url(r'^(?P<slug>[^/]+)/$', PageView.as_view(), name='page'),
     prefix_default_language=False,
 )
