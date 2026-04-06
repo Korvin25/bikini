@@ -307,7 +307,7 @@
                   <button class="btn btn-primary" disabled>{% trans 'Нет в наличии' %}</button>
                 {% else %}
                   {% if count > maximum_in_stock %}
-                      <button class="js-cart-button btn btn-secondary to_cart_list" data-type="order" type="submit">{% trans 'Под заказ' %}</button>
+                      <button class="js-cart-button btn btn-secondary to_cart_list" data-type="order" type="submit">{% trans 'Предзаказ' %}</button>
                   {% else %}
                       <button class="js-cart-button btn btn-secondary to_cart_list" data-type="add" type="submit">{% trans 'В корзину' %}</span></button>
                       <button class="btn btn-primary quick-purchase-btn" style="padding-left: 6px;" 

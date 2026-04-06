@@ -1243,7 +1243,7 @@ msgstr ""
 #: templates/catalog/product.html:302
 #: templates/wishlist/include/wishlist.html:50
 #: templates/wishlist/wishlist.html:99
-msgid "Под заказ"
+msgid "Предзаказ"
 msgstr ""
 
 #: templates/catalog/product.html:309

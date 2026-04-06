@@ -859,7 +859,7 @@ msgstr ""
 #: templates/catalog/product.html:284
 #: templates/wishlist/include/wishlist.html:47
 #: templates/wishlist/wishlist.html:96
-msgid "Под заказ"
+msgid "Предзаказ"
 msgstr ""
 
 #: templates/catalog/product.html:291

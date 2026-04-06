@@ -875,7 +875,7 @@ msgstr "This product is not available"
 #: templates/catalog/product.html:284
 #: templates/wishlist/include/wishlist.html:47
 #: templates/wishlist/wishlist.html:96
-msgid "Под заказ"
+msgid "Предзаказ"
 msgstr "Customized order"
 
 #: templates/catalog/product.html:291

@@ -39,12 +39,12 @@ function parsePrice(price) {
 function submitProductForm($form, $button, option_id, _attrs, _extra_products, data, count, prices, $wishlistInput) {
   if (!areCookiesEnabled) { alertCookiesDisabled(); return false; }
 
-  var data = data || {'prices': {}},
-      url = $form.attr('action'),
-      product_id = parseInt($form.find('input[name="product_id"]').val()),
-      count = count || data.prices.count,
-      prices = prices || data.prices,
-      form_data;
+  var data = data || { 'prices': {} },
+    url = $form.attr('action'),
+    product_id = parseInt($form.find('input[name="product_id"]').val()),
+    count = count || data.prices.count,
+    prices = prices || data.prices,
+    form_data;
 
   form_data = {
     'product_id': product_id,
@@ -65,15 +65,15 @@ function submitProductForm($form, $button, option_id, _attrs, _extra_products, d
     dataType: 'json',
     contentType: 'application/json',
 
-    success: function(res){
+    success: function (res) {
       $button.removeClass('_disabled');
 
       var error = res['error'],
-          errors = res['errors'],
-          result = res['result'],
-          cart_count = res['count'],
-          cart_summary = res['summary'],
-          product_link = res['product_link'];
+        errors = res['errors'],
+        result = res['result'],
+        cart_count = res['count'],
+        cart_summary = res['summary'],
+        product_link = res['product_link'];
 
       if (result == 'ok') {
         if (cart_count) { $('.js-cart-count').text(cart_count); }
@@ -83,7 +83,7 @@ function submitProductForm($form, $button, option_id, _attrs, _extra_products, d
           $wishlistInput.click();
         }
         $('.js-call-close').filter(':visible').click();
-        setTimeout( function() {
+        setTimeout(function () {
           showPopup('#success-popup');
         }, 500);
       }
@@ -93,7 +93,7 @@ function submitProductForm($form, $button, option_id, _attrs, _extra_products, d
         else { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', res.status + ' ' + res.statusText); }
       };
     },
-    error: function(res){
+    error: function (res) {
       $button.removeClass('_disabled');
 
       if (res.status == 400) {
@@ -103,9 +103,9 @@ function submitProductForm($form, $button, option_id, _attrs, _extra_products, d
 
         if (response != undefined) {
           var click_to = response['click_to'],
-              error = response['error'],
-              errors = response['errors'],
-              alert_message = response['alert_message'];
+            error = response['error'],
+            errors = response['errors'],
+            alert_message = response['alert_message'];
 
           if (error) { showErrorPopup('{% trans "При отправке формы произошла ошибка" %}:', error); };
           if (errors) { add_errors($form, errors, true); };
@@ -125,18 +125,18 @@ function submitProductForm($form, $button, option_id, _attrs, _extra_products, d
 
 function collectExtraProductsAttrs(errors, _id) {
   var _extra_products = {},
-      errors = errors || [],
-      _id = _id || false,
-      _data;
+    errors = errors || [],
+    _id = _id || false,
+    _data;
 
-  $.each(data.extra_products, function(id, product){
-    var $product_trigger = $('.js-extra-product-trigger[data-extra-product-id="'+id+'"]'),
-        product_obj = {};
+  $.each(data.extra_products, function (id, product) {
+    var $product_trigger = $('.js-extra-product-trigger[data-extra-product-id="' + id + '"]'),
+      product_obj = {};
 
     if (_id && (id == _id) || !_id && $product_trigger.is(':checked')) {
-      $.each(product.attrs, function(slug){
-        var $checkboxes = $('.js-attr-checkbox[data-attr-slug="'+slug+'"]').filter(':visible'),
-            checked_id = $checkboxes.filter(':checked').attr('data-option-id');
+      $.each(product.attrs, function (slug) {
+        var $checkboxes = $('.js-attr-checkbox[data-attr-slug="' + slug + '"]').filter(':visible'),
+          checked_id = $checkboxes.filter(':checked').attr('data-option-id');
 
         if ($checkboxes.length == 1) { checked_id = $($checkboxes[0]).attr('data-option-id'); };
 
@@ -161,15 +161,15 @@ function collectAttrs(option) {
   option = option || data['option'];
 
   var _attrs = {},
-      _extra_products = {},
-      errors = [],
-      _extra_data,
-      _data;
+    _extra_products = {},
+    errors = [],
+    _extra_data,
+    _data;
 
   if (option.attrs) {
-    $.each(option.attrs, function(slug){
-      var $checkboxes = $('.js-attr-checkbox[data-attr-slug="'+slug+'"]').filter(':visible'),
-          checked_id = $checkboxes.filter(':checked').attr('data-option-id');
+    $.each(option.attrs, function (slug) {
+      var $checkboxes = $('.js-attr-checkbox[data-attr-slug="' + slug + '"]').filter(':visible'),
+        checked_id = $checkboxes.filter(':checked').attr('data-option-id');
 
       if ($checkboxes.length == 1) { checked_id = $($checkboxes[0]).attr('data-option-id'); };
 
@@ -191,15 +191,15 @@ function collectAttrs(option) {
 }
 
 
-$('.js-cart-button').click(function(e){
+$('.js-cart-button').click(function (e) {
   e.preventDefault();
 
   var $button = $(this),
-      $form = $button.parents('.js-product-form'),
-      option = data.option || {},
-      _attrs = {},
-      _extra_products = {},
-      errors = [];
+    $form = $button.parents('.js-product-form'),
+    option = data.option || {},
+    _attrs = {},
+    _extra_products = {},
+    errors = [];
 
   if (!$form.length) { $form = $('.js-product-form'); }
 
@@ -226,20 +226,20 @@ function updateShownCheckboxes(options, attr_types) {
 
   var attr_types = attr_types || ['color', 'size'];
 
-  $.each(data['attrs'], function(slug, attr){
-    if ((attr['category'] == 'primary') && (attr_types.indexOf(attr['type'])>-1)) {
-      var $checkboxes = $('.js-attr-checkbox[data-attr-slug="'+slug+'"]'),
-          $labels = $('label[data-attr-slug="'+slug+'"]'),
-          ids = [];
+  $.each(data['attrs'], function (slug, attr) {
+    if ((attr['category'] == 'primary') && (attr_types.indexOf(attr['type']) > -1)) {
+      var $checkboxes = $('.js-attr-checkbox[data-attr-slug="' + slug + '"]'),
+        $labels = $('label[data-attr-slug="' + slug + '"]'),
+        ids = [];
 
-      $.each(options, function(i, option){
+      $.each(options, function (i, option) {
         ids = ids.concat(option['attrs'][slug]);
       });
 
-      $.each($checkboxes, function(i, checkbox){
+      $.each($checkboxes, function (i, checkbox) {
         var $checkbox = $(this),
-            $parent = $checkbox.parents('label');
-            option_id = parseInt($checkbox.attr('data-option-id'));
+          $parent = $checkbox.parents('label');
+        option_id = parseInt($checkbox.attr('data-option-id'));
 
         if (ids.indexOf(option_id) > -1) { $parent.show(); }
         else { $parent.hide(); }
@@ -286,17 +286,17 @@ function filterOptions(attr_types) {
   // получаем список выбранных на данный момент вариантов (можно отфильтровать по типам атрибутов)
 
   var attr_types = attr_types || ['style', 'color', 'size']
-      options = {};
+  options = {};
 
-  $.each(data['options'], function(i, item){
+  $.each(data['options'], function (i, item) {
     options[i] = item;
   });
 
-  $.each(data['attrs'], function(slug, attr){
-    if ((attr['category'] == 'primary') && (attr_types.indexOf(attr['type'])>-1)) {
-      var $checkboxes = $('.js-attr-checkbox[data-attr-slug="'+slug+'"]:visible'),
-          $checked = $checkboxes.filter(':checked'),
-          chosen_id;
+  $.each(data['attrs'], function (slug, attr) {
+    if ((attr['category'] == 'primary') && (attr_types.indexOf(attr['type']) > -1)) {
+      var $checkboxes = $('.js-attr-checkbox[data-attr-slug="' + slug + '"]:visible'),
+        $checked = $checkboxes.filter(':checked'),
+        chosen_id;
 
       if ($checkboxes.length == 1) { chosen_id = $($checkboxes[0]).attr('data-option-id'); }
       else if ($checked.length) { chosen_id = $($checked[0]).attr('data-option-id'); }
@@ -304,7 +304,7 @@ function filterOptions(attr_types) {
       chosen_id = parseInt(chosen_id);
 
       if (chosen_id) {
-        $.each(options, function(i, option){
+        $.each(options, function (i, option) {
           if (option['attrs'][slug].indexOf(chosen_id) == -1) { delete options[i] };
         });
       }
@@ -325,14 +325,14 @@ function chooseOption(update_total_price, dont_update_wishlist_input) {
   // update_total_price (true|false) - обновляем ли общую стоимость
 
   var options = filterOptions(),
-      option = {},
-      update_total_price = update_total_price || false;
-      dont_update_wishlist_input = dont_update_wishlist_input || false;
-      count = data['prices']['count'],
-      maximum_in_stock = 0;
+    option = {},
+    update_total_price = update_total_price || false;
+  dont_update_wishlist_input = dont_update_wishlist_input || false;
+  count = data['prices']['count'],
+    maximum_in_stock = 0;
 
-  $.each(options, function(i, item){
-    if (!Object.keys(option).length || ((count>maximum_in_stock) && (count<=item['in_stock']))) {
+  $.each(options, function (i, item) {
+    if (!Object.keys(option).length || ((count > maximum_in_stock) && (count <= item['in_stock']))) {
       maximum_in_stock = item['in_stock'];
       option = item;
       data['prices']['option'] = item['price'];
@@ -363,7 +363,7 @@ function chooseOption(update_total_price, dont_update_wishlist_input) {
     }
 
     var $input = $('.js-wishlist-input'),
-        $button = $('.js-wishlist-button');
+      $button = $('.js-wishlist-button');
     if ($input.length) { $input.attr('checked', false); };
     if ($button.length) { $button.text('{% trans "Добавить в список желаемых покупок" %}'); };
   };
@@ -374,8 +374,8 @@ function updateCartButton() {
   // обновляем надпись и тип кнопки "добавить"
 
   var $button = $('.js-cart-button'),
-      $blocks_to_hide = $('.js-hide-if-not-option')
-      p = data['prices'];
+    $blocks_to_hide = $('.js-hide-if-not-option')
+  p = data['prices'];
 
   if (!Object.keys(data['option']).length) {
     $blocks_to_hide.hide();
@@ -388,7 +388,7 @@ function updateCartButton() {
     $button.removeClass('_disabled');
 
     if (p['count'] > p['maximum_in_stock']) {
-      $button.text('{% trans "Под заказ" %}');
+      $button.text('{% trans "Предзаказ" %}');
       $button.attr('data-type', 'order');
     } else {
       $button.text('{% trans "В корзину" %}');
@@ -403,10 +403,10 @@ function updateTotalPrice(update_cart_button) {
   // update_cart_button (true/false) - обновлять ли еще при этом надпись на кнопке
 
   var $price_label = $('.js-cart-price'),
-      $base_price_label = $('.js-base-price'),
-      update_button = update_button || true,
-      p = data['prices'],
-      total_price;
+    $base_price_label = $('.js-base-price'),
+    update_button = update_button || true,
+    p = data['prices'],
+    total_price;
 
   if (update_cart_button) {
     chooseOption(false);  // на случай, что кол-во увеличилось - выбираем вариант с нужным кол-вом
@@ -414,18 +414,18 @@ function updateTotalPrice(update_cart_button) {
 
   // console.log(data);
 
-  base_price = (p['option']+p['extra'])*p['count'] + p['wrapping'];
+  base_price = (p['option'] + p['extra']) * p['count'] + p['wrapping'];
   data['prices']['base'] = total_price;
 
-  discount_price = (p['option']*p['count'])*p['discount'] / 100
-  total_price = (p['option']+p['extra'])*p['count'] + p['wrapping'] - discount_price
+  discount_price = (p['option'] * p['count']) * p['discount'] / 100
+  total_price = (p['option'] + p['extra']) * p['count'] + p['wrapping'] - discount_price
   data['prices']['total'] = total_price;
   data['prices']['discount_price'] = discount_price;
 
   $base_price_label.text(parsePrice(base_price));
   $price_label.text(parsePrice(total_price));
   if (update_cart_button) {
-    updateCartButton(); 
+    updateCartButton();
   }
 }
 
@@ -441,19 +441,19 @@ function changeExtraProduct(extra_product_id, is_checked) {
   // добавляем или удаляем дополнительный товар (is_checked == true/false)
 
   var extra_p = data['extra_products'][extra_product_id],
-      selected = data['extra_p_selected'],
-      price_extra = 0,
-      extra_maximum_in_stock = 9999;
-      maximum_in_stock = data['option']['in_stock'] || 0;
+    selected = data['extra_p_selected'],
+    price_extra = 0,
+    extra_maximum_in_stock = 9999;
+  maximum_in_stock = data['option']['in_stock'] || 0;
 
   if (extra_p) {
     if (is_checked) { selected[extra_product_id] = extra_p }
     else { delete selected[extra_product_id] };
 
-    $.each(selected, function(i, item) {
+    $.each(selected, function (i, item) {
       price_extra += item['price'];
-      if (item['in_stock'] < maximum_in_stock) { maximum_in_stock = item['in_stock'] };      
-      if (item['in_stock'] < extra_maximum_in_stock) { extra_maximum_in_stock = item['in_stock'] };      
+      if (item['in_stock'] < maximum_in_stock) { maximum_in_stock = item['in_stock'] };
+      if (item['in_stock'] < extra_maximum_in_stock) { extra_maximum_in_stock = item['in_stock'] };
     });
 
     data['prices']['extra'] = price_extra;
@@ -484,18 +484,18 @@ function changeGiftWrapping(price, is_checked) {
 
 // ----- Триггеры, связанные со сменой цены -----
 
-$('.js-extra-product-trigger').click(function(e) {
+$('.js-extra-product-trigger').click(function (e) {
   var $obj = $(this),
-      extra_product_id = $obj.attr('data-extra-product-id'),
-      is_checked = $obj.is(':checked');
+    extra_product_id = $obj.attr('data-extra-product-id'),
+    is_checked = $obj.is(':checked');
 
   changeExtraProduct(extra_product_id, is_checked);
 });
 
-$('.js-gift-wrapping-trigger').click(function(e) {
+$('.js-gift-wrapping-trigger').click(function (e) {
   var $obj = $(this),
-      gift_wrapping_price = $obj.attr('data-wrapping-price'),
-      is_checked = $obj.is(':checked');
+    gift_wrapping_price = $obj.attr('data-wrapping-price'),
+    is_checked = $obj.is(':checked');
 
   changeGiftWrapping(gift_wrapping_price, is_checked);
 });
@@ -503,16 +503,16 @@ $('.js-gift-wrapping-trigger').click(function(e) {
 
 // ----- Клик по чекбоксу (превращаем их в радиобаттоны + вызываем пересчет цен) -----
 
-$('.js-not-checkbox').click(function(e) {
+$('.js-not-checkbox').click(function (e) {
   var $checkbox = $(this),
-      attr_slug = $checkbox.attr('data-attr-slug'),
-      attr_type = $checkbox.attr('data-attr-type'),
-      is_checked = $checkbox.is(':checked'),
-      color_id = parseInt($checkbox.attr('data-color-id'));
+    attr_slug = $checkbox.attr('data-attr-slug'),
+    attr_type = $checkbox.attr('data-attr-type'),
+    is_checked = $checkbox.is(':checked'),
+    color_id = parseInt($checkbox.attr('data-color-id'));
 
   if (is_checked) {
-    $('.js-not-checkbox[data-attr-slug="'+attr_slug+'"]').not(this).attr('checked', false); 
-    if (color_id) { 
+    $('.js-not-checkbox[data-attr-slug="' + attr_slug + '"]').not(this).attr('checked', false);
+    if (color_id) {
       // смена порядка фото при выборе цвета
       rebuildCarousel(attr_slug, color_id);
     }
@@ -531,15 +531,15 @@ $('.js-not-checkbox').click(function(e) {
     // добавляем доп.товар в корзину или убираем оттуда
 
     var $extraParent = $checkbox.parents('.js-extra-product-parent');
-        extra_product_id = parseInt($extraParent.attr('data-extra-product-id')),
-        $extraProductTrigger = $extraParent.find('.js-extra-product-trigger')
-        extra_is_checked = $extraProductTrigger.is(':checked');
+    extra_product_id = parseInt($extraParent.attr('data-extra-product-id')),
+      $extraProductTrigger = $extraParent.find('.js-extra-product-trigger')
+    extra_is_checked = $extraProductTrigger.is(':checked');
 
     if (is_checked && !extra_is_checked) {
       var _extra_data = collectExtraProductsAttrs([], extra_product_id),
-          _extra_product = _extra_data['_extra_products'][extra_product_id],
-          _extra_length = Object.keys(_extra_product).length,
-          _errors_length = _extra_data['errors'].length;
+        _extra_product = _extra_data['_extra_products'][extra_product_id],
+        _extra_length = Object.keys(_extra_product).length,
+        _errors_length = _extra_data['errors'].length;
 
       if (!_errors_length) {
         // check
@@ -560,18 +560,18 @@ $('.js-not-checkbox').click(function(e) {
 
 // ----- Кнопки "показать еще" у цветов и видео -----
 
-$('.js-expand-colors').click(function(e) {
+$('.js-expand-colors').click(function (e) {
   e.preventDefault();
 
   var $button = $(this),
-      attr_id = $button.attr('data-attr-id');
+    attr_id = $button.attr('data-attr-id');
 
-  $('label.color_option.js-can-be-shown[data-attr-id="'+attr_id+'"]').show();
+  $('label.color_option.js-can-be-shown[data-attr-id="' + attr_id + '"]').show();
   $button.hide();
 });
 
 
-$('.js-expand-videos').click(function(e) {
+$('.js-expand-videos').click(function (e) {
   e.preventDefault();
 
   $('.js-video-item:hidden').css('display', 'block').css('margin-top', '40px');
@@ -588,13 +588,13 @@ function rebuildCarousel(attr_slug, color_id) {
   if ($carousel.hasClass('js-with-photos')) {
 
     var $photos1 = $('.js-photo-thumb'),
-        $photos2 = $('.js-photo-big'),
-        $buttons = $('.js-navigation-button'),
-        $container1 = $('.js-photo-thumb-container'),
-        $container2 = $('.js-photo-big-container'),
-        $container3 = $('.js-navigation-buttons'),
-        first_color_photos = JSON.parse($carousel.attr('data-first-color-photos')),
-        first_photo_id = first_color_photos[attr_slug][color_id] || 0;
+      $photos2 = $('.js-photo-big'),
+      $buttons = $('.js-navigation-button'),
+      $container1 = $('.js-photo-thumb-container'),
+      $container2 = $('.js-photo-big-container'),
+      $container3 = $('.js-navigation-buttons'),
+      first_color_photos = JSON.parse($carousel.attr('data-first-color-photos')),
+      first_photo_id = first_color_photos[attr_slug][color_id] || 0;
 
     // сортируем список объектов-фоток
     $photos1 = sortPhotosByColor($photos1, attr_slug, color_id, first_photo_id);
@@ -607,8 +607,8 @@ function rebuildCarousel(attr_slug, color_id) {
 
     // скроллим карусель к первому элементу
     $carousel.jcarousel('scroll', 0);
-    $container1.css({'left': '0px', 'top': '0px'});
-    $container2.css({'left': '0px', 'top': '0px'});
+    $container1.css({ 'left': '0px', 'top': '0px' });
+    $container2.css({ 'left': '0px', 'top': '0px' });
 
     // сбрасываем карусель
     $carousel.jcarousel('destroy');
@@ -622,21 +622,21 @@ function sortPhotosByColor($arr, attr_slug, color_id, first_photo_id) {
   // первый приоритет - наличие нужного цвета (data-attrs[attr_slug][color_id]),
   // второй - первоначальный порядок (data-order)
 
-  $arr.sort(function(a, b){
+  $arr.sort(function (a, b) {
     var $a = $(a),
-        $b = $(b),
-        a_order = parseInt($a.attr('data-order')),
-        b_order = parseInt($b.attr('data-order'))
-        a_attrs = JSON.parse($a.attr('data-attrs')),
-        b_attrs = JSON.parse($b.attr('data-attrs')),
-        a_has_color = (a_attrs[attr_slug].indexOf(color_id)>-1),
-        b_has_color = (b_attrs[attr_slug].indexOf(color_id)>-1),
-        a_is_main = $a.attr('data-main-photo'),
-        b_is_main = $b.attr('data-main-photo'),
-        a_is_first = $a.attr('data-photo-id')==first_photo_id.toString(),
-        b_is_first = $b.attr('data-photo-id')==first_photo_id.toString(),
-        a_is_video = $a.attr('data-video'),
-        b_is_video = $b.attr('data-video');
+      $b = $(b),
+      a_order = parseInt($a.attr('data-order')),
+      b_order = parseInt($b.attr('data-order'))
+    a_attrs = JSON.parse($a.attr('data-attrs')),
+      b_attrs = JSON.parse($b.attr('data-attrs')),
+      a_has_color = (a_attrs[attr_slug].indexOf(color_id) > -1),
+      b_has_color = (b_attrs[attr_slug].indexOf(color_id) > -1),
+      a_is_main = $a.attr('data-main-photo'),
+      b_is_main = $b.attr('data-main-photo'),
+      a_is_first = $a.attr('data-photo-id') == first_photo_id.toString(),
+      b_is_first = $b.attr('data-photo-id') == first_photo_id.toString(),
+      a_is_video = $a.attr('data-video'),
+      b_is_video = $b.attr('data-video');
 
     // если data-main-photo: фото первое
     if (a_is_main) { return -5 }
@@ -667,7 +667,7 @@ function movePhotos($container, $arr, set_active) {
   // перемещаем объекты-фотки в начало контейнера в нужном порядке:
   // клонируем их в нужном порядке без сохранения state, оригиналы удаляем
 
-  $arr.each(function(i) {
+  $arr.each(function (i) {
     var $item = $(this);
 
     $item.clone().appendTo($container);
